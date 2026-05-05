@@ -472,12 +472,12 @@ export default function MentorCreateProfile() {
                           />
                           {!formData.customSkill && (
                             <Text
-                              pointerEvents="none"
                               numberOfLines={1}
                               style={{
                                 position: "absolute",
                                 left: 22,
                                 right: 16,
+                                pointerEvents: "none",
                                 color: COLORS.mutedForeground,
                                 fontSize: 15,
                                 fontWeight: "500",
@@ -622,13 +622,13 @@ function InputField({ label, value, onChange, placeholder, keyboardType = "defau
         />
         {!value && !!placeholder && (
           <Text
-            pointerEvents="none"
             numberOfLines={multiline ? undefined : 1}
             style={{
               position: "absolute",
               left: 22,
               right: suffix ? 44 : 16,
               top: multiline ? 16 : undefined,
+              pointerEvents: "none",
               color: COLORS.mutedForeground,
               fontSize: 15,
               fontWeight: "500",

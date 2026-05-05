@@ -114,7 +114,7 @@ export default function CreateProfileChild() {
 
   const pageContent = (
     <View style={styles.page}>
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }} pointerEvents="none">
+      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden", pointerEvents: "none" }}>
         <View style={styles.bgOrbTop} />
         <View style={styles.bgOrbBottom} />
       </View>

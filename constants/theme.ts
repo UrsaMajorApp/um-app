@@ -4,8 +4,6 @@
  * Ориентирован на премиальный, мягкий iOS-стиль без острых углов.
  */
 
-import { Platform } from "react-native";
-
 export const COLORS = {
   // Brand
   primary: "#6C5CE7",
@@ -90,7 +88,7 @@ export const RADIUS = {
   full: 9999,
 };
 
-const WEB_SHADOWS = {
+export const SHADOWS = {
   sm: {
     boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.05)",
   },
@@ -104,39 +102,6 @@ const WEB_SHADOWS = {
     boxShadow: "0px 0px 1px rgba(0,0,0,0.1), 0px 8px 20px rgba(0,0,0,0.06)",
   }
 };
-
-const NATIVE_SHADOWS = {
-  sm: {
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  md: {
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 4,
-  },
-  lg: {
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 12 },
-    elevation: 8,
-  },
-  strict: {
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 5,
-  }
-};
-
-export const SHADOWS = Platform.OS === "web" ? WEB_SHADOWS : NATIVE_SHADOWS;
 
 export const LAYOUT = {
   desktopBreakpoint: 1024,

@@ -255,7 +255,7 @@ export function DevRoleSwitcher() {
               </TouchableOpacity>
 
               {/* ── All options gated by devToolsEnabled ── */}
-              <View style={{ opacity: devToolsEnabled ? 1 : 0.35 }} pointerEvents={devToolsEnabled ? 'auto' : 'none'}>
+              <View style={{ opacity: devToolsEnabled ? 1 : 0.35, pointerEvents: devToolsEnabled ? 'auto' : 'none' }}>
 
                 {/* OTP mode toggle */}
                 <View style={styles.devModeRow}>

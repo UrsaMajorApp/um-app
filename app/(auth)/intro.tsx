@@ -60,7 +60,7 @@ export default function IntroScreen() {
       />
 
       {/* Floating Icons */}
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      <View style={[StyleSheet.absoluteFill, { pointerEvents: "none" }]}>
         <FloatingIcon
           name="rocket"
           color="white"

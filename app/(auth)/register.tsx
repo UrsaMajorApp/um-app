@@ -423,7 +423,7 @@ export default function RegisterScreen() {
                           <MotiView
                             animate={{ opacity: isSelected ? 1 : 0, scale: isSelected ? 1 : 0.7 }}
                             transition={{ type: 'spring' }}
-                            pointerEvents="none"
+                            style={{ pointerEvents: "none" }}
                           >
                             <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: item.color, alignItems: 'center', justifyContent: 'center' }}>
                               <Feather name="check" size={11} color="white" />
@@ -595,11 +595,11 @@ function Field({ label, icon, value, onChange, placeholder, keyboardType = 'defa
                 />
                 {!value && (
                     <Text
-                        pointerEvents="none"
                         style={{
                             position: 'absolute',
                             left: 48,
                             right: 48,
+                            pointerEvents: "none",
                             color: COLORS.mutedForeground,
                             fontSize: 15,
                             fontWeight: '500',

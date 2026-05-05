@@ -301,12 +301,12 @@ function Field({
         />
         {!value && !!placeholder && (
           <Text
-            pointerEvents="none"
             numberOfLines={1}
             style={{
               position: "absolute",
               left: 48,
               right: 48,
+              pointerEvents: "none",
               color: COLORS.mutedForeground,
               fontSize: 15,
               fontWeight: "500",

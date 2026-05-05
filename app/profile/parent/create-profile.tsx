@@ -532,12 +532,12 @@ function ProfileTextInput({
       />
       {!value && !!placeholder && (
         <Text
-          pointerEvents="none"
           numberOfLines={1}
           style={{
             position: "absolute",
             left: 22,
             right: 16,
+            pointerEvents: "none",
             color: COLORS.mutedForeground,
             fontSize: 15,
             fontWeight: "500",

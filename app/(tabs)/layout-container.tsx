@@ -861,11 +861,7 @@ export default function CustomTabBar({ role }: Props) {
                 width: tabWidth,
                 borderRadius: 27,
                 overflow: "hidden",
-                shadowColor: COLORS.primary,
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.4,
-                shadowRadius: 12,
-                elevation: 8,
+                boxShadow: "0px 4px 12px rgba(108, 92, 231, 0.4)",
               }}
             >
               <MotiView
