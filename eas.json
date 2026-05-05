@@ -12,11 +12,5 @@
       "distribution": "internal"
     },
     "production": {}
-  },
-  "deploy": {
-    "preview": {
-      "channel": "preview"
-    },
-    "production": {}
   }
 }
