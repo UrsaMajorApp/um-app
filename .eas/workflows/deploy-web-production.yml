@@ -1,0 +1,19 @@
+name: Deploy Web Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+concurrency:
+  cancel_in_progress: true
+  group: ${{ workflow.filename }}-${{ github.ref }}
+
+jobs:
+  deploy_web:
+    name: Deploy Web to Production
+    type: deploy
+    environment: production
+    params:
+      prod: true
