@@ -71,6 +71,8 @@ export default function TabsLayout() {
       <Tabs.Screen name="parent/child/[id]" options={{ href: null }} />
 
       {/* YOUTH SCREENS */}
+      <Tabs.Screen name="youth/games" options={{ href: null }} />
+      <Tabs.Screen name="youth/games/[id]" options={{ href: null }} />
       <Tabs.Screen name="youth/goals" options={{ href: null }} />
       <Tabs.Screen name="youth/tasks" options={{ href: null }} />
       <Tabs.Screen name="youth/achievements" options={{ href: null }} />
@@ -105,19 +107,11 @@ export default function TabsLayout() {
     </Tabs>
   );
 
-  if (isDesktop) {
-    return (
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <SideNav role={role} />
-        <View style={{ flex: 1 }}>{screens}</View>
-      </View>
-    );
-  }
-
   return (
-    <>
-      {screens}
-      <CustomTabBar role={role} />
-    </>
+    <View style={{ flex: 1, flexDirection: isDesktop ? "row" : "column" }}>
+      {isDesktop && <SideNav role={role} />}
+      <View style={{ flex: 1 }}>{screens}</View>
+      {!isDesktop && <CustomTabBar role={role} />}
+    </View>
   );
 }
