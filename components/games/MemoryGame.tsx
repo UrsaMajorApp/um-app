@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { COLORS, SHADOWS, RADIUS } from '../../constants/theme';
 
-const { width } = Dimensions.get('window');
 const GRID_SIZE = 4;
-const CARD_SIZE = (width - 80) / GRID_SIZE;
+const GRID_GAP = 12;
+const MAX_BOARD_SIZE = 560;
 
 const EMOJIS = ['🚀', '🎨', '🧩', '🧪', '🧬', '🧠', '💻', '🎮'];
 const ALL_CARDS = [...EMOJIS, ...EMOJIS];
 
 export default function MemoryGame({ onFinish }: { onFinish: (score: number) => void }) {
+  const { width } = useWindowDimensions();
   const [cards, setCards] = useState<string[]>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [solved, setSolved] = useState<number[]>([]);
@@ -21,8 +22,12 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
     shuffle();
   }, []);
 
+  const boardSize = Math.min(width - 48, MAX_BOARD_SIZE);
+  const cardSize = (boardSize - GRID_GAP * (GRID_SIZE - 1)) / GRID_SIZE;
+  const emojiSize = Math.max(28, Math.min(44, cardSize * 0.36));
+
   const shuffle = () => {
-    const shuffled = ALL_CARDS.sort(() => Math.random() - 0.5);
+    const shuffled = [...ALL_CARDS].sort(() => Math.random() - 0.5);
     setCards(shuffled);
     setFlipped([]);
     setSolved([]);
@@ -62,7 +67,7 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { width: boardSize }]}>
         <View style={styles.stat}>
           <Text style={styles.statLabel}>Ходы</Text>
           <Text style={styles.statValue}>{moves}</Text>
@@ -72,7 +77,7 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
         </TouchableOpacity>
       </View>
 
-      <View style={styles.grid}>
+      <View style={[styles.grid, { width: boardSize }]}>
         {cards.map((emoji, index) => {
           const isFlipped = flipped.includes(index) || solved.includes(index);
           return (
@@ -81,12 +86,13 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
               onPress={() => handleClick(index)}
               style={[
                 styles.card,
+                { width: cardSize, height: cardSize },
                 isFlipped && styles.cardFlipped,
                 solved.includes(index) && styles.cardSolved
               ]}
               disabled={isFlipped}
             >
-              <Text style={styles.emoji}>
+              <Text style={[styles.emoji, { fontSize: emojiSize }]}>
                 {isFlipped ? emoji : '?'}
               </Text>
             </TouchableOpacity>
@@ -99,14 +105,14 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 24,
     alignItems: 'center',
+    width: '100%',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
     marginBottom: 30,
   },
   stat: {
@@ -136,11 +142,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 12,
+    gap: GRID_GAP,
   },
   card: {
-    width: CARD_SIZE,
-    height: CARD_SIZE,
     borderRadius: RADIUS.lg,
     backgroundColor: 'white',
     alignItems: 'center',
@@ -159,6 +163,6 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   emoji: {
-    fontSize: 32,
+    fontWeight: '900',
   }
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, useWindowDimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
@@ -9,10 +9,9 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const { width } = Dimensions.get('window');
 const GRID_SIZE = 4;
 const CELL_MARGIN = 10;
-const CELL_SIZE = (width - 60 - (GRID_SIZE + 1) * CELL_MARGIN) / GRID_SIZE;
+const MAX_BOARD_SIZE = 520;
 
 const TILE_COLORS: Record<number, string> = {
     2: '#EEE4DA',
@@ -35,6 +34,7 @@ const TEXT_COLORS: Record<string | number, string> = {
 };
 
 export default function Game2048({ onFinish }: { onFinish: (score: number) => void }) {
+    const { width } = useWindowDimensions();
     const [grid, setGrid] = useState<number[][]>(Array(4).fill(0).map(() => Array(4).fill(0)));
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
@@ -42,6 +42,9 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
     useEffect(() => {
         initGame();
     }, []);
+
+    const boardSize = Math.min(width - 48, MAX_BOARD_SIZE);
+    const cellSize = (boardSize - CELL_MARGIN * (GRID_SIZE + 2)) / GRID_SIZE;
 
     const initGame = () => {
         let newGrid = Array(4).fill(0).map(() => Array(4).fill(0));
@@ -128,6 +131,27 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
         onFinish(score);
     };
 
+    useEffect(() => {
+        if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const keyToDirection: Record<string, 'up' | 'down' | 'left' | 'right'> = {
+                ArrowUp: 'up',
+                ArrowDown: 'down',
+                ArrowLeft: 'left',
+                ArrowRight: 'right',
+            };
+            const direction = keyToDirection[event.key];
+            if (!direction) return;
+
+            event.preventDefault();
+            move(direction);
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [move]);
+
     const swipeGesture = React.useMemo(() => Gesture.Pan()
         .onEnd((e) => {
             const { translationX, translationY } = e;
@@ -149,7 +173,7 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <View style={[styles.header, { width: boardSize }]}>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.scoreLabel}>SCORE</Text>
                     <Text style={styles.scoreValue}>{score}</Text>
@@ -160,13 +184,13 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
             </View>
 
             <GestureDetector gesture={swipeGesture}>
-                <View style={styles.board}>
+                <View style={[styles.board, { width: boardSize }]}>
                     {grid.map((row, r) => (
                         <View key={r} style={styles.row}>
                             {row.map((cell, c) => (
-                                <View key={c} style={[styles.cell, { backgroundColor: cell ? TILE_COLORS[cell] || '#3C3A32' : '#CDC1B4' }]}>
+                                <View key={c} style={[styles.cell, { width: cellSize, height: cellSize, backgroundColor: cell ? TILE_COLORS[cell] || '#3C3A32' : '#CDC1B4' }]}>
                                     {cell !== 0 && (
-                                        <Text style={[styles.cellText, { color: TEXT_COLORS[cell] || TEXT_COLORS.default, fontSize: cell > 100 ? 24 : 32 }]}>
+                                        <Text style={[styles.cellText, { color: TEXT_COLORS[cell] || TEXT_COLORS.default, fontSize: cell > 100 ? Math.max(22, cellSize * 0.28) : Math.max(28, cellSize * 0.38) }]}>
                                             {cell}
                                         </Text>
                                     )}
@@ -185,7 +209,7 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
                 </View>
             </GestureDetector>
             
-            <Text style={styles.hint}>Swipe to move tiles</Text>
+            <Text style={styles.hint}>{Platform.OS === 'web' ? 'Use arrow keys or swipe to move tiles' : 'Swipe to move tiles'}</Text>
         </View>
     );
 }
@@ -194,10 +218,10 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         padding: 20,
+        width: '100%',
     },
     header: {
         flexDirection: 'row',
-        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 20,
@@ -240,8 +264,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     cell: {
-        width: CELL_SIZE,
-        height: CELL_SIZE,
         margin: CELL_MARGIN / 2,
         borderRadius: RADIUS.sm,
         alignItems: 'center',

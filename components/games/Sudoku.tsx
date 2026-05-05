@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, useWindowDimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { COLORS, SHADOWS, RADIUS } from '../../constants/theme';
 
@@ -7,10 +7,9 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const { width } = Dimensions.get('window');
 const GRID_SIZE = 9;
 const BOARD_PADDING = 24;
-const CELL_SIZE = (width - BOARD_PADDING * 2 - 10) / GRID_SIZE;
+const MAX_BOARD_SIZE = 560;
 
 type Cell = {
     value: number;
@@ -19,6 +18,7 @@ type Cell = {
 };
 
 export default function Sudoku({ onFinish }: { onFinish: (score: number) => void }) {
+    const { width } = useWindowDimensions();
     const [grid, setGrid] = useState<Cell[][]>([]);
     const [solution, setSolution] = useState<number[][]>([]);
     const [selectedCell, setSelectedCell] = useState<{ r: number, c: number } | null>(null);
@@ -77,6 +77,11 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
         generateSudoku();
     }, [generateSudoku]);
 
+    const boardSize = Math.min(width - BOARD_PADDING * 2, MAX_BOARD_SIZE);
+    const cellSize = Math.floor((boardSize - 13) / GRID_SIZE);
+    const numberPadButtonSize = Math.min(50, Math.max(40, cellSize * 0.82));
+    const cellTextSize = Math.max(16, Math.min(24, cellSize * 0.36));
+
     const handleNumberInput = (num: number) => {
         if (!selectedCell || gameOver) return;
         const { r, c } = selectedCell;
@@ -122,7 +127,7 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <View style={[styles.header, { width: boardSize }]}>
                 <View style={styles.statBox}>
                     <Feather name="x-circle" size={16} color={mistakes > 0 ? COLORS.destructive : COLORS.mutedForeground} />
                     <Text style={styles.statText}>{mistakes}/5</Text>
@@ -146,6 +151,7 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                                 onPress={() => setSelectedCell({ r, c })}
                                 style={[
                                     styles.cell,
+                                    { width: cellSize, height: cellSize },
                                     c % 3 === 2 && c !== 8 && styles.cellBorder,
                                     selectedCell?.r === r && selectedCell?.c === c && styles.cellActive,
                                     !grid[r][c].original && isRelated(r, c) && styles.cellRelated,
@@ -155,6 +161,7 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                                 {cell.value !== 0 && (
                                     <Text style={[
                                         styles.cellText,
+                                        { fontSize: cellTextSize },
                                         cell.original ? styles.textOriginal : styles.textInput,
                                         cell.error && styles.textError
                                     ]}>
@@ -167,12 +174,12 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                 ))}
             </View>
 
-            <View style={styles.numberPad}>
+            <View style={[styles.numberPad, { width: boardSize }]}>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
                     <TouchableOpacity
                         key={num}
                         onPress={() => handleNumberInput(num)}
-                        style={styles.padBtn}
+                        style={[styles.padBtn, { width: numberPadButtonSize, height: numberPadButtonSize }]}
                     >
                         <Text style={styles.padBtnText}>{num}</Text>
                     </TouchableOpacity>
@@ -199,10 +206,10 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         padding: BOARD_PADDING,
+        width: '100%',
     },
     header: {
         flexDirection: 'row',
-        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 20,
@@ -245,8 +252,6 @@ const styles = StyleSheet.create({
         borderBottomColor: '#1F2937',
     },
     cell: {
-        width: CELL_SIZE,
-        height: CELL_SIZE,
         backgroundColor: 'white',
         margin: 0.5,
         alignItems: 'center',
@@ -266,7 +271,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FEE2E2',
     },
     cellText: {
-        fontSize: 18,
         fontWeight: '700',
     },
     textOriginal: {

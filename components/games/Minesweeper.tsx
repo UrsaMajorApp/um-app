@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, LayoutAnimation, Platform, UIManager, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, Alert, useWindowDimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { COLORS, SHADOWS, RADIUS } from '../../constants/theme';
 
@@ -7,10 +7,9 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const { width } = Dimensions.get('window');
 const GRID_SIZE = 10;
 const MINES_COUNT = 15;
-const CELL_SIZE = (width - 48 - (GRID_SIZE * 2)) / GRID_SIZE;
+const MAX_BOARD_SIZE = 620;
 
 type Cell = {
     r: number;
@@ -22,6 +21,7 @@ type Cell = {
 };
 
 export default function Minesweeper({ onFinish }: { onFinish: (score: number) => void }) {
+    const { width } = useWindowDimensions();
     const [grid, setGrid] = useState<Cell[][]>([]);
     const [gameOver, setGameOver] = useState<'playing' | 'won' | 'lost'>('playing');
     const [minesLeft, setMinesLeft] = useState(MINES_COUNT);
@@ -45,6 +45,10 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
     useEffect(() => {
         initGrid();
     }, [initGrid]);
+
+    const boardSize = Math.min(width - 48, MAX_BOARD_SIZE);
+    const cellSize = Math.floor((boardSize - 4 - GRID_SIZE * 2) / GRID_SIZE);
+    const numberSize = Math.max(14, Math.min(18, cellSize * 0.32));
 
     const placeMines = (startR: number, startC: number, currentGrid: Cell[][]) => {
         let placed = 0;
@@ -144,7 +148,7 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <View style={[styles.header, { width: boardSize }]}>
                 <View style={styles.statBox}>
                     <Feather name="flag" size={16} color="#EF4444" />
                     <Text style={styles.statText}>{minesLeft}</Text>
@@ -169,20 +173,21 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
                                 onLongPress={() => toggleFlag(r, c)}
                                 style={[
                                     styles.cell,
+                                    { width: cellSize, height: cellSize },
                                     cell.isRevealed && styles.cellRevealed,
                                     cell.isRevealed && cell.hasMine && styles.cellMine
                                 ]}
                             >
                                 {cell.isRevealed ? (
                                     cell.hasMine ? (
-                                        <Feather name="zap" size={16} color="white" />
+                                        <Feather name="zap" size={numberSize} color="white" />
                                     ) : cell.neighborMines > 0 ? (
-                                        <Text style={[styles.number, { color: NUMBER_COLORS[cell.neighborMines] }]}>
+                                        <Text style={[styles.number, { color: NUMBER_COLORS[cell.neighborMines], fontSize: numberSize }]}>
                                             {cell.neighborMines}
                                         </Text>
                                     ) : null
                                 ) : cell.isFlagged ? (
-                                    <Feather name="flag" size={16} color="#EF4444" />
+                                    <Feather name="flag" size={numberSize} color="#EF4444" />
                                 ) : null}
                             </TouchableOpacity>
                         ))}
@@ -220,10 +225,10 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         padding: 24,
+        width: '100%',
     },
     header: {
         flexDirection: 'row',
-        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 24,
@@ -261,8 +266,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     cell: {
-        width: CELL_SIZE,
-        height: CELL_SIZE,
         backgroundColor: '#E5E7EB',
         margin: 1,
         borderRadius: 4,
@@ -277,7 +280,6 @@ const styles = StyleSheet.create({
     },
     number: {
         fontWeight: '900',
-        fontSize: 16,
     },
     footer: {
         marginTop: 24,
