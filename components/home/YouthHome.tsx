@@ -244,7 +244,10 @@ export default function YouthHome() {
               style={SHADOWS.sm}
               className="bg-blue-50 p-6 rounded-[32px] border border-blue-100 flex-row items-center gap-4"
             >
-              <View className="w-12 h-12 bg-white rounded-2xl items-center justify-center border border-blue-200 shadow-sm">
+              <View
+                className="w-12 h-12 bg-white rounded-2xl items-center justify-center border border-blue-200"
+                style={SHADOWS.sm}
+              >
                 <Feather name="cpu" size={24} color="#3B82F6" />
               </View>
               <View className="flex-1">

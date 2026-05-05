@@ -95,9 +95,9 @@ const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
         position: 'absolute', 
         top: config.top, 
         left: config.left, 
-        zIndex: 0 
+        zIndex: 0,
+        pointerEvents: "none",
       }}
-      pointerEvents="none"
     >
       <Image
         source={require("../../assets/logo/Frame 4.svg")}
@@ -172,9 +172,9 @@ export default function ParentHome() {
       <View 
         style={{ 
           ...Platform.select({ web: { position: 'fixed' } as any, default: { position: 'absolute' } }), 
-          top: 0, left: 0, right: 0, bottom: 0 
+          top: 0, left: 0, right: 0, bottom: 0,
+          pointerEvents: "none",
         }} 
-        pointerEvents="none"
       >
         <FloatingBranding count={40} dark={true} width={width} height={height} seed="body" />
       </View>
@@ -368,7 +368,10 @@ export default function ParentHome() {
               style={SHADOWS.sm}
               className="bg-blue-50 rounded-[32px] p-6 border border-blue-100 flex-row items-center"
             >
-              <View className="w-12 h-12 bg-white rounded-full items-center justify-center mr-4 shadow-sm border border-blue-50">
+              <View
+                className="w-12 h-12 bg-white rounded-full items-center justify-center mr-4 border border-blue-50"
+                style={SHADOWS.sm}
+              >
                 <Feather name="cpu" size={20} color="#3B82F6" />
               </View>
               <View className="flex-1 pr-2">
