@@ -1,0 +1,92 @@
+name: Deploy Web
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-web-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    name: Deploy Web
+    runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "You must add an EXPO_TOKEN repository secret before this workflow can deploy."
+            echo "Create one at https://expo.dev/settings/access-tokens, then add it in GitHub Actions secrets."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: pnpm
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Export website
+        run: pnpm exec expo export --platform web
+
+      - name: Deploy production
+        if: github.event_name != 'pull_request'
+        run: pnpm exec eas deploy --prod --non-interactive
+
+      - name: Deploy preview
+        if: github.event_name == 'pull_request'
+        id: deploy-preview
+        run: |
+          deploy_json="$(pnpm exec eas deploy --alias pr-${{ github.event.pull_request.number }} --non-interactive --json)"
+          echo "$deploy_json"
+          deploy_url="$(echo "$deploy_json" | jq -r '.alias.url // .url // .production.url')"
+          echo "url=$deploy_url" >> "$GITHUB_OUTPUT"
+
+      - name: Comment preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.deploy-preview.outputs.url }}';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `Web preview: ${url}`,
+            });
