@@ -163,36 +163,42 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
             </View>
 
             <View style={styles.board}>
-                {grid.map((row, r) => (
-                    <View key={r} style={styles.row}>
-                        {row.map((cell, c) => (
-                            <TouchableOpacity
-                                key={c}
-                                activeOpacity={0.7}
-                                onPress={() => revealCell(r, c)}
-                                onLongPress={() => toggleFlag(r, c)}
-                                style={[
-                                    styles.cell,
-                                    { width: cellSize, height: cellSize },
-                                    cell.isRevealed && styles.cellRevealed,
-                                    cell.isRevealed && cell.hasMine && styles.cellMine
-                                ]}
-                            >
-                                {cell.isRevealed ? (
-                                    cell.hasMine ? (
-                                        <Feather name="zap" size={numberSize} color="white" />
-                                    ) : cell.neighborMines > 0 ? (
-                                        <Text style={[styles.number, { color: NUMBER_COLORS[cell.neighborMines], fontSize: numberSize }]}>
-                                            {cell.neighborMines}
-                                        </Text>
-                                    ) : null
-                                ) : cell.isFlagged ? (
-                                    <Feather name="flag" size={numberSize} color="#EF4444" />
-                                ) : null}
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                ))}
+                <View style={styles.boardInner}>
+                    {grid.map((row, r) => (
+                        <View key={r} style={styles.row}>
+                            {row.map((cell, c) => (
+                                <TouchableOpacity
+                                    key={c}
+                                    activeOpacity={0.7}
+                                    onPress={() => revealCell(r, c)}
+                                    onLongPress={() => toggleFlag(r, c)}
+                                    style={[
+                                        styles.cell,
+                                        { width: cellSize, height: cellSize },
+                                        cell.isRevealed && styles.cellRevealed,
+                                        cell.isRevealed && cell.hasMine && styles.cellMine,
+                                        r === 0 && c === 0 && styles.cellTopLeft,
+                                        r === 0 && c === GRID_SIZE - 1 && styles.cellTopRight,
+                                        r === GRID_SIZE - 1 && c === 0 && styles.cellBottomLeft,
+                                        r === GRID_SIZE - 1 && c === GRID_SIZE - 1 && styles.cellBottomRight
+                                    ]}
+                                >
+                                    {cell.isRevealed ? (
+                                        cell.hasMine ? (
+                                            <Feather name="zap" size={numberSize} color="white" />
+                                        ) : cell.neighborMines > 0 ? (
+                                            <Text style={[styles.number, { color: NUMBER_COLORS[cell.neighborMines], fontSize: numberSize }]}>
+                                                {cell.neighborMines}
+                                            </Text>
+                                        ) : null
+                                    ) : cell.isFlagged ? (
+                                        <Feather name="flag" size={numberSize} color="#EF4444" />
+                                    ) : null}
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    ))}
+                </View>
             </View>
 
             <View style={styles.footer}>
@@ -262,6 +268,11 @@ const styles = StyleSheet.create({
         borderRadius: RADIUS.lg,
         overflow: 'hidden',
     },
+    boardInner: {
+        backgroundColor: '#D1D5DB',
+        borderRadius: RADIUS.lg,
+        overflow: 'hidden',
+    },
     row: {
         flexDirection: 'row',
     },
@@ -271,6 +282,18 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    cellTopLeft: {
+        borderTopLeftRadius: RADIUS.lg,
+    },
+    cellTopRight: {
+        borderTopRightRadius: RADIUS.lg,
+    },
+    cellBottomLeft: {
+        borderBottomLeftRadius: RADIUS.lg,
+    },
+    cellBottomRight: {
+        borderBottomRightRadius: RADIUS.lg,
     },
     cellRevealed: {
         backgroundColor: 'white',

@@ -142,36 +142,42 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
             </View>
 
             <View style={styles.board}>
-                {grid.map((row, r) => (
-                    <View key={r} style={[styles.row, r % 3 === 2 && r !== 8 && styles.rowBorder]}>
-                        {row.map((cell, c) => (
-                            <TouchableOpacity
-                                key={c}
-                                activeOpacity={1}
-                                onPress={() => setSelectedCell({ r, c })}
-                                style={[
-                                    styles.cell,
-                                    { width: cellSize, height: cellSize },
-                                    c % 3 === 2 && c !== 8 && styles.cellBorder,
-                                    selectedCell?.r === r && selectedCell?.c === c && styles.cellActive,
-                                    !grid[r][c].original && isRelated(r, c) && styles.cellRelated,
-                                    cell.error && styles.cellError
-                                ]}
-                            >
-                                {cell.value !== 0 && (
-                                    <Text style={[
-                                        styles.cellText,
-                                        { fontSize: cellTextSize },
-                                        cell.original ? styles.textOriginal : styles.textInput,
-                                        cell.error && styles.textError
-                                    ]}>
-                                        {cell.value}
-                                    </Text>
-                                )}
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                ))}
+                <View style={styles.boardInner}>
+                    {grid.map((row, r) => (
+                        <View key={r} style={[styles.row, r % 3 === 2 && r !== 8 && styles.rowBorder]}>
+                            {row.map((cell, c) => (
+                                <TouchableOpacity
+                                    key={c}
+                                    activeOpacity={1}
+                                    onPress={() => setSelectedCell({ r, c })}
+                                    style={[
+                                        styles.cell,
+                                        { width: cellSize, height: cellSize },
+                                        c % 3 === 2 && c !== 8 && styles.cellBorder,
+                                        selectedCell?.r === r && selectedCell?.c === c && styles.cellActive,
+                                        !grid[r][c].original && isRelated(r, c) && styles.cellRelated,
+                                        cell.error && styles.cellError,
+                                        r === 0 && c === 0 && styles.cellTopLeft,
+                                        r === 0 && c === GRID_SIZE - 1 && styles.cellTopRight,
+                                        r === GRID_SIZE - 1 && c === 0 && styles.cellBottomLeft,
+                                        r === GRID_SIZE - 1 && c === GRID_SIZE - 1 && styles.cellBottomRight
+                                    ]}
+                                >
+                                    {cell.value !== 0 && (
+                                        <Text style={[
+                                            styles.cellText,
+                                            { fontSize: cellTextSize },
+                                            cell.original ? styles.textOriginal : styles.textInput,
+                                            cell.error && styles.textError
+                                        ]}>
+                                            {cell.value}
+                                        </Text>
+                                    )}
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    ))}
+                </View>
             </View>
 
             <View style={[styles.numberPad, { width: boardSize }]}>
@@ -240,9 +246,15 @@ const styles = StyleSheet.create({
     },
     board: {
         backgroundColor: '#1F2937',
-        padding: 2,
-        borderRadius: RADIUS.sm,
+        padding: 3,
+        borderRadius: RADIUS.md,
+        overflow: 'hidden',
         ...SHADOWS.lg,
+    },
+    boardInner: {
+        backgroundColor: '#1F2937',
+        borderRadius: RADIUS.md,
+        overflow: 'hidden',
     },
     row: {
         flexDirection: 'row',
@@ -256,6 +268,18 @@ const styles = StyleSheet.create({
         margin: 0.5,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    cellTopLeft: {
+        borderTopLeftRadius: RADIUS.md,
+    },
+    cellTopRight: {
+        borderTopRightRadius: RADIUS.md,
+    },
+    cellBottomLeft: {
+        borderBottomLeftRadius: RADIUS.md,
+    },
+    cellBottomRight: {
+        borderBottomRightRadius: RADIUS.md,
     },
     cellBorder: {
         borderRightWidth: 2,
