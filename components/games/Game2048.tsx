@@ -15,7 +15,6 @@ import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withSequence,
-    withSpring,
     withTiming,
 } from "react-native-reanimated";
 import { COLORS, RADIUS } from "../../constants/theme";
@@ -181,8 +180,8 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
   useEffect(() => {
     if (tile.isMerged) {
       scale.value = withSequence(
-        withSpring(1.2, { damping: 8, stiffness: 260 }),
-        withSpring(1, { damping: 12, stiffness: 220 })
+        withTiming(1.12, { duration: 80 }),
+        withTiming(1, { duration: 120 })
       );
     }
   }, [tile.isMerged, tile.value]);
@@ -238,6 +237,10 @@ export default function Game2048({
 
   const boardSize = Math.min(width - 48, MAX_BOARD_SIZE);
   const cellSize = (boardSize - CELL_MARGIN * (GRID_SIZE + 2)) / GRID_SIZE;
+  const isDesktopWeb = Platform.OS === "web" && width >= 768;
+  const hintText = isDesktopWeb
+    ? "Используйте стрелки или мышь, чтобы перемещать плитки"
+    : "Свайпайте, чтобы перемещать плитки";
 
   const addRandomTile = useCallback((currentTiles: Tile[]) => {
     const occupied = new Set(
@@ -294,14 +297,12 @@ export default function Game2048({
 
       setTimeout(() => {
         isMoving.current = false;
-        setTiles((prev) => {
-          const tilesWithNewTile = addRandomTile(prev);
-          if (!hasMovesRemaining(tilesWithNewTile)) {
-            setGameOver(true);
-            onFinish(newScore);
-          }
-          return tilesWithNewTile;
-        });
+        const tilesWithNewTile = addRandomTile(result.tiles);
+        setTiles(tilesWithNewTile);
+        if (!hasMovesRemaining(tilesWithNewTile)) {
+          setGameOver(true);
+          onFinish(newScore);
+        }
       }, 110);
     },
     [addRandomTile, gameOver, onFinish, score, tiles],
@@ -341,8 +342,7 @@ export default function Game2048({
           if (translationX > 0) runOnJS(move)("right");
           else runOnJS(move)("left");
         } else {
-          // translationY < 0 is Swipe UP (finger moving up)
-          // translationY > 0 is Swipe DOWN (finger moving down)
+          // Отрицательный translationY - свайп вверх, положительный - вниз.
           if (translationY < 0) runOnJS(move)("up");
           else runOnJS(move)("down");
         }
@@ -354,11 +354,11 @@ export default function Game2048({
     <View style={styles.container}>
       <View style={[styles.header, { width: boardSize }]}>
         <View style={styles.scoreContainer}>
-          <Text style={styles.scoreLabel}>SCORE</Text>
+          <Text style={styles.scoreLabel}>СЧЕТ</Text>
           <Text style={styles.scoreValue}>{score}</Text>
         </View>
         <TouchableOpacity onPress={initGame} style={styles.resetBtn}>
-          <Text style={styles.resetBtnText}>NEW GAME</Text>
+          <Text style={styles.resetBtnText}>НОВАЯ ИГРА</Text>
         </TouchableOpacity>
       </View>
 
@@ -379,20 +379,16 @@ export default function Game2048({
           ))}
           {gameOver && (
             <View style={styles.overlay}>
-              <Text style={styles.gameOverText}>Game Over!</Text>
+              <Text style={styles.gameOverText}>Игра окончена!</Text>
               <TouchableOpacity onPress={initGame} style={styles.overlayBtn}>
-                <Text style={styles.overlayBtnText}>Try Again</Text>
+                <Text style={styles.overlayBtnText}>Еще раз</Text>
               </TouchableOpacity>
             </View>
           )}
         </View>
       </GestureDetector>
 
-      <Text style={styles.hint}>
-        {Platform.OS === "web"
-          ? "Use arrow keys or swipe to move tiles"
-          : "Swipe to move tiles"}
-      </Text>
+      <Text style={styles.hint}>{hintText}</Text>
     </View>
   );
 }
