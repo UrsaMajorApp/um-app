@@ -17,11 +17,13 @@ import MemoryGame from "../../../../components/games/MemoryGame";
 import Minesweeper from "../../../../components/games/Minesweeper";
 import Sudoku from "../../../../components/games/Sudoku";
 import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
+import { useYouthGameIq } from "../../../../hooks/useYouthGameIq";
 
 export default function YouthGamePage() {
     const router = useRouter();
     const { id } = useLocalSearchParams<{ id?: string }>();
     const { width } = useWindowDimensions();
+    const { recordGameResult } = useYouthGameIq();
     const [earnedPoints, setEarnedPoints] = useState<number | null>(null);
 
     const game = useMemo(() => getGameById(id), [id]);
@@ -36,8 +38,15 @@ export default function YouthGamePage() {
         router.replace("/youth/games" as any);
     };
 
-    const handleFinishGame = (points: number) => {
-        setEarnedPoints(points);
+    const handleFinishGame = async (gameScore: number) => {
+        if (!game) return;
+
+        setEarnedPoints(game.iqReward);
+        await recordGameResult({
+            gameId: game.id,
+            iqPoints: game.iqReward,
+            gameScore,
+        });
     };
 
     const gameContent = game?.id === "memory"

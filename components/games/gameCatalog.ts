@@ -6,6 +6,7 @@ export type GameCard = {
     icon: string;
     color: string;
     desc: string;
+    iqReward: number;
     points: string;
     locked?: boolean;
 };
@@ -20,10 +21,10 @@ export type DailyChallenge = {
 };
 
 export const GAMES: GameCard[] = [
-    { id: "memory", title: "Пары", icon: "brain", color: "#6C5CE7", desc: "Тренируй зрительную память", points: "+20 IQ" },
-    { id: "sudoku", title: "Судоку", icon: "grid", color: "#3B82F6", desc: "Математическая логика", points: "+50 IQ" },
-    { id: "minesweeper", title: "Сапер", icon: "target", color: "#EF4444", desc: "Стратегическое мышление", points: "+40 IQ" },
-    { id: "2048", title: "2048", icon: "hash", color: "#F59E0B", desc: "Складывай числа", points: "+30 IQ" },
+    { id: "memory", title: "Пары", icon: "cpu", color: "#6C5CE7", desc: "Тренируй зрительную память", iqReward: 20, points: "+20 IQ" },
+    { id: "sudoku", title: "Судоку", icon: "grid", color: "#3B82F6", desc: "Математическая логика", iqReward: 50, points: "+50 IQ" },
+    { id: "minesweeper", title: "Сапер", icon: "target", color: "#EF4444", desc: "Стратегическое мышление", iqReward: 40, points: "+40 IQ" },
+    { id: "2048", title: "2048", icon: "hash", color: "#F59E0B", desc: "Складывай числа", iqReward: 30, points: "+30 IQ" },
 ];
 
 export const DAILY_CHALLENGES: DailyChallenge[] = [
@@ -47,7 +48,7 @@ export const DAILY_CHALLENGES: DailyChallenge[] = [
         gameId: "memory",
         title: "Марафон памяти",
         prize: "Приз: 300 монет + бейдж фокус",
-        icon: "brain",
+        icon: "cpu",
         accentColor: "#A78BFA",
         colors: ["#3B0764", "#581C87"],
     },

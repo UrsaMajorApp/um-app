@@ -6,9 +6,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { GAMES, getDailyChallenge, GameId } from "../../../components/games/gameCatalog";
+import { useYouthGameIq } from "../../../hooks/useYouthGameIq";
 
 export default function GamesLobby() {
     const router = useRouter();
+    const { totalIq, loading: iqLoading } = useYouthGameIq();
     const [dailyChallenge, setDailyChallenge] = useState(() => getDailyChallenge());
     const { width } = useWindowDimensions();
     const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
@@ -54,14 +56,16 @@ export default function GamesLobby() {
                 >
                     <SafeAreaView edges={["top"]}>
                         <View style={{ paddingHorizontal: paddingX, paddingTop: 12, paddingBottom: 32 }}>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
                                 <View>
                                     <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 }}>Игровой Центр</Text>
                                     <Text style={{ color: 'white', fontSize: 24, fontWeight: '900' }}>Развивайся играя</Text>
                                 </View>
-                                <View style={{ backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 }}>
-                                    <Text style={{ color: 'white', fontWeight: '900' }}>1240 IQ</Text>
-                                </View>
+                                {!iqLoading && (
+                                    <View style={{ backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 }}>
+                                        <Text style={{ color: 'white', fontWeight: '900' }}>{totalIq} IQ</Text>
+                                    </View>
+                                )}
                             </View>
                         </View>
                     </SafeAreaView>
