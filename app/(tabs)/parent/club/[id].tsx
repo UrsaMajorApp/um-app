@@ -23,6 +23,7 @@ import {
   courseGradient,
   usePublicCourseById,
 } from "../../../../hooks/usePublicData";
+import { formatKZT } from "../../../../lib/formatCurrency";
 import { EnrollmentChoiceModal } from "../../../../components/parent/club/EnrollmentChoiceModal";
 import { FullCourseBookingModal } from "../../../../components/parent/club/FullCourseBookingModal";
 
@@ -586,7 +587,7 @@ export default function ParentClubDetails() {
             Стоимость
           </Text>
           <Text style={{ fontSize: 20, fontWeight: "900", color: "#111827" }}>
-            {course.price.toLocaleString()} ₸/мес
+            {formatKZT(course.price)}/мес
           </Text>
         </View>
         {enrolled ? (

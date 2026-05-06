@@ -19,6 +19,7 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "../../../hooks/usePublicData";
+import { formatKZT } from "../../../lib/formatCurrency";
 import { isWebMinWidth } from "../../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
@@ -318,7 +319,7 @@ export default function CatalogScreen() {
                           marginBottom: 10,
                         }}
                       >
-                        {item.price.toLocaleString()} ₸/мес
+                        {formatKZT(item.price)}/мес
                       </Text>
                       <TouchableOpacity
                         onPress={() =>

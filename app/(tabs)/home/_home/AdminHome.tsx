@@ -1,10 +1,9 @@
+import { AdminCard } from "@/components/admin/AdminCard";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import {
-  AdminCard,
-  AdminHeader,
-  formatKZT,
   useAdminLayout,
   useAdminNavigation,
-} from "@/components/admin/shared";
+} from "@/components/admin/adminUtils";
 import {
   COLORS,
   RADIUS,
@@ -23,6 +22,7 @@ import {
   useTickets,
   useTransactions,
 } from "@/hooks/useAdminData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";

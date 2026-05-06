@@ -19,6 +19,7 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "../../../hooks/usePublicData";
+import { formatKZT } from "../../../lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 // Skill-based filter chips shown in the catalog
@@ -390,7 +391,7 @@ export default function ParentClubs() {
                               fontSize: 13,
                             }}
                           >
-                            {club.price.toLocaleString()} ₸
+                            {formatKZT(club.price)}
                           </Text>
                           <View
                             style={{
@@ -541,7 +542,7 @@ export default function ParentClubs() {
                         }}
                         numberOfLines={1}
                       >
-                        {club.price.toLocaleString()} ₸
+                        {formatKZT(club.price)}
                       </Text>
                       {club.age_min || club.age_max ? (
                         <Text

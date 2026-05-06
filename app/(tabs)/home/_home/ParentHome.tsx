@@ -25,6 +25,7 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "@/hooks/usePublicData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
 import { FloatingBranding } from "@/components/home/parent/FloatingBranding";
 
@@ -434,7 +435,7 @@ export default function ParentHome() {
                             textTransform: "uppercase",
                           }}
                         >
-                          {rec.price.toLocaleString()} ₸/мес
+                          {formatKZT(rec.price)}/мес
                         </Text>
                       </View>
                     </View>

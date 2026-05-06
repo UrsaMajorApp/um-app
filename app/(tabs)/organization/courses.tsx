@@ -22,6 +22,7 @@ import {
   TYPOGRAPHY,
 } from "../../../constants/theme";
 import { useOrgCourses, useOrgGroups } from "../../../hooks/useOrgData";
+import { formatKZT } from "../../../lib/formatCurrency";
 import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgCourses() {
@@ -459,7 +460,7 @@ export default function OrgCourses() {
                             color: COLORS.primary,
                           }}
                         >
-                          {course.price.toLocaleString()} ₸/МЕС
+                          {formatKZT(course.price)}/МЕС
                         </Text>
                       </View>
 

@@ -21,6 +21,7 @@ import {
   TYPOGRAPHY,
 } from "../../../../constants/theme";
 import { useOrgCourseById, useOrgGroups } from "../../../../hooks/useOrgData";
+import { formatKZT } from "../../../../lib/formatCurrency";
 import { useIsDesktop } from "../../../../lib/useIsDesktop";
 
 export default function CourseDetailScreen() {
@@ -220,7 +221,7 @@ export default function CourseDetailScreen() {
                         fontWeight: TYPOGRAPHY.weight.bold,
                       }}
                     >
-                      {course.price.toLocaleString()} ₸ / МЕС
+                      {formatKZT(course.price)} / МЕС
                     </Text>
                   </View>
                   {course.status !== "active" && (

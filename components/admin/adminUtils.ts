@@ -1,54 +1,10 @@
+import { ADMIN_ROUTES, type AdminRouteKey } from "@/constants/admin";
 import { LAYOUT, SPACING } from "@/constants/theme";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { rowsOrEmpty } from "@/lib/supabaseHelpers";
 import { useRouter } from "expo-router";
 import { useWindowDimensions } from "react-native";
 import { useIsDesktop } from "../../lib/useIsDesktop";
-
-export type AdminRouteKey =
-  | "overview"
-  | "users"
-  | "organizations"
-  | "billing"
-  | "support"
-  | "settings";
-
-export const ADMIN_ROUTES: Record<AdminRouteKey, string> = {
-  overview: "/(tabs)/home",
-  users: "/(tabs)/admin/users",
-  organizations: "/(tabs)/admin/organizations",
-  billing: "/(tabs)/admin/billing",
-  support: "/(tabs)/admin/support",
-  settings: "/(tabs)/admin/settings",
-};
-
-export const USER_ROLES = [
-  "all",
-  "parent",
-  "youth",
-  "child",
-  "mentor",
-  "org",
-  "admin",
-] as const;
-
-export const ROLE_LABELS: Record<string, string> = {
-  all: "Все",
-  parent: "Родители",
-  youth: "Молодежь",
-  child: "Дети",
-  mentor: "Менторы",
-  org: "Организации",
-  admin: "Администраторы",
-};
-
-export const ROLE_COLORS: Record<string, { bg: string; color: string }> = {
-  parent: { bg: "#EDE9FE", color: "#6C5CE7" },
-  youth: { bg: "#DBEAFE", color: "#2563EB" },
-  child: { bg: "#DCFCE7", color: "#16A34A" },
-  mentor: { bg: "#FEF9C3", color: "#CA8A04" },
-  org: { bg: "#FEE2E2", color: "#DC2626" },
-  admin: { bg: "#F3F4F6", color: "#374151" },
-};
 
 export function useAdminLayout() {
   const { width } = useWindowDimensions();
@@ -58,11 +14,6 @@ export function useAdminLayout() {
     isDesktop,
     paddingX: isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl,
   };
-}
-
-export function formatKZT(n: number): string {
-  if (!Number.isFinite(n)) return "0 ₸";
-  return `${Math.round(n).toLocaleString("ru-RU")} ₸`;
 }
 
 export function formatAdminDate(iso: string): string {
@@ -102,9 +53,9 @@ export async function ensureConversation(
       .eq("user_id", otherUserId),
   ]);
   const currentIds = new Set(
-    (currentParts.data ?? []).map((p: any) => p.conversation_id),
+    rowsOrEmpty<any>(currentParts).map((p) => p.conversation_id),
   );
-  const shared = (otherParts.data ?? []).find((p: any) =>
+  const shared = rowsOrEmpty<any>(otherParts).find((p) =>
     currentIds.has(p.conversation_id),
   );
   if (shared?.conversation_id)

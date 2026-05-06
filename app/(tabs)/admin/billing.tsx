@@ -1,11 +1,10 @@
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { EmptyState } from "@/components/admin/EmptyState";
+import { SegmentTabs } from "@/components/admin/SegmentTabs";
 import {
-  AdminHeader,
-  EmptyState,
   formatAdminDate,
-  formatKZT,
-  SegmentTabs,
   useAdminLayout,
-} from "@/components/admin/shared";
+} from "@/components/admin/adminUtils";
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
 import {
   useAdminStats,
@@ -13,6 +12,7 @@ import {
   useOrganizations,
   useTransactions,
 } from "@/hooks/useAdminData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {

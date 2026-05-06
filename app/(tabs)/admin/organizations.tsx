@@ -1,9 +1,7 @@
-import {
-  AdminHeader,
-  EmptyState,
-  ensureConversation,
-  SegmentTabs,
-} from "@/components/admin/shared";
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { EmptyState } from "@/components/admin/EmptyState";
+import { SegmentTabs } from "@/components/admin/SegmentTabs";
+import { ensureConversation } from "@/components/admin/adminUtils";
 import { LEVEL_LABELS } from "@/constants/courseOptions";
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,6 +11,7 @@ import {
   useAdminEnrollments,
   useOrganizations,
 } from "@/hooks/useAdminData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -290,7 +289,7 @@ export default function AdminOrganizationsScreen() {
                     >
                       {course.org_name} •{" "}
                       {LEVEL_LABELS[course.level] ?? course.level} •{" "}
-                      {course.price.toLocaleString()} ₸/мес
+                      {formatKZT(course.price)}/мес
                     </Text>
                     {course.description ? (
                       <Text

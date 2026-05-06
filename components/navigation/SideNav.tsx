@@ -6,7 +6,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "@/constants/theme";
 import { useAuth } from "@/contexts/AuthContext";
 import { NotificationsModal } from "./NotificationsModal";
 import { useTabNav } from "./useTabNav";
-import type { Role } from "./tabItems";
+import type { Role } from "@/constants/navigation/tabItems";
 
 type Props = { role: Role | string | null };
 
@@ -300,4 +300,3 @@ export function SideNav({ role }: Props) {
 }
 
 // ─── Mobile bottom tab bar ───────────────────────────────────────────────────
-

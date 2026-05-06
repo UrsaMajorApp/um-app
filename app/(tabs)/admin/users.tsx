@@ -1,14 +1,12 @@
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { EmptyState } from "@/components/admin/EmptyState";
+import { SegmentTabs } from "@/components/admin/SegmentTabs";
 import {
-  AdminHeader,
-  EmptyState,
   ensureConversation,
   formatAdminDate,
-  ROLE_COLORS,
-  ROLE_LABELS,
-  SegmentTabs,
   useAdminLayout,
-  USER_ROLES,
-} from "@/components/admin/shared";
+} from "@/components/admin/adminUtils";
+import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from "@/constants/admin";
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
 import { useAuth } from "@/contexts/AuthContext";
 import {

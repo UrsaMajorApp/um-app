@@ -15,6 +15,7 @@ import {
     SHADOWS
 } from "../../../constants/theme";
 import { useWalletData } from "../../../hooks/usePlatformData";
+import { formatKZT } from "../../../lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorWalletScreen() {
@@ -65,7 +66,7 @@ export default function MentorWalletScreen() {
         ]}
       >
         {tx.amount_kzt > 0 ? "+" : ""}
-        {tx.amount_kzt.toLocaleString()} ₸
+        {formatKZT(tx.amount_kzt)}
       </Text>
     </MotiView>
   );
@@ -94,7 +95,7 @@ export default function MentorWalletScreen() {
               >
                 <Text style={styles.balanceLabel}>Доступно к выводу</Text>
                 <Text style={styles.balanceVal}>
-                  {summary.availableBalance.toLocaleString()} ₸
+                  {formatKZT(summary.availableBalance)}
                 </Text>
                 <View style={styles.balanceActions}>
                   <TouchableOpacity style={styles.actionBtn}>
@@ -118,7 +119,7 @@ export default function MentorWalletScreen() {
                   </View>
                   <View>
                     <Text style={styles.statVal}>
-                      {summary.periodRevenue.toLocaleString()} ₸
+                      {formatKZT(summary.periodRevenue)}
                     </Text>
                     <Text style={styles.statLabel}>
                       За {summary.periodLabel}

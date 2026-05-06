@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "../../../constants/theme";
 import { useWalletData } from "../../../hooks/usePlatformData";
+import { formatKZT } from "../../../lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgWalletScreen() {
@@ -63,7 +64,7 @@ export default function OrgWalletScreen() {
     }
     Alert.alert(
       "Заявка отправлена",
-      `Вывод ${parseFloat(withdrawAmount).toLocaleString()} ₸ будет обработан в течение 1-3 рабочих дней`,
+      `Вывод ${formatKZT(parseFloat(withdrawAmount))} будет обработан в течение 1-3 рабочих дней`,
       [{ text: "OK", onPress: () => setShowWithdrawModal(false) }],
     );
     setWithdrawAmount("");
@@ -112,7 +113,7 @@ export default function OrgWalletScreen() {
         ]}
       >
         {tx.amount_kzt > 0 ? "+" : ""}
-        {tx.amount_kzt.toLocaleString()} ₸
+        {formatKZT(tx.amount_kzt)}
       </Text>
     </MotiView>
   );
@@ -152,7 +153,7 @@ export default function OrgWalletScreen() {
               >
                 <Text style={styles.balanceLabel}>Доступно к выводу</Text>
                 <Text style={styles.balanceVal}>
-                  {summary.availableBalance.toLocaleString()} ₸
+                  {formatKZT(summary.availableBalance)}
                 </Text>
 
                 {/* Revenue breakdown */}
@@ -161,7 +162,7 @@ export default function OrgWalletScreen() {
                     <View style={styles.breakdownDot} />
                     <Text style={styles.breakdownLabel}>Общий доход</Text>
                     <Text style={styles.breakdownVal}>
-                      {summary.totalRevenue.toLocaleString()} ₸
+                      {formatKZT(summary.totalRevenue)}
                     </Text>
                   </View>
                   <View style={[styles.breakdownRow, { opacity: 0.6 }]}>
@@ -173,7 +174,7 @@ export default function OrgWalletScreen() {
                     />
                     <Text style={styles.breakdownLabel}>Комиссия UM (10%)</Text>
                     <Text style={styles.breakdownVal}>
-                      -{summary.commission.toLocaleString()} ₸
+                      -{formatKZT(summary.commission)}
                     </Text>
                   </View>
                 </View>
@@ -203,7 +204,7 @@ export default function OrgWalletScreen() {
                   </View>
                   <View>
                     <Text style={styles.statVal}>
-                      {summary.periodRevenue.toLocaleString()} ₸
+                      {formatKZT(summary.periodRevenue)}
                     </Text>
                     <Text style={styles.statLabel}>
                       За {summary.periodLabel}
@@ -257,7 +258,7 @@ export default function OrgWalletScreen() {
                   onChangeText={setWithdrawAmount}
                 />
                 <Text style={styles.inputHint}>
-                  Доступно: {summary.availableBalance.toLocaleString()} ₸
+                  Доступно: {formatKZT(summary.availableBalance)}
                 </Text>
               </View>
 

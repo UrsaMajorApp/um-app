@@ -3,20 +3,19 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-    COLORS,
-    LAYOUT,
-    SHADOWS
-} from "../../../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../../../constants/theme";
 import { useTeacherGroup } from "../../../../../hooks/usePlatformData";
+import {
+  getDashboardHorizontalPadding,
+  useIsDesktop,
+} from "../../../../../lib/useIsDesktop";
 
 function formatDateKey(date: Date) {
   const year = date.getFullYear();
@@ -28,8 +27,8 @@ function formatDateKey(date: Date) {
 export default function TeacherGroupJournal() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const paddingX = width >= LAYOUT.desktopBreakpoint ? 40 : 24;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const selectedDateKey = formatDateKey(selectedDate);

@@ -13,6 +13,7 @@ import {
     View,
 } from "react-native";
 import { useSubscriptionPlans } from "../../../hooks/usePlatformData";
+import { formatKZT } from "../../../lib/formatCurrency";
 import { isWebMinWidth } from "../../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
@@ -50,7 +51,7 @@ export default function SubscribeScreen() {
 
   function formatPrice(priceKzt: number, billingPeriod: string) {
     const period = billingPeriod === "month" ? "мес" : billingPeriod;
-    return `${priceKzt.toLocaleString()} ₸ / ${period}`;
+    return `${formatKZT(priceKzt)} / ${period}`;
   }
 
   return (

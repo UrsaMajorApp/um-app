@@ -1,14 +1,6 @@
 import { Redirect, useLocalSearchParams } from "expo-router";
-import { useAuth, type UserRole } from "../contexts/AuthContext";
-
-const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, string>> = {
-  parent: "/profile/parent/create-profile",
-  youth: "/profile/youth/create-profile",
-  child: "/profile/youth/create-profile",
-  "young-adult": "/profile/youth/create-profile",
-  mentor: "/profile/mentor/create-profile",
-  org: "/profile/organization/create-profile",
-};
+import { PROFILE_SETUP_ROUTES } from "../constants/profileRoutes";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Index() {
   const { user, isLoading } = useAuth();

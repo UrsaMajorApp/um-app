@@ -1,5 +1,9 @@
 import { useRouter, useSegments } from "expo-router";
-import { DEFAULT_TABS, TABS_BY_ROLE, type Role } from "./tabItems";
+import {
+  DEFAULT_TABS,
+  TABS_BY_ROLE,
+  type Role,
+} from "@/constants/navigation/tabItems";
 
 export function useTabNav(role: Role | string | null) {
   const router = useRouter();

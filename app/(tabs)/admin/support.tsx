@@ -1,10 +1,10 @@
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { EmptyState } from "@/components/admin/EmptyState";
+import { SegmentTabs } from "@/components/admin/SegmentTabs";
 import {
-  AdminHeader,
-  EmptyState,
   formatAdminDate,
-  SegmentTabs,
   useAdminLayout,
-} from "@/components/admin/shared";
+} from "@/components/admin/adminUtils";
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
 import { useTickets } from "@/hooks/useAdminData";
 import React, { useState } from "react";

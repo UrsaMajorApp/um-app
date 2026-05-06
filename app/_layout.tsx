@@ -15,21 +15,11 @@ import "../global.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DevRoleSwitcher } from "../components/DevRoleSwitcher";
 import type { AuthUser, UserRole } from "../contexts/AuthContext";
-
-const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, string>> = {
-  parent: "/profile/parent/create-profile",
-  youth: "/profile/youth/create-profile",
-  child: "/profile/youth/create-profile",
-  "young-adult": "/profile/youth/create-profile",
-  mentor: "/profile/mentor/create-profile",
-  org: "/profile/organization/create-profile",
-};
+import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from "../constants/profileRoutes";
 
 function getProfileSetupRoute(role: UserRole) {
   return PROFILE_SETUP_ROUTES[role] ?? "/(tabs)/home";
 }
-
-const YOUTH_ROLES = new Set<UserRole>(["youth", "child", "young-adult"]);
 
 function isYouthRole(role: UserRole) {
   return YOUTH_ROLES.has(role);

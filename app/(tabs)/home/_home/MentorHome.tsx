@@ -23,6 +23,7 @@ import {
     useMentorStudents,
 } from "@/hooks/useMentorData";
 import { useWalletData } from "@/hooks/usePlatformData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
 
 export default function MentorHome() {
@@ -261,7 +262,7 @@ export default function MentorHome() {
               </View>
               <View>
                 <Text style={styles.statInfoVal}>
-                  {walletSummary.periodRevenue.toLocaleString()} ₸
+                  {formatKZT(walletSummary.periodRevenue)}
                 </Text>
                 <Text style={styles.statInfoLabel}>Доход (мес)</Text>
               </View>

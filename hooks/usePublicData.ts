@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { isUuid } from "../lib/idUtils";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 import type { OrgCourse, OrgGroup } from "./useOrgData";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -131,9 +132,9 @@ export function usePublicCourseById(id: string | undefined) {
         .order("display_order", { ascending: true }),
     ]).then(([courseRes, groupsRes, reviewsRes, slotsRes]) => {
       setCourse(courseRes.data ? mapRow(courseRes.data) : null);
-      setGroups((groupsRes.data ?? []) as OrgGroup[]);
-      setReviews((reviewsRes.data ?? []) as CourseReview[]);
-      setTrialSlots((slotsRes.data ?? []) as TrialLessonSlot[]);
+      setGroups(rowsOrEmpty<OrgGroup>(groupsRes));
+      setReviews(rowsOrEmpty<CourseReview>(reviewsRes));
+      setTrialSlots(rowsOrEmpty<TrialLessonSlot>(slotsRes));
       setLoading(false);
     });
   }, [id, devDataVersion]);

@@ -12,6 +12,7 @@ import {
 import { LEVEL_LABELS } from "../../constants/courseOptions";
 import { COLORS, SHADOWS } from "../../constants/theme";
 import { courseGradient, usePublicCourseById } from "../../hooks/usePublicData";
+import { formatKZT } from "../../lib/formatCurrency";
 import { isWebMinWidth } from "../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
@@ -252,7 +253,7 @@ export default function CourseModal() {
                 <Text
                   style={{ fontSize: 20, fontWeight: "900", color: "#111827" }}
                 >
-                  {course.price.toLocaleString()} ₸/мес
+                  {formatKZT(course.price)}/мес
                 </Text>
               </View>
               <TouchableOpacity

@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSubscriptionPlans } from "../../hooks/usePlatformData";
+import { formatKZT } from "../../lib/formatCurrency";
 import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export default function SubscriptionPaywall() {
@@ -117,9 +118,9 @@ export default function SubscriptionPaywall() {
                 </Text>
                 <View style={styles.priceRow}>
                   <Text style={styles.priceAmount}>
-                    {plan ? plan.price_kzt.toLocaleString() : "—"}
+                    {plan ? formatKZT(plan.price_kzt) : "—"}
                   </Text>
-                  <Text style={styles.priceUnit}> ₸ / мес</Text>
+                  <Text style={styles.priceUnit}> / мес</Text>
                 </View>
 
                 <Pressable

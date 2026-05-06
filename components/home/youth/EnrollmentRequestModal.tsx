@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { COLORS, SHADOWS } from "@/constants/theme";
 import { courseGradient } from "@/hooks/usePublicData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 type EnrollmentRequestModalProps = {
@@ -265,7 +266,9 @@ export function EnrollmentRequestModal({
                       color: COLORS.foreground,
                     }}
                   >
-                    {selectedCourse.price?.toLocaleString() || "—"} ₸/мес
+                    {selectedCourse.price != null
+                      ? `${formatKZT(selectedCourse.price)}/мес`
+                      : "— ₸/мес"}
                   </Text>
                 </View>
               </View>

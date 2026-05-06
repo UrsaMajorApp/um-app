@@ -1,8 +1,6 @@
-import {
-  AdminHeader,
-  SegmentTabs,
-  useAdminLayout,
-} from "@/components/admin/shared";
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { SegmentTabs } from "@/components/admin/SegmentTabs";
+import { useAdminLayout } from "@/components/admin/adminUtils";
 import {
   COLORS,
   RADIUS,

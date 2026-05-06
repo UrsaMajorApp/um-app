@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SHADOWS } from "../../../constants/theme";
+import { formatKZT } from "../../../lib/formatCurrency";
 
 type EnrollmentChoiceModalProps = {
   visible: boolean;
@@ -239,7 +240,7 @@ export function EnrollmentChoiceModal({
                         fontWeight: "600",
                       }}
                     >
-                      {course.price.toLocaleString()} ₸/мес
+                      {formatKZT(course.price)}/мес
                     </Text>
                   </View>
                   <Feather name="chevron-right" size={22} color={COLORS.primary} />

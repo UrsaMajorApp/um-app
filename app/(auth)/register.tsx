@@ -23,6 +23,7 @@ import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import { useDevSettings } from "../../contexts/DevSettingsContext";
+import { formatPhone } from "../../lib/formatPhone";
 import { useIsDesktop } from "../../lib/useIsDesktop";
 
 const ROLES: {
@@ -101,42 +102,6 @@ export default function RegisterScreen() {
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;
 
-  const formatPhone = (text: string) => {
-    // Remove all non-digit characters except +
-    const cleaned = text.replace(/[^\d+]/g, "");
-
-    // Check if it starts with +
-    const hasPlus = cleaned.startsWith("+");
-
-    // Get only digits (no +)
-    const digitsOnly = cleaned.replace(/\D/g, "");
-
-    // Format based on length
-    let formatted = "";
-
-    if (digitsOnly.length === 0) {
-      // Allow typing just "+"
-      formatted = hasPlus ? "+" : "";
-    } else if (digitsOnly.length === 1) {
-      // First digit: keep + if user typed it, otherwise just the digit
-      formatted = hasPlus ? `+${digitsOnly}` : digitsOnly;
-    } else if (digitsOnly.length <= 4) {
-      const prefix = hasPlus ? `+${digitsOnly[0]}` : digitsOnly[0];
-      formatted = `${prefix} (${digitsOnly.slice(1)}`;
-    } else if (digitsOnly.length <= 7) {
-      const prefix = hasPlus ? `+${digitsOnly[0]}` : digitsOnly[0];
-      formatted = `${prefix} (${digitsOnly.slice(1, 4)}) ${digitsOnly.slice(4)}`;
-    } else if (digitsOnly.length <= 9) {
-      const prefix = hasPlus ? `+${digitsOnly[0]}` : digitsOnly[0];
-      formatted = `${prefix} (${digitsOnly.slice(1, 4)}) ${digitsOnly.slice(4, 7)}-${digitsOnly.slice(7)}`;
-    } else {
-      const prefix = hasPlus ? `+${digitsOnly[0]}` : digitsOnly[0];
-      formatted = `${prefix} (${digitsOnly.slice(1, 4)}) ${digitsOnly.slice(4, 7)}-${digitsOnly.slice(7, 9)}-${digitsOnly.slice(9, 11)}`;
-    }
-
-    setIdentifier(formatted);
-  };
-
   const isEmail = authMethod === "email";
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier.trim());
   const isValidPhone = identifier.replace(/\D/g, "").length >= 10;
@@ -145,7 +110,7 @@ export default function RegisterScreen() {
       setIdentifier(text.trim());
       return;
     }
-    formatPhone(text);
+    setIdentifier(formatPhone(text));
   };
 
   const handleAuthMethodChange = (method: AuthMethod) => {
@@ -561,7 +526,7 @@ export default function RegisterScreen() {
                         value={identifier}
                         onChange={handleIdentifierChange}
                         placeholder={
-                          isEmail ? "you@example.com" : "+7 (___) ___-__-__"
+                          isEmail ? "you@example.com" : "+7 777 777 7777"
                         }
                         keyboardType={isEmail ? "email-address" : "phone-pad"}
                         autoFocus

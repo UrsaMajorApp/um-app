@@ -24,6 +24,7 @@ import {
   useOrgStats,
 } from "@/hooks/useOrgData";
 import { useWalletData } from "@/hooks/usePlatformData";
+import { formatKZT } from "@/lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
 
 const QUICK_ACTIONS = [
@@ -777,7 +778,7 @@ export default function OrgHome() {
                     letterSpacing: -1,
                   }}
                 >
-                  {walletSummary.periodRevenue.toLocaleString()} ₸
+                  {formatKZT(walletSummary.periodRevenue)}
                 </Text>
                 <Text
                   style={{
@@ -809,7 +810,7 @@ export default function OrgHome() {
                   </Text>
                 </View>
                 <Text className="text-sm font-black text-gray-900">
-                  {walletSummary.availableBalance.toLocaleString()} ₸
+                  {formatKZT(walletSummary.availableBalance)}
                 </Text>
               </View>
               <View className="flex-row justify-between items-center opacity-40">
@@ -820,7 +821,7 @@ export default function OrgHome() {
                   </Text>
                 </View>
                 <Text className="text-sm font-bold text-gray-900">
-                  -{walletSummary.commission.toLocaleString()} ₸
+                  -{formatKZT(walletSummary.commission)}
                 </Text>
               </View>
             </View>
