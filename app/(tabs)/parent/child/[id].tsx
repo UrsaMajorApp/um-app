@@ -2,16 +2,19 @@ import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { Platform, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Alert, Platform, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import EditChildModal from "../../../../components/parent/EditChildModal";
 import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
 import { useParentData } from "../../../../contexts/ParentDataContext";
+import { Child } from "../../../../models/types";
 
 export default function ParentChildDetails() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { childrenProfile, parentProfile, setActiveChildId } = useParentData();
+  const { childrenProfile, parentProfile, removeChild, setActiveChildId, updateChild } = useParentData();
   const { width } = useWindowDimensions();
+  const [editingChild, setEditingChild] = React.useState<Child | null>(null);
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
   const horizontalPadding = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
 
@@ -35,17 +38,40 @@ export default function ParentChildDetails() {
 
   const currentSkills = getDynamicSkills();
 
+  const deleteChild = async () => {
+    await removeChild(child.id);
+    router.replace("/(tabs)/parent/children" as any);
+  };
+
+  const confirmRemove = () => {
+    if (Platform.OS === "web") {
+      // eslint-disable-next-line no-alert
+      if (window.confirm(`Удалить профиль "${child.name}"? Это действие нельзя отменить.`)) {
+        deleteChild();
+      }
+    } else {
+      Alert.alert(
+        "Удалить ребёнка?",
+        `Профиль "${child.name}" будет удалён. Это действие нельзя отменить.`,
+        [
+          { text: "Отмена", style: "cancel" },
+          { text: "Удалить", style: "destructive", onPress: deleteChild },
+        ],
+      );
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <LinearGradient
-        colors={COLORS.gradients.header as any}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{ paddingBottom: 40, borderBottomLeftRadius: 40, borderBottomRightRadius: 40 }}
-      >
-        <SafeAreaView edges={["top"]}>
-          <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 32 }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+        <LinearGradient
+          colors={COLORS.gradients.header as any}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+        >
+          <SafeAreaView edges={["top"]}>
+            <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: horizontalPadding, paddingTop: 12, paddingBottom: 18 }}>
               <Pressable
                 onPress={() => {
                   if (router.canGoBack()) {
@@ -66,9 +92,60 @@ export default function ParentChildDetails() {
               >
                 <Feather name="arrow-left" size={20} color="white" />
               </Pressable>
-              <Text style={{ fontSize: 20, fontWeight: "800", color: "white" }}>Профиль</Text>
+              <Text style={{ flex: 1, fontSize: 20, fontWeight: "800", color: "white" }}>Профиль</Text>
+              <Pressable
+                onPress={() => setEditingChild(child)}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: "rgba(255,255,255,0.2)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: 8,
+                }}
+              >
+                <Feather name="edit-2" size={18} color="white" />
+              </Pressable>
+              <Pressable
+                onPress={confirmRemove}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: "rgba(255,59,48,0.28)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Feather name="trash-2" size={18} color="white" />
+              </Pressable>
             </View>
+          </SafeAreaView>
+        </LinearGradient>
+      </View>
 
+      <View style={{ flex: 1, backgroundColor: COLORS.background, overflow: "hidden" }}>
+        <LinearGradient
+          pointerEvents="none"
+          colors={COLORS.gradients.header as any}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={{ position: "absolute", top: 0, left: 0, right: 0, height: 520 }}
+        />
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            paddingBottom: 40,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          <LinearGradient
+            colors={COLORS.gradients.header as any}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{ paddingHorizontal: horizontalPadding, paddingTop: 32, paddingBottom: 40, borderBottomLeftRadius: 40, borderBottomRightRadius: 40 }}
+          >
             <View style={{ alignItems: "center" }}>
               <View style={SHADOWS.md} className="w-24 h-24 bg-white rounded-[32px] items-center justify-center mb-5 border-4 border-white/20">
                 <Text style={{ color: '#6C5CE7' }} className="text-4xl font-black">{(child.name || "").charAt(0)}</Text>
@@ -97,18 +174,9 @@ export default function ParentChildDetails() {
                  </View>
               </View>
             </View>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+          </LinearGradient>
 
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: horizontalPadding,
-          paddingTop: 32,
-          paddingBottom: 40,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
+        <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 32, backgroundColor: COLORS.background }}>
         {/* Insight Box */}
         <View className="bg-blue-50 p-6 rounded-[32px] mb-8 flex-row items-center gap-4 border border-blue-100">
            <View className="w-12 h-12 bg-white rounded-2xl items-center justify-center shadow-sm">
@@ -141,7 +209,13 @@ export default function ParentChildDetails() {
                  <View className="flex-1 pr-4">
                     <Text className="font-bold text-gray-900 text-lg mb-1">Большое тестирование</Text>
                     <Text className="text-sm font-medium text-gray-500 mb-4 leading-5">Прохождение 1 раз в месяц для детальной корректировки профиля (навыки, архетип).</Text>
-                    <TouchableOpacity onPress={() => router.push("/profile/youth/testing" as any)} className="bg-blue-50 py-3 px-5 rounded-2xl self-start">
+                    <TouchableOpacity
+                      onPress={() => {
+                        setActiveChildId(child.id);
+                        router.push("/profile/youth/testing" as any);
+                      }}
+                      className="bg-blue-50 py-3 px-5 rounded-2xl self-start"
+                    >
                         <Text className="text-blue-600 font-black text-xs uppercase tracking-wide">Начать тест</Text>
                     </TouchableOpacity>
                  </View>
@@ -228,7 +302,10 @@ export default function ParentChildDetails() {
                   Пройдите глубокий тест способностей ребенка для открытия новых талантов.
                </Text>
                <Pressable
-                  onPress={() => router.push({ pathname: "/parent/testing", params: { childId: child.id } } as any)}
+                  onPress={() => {
+                    setActiveChildId(child.id);
+                    router.push("/profile/youth/testing" as any);
+                  }}
                   className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
                >
                   <Text className="text-gray-900 font-black text-sm uppercase">Начать тест</Text>
@@ -311,7 +388,17 @@ export default function ParentChildDetails() {
                </View>
             </View>
          )}
-      </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
+
+      {editingChild && (
+        <EditChildModal
+          child={editingChild}
+          onSave={(patch) => updateChild(editingChild.id, patch)}
+          onClose={() => setEditingChild(null)}
+        />
+      )}
     </View>
   );
 }
