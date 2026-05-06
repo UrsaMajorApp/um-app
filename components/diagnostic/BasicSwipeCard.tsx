@@ -8,7 +8,7 @@ import { Feather } from '@expo/vector-icons';
 import { MotiView } from 'moti';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SHADOWS } from '$constants/theme';
-import { CATEGORY_COLORS, type BasicCard } from '$data/diagnosticData';
+import { type BasicCard, CATEGORY_COLORS } from '$data/diagnosticData';
 
 interface Props {
   card: BasicCard;

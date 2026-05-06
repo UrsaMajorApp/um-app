@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { useState } from 'react';
 import {
   Alert,
@@ -17,6 +16,7 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroup } from '$hooks/usePlatformData';
 import { useTeacherAttendanceEditor } from '$hooks/useTeacherAttendanceEditor';
 import { formatDateKey } from '$lib/date';
+import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 const SCHEDULE_TOKENS = [

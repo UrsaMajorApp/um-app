@@ -1,7 +1,11 @@
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
+import { ensureConversation, formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
-import { ensureConversation, formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
 import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from '$constants/admin';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -12,12 +16,7 @@ import {
   useFamilies,
   useMentorApps,
 } from '$hooks/useAdminData';
-import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-type UsersTab = 'mentors' | 'active_mentors' | 'users' | 'families';
+import type { AdminUsersTab } from '$types/admin';
 
 export default function AdminUsersScreen() {
   const router = useRouter();
@@ -27,7 +26,7 @@ export default function AdminUsersScreen() {
   const users = useAllUsers();
   const families = useFamilies();
   const stats = useAdminStats(mentorApps.data, [], families.data);
-  const [tab, setTab] = useState<UsersTab>('mentors');
+  const [tab, setTab] = useState<AdminUsersTab>('mentors');
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [selectedMentorId, setSelectedMentorId] = useState<string | null>(null);

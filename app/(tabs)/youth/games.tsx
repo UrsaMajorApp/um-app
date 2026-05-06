@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { useEffect, useState } from 'react';
 import {
   Platform,
@@ -12,10 +11,12 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { type GameId, GAMES, getDailyChallenge } from '$components/games/gameCatalog';
+import { GAMES, getDailyChallenge } from '$components/games/gameCatalog';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
 import { useYouthGameIq } from '$hooks/useYouthGameIq';
+import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { GameId } from '$types/games';
 
 export default function GamesLobby() {
   const router = useRouter();

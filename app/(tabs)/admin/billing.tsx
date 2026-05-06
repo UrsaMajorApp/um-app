@@ -1,15 +1,14 @@
-import { AdminHeader } from '$components/admin/AdminHeader';
-import { EmptyState } from '$components/admin/EmptyState';
-import { SegmentTabs } from '$components/admin/SegmentTabs';
-import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
-import { useAdminStats, useFamilies, useOrganizations, useTransactions } from '$hooks/useAdminData';
-import { formatKZT } from '$lib/formatCurrency';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-type BillingTab = 'transactions' | 'fees';
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
+import { EmptyState } from '$components/admin/EmptyState';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAdminStats, useFamilies, useOrganizations, useTransactions } from '$hooks/useAdminData';
+import { formatKZT } from '$lib/formatCurrency';
+import type { AdminBillingTab } from '$types/admin';
 
 export default function AdminBillingScreen() {
   const { isTablet, paddingX } = useAdminLayout();
@@ -17,7 +16,7 @@ export default function AdminBillingScreen() {
   const txs = useTransactions();
   const orgs = useOrganizations();
   const stats = useAdminStats([], txs.data, families.data);
-  const [tab, setTab] = useState<BillingTab>('transactions');
+  const [tab, setTab] = useState<AdminBillingTab>('transactions');
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   return (

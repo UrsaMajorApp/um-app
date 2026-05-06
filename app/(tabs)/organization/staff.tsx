@@ -10,8 +10,6 @@ import type { OrgStaffMember } from '$hooks/useOrgData';
 import { useOrgStaff } from '$hooks/useOrgData';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
-type Teacher = OrgStaffMember;
-
 export default function OrgStaffScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
@@ -19,7 +17,7 @@ export default function OrgStaffScreen() {
 
   const { staff: teachers, loading } = useOrgStaff();
 
-  const getStatusBadge = (status: Teacher['status']) => {
+  const getStatusBadge = (status: OrgStaffMember['status']) => {
     switch (status) {
       case 'active':
         return (

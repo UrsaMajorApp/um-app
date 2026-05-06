@@ -10,16 +10,16 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { EnrollmentChoiceModal } from '$components/parent/club/EnrollmentChoiceModal';
+import { FullCourseBookingModal } from '$components/parent/club/FullCourseBookingModal';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
-import { courseGradient, usePublicCourseById } from '$hooks/usePublicData';
 import { useParentCourseEnrollment } from '$hooks/useParentCourseEnrollment';
+import { courseGradient, usePublicCourseById } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { EnrollmentChoiceModal } from '$components/parent/club/EnrollmentChoiceModal';
-import { FullCourseBookingModal } from '$components/parent/club/FullCourseBookingModal';
 
 export default function ParentClubDetails() {
   const router = useRouter();

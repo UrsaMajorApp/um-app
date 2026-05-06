@@ -8,6 +8,7 @@ import {
   StyleSheet,
   type ViewStyle,
 } from 'react-native';
+import type { PressableEvent } from '$types/ui';
 
 interface PressableScaleProps extends Omit<PressableProps, 'style'> {
   children: React.ReactNode;
@@ -15,8 +16,6 @@ interface PressableScaleProps extends Omit<PressableProps, 'style'> {
   scaleTo?: number;
   style?: StyleProp<ViewStyle>;
 }
-
-type PressableEvent = Parameters<NonNullable<PressableProps['onPressIn']>>[0];
 
 // Props that must live on the outer Pressable to work correctly:
 //   - position/inset: so the hit target is placed correctly in the parent

@@ -202,13 +202,13 @@ export default function ResetPasswordScreen() {
   );
 }
 
-type PasswordFieldProps = {
+interface PasswordFieldProps {
   label: string;
   value: string;
   onChange: NonNullable<TextInputProps['onChangeText']>;
   shown: boolean;
   onToggle: () => void;
-};
+}
 
 function PasswordField({ label, value, onChange, shown, onToggle }: PasswordFieldProps) {
   return (

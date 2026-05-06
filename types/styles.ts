@@ -1,7 +1,11 @@
-import type { ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 
 export type WebViewStyle = Omit<ViewStyle, 'position'> & {
   backdropFilter?: string;
   cursor?: string;
   position?: ViewStyle['position'] | 'fixed';
+};
+
+export type WebTextStyle = TextStyle & {
+  outlineWidth?: number;
 };

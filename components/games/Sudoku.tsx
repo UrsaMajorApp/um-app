@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import type { SudokuCell as Cell } from '$types/games';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -18,14 +19,6 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 const GRID_SIZE = 9;
 const BOARD_PADDING = 24;
 const MAX_BOARD_SIZE = 560;
-
-type Cell = {
-  r: number;
-  c: number;
-  value: number;
-  original: boolean;
-  error: boolean;
-};
 
 export default function Sudoku({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
@@ -177,40 +170,38 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                 style={[styles.row, rowNumber % 3 === 2 && rowNumber !== 8 && styles.rowBorder]}
               >
                 {row.map((cell) => (
-                <TouchableOpacity
-                  key={`cell-${cell.r}-${cell.c}`}
-                  activeOpacity={1}
-                  onPress={() => setSelectedCell({ r: cell.r, c: cell.c })}
-                  style={[
-                    styles.cell,
-                    { width: cellSize, height: cellSize },
-                    cell.c % 3 === 2 && cell.c !== 8 && styles.cellBorder,
-                    selectedCell?.r === cell.r &&
-                      selectedCell?.c === cell.c &&
-                      styles.cellActive,
-                    !cell.original && isRelated(cell.r, cell.c) && styles.cellRelated,
-                    cell.error && styles.cellError,
-                    cell.r === 0 && cell.c === 0 && styles.cellTopLeft,
-                    cell.r === 0 && cell.c === GRID_SIZE - 1 && styles.cellTopRight,
-                    cell.r === GRID_SIZE - 1 && cell.c === 0 && styles.cellBottomLeft,
-                    cell.r === GRID_SIZE - 1 &&
-                      cell.c === GRID_SIZE - 1 &&
-                      styles.cellBottomRight,
-                  ]}
-                >
-                  {cell.value !== 0 && (
-                    <Text
-                      style={[
-                        styles.cellText,
-                        { fontSize: cellTextSize },
-                        cell.original ? styles.textOriginal : styles.textInput,
-                        cell.error && styles.textError,
-                      ]}
-                    >
-                      {cell.value}
-                    </Text>
-                  )}
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    key={`cell-${cell.r}-${cell.c}`}
+                    activeOpacity={1}
+                    onPress={() => setSelectedCell({ r: cell.r, c: cell.c })}
+                    style={[
+                      styles.cell,
+                      { width: cellSize, height: cellSize },
+                      cell.c % 3 === 2 && cell.c !== 8 && styles.cellBorder,
+                      selectedCell?.r === cell.r && selectedCell?.c === cell.c && styles.cellActive,
+                      !cell.original && isRelated(cell.r, cell.c) && styles.cellRelated,
+                      cell.error && styles.cellError,
+                      cell.r === 0 && cell.c === 0 && styles.cellTopLeft,
+                      cell.r === 0 && cell.c === GRID_SIZE - 1 && styles.cellTopRight,
+                      cell.r === GRID_SIZE - 1 && cell.c === 0 && styles.cellBottomLeft,
+                      cell.r === GRID_SIZE - 1 &&
+                        cell.c === GRID_SIZE - 1 &&
+                        styles.cellBottomRight,
+                    ]}
+                  >
+                    {cell.value !== 0 && (
+                      <Text
+                        style={[
+                          styles.cellText,
+                          { fontSize: cellTextSize },
+                          cell.original ? styles.textOriginal : styles.textInput,
+                          cell.error && styles.textError,
+                        ]}
+                      >
+                        {cell.value}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
                 ))}
               </View>
             );

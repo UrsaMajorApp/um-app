@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import type React from 'react';
 import { Text, View } from 'react-native';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 
 export function EmptyState({
   icon = 'inbox',

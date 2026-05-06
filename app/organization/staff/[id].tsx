@@ -1,12 +1,12 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { MotiView } from 'moti';
 import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgGroups, useOrgStaffById } from '$hooks/useOrgData';
+import { appHref } from '$lib/router';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function StaffDetailScreen() {

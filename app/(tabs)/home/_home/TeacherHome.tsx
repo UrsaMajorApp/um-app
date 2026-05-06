@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { MotiView } from 'moti';
 import {
   ActivityIndicator,
@@ -16,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useTeacherGroups } from '$hooks/usePlatformData';
+import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 function scheduleTimeLabel(schedule: string | null) {

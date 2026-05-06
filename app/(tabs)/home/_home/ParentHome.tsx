@@ -1,19 +1,19 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { useMemo, useState } from 'react';
 import { Platform, Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FloatingBranding } from '$components/home/parent/FloatingBranding';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
-import { featherIconName } from '$lib/icons';
 import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
+import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-import { FloatingBranding } from '$components/home/parent/FloatingBranding';
 import type { WebViewStyle } from '$types/styles';
 
 export default function ParentHome() {

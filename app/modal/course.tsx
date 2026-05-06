@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import {
   ActivityIndicator,
   Dimensions,
@@ -15,6 +14,7 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import { courseGradient, usePublicCourseById } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
+import { appHref } from '$lib/router';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
 const { width } = Dimensions.get('window');

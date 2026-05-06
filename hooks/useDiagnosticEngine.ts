@@ -17,12 +17,12 @@
 import { useCallback, useRef, useState } from 'react';
 import {
   BASIC_CARDS,
-  PRO_TASKS,
-  SKILL_VECTORS,
-  STEALTH_PATTERNS,
   type BasicCard,
+  PRO_TASKS,
   type ProTask,
+  SKILL_VECTORS,
   type SkillCategory,
+  STEALTH_PATTERNS,
   type StealthEvent,
 } from '$data/diagnosticData';
 import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';

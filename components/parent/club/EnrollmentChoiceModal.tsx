@@ -1,11 +1,11 @@
 import { Feather } from '@expo/vector-icons';
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, SHADOWS } from '$constants/theme';
-import { formatKZT } from '$lib/formatCurrency';
 import type { PublicCourse, TrialLessonSlot } from '$hooks/usePublicData';
+import { formatKZT } from '$lib/formatCurrency';
 import type { Child } from '$types/child';
 
-type EnrollmentChoiceModalProps = {
+interface EnrollmentChoiceModalProps {
   visible: boolean;
   course: Pick<PublicCourse, 'price'>;
   activeChild: Pick<Child, 'name'> | null;
@@ -19,7 +19,7 @@ type EnrollmentChoiceModalProps = {
   onBackFromTrial: () => void;
   onSelectTimeSlot: (slotId: string) => void;
   onConfirmTrial: () => void;
-};
+}
 
 export function EnrollmentChoiceModal({
   visible,

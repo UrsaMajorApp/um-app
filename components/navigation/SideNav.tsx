@@ -7,11 +7,13 @@ import { useAuth } from '$contexts/AuthContext';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { useTabNav } from '$components/navigation/useTabNav';
 import type { Role } from '$constants/navigation/tabItems';
+import type { PressableInteractionState } from '$types/navigation';
 
-type Props = { role: Role | string | null };
-type PressableInteractionState = { hovered?: boolean; pressed: boolean };
+interface SideNavProps {
+  role: Role | string | null;
+}
 
-export function SideNav({ role }: Props) {
+export function SideNav({ role }: SideNavProps) {
   const router = useRouter();
   const { tabs, go, isActive } = useTabNav(role);
   const { user, logout } = useAuth();

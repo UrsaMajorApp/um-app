@@ -1,16 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { COLORS, RADIUS } from '$constants/theme';
 import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, RADIUS } from '$constants/theme';
+import type { AuthMethod } from '$types/auth';
 
-export type AuthMethod = 'phone' | 'email';
-
-export function AuthMethodSwitcher({
-  value,
-  onChange,
-}: {
+interface AuthMethodSwitcherProps {
   value: AuthMethod;
   onChange: (method: AuthMethod) => void;
-}) {
+}
+
+export function AuthMethodSwitcher({ value, onChange }: AuthMethodSwitcherProps) {
   return (
     <View style={styles.switcher}>
       {(['phone', 'email'] as const).map((method) => {

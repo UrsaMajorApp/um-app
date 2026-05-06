@@ -7,8 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
-import type { Child } from '$types/child';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { Child } from '$types/child';
 
 export default function ParentChildDetails() {
   const router = useRouter();

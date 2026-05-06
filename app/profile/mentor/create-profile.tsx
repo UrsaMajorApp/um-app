@@ -18,10 +18,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApprovalPendingSuccessView } from '$components/profile/ApprovalPendingSuccessView';
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
-import { useAuth } from '$contexts/AuthContext';
-import { isSupabaseConfigured, supabase } from '$lib/supabase';
-import { useIsDesktop } from '$lib/useIsDesktop';
 import {
   CITIES,
   PREDEFINED_SKILLS,
@@ -30,6 +26,10 @@ import {
   SPECIALIZATIONS,
   STEPS,
 } from '$constants/profile/mentorCreateProfileOptions';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorCreateProfile() {
   const router = useRouter();
@@ -752,7 +752,7 @@ export default function MentorCreateProfile() {
   );
 }
 
-type InputFieldProps = {
+interface InputFieldProps {
   label: string;
   value: string;
   onChange: NonNullable<TextInputProps['onChangeText']>;
@@ -763,7 +763,7 @@ type InputFieldProps = {
   suffix?: string;
   maxLength?: number;
   roleColor?: string;
-};
+}
 
 function InputField({
   label,

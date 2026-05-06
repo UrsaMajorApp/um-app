@@ -1,5 +1,5 @@
-import { useRouter, useSegments, type Href } from 'expo-router';
-import { DEFAULT_TABS, TABS_BY_ROLE, type Role } from '$constants/navigation/tabItems';
+import { type Href, useRouter, useSegments } from 'expo-router';
+import { DEFAULT_TABS, type Role, TABS_BY_ROLE } from '$constants/navigation/tabItems';
 
 export function useTabNav(role: Role | string | null) {
   const router = useRouter();

@@ -8,6 +8,7 @@ import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useParentCalendar } from '$hooks/useParentCalendar';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { CalendarDay } from '$types/calendar';
 
 const MONTHS = [
   'Январь',
@@ -33,11 +34,6 @@ const DAY_ALIASES: Record<number, string[]> = {
   4: ['чт', 'чет', 'четв'],
   5: ['пт', 'пят'],
   6: ['сб', 'суб'],
-};
-
-type CalendarDay = {
-  key: string;
-  value: number | null;
 };
 
 function getCalendarDays(year: number, month: number): CalendarDay[] {

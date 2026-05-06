@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { COLORS } from '$constants/theme';
-import { useAuth } from '$contexts/AuthContext';
-
 import MentorProfile from '$app/profile/mentor/index';
 import OrgProfile from '$app/profile/organization/index';
 import ParentProfile from '$app/profile/parent/index';
 import TeacherProfile from '$app/profile/teacher/index';
 import YouthProfile from '$app/profile/youth/index';
-
-type Role = 'parent' | 'youth' | 'child' | 'mentor' | 'org' | 'teacher';
+import { COLORS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import type { ProfileScreenRole } from '$types/user';
 
 export default function ProfileScreenRouter() {
   const { user, isLoading } = useAuth();
-  const [role, setRole] = useState<Role | null>(null);
+  const [role, setRole] = useState<ProfileScreenRole | null>(null);
 
   useEffect(() => {
     if (user?.role) {
-      setRole(user.role as Role);
+      setRole(user.role as ProfileScreenRole);
     }
   }, [user]);
 

@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { MotiView } from 'moti';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +10,7 @@ import {
   useMentorGroups,
   useMentorStudentAttendanceSummary,
 } from '$hooks/useMentorData';
+import { appHref } from '$lib/router';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorGroupDetail() {

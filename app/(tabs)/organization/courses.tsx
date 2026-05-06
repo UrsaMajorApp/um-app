@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
 import {
@@ -16,8 +15,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgCourses, useOrgGroups } from '$hooks/useOrgData';
-import { featherIconName } from '$lib/icons';
 import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
+import { appHref } from '$lib/router';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgCourses() {

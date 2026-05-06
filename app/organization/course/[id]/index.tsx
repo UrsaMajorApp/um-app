@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { MotiView } from 'moti';
 import { useMemo } from 'react';
 import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -10,6 +9,7 @@ import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgCourseById, useOrgGroups } from '$hooks/useOrgData';
 import { formatKZT } from '$lib/formatCurrency';
+import { appHref } from '$lib/router';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CourseDetailScreen() {

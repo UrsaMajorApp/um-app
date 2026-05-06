@@ -1,6 +1,5 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
 import {
@@ -18,6 +17,7 @@ import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
+import { appHref } from '$lib/router';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
 const { width } = Dimensions.get('window');

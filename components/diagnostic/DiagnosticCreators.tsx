@@ -1,4 +1,3 @@
-import { useIsDesktop } from '$lib/useIsDesktop';
 /**
  * DiagnosticCreators.tsx
  *
@@ -25,12 +24,13 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import NovellaTask from '$components/diagnostic/creators/NovellaTask';
+import WYRCard from '$components/diagnostic/creators/WYRCard';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useDiagnosticEngine911 } from '$hooks/useDiagnosticEngine911';
-import NovellaTask from '$components/diagnostic/creators/NovellaTask';
-import WYRCard from '$components/diagnostic/creators/WYRCard';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 interface Props {
   childId?: string | null;

@@ -2,11 +2,11 @@ import { MotiView } from 'moti';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image } from 'react-native';
 
-type AutonomousLogoProps = {
+interface AutonomousLogoProps {
   width: number;
   height: number;
   dark?: boolean;
-};
+}
 
 function createLogoConfig(width: number, height: number) {
   return {

@@ -1,4 +1,3 @@
-import { useIsDesktop } from '$lib/useIsDesktop';
 /**
  * DiagnosticRebels.tsx
  * Main orchestrator for 12-14 Rebels diagnostic.
@@ -17,12 +16,13 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import HackathonTask from '$components/diagnostic/rebels/HackathonTask';
+import VibeSwipeCard from '$components/diagnostic/rebels/VibeSwipeCard';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useDiagnosticEngine1214 } from '$hooks/useDiagnosticEngine1214';
-import HackathonTask from '$components/diagnostic/rebels/HackathonTask';
-import VibeSwipeCard from '$components/diagnostic/rebels/VibeSwipeCard';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 interface Props {
   childId?: string | null;

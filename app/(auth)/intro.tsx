@@ -6,9 +6,7 @@ import { MotiView } from 'moti';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
-import type { ComponentProps } from 'react';
-
-type MaterialCommunityIconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
+import type { MaterialCommunityIconName } from '$types/icons';
 
 export default function IntroScreen() {
   const router = useRouter();

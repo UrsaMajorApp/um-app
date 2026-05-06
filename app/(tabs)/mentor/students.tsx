@@ -16,8 +16,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import {
-  useMentorStudentAttendanceSummary,
   type GroupMember,
+  useMentorStudentAttendanceSummary,
   useMentorStudents,
 } from '$hooks/useMentorData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';

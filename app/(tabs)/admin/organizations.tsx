@@ -1,7 +1,11 @@
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
+import { ensureConversation } from '$components/admin/adminUtils';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
-import { ensureConversation } from '$components/admin/adminUtils';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -12,12 +16,7 @@ import {
   useOrganizations,
 } from '$hooks/useAdminData';
 import { formatKZT } from '$lib/formatCurrency';
-import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-type OrgTab = 'orgs' | 'courses' | 'enrollments';
+import type { AdminOrgTab } from '$types/admin';
 
 export default function AdminOrganizationsScreen() {
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function AdminOrganizationsScreen() {
   const orgs = useOrganizations();
   const courses = useAdminCourses();
   const enrollments = useAdminEnrollments();
-  const [tab, setTab] = useState<OrgTab>('orgs');
+  const [tab, setTab] = useState<AdminOrgTab>('orgs');
   const [rejectingCourse, setRejectingCourse] = useState<AdminCourse | null>(null);
   const [rejectReason, setRejectReason] = useState('');
   const orgsNeedingAction = orgs.data.filter(

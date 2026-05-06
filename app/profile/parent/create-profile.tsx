@@ -20,6 +20,7 @@ import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import type { ChildAgeGroup, ParentProfileChildDraft } from '$types/profile';
 
 const ROLE_COLOR = '#6C5CE7';
 const ROLE_GRADIENT: [string, string] = ['#6C5CE7', '#8B7FE8'];
@@ -29,20 +30,7 @@ function generateQRPin(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-type AgeGroup = '6-8' | '9-11' | '12-14' | '15-17';
-
-type Child = {
-  id: string;
-  name: string;
-  ageGroup: AgeGroup | null;
-  hasPhone: boolean | null;
-  phone: string;
-  qrPin: string | null;
-  qrPinExpiresAt: Date | null;
-  qrPinOneTimeUse: boolean;
-};
-
-const AGE_OPTIONS: { label: string; value: AgeGroup }[] = [
+const AGE_OPTIONS: { label: string; value: ChildAgeGroup }[] = [
   { label: '6-8', value: '6-8' },
   { label: '9-11', value: '9-11' },
   { label: '12-14', value: '12-14' },
@@ -79,7 +67,7 @@ export default function CreateProfileParent() {
     }));
   }, [user]);
 
-  const [children, setChildren] = useState<Child[]>([
+  const [children, setChildren] = useState<ParentProfileChildDraft[]>([
     {
       id: makeId(),
       name: '',
@@ -149,7 +137,7 @@ export default function CreateProfileParent() {
     });
   }
 
-  function updateChild(id: string, patch: Partial<Child>) {
+  function updateChild(id: string, patch: Partial<ParentProfileChildDraft>) {
     setChildren((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)));
   }
 

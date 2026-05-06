@@ -4,7 +4,7 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import type { OrgGroup } from '$hooks/useOrgData';
 import type { Child } from '$types/child';
 
-type FullCourseBookingModalProps = {
+interface FullCourseBookingModalProps {
   visible: boolean;
   activeChild: Pick<Child, 'name'> | null;
   groups: OrgGroup[];
@@ -13,7 +13,7 @@ type FullCourseBookingModalProps = {
   onClose: () => void;
   onSelectGroup: (groupId: string) => void;
   onConfirm: () => void;
-};
+}
 
 export function FullCourseBookingModal({
   visible,

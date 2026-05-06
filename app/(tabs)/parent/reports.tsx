@@ -8,14 +8,7 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useChildReports } from '$hooks/useParentReports';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-import type { FeatherIconName } from '$types/icons';
-
-type ReportStat = {
-  label: string;
-  value: string;
-  icon: FeatherIconName;
-  color: string;
-};
+import type { ParentReportStat } from '$types/dashboard';
 
 export default function ParentReports() {
   const router = useRouter();
@@ -23,9 +16,10 @@ export default function ParentReports() {
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { childrenProfile, setActiveChildId } = useParentData();
-  const children = useMemo(() => childrenProfile.map((c) => c.name).filter(Boolean), [
-    childrenProfile,
-  ]);
+  const children = useMemo(
+    () => childrenProfile.map((c) => c.name).filter(Boolean),
+    [childrenProfile],
+  );
   const [selectedChild, setSelectedChild] = useState<string>('');
   const firstChild = children[0] ?? '';
   const selectedChildExists = selectedChild ? children.includes(selectedChild) : false;
@@ -147,7 +141,7 @@ export default function ParentReports() {
                   icon: 'check-circle',
                   color: '#10B981',
                 },
-              ] satisfies ReportStat[]
+              ] satisfies ParentReportStat[]
             ).map((stat) => (
               <View
                 key={stat.label}

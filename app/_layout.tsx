@@ -10,8 +10,8 @@ import '../global.css';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { DevRoleSwitcher } from '$components/DevRoleSwitcher';
-import type { AuthUser, UserRole } from '$contexts/AuthContext';
 import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from '$constants/profileRoutes';
+import type { AuthUser, UserRole } from '$contexts/AuthContext';
 import type { AppHref } from '$types/router';
 
 function getProfileSetupRoute(role: UserRole): AppHref {

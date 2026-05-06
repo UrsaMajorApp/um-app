@@ -9,9 +9,9 @@
 import { useCallback, useRef, useState } from 'react';
 import {
   ANCHOR_MAP,
+  type AnchorType,
   CAREER_CARDS,
   PRO_TASKS_1517,
-  type AnchorType,
   type StealthEvent1517,
 } from '$data/diagnosticData1517';
 import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';

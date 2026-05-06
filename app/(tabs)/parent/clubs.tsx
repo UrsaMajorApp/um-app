@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -18,6 +17,7 @@ import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
+import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 // Skill-based filter chips shown in the catalog

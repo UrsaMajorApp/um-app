@@ -4,12 +4,12 @@ import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
-type YouthPassModalProps = {
+interface YouthPassModalProps {
   visible: boolean;
   qrValue: string;
   userName: string;
   onClose: () => void;
-};
+}
 
 export function YouthPassModal({ visible, qrValue, userName, onClose }: YouthPassModalProps) {
   return (

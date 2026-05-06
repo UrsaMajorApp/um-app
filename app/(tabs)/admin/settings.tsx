@@ -1,20 +1,19 @@
-import { AdminHeader } from '$components/admin/AdminHeader';
-import { SegmentTabs } from '$components/admin/SegmentTabs';
-import { useAdminLayout } from '$components/admin/adminUtils';
-import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
-import { useAdminOnboardingQuestions, useAIRules, useTags } from '$hooks/useAdminData';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-type SettingsTab = 'onboarding' | 'tags' | 'logic';
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { useAdminLayout } from '$components/admin/adminUtils';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAdminOnboardingQuestions, useAIRules, useTags } from '$hooks/useAdminData';
+import type { AdminSettingsTab } from '$types/admin';
 
 export default function AdminSettingsScreen() {
   const { paddingX } = useAdminLayout();
   const onboarding = useAdminOnboardingQuestions();
   const tags = useTags();
   const aiRules = useAIRules();
-  const [tab, setTab] = useState<SettingsTab>('onboarding');
+  const [tab, setTab] = useState<AdminSettingsTab>('onboarding');
   const [newTagName, setNewTagName] = useState('');
   const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
   const [editingRule, setEditingRule] = useState({

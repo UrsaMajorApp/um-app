@@ -412,7 +412,7 @@ export default function CreateProfileOrganization() {
 }
 
 // Field component — same as the one in register.tsx
-type FieldProps = {
+interface FieldProps {
   label: string;
   icon: FeatherIconName;
   value: string;
@@ -425,7 +425,7 @@ type FieldProps = {
   shown?: boolean;
   last?: boolean;
   required?: boolean;
-};
+}
 
 function Field({
   label,

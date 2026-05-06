@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
-import { type WalletTransaction, useWalletData } from '$hooks/usePlatformData';
+import { useWalletData, type WalletTransaction } from '$hooks/usePlatformData';
 import { formatKZT } from '$lib/formatCurrency';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 

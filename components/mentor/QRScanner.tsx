@@ -2,10 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { COLORS, SHADOWS } from '$constants/theme';
-
-type QRScanResult = {
-  id: string;
-};
+import type { QRScanResult } from '$types/auth';
 
 interface QRScannerProps {
   onClose: () => void;

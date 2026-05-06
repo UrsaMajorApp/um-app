@@ -3,17 +3,17 @@ import type { User as SupabaseUser } from '@supabase/supabase-js';
 import * as WebBrowser from 'expo-web-browser';
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-  type ReactNode,
 } from 'react';
 import { Platform } from 'react-native';
-import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { getUseRealOtpSetting } from '$contexts/DevSettingsContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
 
 export type UserRole =
   | 'parent'

@@ -1,24 +1,22 @@
-import { COLORS } from '$constants/theme';
-import { useAuth } from '$contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-
 import AdminHome from '$app/(tabs)/home/_home/AdminHome';
 import MentorHome from '$app/(tabs)/home/_home/MentorHome';
 import OrgHome from '$app/(tabs)/home/_home/OrgHome';
 import ParentHome from '$app/(tabs)/home/_home/ParentHome';
 import TeacherHome from '$app/(tabs)/home/_home/TeacherHome';
 import YouthHome from '$app/(tabs)/home/_home/YouthHome';
-
-type Role = 'parent' | 'youth' | 'child' | 'mentor' | 'org' | 'teacher' | 'admin';
+import { COLORS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import type { HomeScreenRole } from '$types/user';
 
 export default function HomeScreenRouter() {
   const { user, isLoading } = useAuth();
-  const [role, setRole] = useState<Role | null>(null);
+  const [role, setRole] = useState<HomeScreenRole | null>(null);
 
   useEffect(() => {
     if (user?.role) {
-      setRole(user.role as Role);
+      setRole(user.role as HomeScreenRole);
     } else {
       setRole(null);
     }

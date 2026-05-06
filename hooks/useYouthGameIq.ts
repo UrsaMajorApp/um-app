@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
-import type { GameId } from '$components/games/gameCatalog';
+import type { GameId } from '$types/games';
 import { useAuth } from '$contexts/AuthContext';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 

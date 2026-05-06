@@ -1,12 +1,12 @@
-import { COLORS } from '$constants/theme';
-import { useYouthAchievements } from '$hooks/useStudentData';
-import { featherIconName } from '$lib/icons';
-import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS } from '$constants/theme';
+import { useYouthAchievements } from '$hooks/useStudentData';
+import { featherIconName } from '$lib/icons';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function YouthAchievements() {
   const router = useRouter();

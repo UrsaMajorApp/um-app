@@ -12,14 +12,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { FormCard, LabeledTextInput, PrimaryActionButton } from '$components/ui/FormControls';
+import { FormCard } from '$components/ui/form/FormCard';
+import { LabeledTextInput } from '$components/ui/form/LabeledTextInput';
+import { PrimaryActionButton } from '$components/ui/form/PrimaryActionButton';
 import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import {
   ICON_OPTIONS,
   LEVEL_OPTIONS,
+  type CourseLevel as Level,
   SKILL_OPTIONS,
   STATUS_OPTIONS,
-  type CourseLevel as Level,
   type CourseStatus as Status,
 } from '$constants/courseOptions';
 import { COLORS, LAYOUT, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';

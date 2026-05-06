@@ -3,14 +3,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSegments } from 'expo-router';
 import { MotiView } from 'moti';
 import { Platform, Pressable, Text, useWindowDimensions, View } from 'react-native';
-import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
-import { useIsDesktop } from '$lib/useIsDesktop';
 import { useTabNav } from '$components/navigation/useTabNav';
 import type { Role } from '$constants/navigation/tabItems';
+import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
-type Props = { role: Role | string | null };
+interface CustomTabBarProps {
+  role: Role | string | null;
+}
 
-export default function CustomTabBar({ role }: Props) {
+export default function CustomTabBar({ role }: CustomTabBarProps) {
   const { tabs, go, isActive } = useTabNav(role);
   const { width } = useWindowDimensions();
   const segments = useSegments() as string[];

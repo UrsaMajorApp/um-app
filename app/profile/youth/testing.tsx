@@ -1,4 +1,3 @@
-import { useIsDesktop } from '$lib/useIsDesktop';
 /**
  * testing.tsx — Age-based router for diagnostic modules.
  *
@@ -28,15 +27,15 @@ import DiagnosticCreators from '$components/diagnostic/DiagnosticCreators';
 import DiagnosticExplorer from '$components/diagnostic/DiagnosticExplorer';
 import DiagnosticRebels from '$components/diagnostic/DiagnosticRebels';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import type { AuthUser } from '$contexts/AuthContext';
 import { useAuth } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { useParentData } from '$contexts/ParentDataContext';
-import { useOnboardingQuestions, type OnboardingQuestion } from '$hooks/usePlatformData';
+import { type OnboardingQuestion, useOnboardingQuestions } from '$hooks/usePlatformData';
 import { generateGeminiDiagnosticJson, isGeminiFallbackError } from '$lib/geminiDiagnostics';
-import type { AuthUser } from '$contexts/AuthContext';
+import { useIsDesktop } from '$lib/useIsDesktop';
 import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';
-
-type AppRouter = ReturnType<typeof useRouter>;
+import type { AppRouter } from '$types/router';
 
 /* ─────────────────────────────────────────────────────────────
    Main component

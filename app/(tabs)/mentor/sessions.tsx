@@ -16,13 +16,7 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { type MentorTrialRequest, useMentorTrialRequests } from '$hooks/useMentorTrialRequests';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-import type { FeatherIconName } from '$types/icons';
-
-type OutcomeConfig = {
-  color: string;
-  label: string;
-  icon: FeatherIconName;
-};
+import type { MentorSessionOutcomeConfig } from '$types/dashboard';
 
 export default function MentorSessionsScreen() {
   const isDesktop = useIsDesktop();
@@ -114,7 +108,10 @@ export default function MentorSessionsScreen() {
   };
 
   const renderArchived = ({ item, index }: { item: MentorTrialRequest; index: number }) => {
-    const outcomeConfig: Record<NonNullable<MentorTrialRequest['outcome']>, OutcomeConfig> = {
+    const outcomeConfig: Record<
+      NonNullable<MentorTrialRequest['outcome']>,
+      MentorSessionOutcomeConfig
+    > = {
       enrolled: { color: '#10B981', label: 'Записался', icon: 'user-check' },
       declined_by_parent: {
         color: '#F59E0B',

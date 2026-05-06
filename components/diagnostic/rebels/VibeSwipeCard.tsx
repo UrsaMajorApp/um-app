@@ -3,10 +3,10 @@
  */
 import { MotiView } from 'moti';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import SwipeableDecisionCard from '$components/diagnostic/SwipeableDecisionCard';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { VibeCard } from '$data/diagnosticData1214';
-import SwipeableDecisionCard from '$components/diagnostic/SwipeableDecisionCard';
 
 interface Props {
   card: VibeCard;

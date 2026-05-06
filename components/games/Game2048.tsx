@@ -19,6 +19,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { COLORS, RADIUS } from '$constants/theme';
 import { isWebMinWidth } from '$lib/useIsDesktop';
+import type { Game2048Direction as Direction, Game2048Tile as Tile } from '$types/games';
 
 const GRID_SIZE = 4;
 const CELL_MARGIN = 10;
@@ -50,17 +51,6 @@ const TEXT_COLORS: Record<string | number, string> = {
   2: '#776E65',
   4: '#776E65',
   default: 'white',
-};
-
-type Direction = 'up' | 'down' | 'left' | 'right';
-
-type Tile = {
-  id: number;
-  row: number;
-  col: number;
-  value: number;
-  isNew?: boolean;
-  isMerged?: boolean;
 };
 
 function createEmptyGrid() {

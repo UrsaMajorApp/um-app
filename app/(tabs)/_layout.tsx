@@ -1,12 +1,12 @@
 import { Tabs, useRouter, useSegments } from 'expo-router';
 import { useEffect, useMemo } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { COLORS } from '$constants/theme';
-import { useAuth, type UserRole } from '$contexts/AuthContext';
 import CustomTabBar from '$components/navigation/CustomTabBar';
 import { SideNav } from '$components/navigation/SideNav';
 import { TabIcon } from '$components/navigation/TabIcon';
 import { YOUTH_ROLES } from '$constants/profileRoutes';
+import { COLORS } from '$constants/theme';
+import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 function canRenderTabSection(role: UserRole, section?: string) {

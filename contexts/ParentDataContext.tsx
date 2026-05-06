@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
+import { useAuth } from '$contexts/AuthContext';
 import { useDevDataVersion } from '$lib/devDataEvents';
 import { createClientUuid, isUuid } from '$lib/idUtils';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import type { Child } from '$types/child';
 import type { Diagnostic } from '$types/diagnostic';
-import { useAuth } from '$contexts/AuthContext';
 
 const devTariffKey = (userId: string) => `um_dev_tariff_${userId}`;
 type AgeGroup = '6-8' | '9-11' | '12-14' | '15-17';

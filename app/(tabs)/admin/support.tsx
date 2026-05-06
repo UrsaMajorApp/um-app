@@ -1,18 +1,17 @@
-import { AdminHeader } from '$components/admin/AdminHeader';
-import { EmptyState } from '$components/admin/EmptyState';
-import { SegmentTabs } from '$components/admin/SegmentTabs';
-import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
-import { useTickets } from '$hooks/useAdminData';
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-
-type SupportTab = 'logs' | 'tickets';
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
+import { EmptyState } from '$components/admin/EmptyState';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useTickets } from '$hooks/useAdminData';
+import type { AdminSupportTab } from '$types/admin';
 
 export default function AdminSupportScreen() {
   const { paddingX } = useAdminLayout();
   const tickets = useTickets();
-  const [tab, setTab] = useState<SupportTab>('logs');
+  const [tab, setTab] = useState<AdminSupportTab>('logs');
   const rows = tickets.data.filter((ticket) =>
     tab === 'tickets' ? ticket.kind === 'complaint' : ticket.kind === 'feedback',
   );

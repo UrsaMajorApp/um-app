@@ -10,15 +10,11 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import type { SwipeRenderArgs } from '$types/diagnostic';
 
 const SWIPE_THRESHOLD = 90;
 const SWIPE_VELOCITY = 850;
 const EXIT_DISTANCE = 1200;
-
-type SwipeRenderArgs = {
-  isLeaving: boolean;
-  swipe: (liked: boolean) => void;
-};
 
 interface Props {
   cardKey: string;

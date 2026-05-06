@@ -75,26 +75,29 @@ export default function QRScanScreen() {
   const [webCameraActive, setWebCameraActive] = useState(false);
   const [webCameraError, setWebCameraError] = useState('');
 
-  const processCode = useCallback(async (raw: string) => {
-    setIsSubmitting(true);
-    const token = raw.trim();
+  const processCode = useCallback(
+    async (raw: string) => {
+      setIsSubmitting(true);
+      const token = raw.trim();
 
-    if (!token) {
-      setError('Неверный QR-код');
-      setScanned(false);
+      if (!token) {
+        setError('Неверный QR-код');
+        setScanned(false);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const result = await loginWithQR(token);
+      if (result.success) {
+        router.replace('/(tabs)/home');
+      } else {
+        setError(result.error ?? 'Недействительный QR-код');
+        setScanned(false);
+      }
       setIsSubmitting(false);
-      return;
-    }
-
-    const result = await loginWithQR(token);
-    if (result.success) {
-      router.replace('/(tabs)/home');
-    } else {
-      setError(result.error ?? 'Недействительный QR-код');
-      setScanned(false);
-    }
-    setIsSubmitting(false);
-  }, [loginWithQR, router]);
+    },
+    [loginWithQR, router],
+  );
 
   const handleQRData = useCallback(
     async (data: string) => {
@@ -390,12 +393,12 @@ export default function QRScanScreen() {
                       />
                       <canvas ref={canvasRef} style={{ display: 'none' }} />
                       {/* Corner guides */}
-                    {CORNER_GUIDES.map(({ id, ...style }) => (
-                      <View
-                        key={id}
-                        style={[
-                          {
-                            position: 'absolute',
+                      {CORNER_GUIDES.map(({ id, ...style }) => (
+                        <View
+                          key={id}
+                          style={[
+                            {
+                              position: 'absolute',
                               width: 28,
                               height: 28,
                               borderColor: 'white',
@@ -495,10 +498,10 @@ export default function QRScanScreen() {
                         onBarcodeScanned={({ data }) => handleQRData(data)}
                       />
                       {/* Corner guides */}
-                    {CORNER_GUIDES.map(({ id, ...style }) => (
-                      <View
-                        key={id}
-                        style={[
+                      {CORNER_GUIDES.map(({ id, ...style }) => (
+                        <View
+                          key={id}
+                          style={[
                             {
                               position: 'absolute',
                               width: 28,

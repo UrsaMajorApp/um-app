@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter, type Href } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MotiView } from 'moti';
 import { useState } from 'react';
@@ -12,22 +12,21 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  type TextStyle,
   type TextInputProps,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthMethodSwitcher, type AuthMethod } from '$components/auth/AuthMethodSwitcher';
+import { AuthMethodSwitcher } from '$components/auth/AuthMethodSwitcher';
 import { PressableScale } from '$components/ui/PressableScale';
 import { AUTH_ROLE_OPTIONS } from '$constants/authRoleOptions';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
-import { useAuth, type UserRole } from '$contexts/AuthContext';
+import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import type { AuthMethod } from '$types/auth';
 import type { FeatherIconName } from '$types/icons';
-
-type WebTextStyle = TextStyle & { outlineWidth?: number };
+import type { WebTextStyle } from '$types/styles';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -745,7 +744,7 @@ export default function RegisterScreen() {
   );
 }
 
-type FieldProps = {
+interface FieldProps {
   label: string;
   icon: FeatherIconName;
   value: string;
@@ -759,7 +758,7 @@ type FieldProps = {
   autoCapitalize?: TextInputProps['autoCapitalize'];
   autoCorrect?: TextInputProps['autoCorrect'];
   last?: boolean;
-};
+}
 
 function Field({
   label,

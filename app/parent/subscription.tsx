@@ -1,9 +1,9 @@
-import { SideNav } from '$components/navigation/SideNav';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SideNav } from '$components/navigation/SideNav';
 import { SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useSubscriptionPlans } from '$hooks/usePlatformData';

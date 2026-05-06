@@ -6,13 +6,13 @@ import { courseGradient, type PublicCourse } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
 
-type EnrollmentRequestModalProps = {
+interface EnrollmentRequestModalProps {
   visible: boolean;
   selectedCourse: PublicCourse | null;
   enrollmentRequested: string[];
   onClose: () => void;
   onRequestEnrollment: () => void;
-};
+}
 
 export function EnrollmentRequestModal({
   visible,

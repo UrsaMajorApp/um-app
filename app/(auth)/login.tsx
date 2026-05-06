@@ -15,12 +15,13 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthMethodSwitcher, type AuthMethod } from '$components/auth/AuthMethodSwitcher';
+import { AuthMethodSwitcher } from '$components/auth/AuthMethodSwitcher';
 import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import type { AuthMethod } from '$types/auth';
 
 export default function LoginScreen() {
   const router = useRouter();

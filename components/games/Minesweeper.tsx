@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import type { MinesweeperCell as Cell } from '$types/games';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -18,15 +19,6 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 const GRID_SIZE = 10;
 const MINES_COUNT = 15;
 const MAX_BOARD_SIZE = 620;
-
-type Cell = {
-  r: number;
-  c: number;
-  hasMine: boolean;
-  isRevealed: boolean;
-  isFlagged: boolean;
-  neighborMines: number;
-};
 
 export default function Minesweeper({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
@@ -211,9 +203,7 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
                     cell.r === 0 && cell.c === 0 && styles.cellTopLeft,
                     cell.r === 0 && cell.c === GRID_SIZE - 1 && styles.cellTopRight,
                     cell.r === GRID_SIZE - 1 && cell.c === 0 && styles.cellBottomLeft,
-                    cell.r === GRID_SIZE - 1 &&
-                      cell.c === GRID_SIZE - 1 &&
-                      styles.cellBottomRight,
+                    cell.r === GRID_SIZE - 1 && cell.c === GRID_SIZE - 1 && styles.cellBottomRight,
                   ]}
                 >
                   {cell.isRevealed ? (

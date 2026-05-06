@@ -6,11 +6,11 @@
  * Run COURSES_MIGRATION.sql first to enable those policies.
  */
 import { useCallback, useEffect, useState } from 'react';
+import type { OrgCourse, OrgGroup } from '$hooks/useOrgData';
 import { useDevDataVersion } from '$lib/devDataEvents';
 import { isUuid } from '$lib/idUtils';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { rowsOrEmpty } from '$lib/supabaseHelpers';
-import type { OrgCourse, OrgGroup } from '$hooks/useOrgData';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

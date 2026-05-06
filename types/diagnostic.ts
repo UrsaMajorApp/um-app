@@ -31,3 +31,8 @@ export type DiagnosticAiResponse = Partial<
     | 'developmentAreas'
   >
 >;
+
+export type SwipeRenderArgs = {
+  isLeaving: boolean;
+  swipe: (liked: boolean) => void;
+};

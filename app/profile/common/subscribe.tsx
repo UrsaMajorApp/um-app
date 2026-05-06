@@ -8,24 +8,23 @@ import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'rea
 import { useSubscriptionPlans } from '$hooks/usePlatformData';
 import { formatKZT } from '$lib/formatCurrency';
 import { isWebMinWidth } from '$lib/useIsDesktop';
+import type { SubscriptionRole } from '$types/auth';
 
 const { width } = Dimensions.get('window');
 const IS_DESKTOP = isWebMinWidth(width, 900);
 
-type Role = 'parent' | 'youth' | 'child' | 'young-adult' | 'org' | 'mentor';
-
-function planKey(role: Role) {
+function planKey(role: SubscriptionRole) {
   return `subscription_plan_${role}`;
 }
 
 export default function SubscribeScreen() {
   const router = useRouter();
-  const [role, setRole] = useState<Role | null>(null);
+  const [role, setRole] = useState<SubscriptionRole | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const { plans, loading } = useSubscriptionPlans(role);
 
   useEffect(() => {
-    AsyncStorage.getItem('user_role').then((v) => setRole((v as Role) || 'parent'));
+    AsyncStorage.getItem('user_role').then((v) => setRole((v as SubscriptionRole) || 'parent'));
   }, []);
 
   useEffect(() => {

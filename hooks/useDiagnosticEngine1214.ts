@@ -10,9 +10,9 @@ import { useCallback, useRef, useState } from 'react';
 import {
   PRO_TASKS_1214,
   RIASEC_MAP,
-  VIBE_CARDS,
   type RiasecType,
   type StealthEvent1214,
+  VIBE_CARDS,
 } from '$data/diagnosticData1214';
 import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';
 import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';

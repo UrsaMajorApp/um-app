@@ -1,14 +1,11 @@
+import { type Href, useRouter } from 'expo-router';
+import { useWindowDimensions } from 'react-native';
 import { ADMIN_ROUTES, type AdminRouteKey } from '$constants/admin';
 import { LAYOUT, SPACING } from '$constants/theme';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { rowsOrEmpty } from '$lib/supabaseHelpers';
-import { useRouter, type Href } from 'expo-router';
-import { useWindowDimensions } from 'react-native';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-type ConversationParticipantRow = {
-  conversation_id: string;
-};
+import type { AdminConversationParticipantRow } from '$types/admin';
 
 export function useAdminLayout() {
   const { width } = useWindowDimensions();
@@ -53,9 +50,9 @@ export async function ensureConversation(
     supabase.from('conversation_participants').select('conversation_id').eq('user_id', otherUserId),
   ]);
   const currentIds = new Set(
-    rowsOrEmpty<ConversationParticipantRow>(currentParts).map((p) => p.conversation_id),
+    rowsOrEmpty<AdminConversationParticipantRow>(currentParts).map((p) => p.conversation_id),
   );
-  const shared = rowsOrEmpty<ConversationParticipantRow>(otherParts).find((p) =>
+  const shared = rowsOrEmpty<AdminConversationParticipantRow>(otherParts).find((p) =>
     currentIds.has(p.conversation_id),
   );
   if (shared?.conversation_id) return { id: shared.conversation_id as string, error: null };

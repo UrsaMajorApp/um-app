@@ -15,15 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications, useOrgGroupById } from '$hooks/useOrgData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
-type AttendanceStatus = 'present' | 'absent' | 'sick' | null;
-
-interface StudentRow {
-  id: string;
-  name: string;
-  age: number | null;
-  status: AttendanceStatus;
-}
+import type { AttendanceStatus, AttendanceStudentRow } from '$types/attendance';
 
 export default function AttendanceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -39,7 +31,7 @@ export default function AttendanceScreen() {
   const { group } = useOrgGroupById(id);
   const { apps, loading } = useOrgApplications();
 
-  const [students, setStudents] = useState<StudentRow[]>([]);
+  const [students, setStudents] = useState<AttendanceStudentRow[]>([]);
 
   useEffect(() => {
     const enrolled = apps.filter(

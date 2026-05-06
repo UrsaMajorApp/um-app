@@ -5,13 +5,9 @@ import type { ReactNode } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import type { ApprovalStep } from '$types/profile';
 
-type ApprovalStep = {
-  label: string;
-  done: boolean;
-};
-
-type ApprovalPendingSuccessViewProps = {
+interface ApprovalPendingSuccessViewProps {
   accentColor: string;
   gradient: [string, string];
   title: string;
@@ -22,7 +18,7 @@ type ApprovalPendingSuccessViewProps = {
   steps?: ApprovalStep[];
   noteText?: string;
   notes?: string[];
-};
+}
 
 export function ApprovalPendingSuccessView({
   accentColor,

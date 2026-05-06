@@ -1,3 +1,5 @@
+import { Feather } from '@expo/vector-icons';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { AdminCard } from '$components/admin/AdminCard';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { useAdminLayout, useAdminNavigation } from '$components/admin/adminUtils';
@@ -14,27 +16,7 @@ import {
   useTransactions,
 } from '$hooks/useAdminData';
 import { formatKZT } from '$lib/formatCurrency';
-import { Feather } from '@expo/vector-icons';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import type { FeatherIconName } from '$types/icons';
-
-type AdminQueueItem = {
-  title: string;
-  count: number;
-  description: string;
-  icon: FeatherIconName;
-  color: string;
-  action: () => void;
-};
-
-type AdminMetricItem = {
-  label: string;
-  value: number | string;
-  detail: string;
-  icon: FeatherIconName;
-  color: string;
-  action: () => void;
-};
+import type { AdminMetricItem, AdminQueueItem } from '$types/admin';
 
 export default function AdminOverviewScreen() {
   const { isTablet, paddingX } = useAdminLayout();

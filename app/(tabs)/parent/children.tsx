@@ -1,15 +1,15 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { useState } from 'react';
 import { Alert, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
-import type { Child } from '$types/child';
+import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { Child } from '$types/child';
 
 export default function ParentChildren() {
   const router = useRouter();

@@ -1,4 +1,3 @@
-import { useIsDesktop } from '$lib/useIsDesktop';
 /**
  * results.tsx — Diagnostic results screen.
  *
@@ -18,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 function compactSummary(summary?: string) {
   const normalized = (summary || '').replace(/\s+/g, ' ').trim();

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import type { AuthUser } from '$contexts/AuthContext';
-import type { Child } from '$types/child';
 import type { OrgGroup } from '$hooks/useOrgData';
 import {
   applyToCourse,
@@ -10,6 +9,7 @@ import {
   type PublicCourse,
   type TrialLessonSlot,
 } from '$hooks/usePublicData';
+import type { Child } from '$types/child';
 
 type EnrollmentType = 'trial' | 'full' | null;
 

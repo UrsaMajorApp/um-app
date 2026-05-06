@@ -16,14 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-import type { FeatherIconName } from '$types/icons';
-
-type StudentStat = {
-  label: string;
-  value: number;
-  ico: FeatherIconName;
-  color: string;
-};
+import type { OrgStudentStat } from '$types/dashboard';
 
 export default function OrgStudents() {
   const router = useRouter();
@@ -159,7 +152,7 @@ export default function OrgStudents() {
                 ico: 'users',
                 color: COLORS.primary,
               },
-            ] satisfies StudentStat[]
+            ] satisfies OrgStudentStat[]
           ).map((s) => (
             <View
               key={s.label}

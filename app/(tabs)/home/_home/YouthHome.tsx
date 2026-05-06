@@ -1,30 +1,22 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { appHref } from '$lib/router';
 import { useState } from 'react';
 import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
 import { YouthPassModal } from '$components/home/youth/YouthPassModal';
+import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
-import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
 import { useStudentTasks, useYouthAchievements } from '$hooks/useStudentData';
 import { useYouthEnrollmentRequests } from '$hooks/useYouthEnrollmentRequests';
 import { featherIconName } from '$lib/icons';
-import type { FeatherIconName } from '$types/icons';
-
-type QuickAction = {
-  label: string;
-  icon: FeatherIconName;
-  color: string;
-  route: string;
-};
+import { appHref } from '$lib/router';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { DashboardQuickAction } from '$types/dashboard';
 
 export default function YouthHome() {
   const router = useRouter();
@@ -77,7 +69,7 @@ export default function YouthHome() {
   // QR payload: stable string per user
   const qrValue = `um:pass:${user?.id ?? 'guest'}:${user?.firstName ?? ''}`;
 
-  const quickActions: QuickAction[] = [
+  const quickActions: DashboardQuickAction[] = [
     { label: 'Мой пропуск', icon: 'maximize', color: '#EC4899', route: '#qr' },
     {
       label: 'Расписание',

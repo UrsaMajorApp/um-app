@@ -11,13 +11,13 @@
 
 import { useCallback, useRef, useState } from 'react';
 import {
+  type BasicSkill911,
   PRO_TASKS_911,
+  type ProTask911,
   SKILL_LABELS_911,
   STEALTH_PATTERNS_911,
-  WYR_CARDS,
-  type BasicSkill911,
-  type ProTask911,
   type StealthEvent911,
+  WYR_CARDS,
   type WYRCard,
 } from '$data/diagnosticData911';
 import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';

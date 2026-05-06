@@ -4,9 +4,9 @@
 import { MotiView } from 'moti';
 import React from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import SwipeableDecisionCard from '$components/diagnostic/SwipeableDecisionCard';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { CareerCard } from '$data/diagnosticData1517';
-import SwipeableDecisionCard from '$components/diagnostic/SwipeableDecisionCard';
 
 interface Props {
   card: CareerCard;
