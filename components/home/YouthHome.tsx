@@ -3,31 +3,34 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-   Alert,
-   Modal,
-   Platform,
-   Pressable,
-   ScrollView,
-   Text,
-   TouchableOpacity,
-   useWindowDimensions,
-   View,
+  Alert,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-   COLORS,
-   LAYOUT,
-   RADIUS,
-   SHADOWS,
-   TYPOGRAPHY
+  COLORS,
+  LAYOUT,
+  RADIUS,
+  SHADOWS,
+  TYPOGRAPHY,
 } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 
+import { useDevSettings } from "../../contexts/DevSettingsContext";
 import { useParentData } from "../../contexts/ParentDataContext";
 import { courseGradient, usePublicCourses } from "../../hooks/usePublicData";
-import { useStudentTasks, useYouthAchievements } from "../../hooks/useStudentData";
-import { useDevSettings } from "../../contexts/DevSettingsContext";
+import {
+  useStudentTasks,
+  useYouthAchievements,
+} from "../../hooks/useStudentData";
 import { isSupabaseConfigured, supabase } from "../../lib/supabase";
 
 export default function YouthHome() {
@@ -100,16 +103,16 @@ export default function YouthHome() {
 
     try {
       const { data, error } = await supabase
-        .from('student_enrollment_requests')
-        .select('course_id')
-        .eq('student_id', user.id)
-        .eq('status', 'pending');
+        .from("student_enrollment_requests")
+        .select("course_id")
+        .eq("student_id", user.id)
+        .eq("status", "pending");
 
       if (!error && data) {
-        setEnrollmentRequested(data.map(r => r.course_id));
+        setEnrollmentRequested(data.map((r) => r.course_id));
       }
     } catch (error) {
-      console.error('Error loading enrollment requests:', error);
+      console.error("Error loading enrollment requests:", error);
     } finally {
       setLoadingEnrollments(false);
     }
@@ -128,7 +131,9 @@ export default function YouthHome() {
     },
   ];
   const openTasks = tasks.filter((task) => !task.done).length;
-  const learningEnergy = tasks.length ? Math.round(((tasks.length - openTasks) / tasks.length) * 100) : 0;
+  const learningEnergy = tasks.length
+    ? Math.round(((tasks.length - openTasks) / tasks.length) * 100)
+    : 0;
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -172,14 +177,20 @@ export default function YouthHome() {
                     {diagnostic ? "Профиль готов" : "Диагностика не пройдена"}
                   </Text>
                 </View>
-                <Pressable onPress={() => router.push("/profile" as any)} className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30">
+                <Pressable
+                  onPress={() => router.push("/profile" as any)}
+                  className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
+                >
                   <View className="w-full h-full bg-white/20 items-center justify-center">
                     <Feather name="user" size={20} color="white" />
                   </View>
                 </Pressable>
               </View>
 
-              <View className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20" style={{ marginTop: 16 }}>
+              <View
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20"
+                style={{ marginTop: 16 }}
+              >
                 <View className="flex-row justify-between items-center mb-3">
                   <Text className="text-white text-xs font-bold uppercase tracking-wider">
                     Энергия обучения
@@ -239,7 +250,7 @@ export default function YouthHome() {
 
         {/* AI Assistant Insight */}
         {diagnostic && currentSkills[0] && (
-        <View className="mb-8">
+          <View className="mb-8">
             <View
               style={SHADOWS.sm}
               className="bg-blue-50 p-6 rounded-[32px] border border-blue-100 flex-row items-center gap-4"
@@ -268,7 +279,7 @@ export default function YouthHome() {
                 </Pressable>
               </View>
             </View>
-        </View>
+          </View>
         )}
 
         {/* Upcoming tasks hint */}
@@ -281,11 +292,15 @@ export default function YouthHome() {
               <Text className="text-xs font-bold text-blue-500 uppercase mb-1">
                 Следующее задание
               </Text>
-              <Text className="text-lg font-black text-blue-900 mb-1" numberOfLines={1}>
+              <Text
+                className="text-lg font-black text-blue-900 mb-1"
+                numberOfLines={1}
+              >
                 {tasks.find((t) => !t.done)?.title ?? tasks[0].title}
               </Text>
               <Text className="text-sm font-semibold text-blue-700">
-                +{tasks.find((t) => !t.done)?.xp_reward ?? tasks[0].xp_reward} XP
+                +{tasks.find((t) => !t.done)?.xp_reward ?? tasks[0].xp_reward}{" "}
+                XP
               </Text>
             </View>
             <View className="w-12 h-12 rounded-2xl bg-blue-500 items-center justify-center">
@@ -353,7 +368,9 @@ export default function YouthHome() {
                 onPress={() => {
                   router.push({
                     pathname: "/profile/youth/testing",
-                    params: activeChild?.id ? { childId: activeChild.id } : undefined,
+                    params: activeChild?.id
+                      ? { childId: activeChild.id }
+                      : undefined,
                   } as any);
                 }}
                 className="bg-purple-600 p-4 rounded-2xl items-center flex-row justify-center gap-2"
@@ -403,43 +420,117 @@ export default function YouthHome() {
             className="-mx-1 px-1 overflow-visible"
           >
             {courses.length === 0 ? (
-              <View style={{ width: 240, backgroundColor: "#F9FAFB", borderRadius: 28, padding: 24, alignItems: "center", justifyContent: "center", marginRight: 16, borderWidth: 1, borderColor: "#F3F4F6" }}>
+              <View
+                style={{
+                  width: 240,
+                  backgroundColor: "#F9FAFB",
+                  borderRadius: 28,
+                  padding: 24,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: 16,
+                  borderWidth: 1,
+                  borderColor: "#F3F4F6",
+                }}
+              >
                 <Feather name="inbox" size={28} color="#D1D5DB" />
-                <Text style={{ color: "#9CA3AF", fontWeight: "700", fontSize: 12, marginTop: 10, textAlign: "center" }}>
+                <Text
+                  style={{
+                    color: "#9CA3AF",
+                    fontWeight: "700",
+                    fontSize: 12,
+                    marginTop: 10,
+                    textAlign: "center",
+                  }}
+                >
                   Курсы скоро появятся
                 </Text>
               </View>
-            ) : courses.slice(0, 3).map((rec, idx) => {
-              const [c1] = courseGradient(idx);
-              return (
-                <View
-                  key={rec.id}
-                  style={[SHADOWS.sm, { width: 220, backgroundColor: "white", borderRadius: 28, overflow: "hidden", borderWidth: 1, borderColor: "#F9FAFB", marginRight: 16, paddingBottom: 16 }]}
-                >
-                  <View style={{ height: 120, backgroundColor: c1 + "15", alignItems: "center", justifyContent: "center" }}>
-                    <Feather name={(rec.icon as any) || "book-open"} size={32} color={c1} />
-                  </View>
-                  <View style={{ padding: 14 }}>
-                    <Text style={{ fontWeight: "800", color: "#111827", marginBottom: 2 }} numberOfLines={1}>
-                      {rec.title}
-                    </Text>
-                    {rec.org_name ? (
-                      <Text style={{ fontSize: 11, color: "#9CA3AF", fontWeight: "600", marginBottom: 8 }} numberOfLines={1}>
-                        {rec.org_name}
-                      </Text>
-                    ) : null}
-                    <Pressable
-                      onPress={() => router.push(`/parent/club/${rec.id}` as any)}
-                      style={{ backgroundColor: "#EDE9FE", paddingVertical: 10, borderRadius: 14, alignItems: "center" }}
+            ) : (
+              courses.slice(0, 3).map((rec, idx) => {
+                const [c1] = courseGradient(idx);
+                return (
+                  <View
+                    key={rec.id}
+                    style={[
+                      SHADOWS.sm,
+                      {
+                        width: 220,
+                        backgroundColor: "white",
+                        borderRadius: 28,
+                        overflow: "hidden",
+                        borderWidth: 1,
+                        borderColor: "#F9FAFB",
+                        marginRight: 16,
+                        paddingBottom: 16,
+                      },
+                    ]}
+                  >
+                    <View
+                      style={{
+                        height: 120,
+                        backgroundColor: c1 + "15",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
                     >
-                      <Text style={{ color: "#6C5CE7", fontWeight: "800", fontSize: 11, textTransform: "uppercase" }}>
-                        {isIndependent ? "Записаться" : "Хочу сюда"}
+                      <Feather
+                        name={(rec.icon as any) || "book-open"}
+                        size={32}
+                        color={c1}
+                      />
+                    </View>
+                    <View style={{ padding: 14 }}>
+                      <Text
+                        style={{
+                          fontWeight: "800",
+                          color: "#111827",
+                          marginBottom: 2,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {rec.title}
                       </Text>
-                    </Pressable>
+                      {rec.org_name ? (
+                        <Text
+                          style={{
+                            fontSize: 11,
+                            color: "#9CA3AF",
+                            fontWeight: "600",
+                            marginBottom: 8,
+                          }}
+                          numberOfLines={1}
+                        >
+                          {rec.org_name}
+                        </Text>
+                      ) : null}
+                      <Pressable
+                        onPress={() =>
+                          router.push(`/parent/club/${rec.id}` as any)
+                        }
+                        style={{
+                          backgroundColor: "#EDE9FE",
+                          paddingVertical: 10,
+                          borderRadius: 14,
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: "#6C5CE7",
+                            fontWeight: "800",
+                            fontSize: 11,
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {isIndependent ? "Записаться" : "Хочу сюда"}
+                        </Text>
+                      </Pressable>
+                    </View>
                   </View>
-                </View>
-              );
-            })}
+                );
+              })
+            )}
           </ScrollView>
         </View>
 
@@ -545,123 +636,241 @@ export default function YouthHome() {
             Твои ачивки
           </Text>
           {achievements.length === 0 ? (
-            <View style={{ backgroundColor: "#F9FAFB", borderRadius: 24, padding: 24, alignItems: "center", borderWidth: 1, borderColor: "#F3F4F6" }}>
+            <View
+              style={{
+                backgroundColor: "#F9FAFB",
+                borderRadius: 24,
+                padding: 24,
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#F3F4F6",
+              }}
+            >
               <Feather name="award" size={28} color="#D1D5DB" />
-              <Text style={{ color: "#9CA3AF", fontWeight: "700", fontSize: 13, marginTop: 10 }}>Достижений пока нет</Text>
+              <Text
+                style={{
+                  color: "#9CA3AF",
+                  fontWeight: "700",
+                  fontSize: 13,
+                  marginTop: 10,
+                }}
+              >
+                Достижений пока нет
+              </Text>
             </View>
           ) : (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="-mx-1 px-1 overflow-visible"
-          >
-            {achievements.map((ach) => (
-              <View
-                key={ach.id}
-                style={{ ...SHADOWS.sm, opacity: ach.unlocked ? 1 : 0.5 }}
-                className="w-32 bg-white p-4 rounded-[24px] border border-gray-50 mr-4 items-center"
-              >
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="-mx-1 px-1 overflow-visible"
+            >
+              {achievements.map((ach) => (
                 <View
-                  style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: RADIUS.full,
-                    backgroundColor: ach.unlocked ? COLORS.primary + "15" : COLORS.muted,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 12,
-                  }}
+                  key={ach.id}
+                  style={{ ...SHADOWS.sm, opacity: ach.unlocked ? 1 : 0.5 }}
+                  className="w-32 bg-white p-4 rounded-[24px] border border-gray-50 mr-4 items-center"
                 >
-                  <Feather
-                    name={ach.unlocked ? (ach.icon_name as any) : "lock"}
-                    size={24}
-                    color={ach.unlocked ? COLORS.primary : COLORS.mutedForeground}
-                  />
+                  <View
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: RADIUS.full,
+                      backgroundColor: ach.unlocked
+                        ? COLORS.primary + "15"
+                        : COLORS.muted,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 12,
+                    }}
+                  >
+                    <Feather
+                      name={ach.unlocked ? (ach.icon_name as any) : "lock"}
+                      size={24}
+                      color={
+                        ach.unlocked ? COLORS.primary : COLORS.mutedForeground
+                      }
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: TYPOGRAPHY.size.sm,
+                      fontWeight: TYPOGRAPHY.weight.bold,
+                      color: COLORS.foreground,
+                      textAlign: "center",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {ach.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: COLORS.mutedForeground,
+                      textAlign: "center",
+                    }}
+                  >
+                    {ach.description ?? ""}
+                  </Text>
                 </View>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.sm,
-                    fontWeight: TYPOGRAPHY.weight.bold,
-                    color: COLORS.foreground,
-                    textAlign: "center",
-                    marginBottom: 4,
-                  }}
-                >
-                  {ach.name}
-                </Text>
-                <Text style={{ fontSize: 10, color: COLORS.mutedForeground, textAlign: "center" }}>
-                  {ach.description ?? ""}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
+              ))}
+            </ScrollView>
           )}
         </View>
 
         {/* Browse Clubs - Student can request enrollment with parent approval */}
         <View style={{ marginBottom: 32 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16, paddingHorizontal: 4 }}>
-            <Text style={{ fontSize: 18, fontWeight: "800", color: COLORS.foreground }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+              paddingHorizontal: 4,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "800",
+                color: COLORS.foreground,
+              }}
+            >
               Интересные кружки
             </Text>
-            <TouchableOpacity onPress={() => router.push("/(tabs)/parent/clubs" as any)}>
-              <Text style={{ fontSize: 13, fontWeight: "700", color: COLORS.primary }}>Все →</Text>
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/parent/clubs" as any)}
+            >
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontWeight: "700",
+                  color: COLORS.primary,
+                }}
+              >
+                Все →
+              </Text>
             </TouchableOpacity>
           </View>
           {courses.length === 0 ? (
-            <View style={{ backgroundColor: "#F9FAFB", borderRadius: 24, padding: 24, alignItems: "center", borderWidth: 1, borderColor: "#F3F4F6" }}>
+            <View
+              style={{
+                backgroundColor: "#F9FAFB",
+                borderRadius: 24,
+                padding: 24,
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#F3F4F6",
+              }}
+            >
               <Feather name="inbox" size={28} color="#D1D5DB" />
-              <Text style={{ color: "#9CA3AF", fontWeight: "700", fontSize: 13, marginTop: 10 }}>Кружки скоро появятся</Text>
+              <Text
+                style={{
+                  color: "#9CA3AF",
+                  fontWeight: "700",
+                  fontSize: 13,
+                  marginTop: 10,
+                }}
+              >
+                Кружки скоро появятся
+              </Text>
             </View>
           ) : (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
-            {courses.slice(0, 4).map((course, idx) => {
-              const isRequested = enrollmentRequested.includes(course.id);
-              const gradient = courseGradient(idx);
-              return (
-                <TouchableOpacity
-                  key={course.id}
-                  onPress={() => {
-                    setSelectedCourse(course);
-                    setShowEnrollModal(true);
-                  }}
-                  style={{
-                    width: 180,
-                    marginRight: 14,
-                    marginLeft: 4,
-                    ...SHADOWS.sm
-                  }}
-                >
-                  <LinearGradient
-                    colors={gradient}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ marginHorizontal: -4 }}
+            >
+              {courses.slice(0, 4).map((course, idx) => {
+                const isRequested = enrollmentRequested.includes(course.id);
+                const gradient = courseGradient(idx);
+                return (
+                  <TouchableOpacity
+                    key={course.id}
+                    onPress={() => {
+                      setSelectedCourse(course);
+                      setShowEnrollModal(true);
+                    }}
                     style={{
-                      borderRadius: 20,
-                      padding: 16,
-                      height: 140,
-                      justifyContent: "space-between"
+                      width: 180,
+                      marginRight: 14,
+                      marginLeft: 4,
+                      ...SHADOWS.sm,
                     }}
                   >
-                    <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.25)", alignItems: "center", justifyContent: "center" }}>
-                      <Feather name={(course.icon as any) || "book-open"} size={20} color="white" />
-                    </View>
-                    <View>
-                      <Text style={{ fontSize: 15, fontWeight: "800", color: "white", marginBottom: 4 }} numberOfLines={1}>
-                        {course.title}
-                      </Text>
-                      <Text style={{ fontSize: 11, color: "rgba(255,255,255,0.8)" }}>
-                        {course.age_min}-{course.age_max} лет
-                      </Text>
-                    </View>
-                  </LinearGradient>
-                  {isRequested && (
-                    <View style={{ position: "absolute", top: 8, right: 8, backgroundColor: "#FEF3C7", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 }}>
-                      <Text style={{ fontSize: 10, fontWeight: "700", color: "#B45309" }}>Запрошен</Text>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+                    <LinearGradient
+                      colors={gradient}
+                      style={{
+                        borderRadius: 20,
+                        padding: 16,
+                        height: 140,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 12,
+                          backgroundColor: "rgba(255,255,255,0.25)",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Feather
+                          name={(course.icon as any) || "book-open"}
+                          size={20}
+                          color="white"
+                        />
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            fontWeight: "800",
+                            color: "white",
+                            marginBottom: 4,
+                          }}
+                          numberOfLines={1}
+                        >
+                          {course.title}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 11,
+                            color: "rgba(255,255,255,0.8)",
+                          }}
+                        >
+                          {course.age_min}-{course.age_max} лет
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                    {isRequested && (
+                      <View
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          backgroundColor: "#FEF3C7",
+                          paddingHorizontal: 8,
+                          paddingVertical: 4,
+                          borderRadius: 8,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            fontWeight: "700",
+                            color: "#B45309",
+                          }}
+                        >
+                          Запрошен
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
           )}
         </View>
       </ScrollView>
@@ -778,10 +987,40 @@ export default function YouthHome() {
         animationType="slide"
         onRequestClose={() => setShowEnrollModal(false)}
       >
-        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" }}>
-          <View style={{ backgroundColor: "white", borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 24, paddingBottom: 40, ...SHADOWS.lg }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <Text style={{ fontSize: 22, fontWeight: "900", color: COLORS.foreground }}>Записаться в кружок</Text>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "flex-end",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
+              padding: 24,
+              paddingBottom: 40,
+              ...SHADOWS.lg,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 20,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: "900",
+                  color: COLORS.foreground,
+                }}
+              >
+                Записаться в кружок
+              </Text>
               <TouchableOpacity onPress={() => setShowEnrollModal(false)}>
                 <Feather name="x" size={24} color={COLORS.mutedForeground} />
               </TouchableOpacity>
@@ -794,13 +1033,46 @@ export default function YouthHome() {
                   colors={courseGradient(0)}
                   style={{ borderRadius: 20, padding: 20, marginBottom: 20 }}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
-                    <View style={{ width: 56, height: 56, borderRadius: 16, backgroundColor: "rgba(255,255,255,0.25)", alignItems: "center", justifyContent: "center" }}>
-                      <Feather name={(selectedCourse.icon as any) || "book-open"} size={26} color="white" />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 14,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: 16,
+                        backgroundColor: "rgba(255,255,255,0.25)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Feather
+                        name={(selectedCourse.icon as any) || "book-open"}
+                        size={26}
+                        color="white"
+                      />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 18, fontWeight: "800", color: "white" }}>{selectedCourse.title}</Text>
-                      <Text style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", marginTop: 2 }}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: "800",
+                          color: "white",
+                        }}
+                      >
+                        {selectedCourse.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.8)",
+                          marginTop: 2,
+                        }}
+                      >
                         {selectedCourse.org_name || "Организация"}
                       </Text>
                     </View>
@@ -808,31 +1080,98 @@ export default function YouthHome() {
                 </LinearGradient>
 
                 {/* Info about parent approval */}
-                <View style={{ backgroundColor: "#FEF3C7", borderRadius: 16, padding: 16, marginBottom: 20, flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
-                  <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: "#FDE68A", alignItems: "center", justifyContent: "center" }}>
+                <View
+                  style={{
+                    backgroundColor: "#FEF3C7",
+                    borderRadius: 16,
+                    padding: 16,
+                    marginBottom: 20,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    gap: 12,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 18,
+                      backgroundColor: "#FDE68A",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Feather name="bell" size={18} color="#B45309" />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 14, fontWeight: "700", color: "#92400E", marginBottom: 4 }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "700",
+                        color: "#92400E",
+                        marginBottom: 4,
+                      }}
+                    >
                       Нужно одобрение родителя
                     </Text>
-                    <Text style={{ fontSize: 13, color: "#B45309", lineHeight: 18 }}>
-                      Родитель получит push-уведомление и сможет подтвердить или отклонить вашу заявку
+                    <Text
+                      style={{ fontSize: 13, color: "#B45309", lineHeight: 18 }}
+                    >
+                      Родитель получит push-уведомление и сможет подтвердить или
+                      отклонить вашу заявку
                     </Text>
                   </View>
                 </View>
 
                 {/* Course details */}
-                <View style={{ backgroundColor: "#F9FAFB", borderRadius: 16, padding: 16, marginBottom: 24, gap: 12 }}>
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: 13, color: COLORS.mutedForeground }}>Возраст</Text>
-                    <Text style={{ fontSize: 13, fontWeight: "700", color: COLORS.foreground }}>
+                <View
+                  style={{
+                    backgroundColor: "#F9FAFB",
+                    borderRadius: 16,
+                    padding: 16,
+                    marginBottom: 24,
+                    gap: 12,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{ fontSize: 13, color: COLORS.mutedForeground }}
+                    >
+                      Возраст
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontWeight: "700",
+                        color: COLORS.foreground,
+                      }}
+                    >
                       {selectedCourse.age_min}-{selectedCourse.age_max} лет
                     </Text>
                   </View>
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: 13, color: COLORS.mutedForeground }}>Стоимость</Text>
-                    <Text style={{ fontSize: 13, fontWeight: "700", color: COLORS.foreground }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{ fontSize: 13, color: COLORS.mutedForeground }}
+                    >
+                      Стоимость
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontWeight: "700",
+                        color: COLORS.foreground,
+                      }}
+                    >
                       {selectedCourse.price?.toLocaleString() || "—"} ₸/мес
                     </Text>
                   </View>
@@ -848,21 +1187,24 @@ export default function YouthHome() {
 
                     try {
                       const parentId =
-                        activeChild?.parentId && activeChild.parentId !== "pending"
+                        activeChild?.parentId &&
+                        activeChild.parentId !== "pending"
                           ? activeChild.parentId
                           : null;
 
                       const { error } = await supabase
-                        .from('student_enrollment_requests')
+                        .from("student_enrollment_requests")
                         .insert({
                           student_id: user.id,
-                          student_name: user.firstName + (user.lastName ? ` ${user.lastName}` : ''),
+                          student_name:
+                            user.firstName +
+                            (user.lastName ? ` ${user.lastName}` : ""),
                           parent_id: parentId,
                           course_id: selectedCourse.id,
                           course_title: selectedCourse.title,
                           org_id: selectedCourse.org_id,
                           org_name: selectedCourse.org_name,
-                          status: 'pending',
+                          status: "pending",
                           notification_sent: false,
                         });
 
@@ -873,40 +1215,64 @@ export default function YouthHome() {
 
                       // TODO: Send push notification to parent
 
-                      setEnrollmentRequested(prev => [...prev, selectedCourse.id]);
+                      setEnrollmentRequested((prev) => [
+                        ...prev,
+                        selectedCourse.id,
+                      ]);
                       setShowEnrollModal(false);
                       Alert.alert(
                         "Запрос отправлен!",
                         "Родитель получит уведомление и сможет подтвердить запись",
-                        [{ text: "OK" }]
+                        [{ text: "OK" }],
                       );
                     } catch (error: any) {
-                      Alert.alert("Ошибка", error?.message || "Не удалось отправить запрос");
+                      Alert.alert(
+                        "Ошибка",
+                        error?.message || "Не удалось отправить запрос",
+                      );
                     }
                   }}
                   disabled={enrollmentRequested.includes(selectedCourse.id)}
                   style={{
-                    backgroundColor: enrollmentRequested.includes(selectedCourse.id) ? "#E5E7EB" : COLORS.primary,
+                    backgroundColor: enrollmentRequested.includes(
+                      selectedCourse.id,
+                    )
+                      ? "#E5E7EB"
+                      : COLORS.primary,
                     paddingVertical: 18,
                     borderRadius: 20,
                     alignItems: "center",
                     flexDirection: "row",
                     justifyContent: "center",
                     gap: 8,
-                    ...SHADOWS.md
+                    ...SHADOWS.md,
                   }}
                 >
-                  <Feather 
-                    name={enrollmentRequested.includes(selectedCourse.id) ? "check" : "send"} 
-                    size={18} 
-                    color={enrollmentRequested.includes(selectedCourse.id) ? "#9CA3AF" : "white"} 
+                  <Feather
+                    name={
+                      enrollmentRequested.includes(selectedCourse.id)
+                        ? "check"
+                        : "send"
+                    }
+                    size={18}
+                    color={
+                      enrollmentRequested.includes(selectedCourse.id)
+                        ? "#9CA3AF"
+                        : "white"
+                    }
                   />
-                  <Text style={{ 
-                    color: enrollmentRequested.includes(selectedCourse.id) ? "#9CA3AF" : "white", 
-                    fontSize: 16, 
-                    fontWeight: "800" 
-                  }}>
-                    {enrollmentRequested.includes(selectedCourse.id) ? "Запрос отправлен" : "Отправить запрос родителю"}
+                  <Text
+                    style={{
+                      color: enrollmentRequested.includes(selectedCourse.id)
+                        ? "#9CA3AF"
+                        : "white",
+                      fontSize: 16,
+                      fontWeight: "800",
+                    }}
+                  >
+                    {enrollmentRequested.includes(selectedCourse.id)
+                      ? "Запрос отправлен"
+                      : "Отправить запрос родителю"}
                   </Text>
                 </TouchableOpacity>
               </>

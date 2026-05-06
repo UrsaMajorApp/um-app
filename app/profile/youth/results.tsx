@@ -15,22 +15,24 @@ import { MotiView } from "moti";
 import {
   Platform,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   useWindowDimensions,
   View,
-  StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useParentData } from "../../../contexts/ParentDataContext";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useParentData } from "../../../contexts/ParentDataContext";
 
 function compactSummary(summary?: string) {
   const normalized = (summary || "").replace(/\s+/g, " ").trim();
-  if (!normalized) return "Отличный результат и сильный потенциал для развития.";
+  if (!normalized)
+    return "Отличный результат и сильный потенциал для развития.";
 
-  const firstSentence = normalized.match(/^[^.!?]+[.!?]/)?.[0]?.trim() || normalized;
+  const firstSentence =
+    normalized.match(/^[^.!?]+[.!?]/)?.[0]?.trim() || normalized;
   if (firstSentence.length <= 130) return firstSentence;
 
   const trimmed = firstSentence.slice(0, 127);
@@ -101,8 +103,16 @@ export default function YouthResults() {
 
   const isPro = diagnostic.tier === "pro";
 
-  const colorPalette = ["#10B981", "#8B5CF6", "#3B82F6", "#F59E0B", "#EC4899", "#14B8A6", "#F43F5E"];
-  
+  const colorPalette = [
+    "#10B981",
+    "#8B5CF6",
+    "#3B82F6",
+    "#F59E0B",
+    "#EC4899",
+    "#14B8A6",
+    "#F43F5E",
+  ];
+
   const sortedScores = Object.entries(diagnostic.scores || {})
     .filter(([k, v]) => typeof v === "number" && v > 0)
     .sort((a, b) => b[1] - a[1])
@@ -110,13 +120,36 @@ export default function YouthResults() {
 
   const chartScores = sortedScores.map(([key, value], idx) => {
     const labelMap: Record<string, string> = {
-      logic: "Логика", creative: "Креатив", social: "Социум", physical: "Физика", linguistic: "Лингвистика",
-      creativity: "Креативность", empathy: "Эмпатия", leadership: "Лидерство", communication: "Общение",
-      adaptability: "Адаптивность", analytics: "Аналитика", teamwork: "Командная работа",
-      Autonomy: "Независимость", Stability: "Стабильность", Mastery: "Мастерство", Management: "Менеджмент",
-      Entrepreneurship: "Предпринимательство", Service: "Служение", Challenge: "Вызов", Lifestyle: "Стиль жизни",
-      R: "Реалистичный", I: "Интеллектуальный", A: "Артистичный", S: "Социальный", E: "Предприимчивый", C: "Конвенциональный",
-      tech: "Технологии", art: "Искусство", nature: "Природа", sport: "Спорт",
+      logic: "Логика",
+      creative: "Креатив",
+      social: "Социум",
+      physical: "Физика",
+      linguistic: "Лингвистика",
+      creativity: "Креативность",
+      empathy: "Эмпатия",
+      leadership: "Лидерство",
+      communication: "Общение",
+      adaptability: "Адаптивность",
+      analytics: "Аналитика",
+      teamwork: "Командная работа",
+      Autonomy: "Независимость",
+      Stability: "Стабильность",
+      Mastery: "Мастерство",
+      Management: "Менеджмент",
+      Entrepreneurship: "Предпринимательство",
+      Service: "Служение",
+      Challenge: "Вызов",
+      Lifestyle: "Стиль жизни",
+      R: "Реалистичный",
+      I: "Интеллектуальный",
+      A: "Артистичный",
+      S: "Социальный",
+      E: "Предприимчивый",
+      C: "Конвенциональный",
+      tech: "Технологии",
+      art: "Искусство",
+      nature: "Природа",
+      sport: "Спорт",
     };
     const label = labelMap[key] || key;
     // Normalize roughly (some test formats output points instead of percentages)
@@ -284,10 +317,7 @@ export default function YouthResults() {
                         duration: 1000,
                         delay: 500 + idx * 100,
                       }}
-                      style={[
-                        s.barFill,
-                        { backgroundColor: score.color },
-                      ]}
+                      style={[s.barFill, { backgroundColor: score.color }]}
                     />
                   </View>
                 </View>
@@ -306,7 +336,14 @@ export default function YouthResults() {
                   transition={{ delay: 400, duration: 400 }}
                   style={s.card}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 16,
+                    }}
+                  >
                     <Feather name="target" size={18} color="#10B981" />
                     <Text style={s.cardTitle}>Ключевые навыки</Text>
                   </View>
@@ -315,15 +352,17 @@ export default function YouthResults() {
                     diagnostic.topStrengths.length > 0 && (
                       <View style={{ marginBottom: 16 }}>
                         <Text style={s.subLabel}>Сильные стороны:</Text>
-                        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            gap: 8,
+                            marginTop: 8,
+                          }}
+                        >
                           {diagnostic.topStrengths.map((s2, i) => (
-                            <View
-                              key={i}
-                              style={s.strengthChip}
-                            >
-                              <Text style={s.strengthChipText}>
-                                ✦ {s2}
-                              </Text>
+                            <View key={i} style={s.strengthChip}>
+                              <Text style={s.strengthChipText}>✦ {s2}</Text>
                             </View>
                           ))}
                         </View>
@@ -334,15 +373,17 @@ export default function YouthResults() {
                     diagnostic.developmentAreas.length > 0 && (
                       <View>
                         <Text style={s.subLabel}>Зоны роста:</Text>
-                        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            gap: 8,
+                            marginTop: 8,
+                          }}
+                        >
                           {diagnostic.developmentAreas.map((d, i) => (
-                            <View
-                              key={i}
-                              style={s.devAreaChip}
-                            >
-                              <Text style={s.devAreaChipText}>
-                                ↗ {d}
-                              </Text>
+                            <View key={i} style={s.devAreaChip}>
+                              <Text style={s.devAreaChipText}>↗ {d}</Text>
                             </View>
                           ))}
                         </View>
@@ -359,7 +400,14 @@ export default function YouthResults() {
                   transition={{ delay: 500, duration: 400 }}
                   style={s.card}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 12,
+                    }}
+                  >
                     <Feather name="cpu" size={18} color="#3B82F6" />
                     <Text style={s.cardTitle}>Тип интеллекта</Text>
                   </View>
@@ -377,7 +425,14 @@ export default function YouthResults() {
                   transition={{ delay: 600, duration: 400 }}
                   style={[s.card, { backgroundColor: "#FEFCE8" }]}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 12,
+                    }}
+                  >
                     <Feather name="activity" size={18} color="#D97706" />
                     <Text style={s.cardTitle}>Тип личности</Text>
                   </View>
@@ -399,7 +454,14 @@ export default function YouthResults() {
                     transition={{ delay: 700, duration: 400 }}
                     style={s.card}
                   >
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                        marginBottom: 16,
+                      }}
+                    >
                       <Feather name="compass" size={18} color="#8B5CF6" />
                       <Text style={s.cardTitle}>Ранняя профориентация</Text>
                     </View>
@@ -420,15 +482,27 @@ export default function YouthResults() {
                   from={{ opacity: 0, translateY: 20 }}
                   animate={{ opacity: 1, translateY: 0 }}
                   transition={{ delay: 800, duration: 400 }}
-                  style={[s.card, { backgroundColor: `${COLORS.secondary}10`, borderWidth: 1, borderColor: `${COLORS.secondary}20` }]}
+                  style={[
+                    s.card,
+                    {
+                      backgroundColor: `${COLORS.secondary}10`,
+                      borderWidth: 1,
+                      borderColor: `${COLORS.secondary}20`,
+                    },
+                  ]}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 12,
+                    }}
+                  >
                     <Feather name="heart" size={18} color={COLORS.secondary} />
                     <Text style={s.cardTitle}>Совет для родителей</Text>
                   </View>
-                  <Text style={s.adviceText}>
-                    {diagnostic.parentAdvice}
-                  </Text>
+                  <Text style={s.adviceText}>{diagnostic.parentAdvice}</Text>
                 </MotiView>
               )}
             </>
@@ -482,9 +556,7 @@ export default function YouthResults() {
                 рекомендации.
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  router.push("/parent/subscription" as any)
-                }
+                onPress={() => router.push("/parent/subscription" as any)}
                 style={{
                   backgroundColor: "white",
                   paddingVertical: 14,
@@ -516,7 +588,12 @@ export default function YouthResults() {
                   fontWeight: "500",
                 }}
               >
-                На основе твоих ответов, твои самые сильные стороны — это {chartScores.slice(0, 2).map(s => s.label.toLowerCase()).join(" и ")}. Продолжай развивать их!
+                На основе твоих ответов, твои самые сильные стороны — это{" "}
+                {chartScores
+                  .slice(0, 2)
+                  .map((s) => s.label.toLowerCase())
+                  .join(" и ")}
+                . Продолжай развивать их!
               </Text>
             </View>
           )}
@@ -536,9 +613,7 @@ export default function YouthResults() {
                 ...SHADOWS.md,
               }}
             >
-              <Text
-                style={{ fontSize: 18, fontWeight: "800", color: "white" }}
-              >
+              <Text style={{ fontSize: 18, fontWeight: "800", color: "white" }}>
                 На главную
               </Text>
             </LinearGradient>

@@ -3,7 +3,12 @@ const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models
 const GEMINI_FALLBACK_PREFIX = "GEMINI_FALLBACK:";
 
 function parseGeminiJson(text: string) {
-  return JSON.parse(text.replace(/```json/g, "").replace(/```/g, "").trim());
+  return JSON.parse(
+    text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim(),
+  );
 }
 
 export async function generateGeminiDiagnosticJson(prompt: string) {
@@ -39,5 +44,7 @@ export async function generateGeminiDiagnosticJson(prompt: string) {
 }
 
 export function isGeminiFallbackError(error: unknown) {
-  return error instanceof Error && error.message.startsWith(GEMINI_FALLBACK_PREFIX);
+  return (
+    error instanceof Error && error.message.startsWith(GEMINI_FALLBACK_PREFIX)
+  );
 }

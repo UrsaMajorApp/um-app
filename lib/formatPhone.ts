@@ -12,8 +12,7 @@ export function formatPhone(text: string): string {
 
   const cc = hasPlus ? `+${digitsOnly[0]}` : digitsOnly[0];
 
-  if (digitsOnly.length <= 4)
-    return `${cc} ${digitsOnly.slice(1)}`;
+  if (digitsOnly.length <= 4) return `${cc} ${digitsOnly.slice(1)}`;
   if (digitsOnly.length <= 7)
     return `${cc} ${digitsOnly.slice(1, 4)} ${digitsOnly.slice(4)}`;
 

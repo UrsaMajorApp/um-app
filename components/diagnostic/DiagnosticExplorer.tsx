@@ -11,19 +11,18 @@ import { MotiView } from "moti";
 import React, { useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   useWindowDimensions,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
-import { useParentData } from "../../contexts/ParentDataContext";
+import { COLORS, LAYOUT, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
+import { useParentData } from "../../contexts/ParentDataContext";
 import { useDiagnosticEngine } from "../../hooks/useDiagnosticEngine";
 import { useSpeech } from "../../hooks/useSpeech";
 import BasicSwipeCard from "./BasicSwipeCard";
@@ -36,8 +35,12 @@ interface Props {
 export default function DiagnosticExplorer({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
-  const { childrenProfile, activeChildId, updateChildDiagnostic, parentProfile } =
-    useParentData();
+  const {
+    childrenProfile,
+    activeChildId,
+    updateChildDiagnostic,
+    parentProfile,
+  } = useParentData();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
   const horizontalPadding = isDesktop
@@ -134,9 +137,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
             color="white"
             style={{ marginTop: 24 }}
           />
-          <Text style={styles.processingTitle}>
-            ИИ анализирует ответы...
-          </Text>
+          <Text style={styles.processingTitle}>ИИ анализирует ответы...</Text>
           <Text style={styles.processingSubtitle}>
             Создаём персональный профиль талантов
           </Text>
@@ -208,7 +209,12 @@ export default function DiagnosticExplorer({ childId }: Props) {
   const isProPhase = engine.phase === "pro";
 
   return (
-    <View style={{ flex: 1, backgroundColor: isProPhase ? "#0F0A2A" : COLORS.background }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: isProPhase ? "#0F0A2A" : COLORS.background,
+      }}
+    >
       {/* Background decorations */}
       {!isProPhase && (
         <View style={StyleSheet.absoluteFill}>
@@ -263,10 +269,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
               />
             </TouchableOpacity>
             <Text
-              style={[
-                styles.headerTitle,
-                isProPhase && { color: "white" },
-              ]}
+              style={[styles.headerTitle, isProPhase && { color: "white" }]}
             >
               {isProPhase ? "Космический квест 🚀" : "Что тебе нравится?"}
             </Text>

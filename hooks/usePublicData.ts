@@ -7,8 +7,8 @@
  */
 import { useCallback, useEffect, useState } from "react";
 import { useDevDataVersion } from "../lib/devDataEvents";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import { isUuid } from "../lib/idUtils";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import type { OrgCourse, OrgGroup } from "./useOrgData";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -36,11 +36,11 @@ export function courseGradient(index: number): [string, string] {
 
 // Maps talent-score dimensions → skills stored in org_courses.skills[]
 export const SCORE_TO_SKILLS: Record<string, string[]> = {
-  logical:   ["Логика", "Код", "Математика", "Крит. мышление"],
-  creative:  ["Креативность", "Дизайн"],
-  social:    ["Команда", "Коммуникация", "Лидерство"],
-  physical:  ["Команда"],
-  linguistic:["Языки", "Коммуникация"],
+  logical: ["Логика", "Код", "Математика", "Крит. мышление"],
+  creative: ["Креативность", "Дизайн"],
+  social: ["Команда", "Коммуникация", "Лидерство"],
+  physical: ["Команда"],
+  linguistic: ["Языки", "Коммуникация"],
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -83,7 +83,9 @@ export function usePublicCourses() {
     setLoading(false);
   }, [devDataVersion]);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   return { courses, loading, refresh };
 }
@@ -171,7 +173,9 @@ export async function applyToCourse(params: {
   groupSchedule?: string | null;
 }): Promise<{ error: string | null }> {
   if (!supabase || !isSupabaseConfigured) return { error: "Not configured" };
-  const childProfileId = isUuid(params.childProfileId) ? params.childProfileId : null;
+  const childProfileId = isUuid(params.childProfileId)
+    ? params.childProfileId
+    : null;
   const res = await supabase.from("org_applications").insert({
     org_id: params.orgId,
     parent_user_id: params.parentUserId ?? null,
@@ -198,7 +202,7 @@ export async function checkEnrollment(params: {
   parentUserId?: string;
 }): Promise<{ enrolled: boolean }> {
   if (!supabase || !isSupabaseConfigured) return { enrolled: false };
-  
+
   let query = supabase
     .from("org_applications")
     .select("id")
@@ -216,7 +220,7 @@ export async function checkEnrollment(params: {
   }
 
   const res = await query;
-  
+
   return { enrolled: (res.data?.length ?? 0) > 0 };
 }
 
@@ -236,7 +240,7 @@ export async function applyToTrialLesson(params: {
 }): Promise<{ error: string | null }> {
   if (!supabase || !isSupabaseConfigured) return { error: "Not configured" };
   const childId = isUuid(params.childId) ? params.childId : null;
-  
+
   const res = await supabase.from("trial_lesson_requests").insert({
     child_id: childId,
     child_name: params.childName,
@@ -248,8 +252,8 @@ export async function applyToTrialLesson(params: {
     course_title: params.courseTitle,
     requested_slots: params.requestedSlots,
     confirmed_slot: params.selectedSlot,
-    status: 'pending',
+    status: "pending",
   });
-  
+
   return { error: res.error?.message ?? null };
 }

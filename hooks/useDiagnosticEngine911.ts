@@ -11,22 +11,26 @@
 
 import { useCallback, useRef, useState } from "react";
 import {
-  WYR_CARDS,
   PRO_TASKS_911,
-  STEALTH_PATTERNS_911,
   SKILL_LABELS_911,
+  STEALTH_PATTERNS_911,
+  WYR_CARDS,
   type BasicSkill911,
-  type ProSkill911,
-  type StealthEvent911,
-  type WYRCard,
   type ProTask911,
+  type StealthEvent911,
+  type WYRCard
 } from "../data/diagnosticData911";
 import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
 import type { Diagnostic } from "../models/types";
 
 // ─── Phase & state types ──────────────────────────────────────────────────────
 
-export type DiagnosticPhase911 = "intro" | "basic" | "pro" | "processing" | "done";
+export type DiagnosticPhase911 =
+  | "intro"
+  | "basic"
+  | "pro"
+  | "processing"
+  | "done";
 
 export interface Engine911State {
   phase: DiagnosticPhase911;
@@ -180,7 +184,11 @@ export function useDiagnosticEngine911(opts: {
     const top3 = (Object.entries(skillCounts) as [BasicSkill911, number][])
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3)
-      .map(([skill, count]) => ({ skill, count, label: SKILL_LABELS_911[skill] }));
+      .map(([skill, count]) => ({
+        skill,
+        count,
+        label: SKILL_LABELS_911[skill],
+      }));
 
     const weakest = (Object.entries(skillCounts) as [BasicSkill911, number][])
       .sort((a, b) => a[1] - b[1])
@@ -207,9 +215,11 @@ export function useDiagnosticEngine911(opts: {
       }
     }
     const dominantPattern =
-      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "balanced";
+      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
+      "balanced";
     const stealthLabel =
-      STEALTH_PATTERNS_911.find((p) => p.id === dominantPattern)?.label || "Сбалансированный";
+      STEALTH_PATTERNS_911.find((p) => p.id === dominantPattern)?.label ||
+      "Сбалансированный";
 
     return {
       scores,
@@ -276,7 +286,8 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
     } catch (e) {
       console.error("AI report error:", e);
       aiData = {
-        summary: "Сильная сторона ребёнка — инициативность и творческое мышление.",
+        summary:
+          "Сильная сторона ребёнка — инициативность и творческое мышление.",
         recommendedConstellation: computed.top3[0]?.label ?? "Творец",
         ...(isPro
           ? {
@@ -284,8 +295,13 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
               developmentAreas: computed.weakest,
               intellectType: "Социально-творческий интеллект",
               personalityBehavior: computed.stealthProfile,
-              careerArchetypes: ["Проектный менеджер", "UX-дизайнер", "Педагог-новатор"],
-              parentAdvice: "Поощряйте командные проекты и творческие инициативы ребёнка.",
+              careerArchetypes: [
+                "Проектный менеджер",
+                "UX-дизайнер",
+                "Педагог-новатор",
+              ],
+              parentAdvice:
+                "Поощряйте командные проекты и творческие инициативы ребёнка.",
             }
           : {}),
       };
@@ -327,8 +343,10 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
 
   // ── Public API ────────────────────────────────────────────────────────────────
 
-  const currentCard = phase === "basic" ? WYR_CARDS[basicIndex] ?? null : null;
-  const currentTask = phase === "pro" ? PRO_TASKS_911[proIndex] ?? null : null;
+  const currentCard =
+    phase === "basic" ? (WYR_CARDS[basicIndex] ?? null) : null;
+  const currentTask =
+    phase === "pro" ? (PRO_TASKS_911[proIndex] ?? null) : null;
 
   return {
     phase,

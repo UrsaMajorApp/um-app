@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export interface MentorGroup {
   id: string;
@@ -108,7 +108,7 @@ export function useMentorGroups() {
       raw.map((g: any) => ({
         ...g,
         student_count: countMap.get(g.id) ?? 0,
-      }))
+      })),
     );
     setLoading(false);
   }, [user?.id]);
@@ -321,7 +321,7 @@ export function useMentorAttendance() {
 
     const sessionIds = sessions.map((s: any) => s.id);
     const sessionMap = new Map<string, string>(
-      sessions.map((s: any) => [s.id, s.session_date])
+      sessions.map((s: any) => [s.id, s.session_date]),
     );
 
     // Fetch records + member names
@@ -339,7 +339,7 @@ export function useMentorAttendance() {
           .in("id", memberIds)
       : { data: [], error: null };
     const memberMap = new Map<string, string>(
-      ok<any>(memberRes).map((m: any) => [m.id, m.student_name])
+      ok<any>(memberRes).map((m: any) => [m.id, m.student_name]),
     );
 
     const flat: AttendanceRecord[] = recRows.map((r: any) => ({
@@ -373,7 +373,9 @@ export interface MentorStudentAttendanceSummary {
 
 export function useMentorStudentAttendanceSummary() {
   const { user } = useAuth();
-  const [summary, setSummary] = useState<Record<string, MentorStudentAttendanceSummary>>({});
+  const [summary, setSummary] = useState<
+    Record<string, MentorStudentAttendanceSummary>
+  >({});
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
@@ -409,7 +411,9 @@ export function useMentorStudentAttendanceSummary() {
     }
 
     const sessionOrder = new Map<string, number>();
-    sessions.forEach((session: any, index: number) => sessionOrder.set(session.id, index));
+    sessions.forEach((session: any, index: number) =>
+      sessionOrder.set(session.id, index),
+    );
     const recordsRes = await supabase
       .from("attendance_records")
       .select("member_id, session_id, present")
@@ -422,7 +426,11 @@ export function useMentorStudentAttendanceSummary() {
         (sessionOrder.get(b.session_id) ?? Number.MAX_SAFE_INTEGER),
     );
     for (const record of records) {
-      const current = next[record.member_id] ?? { total: 0, missed: 0, latestPresent: null };
+      const current = next[record.member_id] ?? {
+        total: 0,
+        missed: 0,
+        latestPresent: null,
+      };
       current.total += 1;
       if (!record.present) current.missed += 1;
       if (current.latestPresent === null) {
@@ -491,7 +499,12 @@ export function useLearningPath(studentName?: string) {
     refresh();
   };
 
-  const addStep = async (phase: string, phaseOrder: number, itemText: string, sName?: string) => {
+  const addStep = async (
+    phase: string,
+    phaseOrder: number,
+    itemText: string,
+    sName?: string,
+  ) => {
     if (!supabase || !user?.id) return;
     await supabase.from("learning_path_steps").insert({
       mentor_user_id: user.id,
@@ -516,7 +529,10 @@ export interface MentorProfileStats {
 
 export function useMentorProfileStats() {
   const { user } = useAuth();
-  const [stats, setStats] = useState<MentorProfileStats>({ studentCount: 0, groupCount: 0 });
+  const [stats, setStats] = useState<MentorProfileStats>({
+    studentCount: 0,
+    groupCount: 0,
+  });
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
@@ -575,7 +591,9 @@ export function useMentorOwnProfile() {
     setLoading(true);
     const res = await supabase
       .from("mentor_applications")
-      .select("specialization, bio, experience, education, photo_emoji, rating, sessions")
+      .select(
+        "specialization, bio, experience, education, photo_emoji, rating, sessions",
+      )
       .eq("user_id", user.id)
       .maybeSingle();
     setProfile(res.data ?? null);
@@ -587,7 +605,9 @@ export function useMentorOwnProfile() {
   }, [refresh]);
 
   const updateProfile = useCallback(
-    async (patch: Partial<MentorOwnProfile>): Promise<{ error: string | null }> => {
+    async (
+      patch: Partial<MentorOwnProfile>,
+    ): Promise<{ error: string | null }> => {
       if (!supabase || !user?.id) return { error: "Not configured" };
       const res = await supabase
         .from("mentor_applications")

@@ -1,11 +1,19 @@
+import { SideNav } from "@/app/(tabs)/layout-container";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SideNav } from "@/app/(tabs)/layout-container";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
+import { LAYOUT, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSubscriptionPlans } from "../../hooks/usePlatformData";
 
@@ -24,19 +32,34 @@ export default function SubscriptionPaywall() {
   const content = (
     <View style={styles.contentArea}>
       {/* Ambient blobs */}
-      <View style={[styles.blob, { top: -80, left: -80, backgroundColor: "rgba(139,92,246,0.18)" }]} />
-      <View style={[styles.blob, { bottom: -80, right: -80, backgroundColor: "rgba(56,189,248,0.12)" }]} />
+      <View
+        style={[
+          styles.blob,
+          { top: -80, left: -80, backgroundColor: "rgba(139,92,246,0.18)" },
+        ]}
+      />
+      <View
+        style={[
+          styles.blob,
+          { bottom: -80, right: -80, backgroundColor: "rgba(56,189,248,0.12)" },
+        ]}
+      />
 
       <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
         {/* Close button */}
-        <View style={[styles.topBar, { paddingHorizontal: isDesktop ? 40 : 20 }]}>
+        <View
+          style={[styles.topBar, { paddingHorizontal: isDesktop ? 40 : 20 }]}
+        >
           <Pressable onPress={() => router.back()} style={styles.closeBtn}>
             <Feather name="x" size={20} color="white" />
           </Pressable>
         </View>
 
         <ScrollView
-          contentContainerStyle={[styles.scroll, { paddingHorizontal: isDesktop ? 60 : 24 }]}
+          contentContainerStyle={[
+            styles.scroll,
+            { paddingHorizontal: isDesktop ? 60 : 24 },
+          ]}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.inner}>
@@ -45,16 +68,25 @@ export default function SubscriptionPaywall() {
               <View style={styles.zapIcon}>
                 <Feather name="zap" size={30} color="#A78BFA" />
               </View>
-              <Text style={styles.heroTitle}>Раскройте 100%{"\n"}потенциала ребенка</Text>
+              <Text style={styles.heroTitle}>
+                Раскройте 100%{"\n"}потенциала ребенка
+              </Text>
               <Text style={styles.heroSubtitle}>
-                Оформите подписку PRO, чтобы получить индивидуальный план развития и доступ ко всем премиум-функциям.
+                Оформите подписку PRO, чтобы получить индивидуальный план
+                развития и доступ ко всем премиум-функциям.
               </Text>
             </View>
 
             {/* Feature list */}
             <View style={styles.featureCard}>
               {(plan?.features ?? []).map((feature, idx, features) => (
-                <View key={feature} style={[styles.featureRow, idx < features.length - 1 && { marginBottom: 20 }]}>
+                <View
+                  key={feature}
+                  style={[
+                    styles.featureRow,
+                    idx < features.length - 1 && { marginBottom: 20 },
+                  ]}
+                >
                   <View style={styles.featureIcon}>
                     <Feather name="check-circle" size={20} color="#A78BFA" />
                   </View>
@@ -64,7 +96,9 @@ export default function SubscriptionPaywall() {
                 </View>
               ))}
               {!plan && (
-                <Text style={styles.featureDesc}>Активных тарифов пока нет.</Text>
+                <Text style={styles.featureDesc}>
+                  Активных тарифов пока нет.
+                </Text>
               )}
             </View>
 
@@ -80,24 +114,33 @@ export default function SubscriptionPaywall() {
                   colors={["rgba(255,255,255,0.15)", "transparent"]}
                   style={StyleSheet.absoluteFillObject}
                 />
-                <Text style={styles.pricingLabel}>{plan?.title ?? "Тариф"}</Text>
+                <Text style={styles.pricingLabel}>
+                  {plan?.title ?? "Тариф"}
+                </Text>
                 <View style={styles.priceRow}>
-                  <Text style={styles.priceAmount}>{plan ? plan.price_kzt.toLocaleString() : "—"}</Text>
+                  <Text style={styles.priceAmount}>
+                    {plan ? plan.price_kzt.toLocaleString() : "—"}
+                  </Text>
                   <Text style={styles.priceUnit}> ₸ / мес</Text>
                 </View>
 
                 <Pressable
                   disabled={!plan}
                   onPress={handleSubscribe}
-                  style={({ pressed }) => [styles.kaspiBtn, pressed && { opacity: 0.9 }]}
+                  style={({ pressed }) => [
+                    styles.kaspiBtn,
+                    pressed && { opacity: 0.9 },
+                  ]}
                 >
-                  <Text style={styles.kaspiText}>
-                    Выбрать тариф
-                  </Text>
+                  <Text style={styles.kaspiText}>Выбрать тариф</Text>
                 </Pressable>
 
                 <View style={styles.secureRow}>
-                  <Feather name="lock" size={11} color="rgba(255,255,255,0.6)" />
+                  <Feather
+                    name="lock"
+                    size={11}
+                    color="rgba(255,255,255,0.6)"
+                  />
                   <Text style={styles.secureText}>Безопасный платеж</Text>
                 </View>
               </LinearGradient>
@@ -105,7 +148,9 @@ export default function SubscriptionPaywall() {
 
             {/* Free tier */}
             <Pressable onPress={() => router.back()} style={styles.freeBtn}>
-              <Text style={styles.freeText}>Продолжить на бесплатном (Basic)</Text>
+              <Text style={styles.freeText}>
+                Продолжить на бесплатном (Basic)
+              </Text>
             </Pressable>
           </View>
         </ScrollView>

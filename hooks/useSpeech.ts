@@ -15,8 +15,8 @@ interface SpeechOptions {
 }
 
 const DEFAULTS: Required<Pick<SpeechOptions, "pitch" | "rate" | "language">> = {
-  pitch: 1.15,   // slightly higher → friendlier for kids
-  rate: 0.85,    // slightly slower → easier to understand
+  pitch: 1.15, // slightly higher → friendlier for kids
+  rate: 0.85, // slightly slower → easier to understand
   language: "ru-RU",
 };
 
@@ -24,35 +24,32 @@ export function useSpeech() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const speakingRef = useRef(false);
 
-  const speak = useCallback(
-    (text: string, opts?: SpeechOptions) => {
-      // Stop any ongoing utterance first
-      Speech.stop();
+  const speak = useCallback((text: string, opts?: SpeechOptions) => {
+    // Stop any ongoing utterance first
+    Speech.stop();
 
-      setIsSpeaking(true);
-      speakingRef.current = true;
+    setIsSpeaking(true);
+    speakingRef.current = true;
 
-      Speech.speak(text, {
-        language: opts?.language ?? DEFAULTS.language,
-        pitch: opts?.pitch ?? DEFAULTS.pitch,
-        rate: opts?.rate ?? DEFAULTS.rate,
-        onDone: () => {
-          setIsSpeaking(false);
-          speakingRef.current = false;
-          opts?.onDone?.();
-        },
-        onStopped: () => {
-          setIsSpeaking(false);
-          speakingRef.current = false;
-        },
-        onError: () => {
-          setIsSpeaking(false);
-          speakingRef.current = false;
-        },
-      });
-    },
-    [],
-  );
+    Speech.speak(text, {
+      language: opts?.language ?? DEFAULTS.language,
+      pitch: opts?.pitch ?? DEFAULTS.pitch,
+      rate: opts?.rate ?? DEFAULTS.rate,
+      onDone: () => {
+        setIsSpeaking(false);
+        speakingRef.current = false;
+        opts?.onDone?.();
+      },
+      onStopped: () => {
+        setIsSpeaking(false);
+        speakingRef.current = false;
+      },
+      onError: () => {
+        setIsSpeaking(false);
+        speakingRef.current = false;
+      },
+    });
+  }, []);
 
   const stop = useCallback(() => {
     Speech.stop();

@@ -4,13 +4,13 @@ import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  Image,
   Platform,
   Pressable,
   ScrollView,
   Text,
   useWindowDimensions,
   View,
-  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NotificationsModal } from "../../app/(tabs)/layout-container";
@@ -19,11 +19,15 @@ import {
   LAYOUT,
   RADIUS,
   SHADOWS,
-  TYPOGRAPHY
+  TYPOGRAPHY,
 } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { useParentData } from "../../contexts/ParentDataContext";
-import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from "../../hooks/usePublicData";
+import {
+  courseGradient,
+  SCORE_TO_SKILLS,
+  usePublicCourses,
+} from "../../hooks/usePublicData";
 
 const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
   const [visible, setVisible] = useState(false);
@@ -48,7 +52,7 @@ const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
       // 2. Ждем пока покажется + небольшая пауза в видимом состоянии
       timeoutId = setTimeout(() => {
         if (!isMounted) return;
-        
+
         // 3. Скрываем
         setVisible(false);
 
@@ -82,29 +86,29 @@ const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
 
   return (
     <MotiView
-      animate={{ 
-        opacity: visible ? (dark ? 0.06 : 0.15) : 0, 
+      animate={{
+        opacity: visible ? (dark ? 0.06 : 0.15) : 0,
         scale: visible ? 1.1 : 0.6,
-        rotate: config.rotation 
+        rotate: config.rotation,
       }}
       transition={{
-        type: 'timing',
+        type: "timing",
         duration: config.duration,
       }}
-      style={{ 
-        position: 'absolute', 
-        top: config.top, 
-        left: config.left, 
+      style={{
+        position: "absolute",
+        top: config.top,
+        left: config.left,
         zIndex: 0,
         pointerEvents: "none",
       }}
     >
       <Image
         source={require("../../assets/logo/Frame 4.svg")}
-        style={{ 
-          width: config.size, 
-          height: config.size, 
-          tintColor: dark ? '#555555' : undefined 
+        style={{
+          width: config.size,
+          height: config.size,
+          tintColor: dark ? "#555555" : undefined,
         }}
         resizeMode="contain"
       />
@@ -112,20 +116,17 @@ const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
   );
 });
 
-const FloatingBranding = React.memo(({ count = 15, dark = false, width, height }: any) => {
-  return (
-    <>
-      {Array.from({ length: count }).map((_, i) => (
-        <AutonomousLogo
-          key={i}
-          width={width}
-          height={height}
-          dark={dark}
-        />
-      ))}
-    </>
-  );
-});
+const FloatingBranding = React.memo(
+  ({ count = 15, dark = false, width, height }: any) => {
+    return (
+      <>
+        {Array.from({ length: count }).map((_, i) => (
+          <AutonomousLogo key={i} width={width} height={height} dark={dark} />
+        ))}
+      </>
+    );
+  },
+);
 
 export default function ParentHome() {
   const router = useRouter();
@@ -158,7 +159,9 @@ export default function ParentHome() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 2)
       .map(([t]) => t);
-    const wantedSkills = new Set(topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []));
+    const wantedSkills = new Set(
+      topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []),
+    );
 
     const matched = publicCourses.filter((c) =>
       c.skills.some((s) => wantedSkills.has(s)),
@@ -169,14 +172,26 @@ export default function ParentHome() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Intensive Fixed Background Layer (Branded "Rain") */}
-      <View 
-        style={{ 
-          ...Platform.select({ web: { position: 'fixed' } as any, default: { position: 'absolute' } }), 
-          top: 0, left: 0, right: 0, bottom: 0,
+      <View
+        style={{
+          ...Platform.select({
+            web: { position: "fixed" } as any,
+            default: { position: "absolute" },
+          }),
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           pointerEvents: "none",
-        }} 
+        }}
       >
-        <FloatingBranding count={40} dark={true} width={width} height={height} seed="body" />
+        <FloatingBranding
+          count={40}
+          dark={true}
+          width={width}
+          height={height}
+          seed="body"
+        />
       </View>
 
       <ScrollView
@@ -217,40 +232,40 @@ export default function ParentHome() {
                       letterSpacing: TYPOGRAPHY.letterSpacing.tight,
                     }}
                   >
-                    Привет, {user?.firstName || parentProfile?.firstName || "Родитель"}
-                    !
+                    Привет,{" "}
+                    {user?.firstName || parentProfile?.firstName || "Родитель"}!
                   </Text>
                   {!isDesktop && (
-                  <Pressable
-                    onPress={() => setNotificationsVisible(true)}
-                    style={{
-                      width: 52,
-                      height: 52,
-                      borderRadius: RADIUS.lg,
-                      backgroundColor: "rgba(255,255,255,0.2)",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderWidth: 1,
-                      borderColor: "rgba(255,255,255,0.3)",
-                      ...(Platform.OS === "web" &&
-                        ({ cursor: "pointer" } as any)),
-                    }}
-                  >
-                    <Feather name="bell" size={20} color="white" />
-                    <View
+                    <Pressable
+                      onPress={() => setNotificationsVisible(true)}
                       style={{
-                        position: "absolute",
-                        top: 14,
-                        right: 14,
-                        width: 10,
-                        height: 10,
-                        backgroundColor: COLORS.destructive,
-                        borderRadius: 5,
-                        borderWidth: 1.5,
-                        borderColor: "rgba(255,255,255,0.4)",
+                        width: 52,
+                        height: 52,
+                        borderRadius: RADIUS.lg,
+                        backgroundColor: "rgba(255,255,255,0.2)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderWidth: 1,
+                        borderColor: "rgba(255,255,255,0.3)",
+                        ...(Platform.OS === "web" &&
+                          ({ cursor: "pointer" } as any)),
                       }}
-                    />
-                  </Pressable>
+                    >
+                      <Feather name="bell" size={20} color="white" />
+                      <View
+                        style={{
+                          position: "absolute",
+                          top: 14,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: COLORS.destructive,
+                          borderRadius: 5,
+                          borderWidth: 1.5,
+                          borderColor: "rgba(255,255,255,0.4)",
+                        }}
+                      />
+                    </Pressable>
                   )}
                 </View>
                 <Text
@@ -271,7 +286,9 @@ export default function ParentHome() {
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 24 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Мои дети</Text>
-            <Pressable onPress={() => router.push("/(tabs)/parent/children" as any)}>
+            <Pressable
+              onPress={() => router.push("/(tabs)/parent/children" as any)}
+            >
               <Text className="text-purple-600 font-bold text-sm">Все</Text>
             </Pressable>
           </View>
@@ -379,7 +396,8 @@ export default function ParentHome() {
                   AI Диагностика
                 </Text>
                 <Text className="text-blue-700 text-xs leading-4">
-                  Пройдите диагностику талантов для {activeChild.name}, чтобы получить персональные рекомендации по развитию.
+                  Пройдите диагностику талантов для {activeChild.name}, чтобы
+                  получить персональные рекомендации по развитию.
                 </Text>
                 <Pressable
                   onPress={() => {
@@ -418,9 +436,28 @@ export default function ParentHome() {
             style={{ paddingLeft: horizontalPadding }}
           >
             {recommendations.length === 0 ? (
-              <View style={{ width: 260, backgroundColor: "#F9FAFB", borderRadius: 28, padding: 24, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "#F3F4F6" }}>
+              <View
+                style={{
+                  width: 260,
+                  backgroundColor: "#F9FAFB",
+                  borderRadius: 28,
+                  padding: 24,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 1,
+                  borderColor: "#F3F4F6",
+                }}
+              >
                 <Feather name="inbox" size={28} color="#D1D5DB" />
-                <Text style={{ color: "#9CA3AF", fontWeight: "700", fontSize: 13, marginTop: 10, textAlign: "center" }}>
+                <Text
+                  style={{
+                    color: "#9CA3AF",
+                    fontWeight: "700",
+                    fontSize: 13,
+                    marginTop: 10,
+                    textAlign: "center",
+                  }}
+                >
                   Курсы появятся{"\n"}когда организации их добавят
                 </Text>
               </View>
@@ -431,22 +468,75 @@ export default function ParentHome() {
                   <Pressable
                     key={rec.id}
                     onPress={() => router.push(`/parent/club/${rec.id}` as any)}
-                    style={[SHADOWS.sm, { marginRight: 16, width: 240, backgroundColor: "white", borderRadius: 28, overflow: "hidden", borderWidth: 1, borderColor: "#F9FAFB" }]}
+                    style={[
+                      SHADOWS.sm,
+                      {
+                        marginRight: 16,
+                        width: 240,
+                        backgroundColor: "white",
+                        borderRadius: 28,
+                        overflow: "hidden",
+                        borderWidth: 1,
+                        borderColor: "#F9FAFB",
+                      },
+                    ]}
                   >
-                    <View style={{ height: 120, backgroundColor: c1 + "20", alignItems: "center", justifyContent: "center" }}>
-                      <Feather name={(rec.icon as any) || "book-open"} size={36} color={c1} />
+                    <View
+                      style={{
+                        height: 120,
+                        backgroundColor: c1 + "20",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Feather
+                        name={(rec.icon as any) || "book-open"}
+                        size={36}
+                        color={c1}
+                      />
                     </View>
                     <View style={{ padding: 14 }}>
-                      <Text style={{ fontWeight: "800", color: "#111827", marginBottom: 2, fontSize: 14 }} numberOfLines={1}>
+                      <Text
+                        style={{
+                          fontWeight: "800",
+                          color: "#111827",
+                          marginBottom: 2,
+                          fontSize: 14,
+                        }}
+                        numberOfLines={1}
+                      >
                         {rec.title}
                       </Text>
                       {rec.org_name ? (
-                        <Text style={{ fontSize: 11, color: "#9CA3AF", fontWeight: "600", marginBottom: 6 }} numberOfLines={1}>
+                        <Text
+                          style={{
+                            fontSize: 11,
+                            color: "#9CA3AF",
+                            fontWeight: "600",
+                            marginBottom: 6,
+                          }}
+                          numberOfLines={1}
+                        >
                           {rec.org_name}
                         </Text>
                       ) : null}
-                      <View style={{ backgroundColor: "#EDE9FE", alignSelf: "flex-start", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 }}>
-                        <Text style={{ fontSize: 9, fontWeight: "900", color: "#6C5CE7", textTransform: "uppercase" }}>
+                      <View
+                        style={{
+                          backgroundColor: "#EDE9FE",
+                          alignSelf: "flex-start",
+                          paddingHorizontal: 8,
+                          paddingVertical: 3,
+                          borderRadius: 8,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 9,
+                            fontWeight: "900",
+                            color: "#6C5CE7",
+                            textTransform: "uppercase",
+                          }}
+                        >
                           {rec.price.toLocaleString()} ₸/мес
                         </Text>
                       </View>
@@ -488,7 +578,6 @@ export default function ParentHome() {
             </Pressable>
           </View>
         </View>
-
       </ScrollView>
 
       <NotificationsModal

@@ -33,7 +33,14 @@ export default function AdminIntroScreen() {
 
   if (isLoading || !user || user.role !== "admin") {
     return (
-      <View style={{ flex: 1, backgroundColor: COLORS.background, justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.background,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
@@ -41,7 +48,9 @@ export default function AdminIntroScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
         <MotiView
           from={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -62,11 +71,24 @@ export default function AdminIntroScreen() {
           >
             <Feather name="shield" size={32} color="white" />
           </LinearGradient>
-          
-          <Text style={{ fontSize: TYPOGRAPHY.size.xxl, fontWeight: TYPOGRAPHY.weight.bold, color: COLORS.foreground, marginBottom: 8 }}>
+
+          <Text
+            style={{
+              fontSize: TYPOGRAPHY.size.xxl,
+              fontWeight: TYPOGRAPHY.weight.bold,
+              color: COLORS.foreground,
+              marginBottom: 8,
+            }}
+          >
             Панель Администратора
           </Text>
-          <Text style={{ fontSize: TYPOGRAPHY.size.md, color: COLORS.mutedForeground, marginBottom: 32 }}>
+          <Text
+            style={{
+              fontSize: TYPOGRAPHY.size.md,
+              color: COLORS.mutedForeground,
+              marginBottom: 32,
+            }}
+          >
             Подготовка рабочего пространства...
           </Text>
 

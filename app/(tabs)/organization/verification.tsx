@@ -17,8 +17,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 import { useOrgProfile } from "../../../hooks/useOrgData";
+import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 
 type DocKey = "bin_doc" | "registration_doc" | "license_doc";
 
@@ -33,18 +33,29 @@ export default function OrgVerificationScreen() {
   const { user } = useAuth();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
-  const { id: orgId, status: orgStatus, refresh: refreshOrgProfile } = useOrgProfile();
+  const horizontalPadding = isDesktop
+    ? LAYOUT.dashboardHorizontalPaddingDesktop
+    : 20;
+  const {
+    id: orgId,
+    status: orgStatus,
+    refresh: refreshOrgProfile,
+  } = useOrgProfile();
 
   const [bin, setBin] = useState("");
-  const [docs, setDocs] = useState<DocState>({ bin_doc: false, registration_doc: false, license_doc: false });
+  const [docs, setDocs] = useState<DocState>({
+    bin_doc: false,
+    registration_doc: false,
+    license_doc: false,
+  });
   const [offerAccepted, setOfferAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const binValid = /^\d{12}$/.test(bin);
-  const allDocsUploaded = docs.bin_doc && docs.registration_doc && docs.license_doc;
+  const allDocsUploaded =
+    docs.bin_doc && docs.registration_doc && docs.license_doc;
   const canSubmit = binValid && allDocsUploaded && offerAccepted;
 
   // Already submitted
@@ -52,28 +63,80 @@ export default function OrgVerificationScreen() {
     return (
       <View style={{ flex: 1, backgroundColor: COLORS.background }}>
         <SafeAreaView edges={["top"]}>
-          <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 12, paddingBottom: 16 }}>
-            <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 12, padding: 4 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              paddingHorizontal: 20,
+              paddingTop: 12,
+              paddingBottom: 16,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{ marginRight: 12, padding: 4 }}
+            >
               <Feather name="arrow-left" size={22} color={COLORS.foreground} />
             </TouchableOpacity>
-            <Text style={{ fontSize: 20, fontWeight: "800", color: COLORS.foreground }}>Верификация</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "800",
+                color: COLORS.foreground,
+              }}
+            >
+              Верификация
+            </Text>
           </View>
         </SafeAreaView>
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 32 }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 32,
+          }}
+        >
           <MotiView
             from={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring" }}
             style={{ alignItems: "center" }}
           >
-            <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: "#FEF9C3", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
+            <View
+              style={{
+                width: 96,
+                height: 96,
+                borderRadius: 48,
+                backgroundColor: "#FEF9C3",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 24,
+              }}
+            >
               <Feather name="clock" size={48} color="#854D0E" />
             </View>
-            <Text style={{ fontSize: 22, fontWeight: "900", color: COLORS.foreground, textAlign: "center", marginBottom: 12 }}>
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: "900",
+                color: COLORS.foreground,
+                textAlign: "center",
+                marginBottom: 12,
+              }}
+            >
               Документы на проверке
             </Text>
-            <Text style={{ fontSize: 15, color: COLORS.mutedForeground, textAlign: "center", lineHeight: 22 }}>
-              Администратор рассматривает вашу заявку. Обычно это занимает до 24 часов.
+            <Text
+              style={{
+                fontSize: 15,
+                color: COLORS.mutedForeground,
+                textAlign: "center",
+                lineHeight: 22,
+              }}
+            >
+              Администратор рассматривает вашу заявку. Обычно это занимает до 24
+              часов.
             </Text>
           </MotiView>
         </View>
@@ -88,10 +151,22 @@ export default function OrgVerificationScreen() {
 
   const handleSubmit = async () => {
     setError(null);
-    if (!binValid) { setError("БИН должен содержать ровно 12 цифр."); return; }
-    if (!allDocsUploaded) { setError("Загрузите все три документа."); return; }
-    if (!offerAccepted) { setError("Примите условия публичной оферты."); return; }
-    if (!orgId) { setError("Профиль организации не найден."); return; }
+    if (!binValid) {
+      setError("БИН должен содержать ровно 12 цифр.");
+      return;
+    }
+    if (!allDocsUploaded) {
+      setError("Загрузите все три документа.");
+      return;
+    }
+    if (!offerAccepted) {
+      setError("Примите условия публичной оферты.");
+      return;
+    }
+    if (!orgId) {
+      setError("Профиль организации не найден.");
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -108,7 +183,10 @@ export default function OrgVerificationScreen() {
             status: "ready_for_review",
           })
           .eq("id", orgId);
-        if (updateErr) { setError(updateErr.message); return; }
+        if (updateErr) {
+          setError(updateErr.message);
+          return;
+        }
       }
       await refreshOrgProfile();
       setSubmitted(true);
@@ -117,10 +195,30 @@ export default function OrgVerificationScreen() {
     }
   };
 
-  const DOC_SLOTS: { key: DocKey; label: string; hint: string; icon: string }[] = [
-    { key: "bin_doc", label: "Свидетельство о регистрации (БИН)", hint: "PDF или JPG до 10MB", icon: "file-text" },
-    { key: "registration_doc", label: "Справка о государственной регистрации", hint: "PDF или JPG до 10MB", icon: "award" },
-    { key: "license_doc", label: "Образовательная лицензия", hint: "PDF или JPG до 10MB", icon: "book-open" },
+  const DOC_SLOTS: {
+    key: DocKey;
+    label: string;
+    hint: string;
+    icon: string;
+  }[] = [
+    {
+      key: "bin_doc",
+      label: "Свидетельство о регистрации (БИН)",
+      hint: "PDF или JPG до 10MB",
+      icon: "file-text",
+    },
+    {
+      key: "registration_doc",
+      label: "Справка о государственной регистрации",
+      hint: "PDF или JPG до 10MB",
+      icon: "award",
+    },
+    {
+      key: "license_doc",
+      label: "Образовательная лицензия",
+      hint: "PDF или JPG до 10MB",
+      icon: "book-open",
+    },
   ];
 
   return (
@@ -128,14 +226,38 @@ export default function OrgVerificationScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
-      <SafeAreaView edges={["top"]} style={{ backgroundColor: COLORS.background }}>
-        <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 12, paddingBottom: 16 }}>
-          <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 12, padding: 4 }}>
+      <SafeAreaView
+        edges={["top"]}
+        style={{ backgroundColor: COLORS.background }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: 20,
+            paddingTop: 12,
+            paddingBottom: 16,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{ marginRight: 12, padding: 4 }}
+          >
             <Feather name="arrow-left" size={22} color={COLORS.foreground} />
           </TouchableOpacity>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 20, fontWeight: "800", color: COLORS.foreground }}>Верификация</Text>
-            <Text style={{ fontSize: 12, color: COLORS.mutedForeground }}>Шаг 2 из 3</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "800",
+                color: COLORS.foreground,
+              }}
+            >
+              Верификация
+            </Text>
+            <Text style={{ fontSize: 12, color: COLORS.mutedForeground }}>
+              Шаг 2 из 3
+            </Text>
           </View>
         </View>
       </SafeAreaView>
@@ -144,7 +266,9 @@ export default function OrgVerificationScreen() {
         contentContainerStyle={{
           paddingHorizontal: horizontalPadding,
           paddingBottom: 60,
-          maxWidth: isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop * 10 : undefined,
+          maxWidth: isDesktop
+            ? LAYOUT.dashboardHorizontalPaddingDesktop * 10
+            : undefined,
           alignSelf: "center",
           width: "100%",
         }}
@@ -152,26 +276,57 @@ export default function OrgVerificationScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {/* Info banner */}
-        <View style={{
-          backgroundColor: "#EDE9FE",
-          borderRadius: RADIUS.lg,
-          padding: 16,
-          flexDirection: "row",
-          gap: 12,
-          marginBottom: 24,
-        }}>
-          <Feather name="info" size={18} color="#6C5CE7" style={{ marginTop: 1 }} />
-          <Text style={{ flex: 1, fontSize: 13, color: "#5B21B6", lineHeight: 20 }}>
-            После проверки документов ваша организация получит синюю галочку, появится в поиске, и ИИ начнёт рекомендовать ваши курсы.
+        <View
+          style={{
+            backgroundColor: "#EDE9FE",
+            borderRadius: RADIUS.lg,
+            padding: 16,
+            flexDirection: "row",
+            gap: 12,
+            marginBottom: 24,
+          }}
+        >
+          <Feather
+            name="info"
+            size={18}
+            color="#6C5CE7"
+            style={{ marginTop: 1 }}
+          />
+          <Text
+            style={{ flex: 1, fontSize: 13, color: "#5B21B6", lineHeight: 20 }}
+          >
+            После проверки документов ваша организация получит синюю галочку,
+            появится в поиске, и ИИ начнёт рекомендовать ваши курсы.
           </Text>
         </View>
 
         {/* BIN field */}
-        <View style={{ backgroundColor: "white", borderRadius: RADIUS.xl, padding: 20, marginBottom: 16, ...SHADOWS.sm }}>
-          <Text style={{ fontSize: 14, fontWeight: "700", color: COLORS.foreground, marginBottom: 4 }}>
+        <View
+          style={{
+            backgroundColor: "white",
+            borderRadius: RADIUS.xl,
+            padding: 20,
+            marginBottom: 16,
+            ...SHADOWS.sm,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "700",
+              color: COLORS.foreground,
+              marginBottom: 4,
+            }}
+          >
             БИН организации
           </Text>
-          <Text style={{ fontSize: 12, color: COLORS.mutedForeground, marginBottom: 12 }}>
+          <Text
+            style={{
+              fontSize: 12,
+              color: COLORS.mutedForeground,
+              marginBottom: 12,
+            }}
+          >
             12-значный бизнес-идентификационный номер
           </Text>
           <View style={{ position: "relative" }}>
@@ -186,7 +341,12 @@ export default function OrgVerificationScreen() {
                 backgroundColor: "#F9FAFB",
                 borderRadius: 14,
                 borderWidth: 1.5,
-                borderColor: bin.length > 0 ? (binValid ? "#10B981" : "#EF4444") : "#E5E7EB",
+                borderColor:
+                  bin.length > 0
+                    ? binValid
+                      ? "#10B981"
+                      : "#EF4444"
+                    : "#E5E7EB",
                 paddingHorizontal: 16,
                 paddingVertical: 13,
                 paddingRight: 48,
@@ -196,7 +356,15 @@ export default function OrgVerificationScreen() {
                 color: COLORS.foreground,
               }}
             />
-            <View style={{ position: "absolute", right: 14, top: 0, bottom: 0, justifyContent: "center" }}>
+            <View
+              style={{
+                position: "absolute",
+                right: 14,
+                top: 0,
+                bottom: 0,
+                justifyContent: "center",
+              }}
+            >
               {bin.length > 0 && (
                 <Feather
                   name={binValid ? "check-circle" : "x-circle"}
@@ -214,8 +382,23 @@ export default function OrgVerificationScreen() {
         </View>
 
         {/* Document uploads */}
-        <View style={{ backgroundColor: "white", borderRadius: RADIUS.xl, padding: 20, marginBottom: 16, ...SHADOWS.sm }}>
-          <Text style={{ fontSize: 14, fontWeight: "700", color: COLORS.foreground, marginBottom: 16 }}>
+        <View
+          style={{
+            backgroundColor: "white",
+            borderRadius: RADIUS.xl,
+            padding: 20,
+            marginBottom: 16,
+            ...SHADOWS.sm,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "700",
+              color: COLORS.foreground,
+              marginBottom: 16,
+            }}
+          >
             Документы
           </Text>
           <View style={{ gap: 12 }}>
@@ -238,14 +421,16 @@ export default function OrgVerificationScreen() {
                     gap: 14,
                   }}
                 >
-                  <View style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    backgroundColor: uploaded ? "#10B98120" : "#6C5CE720",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}>
+                  <View
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      backgroundColor: uploaded ? "#10B98120" : "#6C5CE720",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Feather
                       name={uploaded ? "check" : (slot.icon as any)}
                       size={20}
@@ -253,10 +438,22 @@ export default function OrgVerificationScreen() {
                     />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 13, fontWeight: "700", color: uploaded ? "#166534" : COLORS.foreground }}>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontWeight: "700",
+                        color: uploaded ? "#166534" : COLORS.foreground,
+                      }}
+                    >
                       {slot.label}
                     </Text>
-                    <Text style={{ fontSize: 11, color: uploaded ? "#16A34A" : COLORS.mutedForeground, marginTop: 2 }}>
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        color: uploaded ? "#16A34A" : COLORS.mutedForeground,
+                        marginTop: 2,
+                      }}
+                    >
                       {uploaded ? "Файл загружен" : slot.hint}
                     </Text>
                   </View>
@@ -270,28 +467,53 @@ export default function OrgVerificationScreen() {
         </View>
 
         {/* Public offer */}
-        <View style={{ backgroundColor: "white", borderRadius: RADIUS.xl, padding: 20, marginBottom: 24, ...SHADOWS.sm }}>
+        <View
+          style={{
+            backgroundColor: "white",
+            borderRadius: RADIUS.xl,
+            padding: 20,
+            marginBottom: 24,
+            ...SHADOWS.sm,
+          }}
+        >
           <TouchableOpacity
             onPress={() => setOfferAccepted(!offerAccepted)}
             activeOpacity={0.8}
             style={{ flexDirection: "row", alignItems: "flex-start", gap: 14 }}
           >
-            <View style={{
-              width: 24,
-              height: 24,
-              borderRadius: 6,
-              borderWidth: 2,
-              borderColor: offerAccepted ? "#6C5CE7" : "#D1D5DB",
-              backgroundColor: offerAccepted ? "#6C5CE7" : "white",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: 1,
-            }}>
-              {offerAccepted && <Feather name="check" size={14} color="white" />}
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 6,
+                borderWidth: 2,
+                borderColor: offerAccepted ? "#6C5CE7" : "#D1D5DB",
+                backgroundColor: offerAccepted ? "#6C5CE7" : "white",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 1,
+              }}
+            >
+              {offerAccepted && (
+                <Feather name="check" size={14} color="white" />
+              )}
             </View>
-            <Text style={{ flex: 1, fontSize: 14, color: COLORS.foreground, lineHeight: 22 }}>
+            <Text
+              style={{
+                flex: 1,
+                fontSize: 14,
+                color: COLORS.foreground,
+                lineHeight: 22,
+              }}
+            >
               Я принимаю условия{" "}
-              <Text style={{ color: "#6C5CE7", fontWeight: "700", textDecorationLine: "underline" }}>
+              <Text
+                style={{
+                  color: "#6C5CE7",
+                  fontWeight: "700",
+                  textDecorationLine: "underline",
+                }}
+              >
                 Публичной оферты
               </Text>{" "}
               платформы UM. Это заменяет бумажный договор.
@@ -303,28 +525,59 @@ export default function OrgVerificationScreen() {
           <MotiView
             from={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            style={{ backgroundColor: "#FEE2E2", borderRadius: RADIUS.md, padding: 12, marginBottom: 16, borderWidth: 1, borderColor: "#FCA5A5" }}
+            style={{
+              backgroundColor: "#FEE2E2",
+              borderRadius: RADIUS.md,
+              padding: 12,
+              marginBottom: 16,
+              borderWidth: 1,
+              borderColor: "#FCA5A5",
+            }}
           >
-            <Text style={{ color: "#B91C1C", fontSize: 13, fontWeight: "600", textAlign: "center" }}>{error}</Text>
+            <Text
+              style={{
+                color: "#B91C1C",
+                fontSize: 13,
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              {error}
+            </Text>
           </MotiView>
         )}
 
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={submitting || !canSubmit}
-          style={{ opacity: !canSubmit ? 0.5 : 1, borderRadius: RADIUS.xl, overflow: "hidden", ...SHADOWS.md }}
+          style={{
+            opacity: !canSubmit ? 0.5 : 1,
+            borderRadius: RADIUS.xl,
+            overflow: "hidden",
+            ...SHADOWS.md,
+          }}
           activeOpacity={0.85}
         >
           <LinearGradient
             colors={["#6C5CE7", "#8B7FE8"]}
-            style={{ paddingVertical: 18, alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 8 }}
+            style={{
+              paddingVertical: 18,
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              gap: 8,
+            }}
           >
             {submitting ? (
               <ActivityIndicator color="white" size="small" />
             ) : (
               <>
                 <Feather name="send" size={18} color="white" />
-                <Text style={{ color: "white", fontWeight: "800", fontSize: 16 }}>Отправить на проверку</Text>
+                <Text
+                  style={{ color: "white", fontWeight: "800", fontSize: 16 }}
+                >
+                  Отправить на проверку
+                </Text>
               </>
             )}
           </LinearGradient>

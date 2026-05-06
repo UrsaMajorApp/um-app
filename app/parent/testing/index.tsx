@@ -12,7 +12,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { useOnboardingQuestions } from "../../../hooks/usePlatformData";
-import { generateGeminiDiagnosticJson, isGeminiFallbackError } from "../../../lib/geminiDiagnostics";
+import {
+  generateGeminiDiagnosticJson,
+  isGeminiFallbackError,
+} from "../../../lib/geminiDiagnostics";
 
 // Answer order matches the DB seed: creative, physical, logical, social, linguistic
 const ANSWER_VALUES = [
@@ -104,7 +107,8 @@ export default function DiagnosticTest() {
             physical: 62,
             linguistic: 68,
           },
-          summary: "Сильная сторона ребёнка — творческий и познавательный интерес.",
+          summary:
+            "Сильная сторона ребёнка — творческий и познавательный интерес.",
           recommendedConstellation: "Юный исследователь",
         };
       }

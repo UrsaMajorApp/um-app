@@ -35,7 +35,11 @@ const DevSettingsContext = createContext<DevSettings>({
   setDevYouthAge: () => {},
 });
 
-export function DevSettingsProvider({ children }: { children: React.ReactNode }) {
+export function DevSettingsProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [mentorApproved, setMentorApproved] = useState(false);
   const [orgVerified, setOrgVerified] = useState(false);
   const [useRealOtp, setUseRealOtpState] = useState(false);
@@ -54,7 +58,18 @@ export function DevSettingsProvider({ children }: { children: React.ReactNode })
   };
 
   return (
-    <DevSettingsContext.Provider value={{ mentorApproved, setMentorApproved, orgVerified, setOrgVerified, useRealOtp, setUseRealOtp, devYouthAge, setDevYouthAge }}>
+    <DevSettingsContext.Provider
+      value={{
+        mentorApproved,
+        setMentorApproved,
+        orgVerified,
+        setOrgVerified,
+        useRealOtp,
+        setUseRealOtp,
+        devYouthAge,
+        setDevYouthAge,
+      }}
+    >
       {children}
     </DevSettingsContext.Provider>
   );

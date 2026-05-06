@@ -30,8 +30,8 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { useParentData } from "../../contexts/ParentDataContext";
 import { useDiagnosticEngine911 } from "../../hooks/useDiagnosticEngine911";
-import WYRCard from "./creators/WYRCard";
 import NovellaTask from "./creators/NovellaTask";
+import WYRCard from "./creators/WYRCard";
 
 interface Props {
   childId?: string | null;
@@ -40,10 +40,17 @@ interface Props {
 export default function DiagnosticCreators({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
-  const { childrenProfile, activeChildId, updateChildDiagnostic, parentProfile } = useParentData();
+  const {
+    childrenProfile,
+    activeChildId,
+    updateChildDiagnostic,
+    parentProfile,
+  } = useParentData();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const hPad = isDesktop ? LAYOUT.profileHorizontalPaddingDesktop : LAYOUT.profileHorizontalPaddingMobile;
+  const hPad = isDesktop
+    ? LAYOUT.profileHorizontalPaddingDesktop
+    : LAYOUT.profileHorizontalPaddingMobile;
 
   const isPro = parentProfile?.tariff === "pro";
   const targetChildId = childId || activeChildId;
@@ -80,7 +87,10 @@ export default function DiagnosticCreators({ childId }: Props) {
 
   if (engine.isProcessing || engine.phase === "processing") {
     return (
-      <LinearGradient colors={["#0F0A2A", "#1A1040", "#2D1B69"]} style={styles.fullScreen}>
+      <LinearGradient
+        colors={["#0F0A2A", "#1A1040", "#2D1B69"]}
+        style={styles.fullScreen}
+      >
         <SafeAreaView style={styles.centered}>
           <MotiView
             from={{ scale: 0.8, opacity: 0 }}
@@ -89,7 +99,11 @@ export default function DiagnosticCreators({ childId }: Props) {
           >
             <Text style={{ fontSize: 64 }}>🔬</Text>
           </MotiView>
-          <ActivityIndicator size="large" color="#A78BFA" style={{ marginTop: 24 }} />
+          <ActivityIndicator
+            size="large"
+            color="#A78BFA"
+            style={{ marginTop: 24 }}
+          />
           <Text style={styles.processingTitle}>ИИ анализирует ответы...</Text>
           <Text style={styles.processingSubtitle}>
             Создаём персональный профиль{"\n"}«Творца»
@@ -103,7 +117,10 @@ export default function DiagnosticCreators({ childId }: Props) {
 
   if (engine.phase === "intro") {
     return (
-      <LinearGradient colors={["#5B21B6", "#7C3AED", "#A78BFA"]} style={styles.fullScreen}>
+      <LinearGradient
+        colors={["#5B21B6", "#7C3AED", "#A78BFA"]}
+        style={styles.fullScreen}
+      >
         <SafeAreaView style={styles.centered}>
           <MotiView
             from={{ scale: 0.7, opacity: 0 }}
@@ -139,7 +156,9 @@ export default function DiagnosticCreators({ childId }: Props) {
               {isPro && (
                 <View style={styles.stepItem}>
                   <Text style={styles.stepItemNum}>②</Text>
-                  <Text style={styles.stepItemText}>Квест «Тайна Лаборатории»</Text>
+                  <Text style={styles.stepItemText}>
+                    Квест «Тайна Лаборатории»
+                  </Text>
                 </View>
               )}
             </View>
@@ -199,12 +218,19 @@ export default function DiagnosticCreators({ childId }: Props) {
                 color={isProPhase ? "white" : COLORS.foreground}
               />
             </TouchableOpacity>
-            <Text style={[styles.headerTitle, isProPhase && { color: "white" }]}>
+            <Text
+              style={[styles.headerTitle, isProPhase && { color: "white" }]}
+            >
               {isProPhase ? "🔬 Тайна Лаборатории 404" : "⚡ Что выберешь?"}
             </Text>
           </View>
           <TouchableOpacity onPress={handleSkip}>
-            <Text style={[styles.skipHeader, isProPhase && { color: "rgba(255,255,255,0.5)" }]}>
+            <Text
+              style={[
+                styles.skipHeader,
+                isProPhase && { color: "rgba(255,255,255,0.5)" },
+              ]}
+            >
               Пропустить
             </Text>
           </TouchableOpacity>
@@ -212,7 +238,13 @@ export default function DiagnosticCreators({ childId }: Props) {
       </SafeAreaView>
 
       {/* Progress */}
-      <View style={[styles.progressTrack, { marginHorizontal: hPad }, isProPhase && styles.progressTrackDark]}>
+      <View
+        style={[
+          styles.progressTrack,
+          { marginHorizontal: hPad },
+          isProPhase && styles.progressTrackDark,
+        ]}
+      >
         <MotiView
           animate={{ width: `${progressPct}%` }}
           transition={{ type: "timing", duration: 300 }}
@@ -256,90 +288,154 @@ export default function DiagnosticCreators({ childId }: Props) {
 
 const styles = StyleSheet.create({
   fullScreen: { flex: 1 },
-  centered: { flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 32 },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 32,
+  },
   screen: { flex: 1, backgroundColor: COLORS.background },
   screenDark: { backgroundColor: "#0A0718" },
 
   // Background blobs
   blob1: {
-    position: "absolute", top: -100, right: -100,
-    width: 380, height: 380, borderRadius: 190,
+    position: "absolute",
+    top: -100,
+    right: -100,
+    width: 380,
+    height: 380,
+    borderRadius: 190,
     backgroundColor: `${COLORS.primary}08`,
   },
   blob2: {
-    position: "absolute", bottom: -60, left: -80,
-    width: 300, height: 300, borderRadius: 150,
+    position: "absolute",
+    bottom: -60,
+    left: -80,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
     backgroundColor: `${COLORS.secondary}06`,
   },
   blobDark1: {
-    position: "absolute", top: -80, right: -80,
-    width: 350, height: 350, borderRadius: 175,
+    position: "absolute",
+    top: -80,
+    right: -80,
+    width: 350,
+    height: 350,
+    borderRadius: 175,
     backgroundColor: "rgba(124,58,237,0.12)",
   },
   blobDark2: {
-    position: "absolute", bottom: -40, left: -60,
-    width: 280, height: 280, borderRadius: 140,
+    position: "absolute",
+    bottom: -40,
+    left: -60,
+    width: 280,
+    height: 280,
+    borderRadius: 140,
     backgroundColor: "rgba(167,139,250,0.07)",
   },
 
   // Header
   header: {
-    flexDirection: "row", justifyContent: "space-between",
-    alignItems: "center", paddingVertical: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 12,
   },
   backBtn: {
-    width: 44, height: 44, borderRadius: 22,
-    backgroundColor: "white", alignItems: "center",
-    justifyContent: "center", marginRight: 12, ...SHADOWS.sm,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+    ...SHADOWS.sm,
   },
   backBtnDark: { backgroundColor: "rgba(255,255,255,0.1)" },
   headerTitle: {
-    fontSize: 18, fontWeight: "900", color: COLORS.foreground, letterSpacing: -0.3,
+    fontSize: 18,
+    fontWeight: "900",
+    color: COLORS.foreground,
+    letterSpacing: -0.3,
   },
   skipHeader: {
-    fontSize: 14, fontWeight: "600", color: COLORS.mutedForeground,
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.mutedForeground,
   },
 
   // Progress bar
   progressTrack: {
-    height: 6, backgroundColor: COLORS.muted,
-    borderRadius: 3, overflow: "hidden", marginBottom: 8,
+    height: 6,
+    backgroundColor: COLORS.muted,
+    borderRadius: 3,
+    overflow: "hidden",
+    marginBottom: 8,
   },
   progressTrackDark: { backgroundColor: "rgba(255,255,255,0.08)" },
   progressFill: {
-    height: "100%", backgroundColor: COLORS.primary, borderRadius: 3,
+    height: "100%",
+    backgroundColor: COLORS.primary,
+    borderRadius: 3,
   },
   progressFillPro: { backgroundColor: "#A78BFA" },
 
   // Intro
   introTitle: {
-    fontSize: 36, fontWeight: "900", color: "white",
-    textAlign: "center", marginTop: 24, letterSpacing: -0.5,
+    fontSize: 36,
+    fontWeight: "900",
+    color: "white",
+    textAlign: "center",
+    marginTop: 24,
+    letterSpacing: -0.5,
   },
   introSubtitle: {
-    fontSize: 17, color: "rgba(255,255,255,0.8)",
-    textAlign: "center", marginTop: 10, fontWeight: "600", lineHeight: 25,
+    fontSize: 17,
+    color: "rgba(255,255,255,0.8)",
+    textAlign: "center",
+    marginTop: 10,
+    fontWeight: "600",
+    lineHeight: 25,
   },
   stepsPreview: {
     backgroundColor: "rgba(255,255,255,0.12)",
-    borderRadius: RADIUS.lg, padding: 16, gap: 10, marginBottom: 28,
+    borderRadius: RADIUS.lg,
+    padding: 16,
+    gap: 10,
+    marginBottom: 28,
   },
   stepItem: { flexDirection: "row", alignItems: "center", gap: 10 },
   stepItemNum: { fontSize: 20 },
-  stepItemText: { fontSize: 15, fontWeight: "600", color: "rgba(255,255,255,0.9)" },
+  stepItemText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "rgba(255,255,255,0.9)",
+  },
   startButton: {
-    backgroundColor: "white", paddingVertical: 22,
-    borderRadius: RADIUS.xl, alignItems: "center", ...SHADOWS.lg,
+    backgroundColor: "white",
+    paddingVertical: 22,
+    borderRadius: RADIUS.xl,
+    alignItems: "center",
+    ...SHADOWS.lg,
   },
   startButtonText: { fontSize: 22, fontWeight: "900", color: "#7C3AED" },
   skipText: { color: "rgba(255,255,255,0.5)", fontSize: 15, fontWeight: "600" },
 
   // Processing
   processingTitle: {
-    color: "white", fontSize: 22, fontWeight: "800", marginTop: 28, textAlign: "center",
+    color: "white",
+    fontSize: 22,
+    fontWeight: "800",
+    marginTop: 28,
+    textAlign: "center",
   },
   processingSubtitle: {
-    color: "rgba(255,255,255,0.6)", fontSize: 15, fontWeight: "600",
-    marginTop: 8, textAlign: "center", lineHeight: 22,
+    color: "rgba(255,255,255,0.6)",
+    fontSize: 15,
+    fontWeight: "600",
+    marginTop: 8,
+    textAlign: "center",
+    lineHeight: 22,
   },
 });

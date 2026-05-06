@@ -2,12 +2,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import {
-    Platform,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
 

@@ -21,22 +21,16 @@ import {
   SKILL_VECTORS,
   STEALTH_PATTERNS,
   type BasicCard,
-  type DiagnosticSession,
   type ProTask,
   type SkillCategory,
-  type StealthEvent,
+  type StealthEvent
 } from "../data/diagnosticData";
 import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
 import { Diagnostic } from "../models/types";
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
-export type DiagnosticPhase =
-  | "intro"
-  | "basic"
-  | "pro"
-  | "processing"
-  | "done";
+export type DiagnosticPhase = "intro" | "basic" | "pro" | "processing" | "done";
 
 export interface EngineState {
   phase: DiagnosticPhase;
@@ -214,7 +208,10 @@ export function useDiagnosticEngine(opts: {
     }
 
     // 3) Map to Diagnostic scores (0-100 scale)
-    const scores: Record<string, number> = { ...categoryCounts, ...rawScoreMap };
+    const scores: Record<string, number> = {
+      ...categoryCounts,
+      ...rawScoreMap,
+    };
 
     // 4) Stealth personality profile
     let patternCounts: Record<string, number> = {};
@@ -226,9 +223,11 @@ export function useDiagnosticEngine(opts: {
       }
     }
     const dominantPattern =
-      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "balanced";
+      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
+      "balanced";
     const stealthLabel =
-      STEALTH_PATTERNS.find((p) => p.id === dominantPattern)?.label || "Сбалансированный";
+      STEALTH_PATTERNS.find((p) => p.id === dominantPattern)?.label ||
+      "Сбалансированный";
 
     return {
       scores,
@@ -253,20 +252,28 @@ export function useDiagnosticEngine(opts: {
       const prompt = `You are an expert child psychologist. Analyze this diagnostic data for a 6-8 year old child.
 
 BASIC test (interest swipes): Top categories — ${topCatsStr}.
-${isPro ? `PRO test scores: ${JSON.stringify(computed.rawScoreMap)}.
-Stealth personality profile: ${computed.stealthProfile}.` : ""}
+${
+  isPro
+    ? `PRO test scores: ${JSON.stringify(computed.rawScoreMap)}.
+Stealth personality profile: ${computed.stealthProfile}.`
+    : ""
+}
 
 Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" : "Include only base fields"}:
 {
   "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Creative 1-2 word title for talent type in Russian (e.g. 'Техно-энтузиаст')"
-  ${isPro ? `,
+  ${
+    isPro
+      ? `,
   "intellectType": "Type of intelligence in Russian (e.g. 'Логико-пространственный')",
   "personalityBehavior": "Personality behavior pattern in Russian based on stealth data: ${computed.stealthProfile}",
   "careerArchetypes": ["3 potential future career directions in Russian"],
   "parentAdvice": "1-2 sentences of personalized advice for parents in Russian",
   "topStrengths": ["top 2-3 strengths in Russian"],
-  "developmentAreas": ["1-2 areas for development in Russian"]` : ""}
+  "developmentAreas": ["1-2 areas for development in Russian"]`
+      : ""
+  }
 }`;
 
       return generateGeminiDiagnosticJson(prompt);
@@ -350,9 +357,8 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
   // ── Public API ───────────────────────────────────────────────────────
 
   const currentCard =
-    phase === "basic" ? BASIC_CARDS[basicIndex] ?? null : null;
-  const currentTask =
-    phase === "pro" ? PRO_TASKS[proIndex] ?? null : null;
+    phase === "basic" ? (BASIC_CARDS[basicIndex] ?? null) : null;
+  const currentTask = phase === "pro" ? (PRO_TASKS[proIndex] ?? null) : null;
 
   return {
     // State

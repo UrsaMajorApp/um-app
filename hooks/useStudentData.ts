@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { useDevDataVersion } from "../lib/devDataEvents";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export interface StudentTask {
   id: string;
@@ -104,7 +104,12 @@ export function useYouthGoals() {
         .order("step_order", { ascending: true });
       for (const s of ok<any>(stepsRes)) {
         const arr = stepsMap.get(s.goal_id) ?? [];
-        arr.push({ id: s.id, text: s.text, done: s.done, step_order: s.step_order });
+        arr.push({
+          id: s.id,
+          text: s.text,
+          done: s.done,
+          step_order: s.step_order,
+        });
         stepsMap.set(s.goal_id, arr);
       }
     }
@@ -116,7 +121,7 @@ export function useYouthGoals() {
         progress: g.progress,
         color: g.color,
         steps: stepsMap.get(g.id) ?? [],
-      }))
+      })),
     );
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -175,7 +180,7 @@ export function useYouthAchievements() {
         icon_name: a.icon_name,
         description: a.description,
         unlocked: unlockedSet.has(a.id),
-      }))
+      })),
     );
     setLoading(false);
   }, [user?.id, devDataVersion]);

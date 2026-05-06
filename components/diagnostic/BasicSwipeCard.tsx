@@ -7,14 +7,9 @@
 import { Feather } from "@expo/vector-icons";
 import { MotiView } from "moti";
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SHADOWS } from "../../constants/theme";
 import { CATEGORY_COLORS, type BasicCard } from "../../data/diagnosticData";
-import { COLORS, RADIUS, SHADOWS } from "../../constants/theme";
 
 interface Props {
   card: BasicCard;
@@ -62,9 +57,14 @@ export default function BasicSwipeCard({
         </Text>
 
         {/* audio hint */}
-        <View style={[styles.audioBubble, { backgroundColor: palette.text + "15" }]}>
+        <View
+          style={[styles.audioBubble, { backgroundColor: palette.text + "15" }]}
+        >
           <Feather name="volume-2" size={16} color={palette.text} />
-          <Text style={[styles.audioText, { color: palette.text }]} numberOfLines={2}>
+          <Text
+            style={[styles.audioText, { color: palette.text }]}
+            numberOfLines={2}
+          >
             {card.audioQuestion}
           </Text>
         </View>

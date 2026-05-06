@@ -42,7 +42,10 @@ async function hasSupabaseSession() {
 }
 
 function sumIq(results: Pick<GameIqResult, "iq_points">[]) {
-  return results.reduce((sum, result) => sum + Number(result.iq_points || 0), 0);
+  return results.reduce(
+    (sum, result) => sum + Number(result.iq_points || 0),
+    0,
+  );
 }
 
 export function useYouthGameIq() {

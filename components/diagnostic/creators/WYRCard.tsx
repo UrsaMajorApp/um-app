@@ -6,14 +6,12 @@
  */
 import { MotiView } from "moti";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import type { BasicSkill911, WYRCard as WYRCardType } from "../../../data/diagnosticData911";
+import type {
+  BasicSkill911,
+  WYRCard as WYRCardType,
+} from "../../../data/diagnosticData911";
 
 interface Props {
   card: WYRCardType;
@@ -24,7 +22,13 @@ interface Props {
   timerSeconds?: number;
 }
 
-export default function WYRCard({ card, index, total, onChoice, timerSeconds = 10 }: Props) {
+export default function WYRCard({
+  card,
+  index,
+  total,
+  onChoice,
+  timerSeconds = 10,
+}: Props) {
   const [timeLeft, setTimeLeft] = useState(timerSeconds);
   const [chosen, setChosen] = useState<"A" | "B" | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -45,7 +49,11 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
           // Auto-choose randomly on timeout for natural flow
           const auto = Math.random() < 0.5 ? "A" : "B";
           setChosen(auto);
-          setTimeout(() => onChoice(auto === "A" ? card.optionA.skill : card.optionB.skill), 300);
+          setTimeout(
+            () =>
+              onChoice(auto === "A" ? card.optionA.skill : card.optionB.skill),
+            300,
+          );
           return 0;
         }
         return t - 1;
@@ -61,11 +69,18 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
     if (chosen) return;
     if (timerRef.current) clearInterval(timerRef.current);
     setChosen(which);
-    setTimeout(() => onChoice(which === "A" ? card.optionA.skill : card.optionB.skill), 350);
+    setTimeout(
+      () => onChoice(which === "A" ? card.optionA.skill : card.optionB.skill),
+      350,
+    );
   };
 
   const timerColor =
-    timeLeft > 6 ? COLORS.success : timeLeft > 3 ? COLORS.warning : COLORS.destructive;
+    timeLeft > 6
+      ? COLORS.success
+      : timeLeft > 3
+        ? COLORS.warning
+        : COLORS.destructive;
   const timerPct = (timeLeft / timerSeconds) * 100;
 
   return (

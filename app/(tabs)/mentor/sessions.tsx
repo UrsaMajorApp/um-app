@@ -16,8 +16,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 
 type TabType = "requests" | "archive";
 
@@ -44,7 +44,9 @@ export default function MentorSessionsScreen() {
   const [requests, setRequests] = useState<TrialRequest[]>([]);
   const [archivedRequests, setArchivedRequests] = useState<TrialRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>({});
+  const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>(
+    {},
+  );
 
   // Fetch trial lesson requests from Supabase
   useEffect(() => {
@@ -61,11 +63,11 @@ export default function MentorSessionsScreen() {
     try {
       // Fetch pending requests
       const { data: pendingData, error: pendingError } = await supabase
-        .from('trial_lesson_requests')
-        .select('*')
-        .eq('mentor_id', user.id)
-        .eq('status', 'pending')
-        .order('created_at', { ascending: false });
+        .from("trial_lesson_requests")
+        .select("*")
+        .eq("mentor_id", user.id)
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
 
       if (!pendingError && pendingData) {
         setRequests(pendingData as TrialRequest[]);
@@ -73,18 +75,18 @@ export default function MentorSessionsScreen() {
 
       // Fetch archived (completed/declined) requests
       const { data: archivedData, error: archivedError } = await supabase
-        .from('trial_lesson_requests')
-        .select('*')
-        .eq('mentor_id', user.id)
-        .in('status', ['confirmed', 'completed', 'declined'])
-        .order('created_at', { ascending: false })
+        .from("trial_lesson_requests")
+        .select("*")
+        .eq("mentor_id", user.id)
+        .in("status", ["confirmed", "completed", "declined"])
+        .order("created_at", { ascending: false })
         .limit(20);
 
       if (!archivedError && archivedData) {
         setArchivedRequests(archivedData as TrialRequest[]);
       }
     } catch (error) {
-      console.error('Error fetching trial requests:', error);
+      console.error("Error fetching trial requests:", error);
     } finally {
       setLoading(false);
     }
@@ -100,82 +102,86 @@ export default function MentorSessionsScreen() {
   const handleConfirm = async (requestId: string) => {
     const slot = selectedSlots[requestId];
     if (!slot) {
-      Alert.alert("Выберите время", "Пожалуйста, выберите удобное время для пробного урока");
+      Alert.alert(
+        "Выберите время",
+        "Пожалуйста, выберите удобное время для пробного урока",
+      );
       return;
     }
-    
-    const [day, time] = slot.split('-');
-    
-    Alert.alert(
-      "Подтвердить пробный урок?",
-      `Время: ${day} в ${time}`,
-      [
-        { text: "Отмена", style: "cancel" },
-        {
-          text: "Подтвердить",
-          onPress: async () => {
-            if (!supabase || !isSupabaseConfigured) return;
-            
-            const { error } = await supabase
-              .from('trial_lesson_requests')
-              .update({
-                status: 'confirmed',
-                confirmed_slot: { day, time },
-                confirmed_at: new Date().toISOString(),
-              })
-              .eq('id', requestId);
-            
-            if (error) {
-              Alert.alert("Ошибка", error.message);
-              return;
-            }
-            
-            // TODO: Send push notification to parent
-            
-            setRequests((prev) => prev.filter((r) => r.id !== requestId));
-            Alert.alert("Успешно!", "Пробный урок подтверждён. Родитель получит уведомление.");
-            fetchRequests(); // Refresh lists
-          },
+
+    const [day, time] = slot.split("-");
+
+    Alert.alert("Подтвердить пробный урок?", `Время: ${day} в ${time}`, [
+      { text: "Отмена", style: "cancel" },
+      {
+        text: "Подтвердить",
+        onPress: async () => {
+          if (!supabase || !isSupabaseConfigured) return;
+
+          const { error } = await supabase
+            .from("trial_lesson_requests")
+            .update({
+              status: "confirmed",
+              confirmed_slot: { day, time },
+              confirmed_at: new Date().toISOString(),
+            })
+            .eq("id", requestId);
+
+          if (error) {
+            Alert.alert("Ошибка", error.message);
+            return;
+          }
+
+          // TODO: Send push notification to parent
+
+          setRequests((prev) => prev.filter((r) => r.id !== requestId));
+          Alert.alert(
+            "Успешно!",
+            "Пробный урок подтверждён. Родитель получит уведомление.",
+          );
+          fetchRequests(); // Refresh lists
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const handleDecline = async (requestId: string) => {
-    Alert.alert(
-      "Отклонить заявку?",
-      "Родитель получит уведомление об отказе",
-      [
-        { text: "Отмена", style: "cancel" },
-        {
-          text: "Отклонить",
-          style: "destructive",
-          onPress: async () => {
-            if (!supabase || !isSupabaseConfigured) return;
-            
-            const { error } = await supabase
-              .from('trial_lesson_requests')
-              .update({
-                status: 'declined',
-              })
-              .eq('id', requestId);
-            
-            if (error) {
-              Alert.alert("Ошибка", error.message);
-              return;
-            }
-            
-            // TODO: Send push notification to parent
-            
-            setRequests((prev) => prev.filter((r) => r.id !== requestId));
-            fetchRequests(); // Refresh lists
-          },
+    Alert.alert("Отклонить заявку?", "Родитель получит уведомление об отказе", [
+      { text: "Отмена", style: "cancel" },
+      {
+        text: "Отклонить",
+        style: "destructive",
+        onPress: async () => {
+          if (!supabase || !isSupabaseConfigured) return;
+
+          const { error } = await supabase
+            .from("trial_lesson_requests")
+            .update({
+              status: "declined",
+            })
+            .eq("id", requestId);
+
+          if (error) {
+            Alert.alert("Ошибка", error.message);
+            return;
+          }
+
+          // TODO: Send push notification to parent
+
+          setRequests((prev) => prev.filter((r) => r.id !== requestId));
+          fetchRequests(); // Refresh lists
         },
-      ]
-    );
+      },
+    ]);
   };
 
-  const renderRequest = ({ item, index }: { item: TrialRequest; index: number }) => {
+  const renderRequest = ({
+    item,
+    index,
+  }: {
+    item: TrialRequest;
+    index: number;
+  }) => {
     const selectedSlot = selectedSlots[item.id] || "";
     return (
       <MotiView
@@ -191,7 +197,9 @@ export default function MentorSessionsScreen() {
           </LinearGradient>
           <View style={{ flex: 1 }}>
             <Text style={styles.childName}>{item.child_name}</Text>
-            {item.child_age && <Text style={styles.childAge}>{item.child_age} лет</Text>}
+            {item.child_age && (
+              <Text style={styles.childAge}>{item.child_age} лет</Text>
+            )}
           </View>
           <View style={styles.newBadge}>
             <Feather name="clock" size={12} color="#10B981" />
@@ -202,7 +210,11 @@ export default function MentorSessionsScreen() {
         {/* Course & Parent info */}
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
-            <Feather name="book-open" size={14} color={COLORS.mutedForeground} />
+            <Feather
+              name="book-open"
+              size={14}
+              color={COLORS.mutedForeground}
+            />
             <Text style={styles.infoText}>{item.course_title}</Text>
           </View>
           {item.parent_name && (
@@ -223,15 +235,22 @@ export default function MentorSessionsScreen() {
               <Pressable
                 key={idx}
                 onPress={() => handleSelectSlot(item.id, slotKey)}
-                style={[
-                  styles.slotChip,
-                  isSelected && styles.slotChipSelected,
-                ]}
+                style={[styles.slotChip, isSelected && styles.slotChipSelected]}
               >
-                <Text style={[styles.slotDay, isSelected && styles.slotTextSelected]}>
+                <Text
+                  style={[
+                    styles.slotDay,
+                    isSelected && styles.slotTextSelected,
+                  ]}
+                >
                   {slot.day}
                 </Text>
-                <Text style={[styles.slotTime, isSelected && styles.slotTextSelected]}>
+                <Text
+                  style={[
+                    styles.slotTime,
+                    isSelected && styles.slotTextSelected,
+                  ]}
+                >
                   {slot.time}
                 </Text>
               </Pressable>
@@ -249,7 +268,10 @@ export default function MentorSessionsScreen() {
             <Text style={styles.declineBtnText}>Отклонить</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.confirmBtn, !selectedSlot && styles.confirmBtnDisabled]}
+            style={[
+              styles.confirmBtn,
+              !selectedSlot && styles.confirmBtnDisabled,
+            ]}
             onPress={() => handleConfirm(item.id)}
             disabled={!selectedSlot}
           >
@@ -261,13 +283,25 @@ export default function MentorSessionsScreen() {
     );
   };
 
-  const renderArchived = ({ item, index }: { item: TrialRequest; index: number }) => {
+  const renderArchived = ({
+    item,
+    index,
+  }: {
+    item: TrialRequest;
+    index: number;
+  }) => {
     const outcomeConfig = {
       enrolled: { color: "#10B981", label: "Записался", icon: "user-check" },
-      declined_by_parent: { color: "#F59E0B", label: "Отказался", icon: "user-x" },
+      declined_by_parent: {
+        color: "#F59E0B",
+        label: "Отказался",
+        icon: "user-x",
+      },
       no_show: { color: "#EF4444", label: "Не пришёл", icon: "user-minus" },
     };
-    const outcome = item.outcome ? outcomeConfig[item.outcome as keyof typeof outcomeConfig] : null;
+    const outcome = item.outcome
+      ? outcomeConfig[item.outcome as keyof typeof outcomeConfig]
+      : null;
 
     return (
       <MotiView
@@ -291,8 +325,17 @@ export default function MentorSessionsScreen() {
             )}
           </View>
           {outcome && (
-            <View style={[styles.outcomeBadge, { backgroundColor: outcome.color + "15" }]}>
-              <Feather name={outcome.icon as any} size={14} color={outcome.color} />
+            <View
+              style={[
+                styles.outcomeBadge,
+                { backgroundColor: outcome.color + "15" },
+              ]}
+            >
+              <Feather
+                name={outcome.icon as any}
+                size={14}
+                color={outcome.color}
+              />
               <Text style={[styles.outcomeBadgeText, { color: outcome.color }]}>
                 {outcome.label}
               </Text>
@@ -301,7 +344,11 @@ export default function MentorSessionsScreen() {
         </View>
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
-            <Feather name="book-open" size={14} color={COLORS.mutedForeground} />
+            <Feather
+              name="book-open"
+              size={14}
+              color={COLORS.mutedForeground}
+            />
             <Text style={styles.infoText}>{item.course_title}</Text>
           </View>
         </View>
@@ -311,88 +358,131 @@ export default function MentorSessionsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
           colors={COLORS.gradients.header as any}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
         >
           <SafeAreaView edges={["top"]}>
-            <View style={{ paddingHorizontal: paddingX, paddingTop: 12, paddingBottom: 20 }}>
-              <Text style={[styles.mainTitle, { color: 'white' }]}>Пробные уроки</Text>
-              <Text style={[styles.subtitle, { color: 'rgba(255,255,255,0.7)' }]}>Заявки от родителей</Text>
+            <View
+              style={{
+                paddingHorizontal: paddingX,
+                paddingTop: 12,
+                paddingBottom: 20,
+              }}
+            >
+              <Text style={[styles.mainTitle, { color: "white" }]}>
+                Пробные уроки
+              </Text>
+              <Text
+                style={[styles.subtitle, { color: "rgba(255,255,255,0.7)" }]}
+              >
+                Заявки от родителей
+              </Text>
             </View>
           </SafeAreaView>
         </LinearGradient>
       </View>
-      <View style={{ paddingHorizontal: paddingX, paddingTop: 10, paddingBottom: 10 }}>
-
-          {/* Tabs */}
-          <View style={styles.tabsContainer}>
-            <Pressable
-              onPress={() => setActiveTab("requests")}
-              style={[styles.tab, activeTab === "requests" && styles.tabActive]}
+      <View
+        style={{
+          paddingHorizontal: paddingX,
+          paddingTop: 10,
+          paddingBottom: 10,
+        }}
+      >
+        {/* Tabs */}
+        <View style={styles.tabsContainer}>
+          <Pressable
+            onPress={() => setActiveTab("requests")}
+            style={[styles.tab, activeTab === "requests" && styles.tabActive]}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === "requests" && styles.tabTextActive,
+              ]}
             >
-              <Text style={[styles.tabText, activeTab === "requests" && styles.tabTextActive]}>
-                Заявки
-              </Text>
-              {requests.length > 0 && (
-                <View style={styles.tabBadge}>
-                  <Text style={styles.tabBadgeText}>{requests.length}</Text>
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => setActiveTab("archive")}
-              style={[styles.tab, activeTab === "archive" && styles.tabActive]}
+              Заявки
+            </Text>
+            {requests.length > 0 && (
+              <View style={styles.tabBadge}>
+                <Text style={styles.tabBadgeText}>{requests.length}</Text>
+              </View>
+            )}
+          </Pressable>
+          <Pressable
+            onPress={() => setActiveTab("archive")}
+            style={[styles.tab, activeTab === "archive" && styles.tabActive]}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === "archive" && styles.tabTextActive,
+              ]}
             >
-              <Text style={[styles.tabText, activeTab === "archive" && styles.tabTextActive]}>
-                Архив
-              </Text>
-            </Pressable>
-          </View>
+              Архив
+            </Text>
+          </Pressable>
         </View>
+      </View>
 
-        {loading ? (
-          <View style={{ paddingVertical: 60, alignItems: 'center' }}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
-          </View>
-        ) : activeTab === "requests" ? (
-          <FlatList
-            data={requests}
-            renderItem={renderRequest}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingHorizontal: paddingX, paddingBottom: 100, paddingTop: 10 }}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <View style={styles.emptyState}>
-                <MaterialCommunityIcons name="calendar-check" size={64} color="#E5E7EB" />
-                <Text style={styles.emptyTitle}>Нет новых заявок</Text>
-                <Text style={styles.emptySubtitle}>
-                  Заявки на пробные уроки появятся здесь
-                </Text>
-              </View>
-            }
-          />
-        ) : (
-          <FlatList
-            data={archivedRequests}
-            renderItem={renderArchived}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingHorizontal: paddingX, paddingBottom: 100, paddingTop: 10 }}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <View style={styles.emptyState}>
-                <MaterialCommunityIcons name="archive-outline" size={64} color="#E5E7EB" />
-                <Text style={styles.emptyTitle}>Архив пуст</Text>
-                <Text style={styles.emptySubtitle}>
-                  Завершённые пробные уроки появятся здесь
-                </Text>
-              </View>
-            }
-          />
-        )}
+      {loading ? (
+        <View style={{ paddingVertical: 60, alignItems: "center" }}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      ) : activeTab === "requests" ? (
+        <FlatList
+          data={requests}
+          renderItem={renderRequest}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            paddingHorizontal: paddingX,
+            paddingBottom: 100,
+            paddingTop: 10,
+          }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <MaterialCommunityIcons
+                name="calendar-check"
+                size={64}
+                color="#E5E7EB"
+              />
+              <Text style={styles.emptyTitle}>Нет новых заявок</Text>
+              <Text style={styles.emptySubtitle}>
+                Заявки на пробные уроки появятся здесь
+              </Text>
+            </View>
+          }
+        />
+      ) : (
+        <FlatList
+          data={archivedRequests}
+          renderItem={renderArchived}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            paddingHorizontal: paddingX,
+            paddingBottom: 100,
+            paddingTop: 10,
+          }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <MaterialCommunityIcons
+                name="archive-outline"
+                size={64}
+                color="#E5E7EB"
+              />
+              <Text style={styles.emptyTitle}>Архив пуст</Text>
+              <Text style={styles.emptySubtitle}>
+                Завершённые пробные уроки появятся здесь
+              </Text>
+            </View>
+          }
+        />
+      )}
     </View>
   );
 }

@@ -73,7 +73,6 @@ export interface AIRule {
   enabled: boolean;
 }
 
-
 export interface AdminStats {
   pendingMentors: number;
   totalMentors: number;
@@ -94,10 +93,16 @@ export function useFamilies() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [parents, tariffs, children] = await Promise.all([
-      supabase.from("um_user_profiles").select("id, first_name, last_name").eq("role", "parent"),
+      supabase
+        .from("um_user_profiles")
+        .select("id, first_name, last_name")
+        .eq("role", "parent"),
       supabase.from("parent_profiles").select("user_id, tariff"),
       supabase.from("child_profiles").select("parent_user_id"),
     ]);
@@ -106,7 +111,10 @@ export function useFamilies() {
     );
     const childCount = new Map<string, number>();
     for (const c of ok<any>(children)) {
-      childCount.set(c.parent_user_id, (childCount.get(c.parent_user_id) ?? 0) + 1);
+      childCount.set(
+        c.parent_user_id,
+        (childCount.get(c.parent_user_id) ?? 0) + 1,
+      );
     }
     setData(
       ok<any>(parents).map((p) => ({
@@ -120,7 +128,9 @@ export function useFamilies() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
   return { data, loading, refresh };
 }
 
@@ -129,7 +139,10 @@ export function useMentorApps() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const res = await supabase
       .from("mentor_applications")
@@ -139,16 +152,28 @@ export function useMentorApps() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const approve = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("mentor_applications").update({ status: "approved", reviewed_at: new Date().toISOString() }).eq("id", id);
+    await supabase
+      .from("mentor_applications")
+      .update({ status: "approved", reviewed_at: new Date().toISOString() })
+      .eq("id", id);
     refresh();
   };
   const reject = async (id: string, reason?: string) => {
     if (!supabase) return;
-    await supabase.from("mentor_applications").update({ status: "rejected", rejection_reason: reason ?? null, reviewed_at: new Date().toISOString() }).eq("id", id);
+    await supabase
+      .from("mentor_applications")
+      .update({
+        status: "rejected",
+        rejection_reason: reason ?? null,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", id);
     refresh();
   };
 
@@ -160,28 +185,45 @@ export function useOrganizations() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
-    const res = await supabase.from("organizations").select("*, owner_user_id").order("created_at", { ascending: false });
+    const res = await supabase
+      .from("organizations")
+      .select("*, owner_user_id")
+      .order("created_at", { ascending: false });
     setData(ok<Organization>(res));
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const verify = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("organizations").update({ status: "verified" }).eq("id", id);
+    await supabase
+      .from("organizations")
+      .update({ status: "verified" })
+      .eq("id", id);
     refresh();
   };
   const reject = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("organizations").update({ status: "rejected" }).eq("id", id);
+    await supabase
+      .from("organizations")
+      .update({ status: "rejected" })
+      .eq("id", id);
     refresh();
   };
   const setCommission = async (id: string, pct: number) => {
     if (!supabase) return;
-    await supabase.from("organizations").update({ commission_pct: pct }).eq("id", id);
+    await supabase
+      .from("organizations")
+      .update({ commission_pct: pct })
+      .eq("id", id);
     refresh();
   };
 
@@ -193,17 +235,29 @@ export function useTransactions() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [txRes, parentsRes, orgsRes] = await Promise.all([
-      supabase.from("transactions").select("*").order("created_at", { ascending: false }).limit(100),
+      supabase
+        .from("transactions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100),
       supabase.from("um_user_profiles").select("id, first_name, last_name"),
       supabase.from("organizations").select("id, name"),
     ]);
     const parentMap = new Map<string, string>(
-      ok<any>(parentsRes).map((p) => [p.id, `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || "—"]),
+      ok<any>(parentsRes).map((p) => [
+        p.id,
+        `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || "—",
+      ]),
     );
-    const orgMap = new Map<string, string>(ok<any>(orgsRes).map((o) => [o.id, o.name]));
+    const orgMap = new Map<string, string>(
+      ok<any>(orgsRes).map((o) => [o.id, o.name]),
+    );
     setData(
       ok<any>(txRes).map((t) => ({
         id: t.id,
@@ -220,7 +274,9 @@ export function useTransactions() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
   return { data, loading, refresh };
 }
 
@@ -229,14 +285,23 @@ export function useTickets() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [ticketRes, usersRes] = await Promise.all([
-      supabase.from("tickets").select("*").order("created_at", { ascending: false }),
+      supabase
+        .from("tickets")
+        .select("*")
+        .order("created_at", { ascending: false }),
       supabase.from("um_user_profiles").select("id, first_name, last_name"),
     ]);
     const userMap = new Map<string, string>(
-      ok<any>(usersRes).map((u) => [u.id, `${u.first_name ?? ""} ${u.last_name ?? ""}`.trim() || "—"]),
+      ok<any>(usersRes).map((u) => [
+        u.id,
+        `${u.first_name ?? ""} ${u.last_name ?? ""}`.trim() || "—",
+      ]),
     );
     setData(
       ok<any>(ticketRes).map((t) => ({
@@ -252,16 +317,24 @@ export function useTickets() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const takeInProgress = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("tickets").update({ status: "in_progress" }).eq("id", id);
+    await supabase
+      .from("tickets")
+      .update({ status: "in_progress" })
+      .eq("id", id);
     refresh();
   };
   const resolve = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("tickets").update({ status: "resolved", resolved_at: new Date().toISOString() }).eq("id", id);
+    await supabase
+      .from("tickets")
+      .update({ status: "resolved", resolved_at: new Date().toISOString() })
+      .eq("id", id);
     refresh();
   };
 
@@ -273,20 +346,27 @@ export function useTags() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const res = await supabase.from("tags").select("*").order("name");
     setData(ok<Tag>(res));
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const add = async (name: string) => {
     if (!supabase) return;
     const cleaned = name.trim();
     if (!cleaned) return;
-    await supabase.from("tags").insert({ name: cleaned.startsWith("#") ? cleaned : `#${cleaned}` });
+    await supabase
+      .from("tags")
+      .insert({ name: cleaned.startsWith("#") ? cleaned : `#${cleaned}` });
     refresh();
   };
   const remove = async (id: string) => {
@@ -303,14 +383,19 @@ export function useAIRules() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const res = await supabase.from("ai_rules").select("*").order("created_at");
     setData(ok<AIRule>(res));
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const toggle = async (id: string, enabled: boolean) => {
     if (!supabase) return;
@@ -320,7 +405,12 @@ export function useAIRules() {
 
   const updateRule = async (
     id: string,
-    patch: Partial<Pick<AIRule, "name" | "condition" | "recommendation_title" | "recommendation_body">>,
+    patch: Partial<
+      Pick<
+        AIRule,
+        "name" | "condition" | "recommendation_title" | "recommendation_body"
+      >
+    >,
   ) => {
     if (!supabase) return;
     await supabase.from("ai_rules").update(patch).eq("id", id);
@@ -348,13 +438,22 @@ export function useAdminEnrollments() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [appRes, orgsRes] = await Promise.all([
-      supabase.from("org_applications").select("*").order("created_at", { ascending: false }).limit(200),
+      supabase
+        .from("org_applications")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(200),
       supabase.from("organizations").select("id, name"),
     ]);
-    const orgMap = new Map<string, string>(ok<any>(orgsRes).map((o) => [o.id, o.name]));
+    const orgMap = new Map<string, string>(
+      ok<any>(orgsRes).map((o) => [o.id, o.name]),
+    );
     setData(
       ok<any>(appRes).map((a) => ({
         id: a.id,
@@ -372,28 +471,44 @@ export function useAdminEnrollments() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const markPaid = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("org_applications").update({ status: "paid" }).eq("id", id);
+    await supabase
+      .from("org_applications")
+      .update({ status: "paid" })
+      .eq("id", id);
     refresh();
   };
   const activate = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("org_applications").update({ status: "activated" }).eq("id", id);
+    await supabase
+      .from("org_applications")
+      .update({ status: "activated" })
+      .eq("id", id);
     refresh();
   };
   const reject = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("org_applications").update({ status: "rejected" }).eq("id", id);
+    await supabase
+      .from("org_applications")
+      .update({ status: "rejected" })
+      .eq("id", id);
     refresh();
   };
 
   return { data, loading, refresh, markPaid, activate, reject };
 }
 
-export type OnboardingAudience = "parent" | "org" | "child" | "youth" | "parent_diagnostic";
+export type OnboardingAudience =
+  | "parent"
+  | "org"
+  | "child"
+  | "youth"
+  | "parent_diagnostic";
 
 export interface AdminOnboardingQuestion {
   id: string;
@@ -409,7 +524,10 @@ export function useAdminOnboardingQuestions() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const { data: rows } = await supabase
       .from("onboarding_questions")
@@ -420,7 +538,9 @@ export function useAdminOnboardingQuestions() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const remove = async (id: string) => {
     if (!supabase) return;
@@ -466,13 +586,21 @@ export function useAdminCourses() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [coursesRes, orgsRes] = await Promise.all([
-      supabase.from("org_courses").select("*").order("created_at", { ascending: false }),
+      supabase
+        .from("org_courses")
+        .select("*")
+        .order("created_at", { ascending: false }),
       supabase.from("organizations").select("id, name"),
     ]);
-    const orgMap = new Map<string, string>(ok<any>(orgsRes).map((o) => [o.id, o.name]));
+    const orgMap = new Map<string, string>(
+      ok<any>(orgsRes).map((o) => [o.id, o.name]),
+    );
     setData(
       ok<any>(coursesRes).map((c) => ({
         id: c.id,
@@ -492,16 +620,24 @@ export function useAdminCourses() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const approveCourse = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("org_courses").update({ status: "active" }).eq("id", id);
+    await supabase
+      .from("org_courses")
+      .update({ status: "active" })
+      .eq("id", id);
     refresh();
   };
   const rejectCourse = async (id: string, reason?: string) => {
     if (!supabase) return;
-    await supabase.from("org_courses").update({ status: "archived", rejection_reason: reason ?? null }).eq("id", id);
+    await supabase
+      .from("org_courses")
+      .update({ status: "archived", rejection_reason: reason ?? null })
+      .eq("id", id);
     refresh();
   };
 
@@ -513,7 +649,10 @@ export function useAllUsers() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured) { setLoading(false); return; }
+    if (!supabase || !isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const res = await supabase
       .from("um_user_profiles")
@@ -523,7 +662,9 @@ export function useAllUsers() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
   return { data, loading, refresh };
 }
 
@@ -532,9 +673,14 @@ export function useAdminStats(
   transactions: Transaction[],
   families: AdminFamily[],
 ): AdminStats {
-  const pendingMentors = mentorApps.filter((m) => m.status === "pending").length;
+  const pendingMentors = mentorApps.filter(
+    (m) => m.status === "pending",
+  ).length;
   const totalMentors = mentorApps.filter((m) => m.status === "approved").length;
-  const activeSessions = mentorApps.reduce((sum, m) => sum + (m.sessions ?? 0), 0);
+  const activeSessions = mentorApps.reduce(
+    (sum, m) => sum + (m.sessions ?? 0),
+    0,
+  );
   const completedTx = transactions.filter((t) => t.status === "completed");
   const gmv = completedTx.reduce((sum, t) => sum + t.amount, 0);
   const revenue = completedTx.reduce((sum, t) => sum + t.platform_amount, 0);

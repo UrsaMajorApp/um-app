@@ -1,3 +1,6 @@
+import { Feather } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useRef, useState } from "react";
 import {
@@ -10,11 +13,8 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Feather } from "@expo/vector-icons";
-import { useChatMessages } from "../../hooks/useChats";
 import { COLORS, SHADOWS } from "../../constants/theme";
+import { useChatMessages } from "../../hooks/useChats";
 
 export default function ChatModal() {
   const router = useRouter();
@@ -54,23 +54,39 @@ export default function ChatModal() {
             colors={COLORS.gradients.header as any}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={{ paddingBottom: 24, borderBottomLeftRadius: 32, borderBottomRightRadius: 32 }}
+            style={{
+              paddingBottom: 24,
+              borderBottomLeftRadius: 32,
+              borderBottomRightRadius: 32,
+            }}
           >
-            <View style={{ paddingTop: Platform.OS === "ios" ? 54 : 32, paddingHorizontal: 20 }}>
-               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                   <TouchableOpacity
-                       onPress={() => router.back()}
-                       style={{
-                           width: 40, height: 40, borderRadius: 20,
-                           backgroundColor: "rgba(255,255,255,0.2)",
-                           alignItems: "center", justifyContent: "center",
-                           marginRight: 12,
-                       }}
-                   >
-                       <Feather name="arrow-left" size={20} color="white" />
-                   </TouchableOpacity>
-                   <Text style={{ fontSize: 20, fontWeight: "800", color: "white" }}>{name}</Text>
-               </View>
+            <View
+              style={{
+                paddingTop: Platform.OS === "ios" ? 54 : 32,
+                paddingHorizontal: 20,
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginRight: 12,
+                  }}
+                >
+                  <Feather name="arrow-left" size={20} color="white" />
+                </TouchableOpacity>
+                <Text
+                  style={{ fontSize: 20, fontWeight: "800", color: "white" }}
+                >
+                  {name}
+                </Text>
+              </View>
             </View>
           </LinearGradient>
 
@@ -78,15 +94,29 @@ export default function ChatModal() {
           <ScrollView
             ref={scrollRef}
             contentContainerStyle={{ padding: 16, paddingBottom: 16 }}
-            onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
+            onContentSizeChange={() =>
+              scrollRef.current?.scrollToEnd({ animated: false })
+            }
           >
             {loading && (
-              <Text style={{ textAlign: "center", color: "#9CA3AF", marginVertical: 16 }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "#9CA3AF",
+                  marginVertical: 16,
+                }}
+              >
                 Загрузка...
               </Text>
             )}
             {!loading && messages.length === 0 && (
-              <Text style={{ textAlign: "center", color: "#9CA3AF", marginVertical: 32 }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "#9CA3AF",
+                  marginVertical: 32,
+                }}
+              >
                 Нет сообщений. Напишите первым!
               </Text>
             )}
@@ -106,7 +136,12 @@ export default function ChatModal() {
                   maxWidth: "80%",
                 }}
               >
-                <Text style={{ color: msg.is_mine ? "white" : "black", fontSize: 15 }}>
+                <Text
+                  style={{
+                    color: msg.is_mine ? "white" : "black",
+                    fontSize: 15,
+                  }}
+                >
                   {msg.body}
                 </Text>
               </MotiView>
@@ -151,7 +186,12 @@ export default function ChatModal() {
                 borderRadius: 20,
               }}
             >
-              <Text style={{ color: input.trim() ? "white" : "#9CA3AF", fontWeight: "700" }}>
+              <Text
+                style={{
+                  color: input.trim() ? "white" : "#9CA3AF",
+                  fontWeight: "700",
+                }}
+              >
                 Отпр.
               </Text>
             </TouchableOpacity>

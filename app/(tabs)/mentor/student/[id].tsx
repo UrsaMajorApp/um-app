@@ -17,9 +17,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
+import { useAuth } from "../../../../contexts/AuthContext";
 import { useMentorStudents } from "../../../../hooks/useMentorData";
 import { isSupabaseConfigured, supabase } from "../../../../lib/supabase";
-import { useAuth } from "../../../../contexts/AuthContext";
 
 export default function MentorStudentDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -33,11 +33,11 @@ export default function MentorStudentDetailScreen() {
   const student = students.find((s) => s.id === (id as string)) || students[0];
 
   // State for editable notes
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [tempNotes, setTempNotes] = useState(notes);
   const [notesLoading, setNotesLoading] = useState(true);
-  
+
   // State for monthly report modal
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportMonth, setReportMonth] = useState(
@@ -60,22 +60,22 @@ export default function MentorStudentDetailScreen() {
     setNotesLoading(true);
     try {
       const { data, error } = await supabase
-        .from('mentor_student_notes')
-        .select('notes')
-        .eq('mentor_id', user.id)
-        .eq('student_id', student.id)
+        .from("mentor_student_notes")
+        .select("notes")
+        .eq("mentor_id", user.id)
+        .eq("student_id", student.id)
         .maybeSingle();
 
       if (!error && data) {
-        setNotes(data.notes || '');
-        setTempNotes(data.notes || '');
+        setNotes(data.notes || "");
+        setTempNotes(data.notes || "");
       } else if (!data) {
         // No notes yet, use default
-        setNotes('');
-        setTempNotes('');
+        setNotes("");
+        setTempNotes("");
       }
     } catch (error) {
-      console.error('Error loading notes:', error);
+      console.error("Error loading notes:", error);
     } finally {
       setNotesLoading(false);
     }
@@ -96,16 +96,17 @@ export default function MentorStudentDetailScreen() {
     }
 
     try {
-      const { error } = await supabase
-        .from('mentor_student_notes')
-        .upsert({
+      const { error } = await supabase.from("mentor_student_notes").upsert(
+        {
           mentor_id: user.id,
           student_id: student.id,
           notes: tempNotes,
           updated_at: new Date().toISOString(),
-        }, {
-          onConflict: 'mentor_id,student_id'
-        });
+        },
+        {
+          onConflict: "mentor_id,student_id",
+        },
+      );
 
       if (error) {
         Alert.alert("Ошибка", error.message);
@@ -129,28 +130,29 @@ export default function MentorStudentDetailScreen() {
     try {
       // Get current month in YYYY-MM format
       const now = new Date();
-      const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 
       const reportData = {
         sessions_count: 0,
         progress_percentage: student.progress,
         average_rating: null,
-        skills: studentDetails.skills.map(s => ({ label: s.label, value: s.value })),
+        skills: studentDetails.skills.map((s) => ({
+          label: s.label,
+          value: s.value,
+        })),
         highlights: notes,
         areas_for_improvement: "",
       };
 
-      const { error } = await supabase
-        .from('mentor_monthly_reports')
-        .insert({
-          mentor_id: user.id,
-          student_id: student.id,
-          parent_id: null, // TODO: Get parent_id from student profile
-          report_month: monthKey,
-          report_data: reportData,
-          sent_to_parent: true,
-          sent_at: new Date().toISOString(),
-        });
+      const { error } = await supabase.from("mentor_monthly_reports").insert({
+        mentor_id: user.id,
+        student_id: student.id,
+        parent_id: null, // TODO: Get parent_id from student profile
+        report_month: monthKey,
+        report_data: reportData,
+        sent_to_parent: true,
+        sent_at: new Date().toISOString(),
+      });
 
       if (error) {
         Alert.alert("Ошибка", error.message);
@@ -162,238 +164,304 @@ export default function MentorStudentDetailScreen() {
       Alert.alert(
         "Отчёт создан",
         `Месячный отчёт за ${reportMonth} отправлен родителю`,
-        [{ text: "OK", onPress: () => setShowReportModal(false) }]
+        [{ text: "OK", onPress: () => setShowReportModal(false) }],
       );
     } catch (error: any) {
       Alert.alert("Ошибка", error?.message || "Не удалось создать отчёт");
     }
   };
 
-  const skillMap = student.skills ?? { com: 0, lead: 0, cre: 0, log: 0, dis: 0 };
+  const skillMap = student.skills ?? {
+    com: 0,
+    lead: 0,
+    cre: 0,
+    log: 0,
+    dis: 0,
+  };
   const studentDetails = {
     parentName: null,
     parentPhone: null,
     city: null,
     school: null,
-    grade: student.student_age ? `${student.student_age} лет` : "Возраст не указан",
+    grade: student.student_age
+      ? `${student.student_age} лет`
+      : "Возраст не указан",
     subjects: [] as string[],
     goals: null,
     skills: [
-        { label: 'Креативность', value: skillMap.cre ?? 0, color: '#6C5CE7' },
-        { label: 'Коммуникация', value: skillMap.com ?? 0, color: '#A78BFA' },
-        { label: 'Лидерство', value: skillMap.lead ?? 0, color: '#3B82F6' },
-        { label: 'Логика', value: skillMap.log ?? 0, color: '#10B981' },
+      { label: "Креативность", value: skillMap.cre ?? 0, color: "#6C5CE7" },
+      { label: "Коммуникация", value: skillMap.com ?? 0, color: "#A78BFA" },
+      { label: "Лидерство", value: skillMap.lead ?? 0, color: "#3B82F6" },
+      { label: "Логика", value: skillMap.log ?? 0, color: "#10B981" },
     ],
-    history: [] as Array<{ id: string; date: string; subject: string; duration: string; rating: number }>,
+    history: [] as Array<{
+      id: string;
+      date: string;
+      subject: string;
+      duration: string;
+      rating: number;
+    }>,
   };
 
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header Section */}
-        <LinearGradient colors={COLORS.gradients.header as any} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.header}>
-            <SafeAreaView edges={["top"]}>
-                <View style={[styles.headerTop, { paddingHorizontal: paddingX }]}>
-                    <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-                        <Feather name="arrow-left" size={20} color="white" />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Профиль ученика</Text>
-                    <TouchableOpacity style={styles.editBtn}>
-                        <Feather name="edit-3" size={20} color="white" />
-                    </TouchableOpacity>
+        <LinearGradient
+          colors={COLORS.gradients.header as any}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.header}
+        >
+          <SafeAreaView edges={["top"]}>
+            <View style={[styles.headerTop, { paddingHorizontal: paddingX }]}>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                style={styles.backBtn}
+              >
+                <Feather name="arrow-left" size={20} color="white" />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>Профиль ученика</Text>
+              <TouchableOpacity style={styles.editBtn}>
+                <Feather name="edit-3" size={20} color="white" />
+              </TouchableOpacity>
+            </View>
+
+            <MotiView
+              from={{ opacity: 0, translateY: 10 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              style={[styles.profileCard, { marginHorizontal: paddingX }]}
+            >
+              <View style={styles.profileHeader}>
+                <View style={styles.avatarBox}>
+                  <Text style={styles.avatarText}>
+                    {student.student_name.charAt(0)}
+                  </Text>
                 </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.studentName}>{student.student_name}</Text>
+                  <Text style={styles.studentGrade}>
+                    {studentDetails.grade}
+                  </Text>
+                </View>
+              </View>
 
-                <MotiView 
-                    from={{ opacity: 0, translateY: 10 }}
-                    animate={{ opacity: 1, translateY: 0 }}
-                    style={[styles.profileCard, { marginHorizontal: paddingX }]}
-                >
-                    <View style={styles.profileHeader}>
-                        <View style={styles.avatarBox}>
-                            <Text style={styles.avatarText}>{student.student_name.charAt(0)}</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.studentName}>{student.student_name}</Text>
-                            <Text style={styles.studentGrade}>{studentDetails.grade}</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.statsRow}>
-                        <View style={styles.statItem}>
-                            <Text style={styles.statValue}>8</Text>
-                            <Text style={styles.statLabel}>Сессий</Text>
-                        </View>
-                        <View style={styles.statDivider} />
-                        <View style={styles.statItem}>
-                            <Text style={styles.statValue}>{student.progress}%</Text>
-                            <Text style={styles.statLabel}>Прогресс</Text>
-                        </View>
-                        <View style={styles.statDivider} />
-                        <View style={styles.statItem}>
-                            <MaterialCommunityIcons name="star" size={24} color="#FFD700" />
-                            <Text style={styles.statLabel}>Отличник</Text>
-                        </View>
-                    </View>
-                </MotiView>
-            </SafeAreaView>
+              <View style={styles.statsRow}>
+                <View style={styles.statItem}>
+                  <Text style={styles.statValue}>8</Text>
+                  <Text style={styles.statLabel}>Сессий</Text>
+                </View>
+                <View style={styles.statDivider} />
+                <View style={styles.statItem}>
+                  <Text style={styles.statValue}>{student.progress}%</Text>
+                  <Text style={styles.statLabel}>Прогресс</Text>
+                </View>
+                <View style={styles.statDivider} />
+                <View style={styles.statItem}>
+                  <MaterialCommunityIcons
+                    name="star"
+                    size={24}
+                    color="#FFD700"
+                  />
+                  <Text style={styles.statLabel}>Отличник</Text>
+                </View>
+              </View>
+            </MotiView>
+          </SafeAreaView>
         </LinearGradient>
 
         <View style={[styles.content, { paddingHorizontal: paddingX }]}>
-            {/* Contact Info */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Контакты родителя</Text>
-                <View style={styles.infoCard}>
-                    <View style={styles.infoItem}>
-                        <Feather name="user" size={18} color="#6C5CE7" />
-                        <Text style={styles.infoText}>{studentDetails.parentName || "Не указан"}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                        <Feather name="phone" size={18} color="#6C5CE7" />
-                        <Text style={styles.infoText}>{studentDetails.parentPhone || "Не указан"}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                        <Feather name="map-pin" size={18} color="#6C5CE7" />
-                        <Text style={styles.infoText}>{studentDetails.city || "Не указан"}</Text>
-                    </View>
-                </View>
+          {/* Contact Info */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Контакты родителя</Text>
+            <View style={styles.infoCard}>
+              <View style={styles.infoItem}>
+                <Feather name="user" size={18} color="#6C5CE7" />
+                <Text style={styles.infoText}>
+                  {studentDetails.parentName || "Не указан"}
+                </Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Feather name="phone" size={18} color="#6C5CE7" />
+                <Text style={styles.infoText}>
+                  {studentDetails.parentPhone || "Не указан"}
+                </Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Feather name="map-pin" size={18} color="#6C5CE7" />
+                <Text style={styles.infoText}>
+                  {studentDetails.city || "Не указан"}
+                </Text>
+              </View>
             </View>
+          </View>
 
-            {/* Subjects & Goals */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Направления и цели</Text>
-                <View style={styles.tagsRow}>
-                    {studentDetails.subjects.length === 0 && (
-                        <Text style={styles.emptyText}>Направления пока не указаны.</Text>
-                    )}
-                    {studentDetails.subjects.map(sub => (
-                        <View key={sub} style={styles.tag}>
-                            <Text style={styles.tagText}>{sub}</Text>
-                        </View>
-                    ))}
+          {/* Subjects & Goals */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Направления и цели</Text>
+            <View style={styles.tagsRow}>
+              {studentDetails.subjects.length === 0 && (
+                <Text style={styles.emptyText}>
+                  Направления пока не указаны.
+                </Text>
+              )}
+              {studentDetails.subjects.map((sub) => (
+                <View key={sub} style={styles.tag}>
+                  <Text style={styles.tagText}>{sub}</Text>
                 </View>
-                <View style={styles.goalCard}>
-                    <Text style={styles.goalText}>{studentDetails.goals || "Цели пока не указаны."}</Text>
-                </View>
+              ))}
             </View>
-
-            {/* Skills */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Развитие навыков</Text>
-                <View style={styles.skillsCard}>
-                    {studentDetails.skills.map((skill, idx) => (
-                        <View key={skill.label} style={{ marginBottom: idx === studentDetails.skills.length - 1 ? 0 : 16 }}>
-                            <View style={styles.skillHeader}>
-                                <Text style={styles.skillLabel}>{skill.label}</Text>
-                                <Text style={styles.skillValue}>{skill.value}%</Text>
-                            </View>
-                            <View style={styles.skillBarBg}>
-                                <MotiView 
-                                    from={{ width: 0 }}
-                                    animate={{ width: `${skill.value}%` as any }}
-                                    transition={{ duration: 1000, type: 'timing' }}
-                                    style={[styles.skillBarFill, { backgroundColor: skill.color }]} 
-                                />
-                            </View>
-                        </View>
-                    ))}
-                </View>
+            <View style={styles.goalCard}>
+              <Text style={styles.goalText}>
+                {studentDetails.goals || "Цели пока не указаны."}
+              </Text>
             </View>
+          </View>
 
-            {/* Session History */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>История сессий</Text>
-                <View style={{ gap: 12 }}>
-                    {studentDetails.history.length === 0 && (
-                        <View style={styles.historyCard}>
-                            <Text style={styles.emptyText}>Истории сессий пока нет.</Text>
-                        </View>
-                    )}
-                    {studentDetails.history.map(session => (
-                        <View key={session.id} style={styles.historyCard}>
-                            <View style={{ flex: 1 }}>
-                                <Text style={styles.historySubject}>{session.subject}</Text>
-                                <Text style={styles.historyDate}>{session.date} • {session.duration}</Text>
-                            </View>
-                            <View style={styles.ratingRow}>
-                                {[...Array(5)].map((_, i) => (
-                                    <MaterialCommunityIcons 
-                                        key={i} 
-                                        name={i < session.rating ? "star" : "star-outline"} 
-                                        size={16} 
-                                        color="#FFD700" 
-                                    />
-                                ))}
-                            </View>
-                        </View>
-                    ))}
-                </View>
-            </View>
-
-            {/* Notes - Editable */}
-            <View style={styles.section}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                    <Text style={styles.sectionTitle}>Заметки ментора</Text>
-                    {!isEditingNotes && (
-                        <TouchableOpacity 
-                            onPress={() => { setTempNotes(notes); setIsEditingNotes(true); }}
-                            style={styles.editNotesBtn}
-                        >
-                            <Feather name="edit-2" size={14} color="#6C5CE7" />
-                            <Text style={styles.editNotesBtnText}>Редактировать</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
-                {isEditingNotes ? (
-                    <View style={styles.notesEditCard}>
-                        <TextInput
-                            value={tempNotes}
-                            onChangeText={setTempNotes}
-                            multiline
-                            style={styles.notesInput}
-                            placeholder="Добавьте заметки о ученике..."
-                            placeholderTextColor="#9CA3AF"
-                        />
-                        <View style={styles.notesEditActions}>
-                            <TouchableOpacity 
-                                onPress={() => setIsEditingNotes(false)}
-                                style={styles.notesCancelBtn}
-                            >
-                                <Text style={styles.notesCancelText}>Отмена</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity 
-                                onPress={handleSaveNotes}
-                                style={styles.notesSaveBtn}
-                            >
-                                <Feather name="check" size={16} color="white" />
-                                <Text style={styles.notesSaveText}>Сохранить</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                ) : (
-                    <View style={styles.notesCard}>
-                        <Text style={styles.notesText}>{notes}</Text>
-                    </View>
-                )}
-            </View>
-
-            {/* Monthly Report Button */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Отчётность</Text>
-                <TouchableOpacity 
-                    style={styles.reportBtn}
-                    onPress={() => setShowReportModal(true)}
+          {/* Skills */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Развитие навыков</Text>
+            <View style={styles.skillsCard}>
+              {studentDetails.skills.map((skill, idx) => (
+                <View
+                  key={skill.label}
+                  style={{
+                    marginBottom:
+                      idx === studentDetails.skills.length - 1 ? 0 : 16,
+                  }}
                 >
-                    <View style={styles.reportBtnIcon}>
-                        <Feather name="file-text" size={22} color="#6C5CE7" />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.reportBtnTitle}>Месячный отчёт</Text>
-                        <Text style={styles.reportBtnSubtitle}>Создать и отправить родителю</Text>
-                    </View>
-                    <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
-                </TouchableOpacity>
+                  <View style={styles.skillHeader}>
+                    <Text style={styles.skillLabel}>{skill.label}</Text>
+                    <Text style={styles.skillValue}>{skill.value}%</Text>
+                  </View>
+                  <View style={styles.skillBarBg}>
+                    <MotiView
+                      from={{ width: 0 }}
+                      animate={{ width: `${skill.value}%` as any }}
+                      transition={{ duration: 1000, type: "timing" }}
+                      style={[
+                        styles.skillBarFill,
+                        { backgroundColor: skill.color },
+                      ]}
+                    />
+                  </View>
+                </View>
+              ))}
             </View>
+          </View>
 
+          {/* Session History */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>История сессий</Text>
+            <View style={{ gap: 12 }}>
+              {studentDetails.history.length === 0 && (
+                <View style={styles.historyCard}>
+                  <Text style={styles.emptyText}>Истории сессий пока нет.</Text>
+                </View>
+              )}
+              {studentDetails.history.map((session) => (
+                <View key={session.id} style={styles.historyCard}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.historySubject}>{session.subject}</Text>
+                    <Text style={styles.historyDate}>
+                      {session.date} • {session.duration}
+                    </Text>
+                  </View>
+                  <View style={styles.ratingRow}>
+                    {[...Array(5)].map((_, i) => (
+                      <MaterialCommunityIcons
+                        key={i}
+                        name={i < session.rating ? "star" : "star-outline"}
+                        size={16}
+                        color="#FFD700"
+                      />
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Notes - Editable */}
+          <View style={styles.section}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <Text style={styles.sectionTitle}>Заметки ментора</Text>
+              {!isEditingNotes && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setTempNotes(notes);
+                    setIsEditingNotes(true);
+                  }}
+                  style={styles.editNotesBtn}
+                >
+                  <Feather name="edit-2" size={14} color="#6C5CE7" />
+                  <Text style={styles.editNotesBtnText}>Редактировать</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {isEditingNotes ? (
+              <View style={styles.notesEditCard}>
+                <TextInput
+                  value={tempNotes}
+                  onChangeText={setTempNotes}
+                  multiline
+                  style={styles.notesInput}
+                  placeholder="Добавьте заметки о ученике..."
+                  placeholderTextColor="#9CA3AF"
+                />
+                <View style={styles.notesEditActions}>
+                  <TouchableOpacity
+                    onPress={() => setIsEditingNotes(false)}
+                    style={styles.notesCancelBtn}
+                  >
+                    <Text style={styles.notesCancelText}>Отмена</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleSaveNotes}
+                    style={styles.notesSaveBtn}
+                  >
+                    <Feather name="check" size={16} color="white" />
+                    <Text style={styles.notesSaveText}>Сохранить</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.notesCard}>
+                <Text style={styles.notesText}>{notes}</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Monthly Report Button */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Отчётность</Text>
+            <TouchableOpacity
+              style={styles.reportBtn}
+              onPress={() => setShowReportModal(true)}
+            >
+              <View style={styles.reportBtnIcon}>
+                <Feather name="file-text" size={22} color="#6C5CE7" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.reportBtnTitle}>Месячный отчёт</Text>
+                <Text style={styles.reportBtnSubtitle}>
+                  Создать и отправить родителю
+                </Text>
+              </View>
+              <Feather
+                name="chevron-right"
+                size={20}
+                color={COLORS.mutedForeground}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
 
@@ -411,7 +479,9 @@ export default function MentorStudentDetailScreen() {
             <View style={styles.reportPreview}>
               <View style={styles.reportPreviewHeader}>
                 <Feather name="file-text" size={32} color="#6C5CE7" />
-                <Text style={styles.reportPreviewTitle}>Отчёт: {student.student_name}</Text>
+                <Text style={styles.reportPreviewTitle}>
+                  Отчёт: {student.student_name}
+                </Text>
                 <Text style={styles.reportPreviewMonth}>{reportMonth}</Text>
               </View>
 
@@ -421,7 +491,9 @@ export default function MentorStudentDetailScreen() {
                   <Text style={styles.reportStatLabel}>Сессий проведено</Text>
                 </View>
                 <View style={styles.reportStatItem}>
-                  <Text style={styles.reportStatValue}>{student.progress}%</Text>
+                  <Text style={styles.reportStatValue}>
+                    {student.progress}%
+                  </Text>
                   <Text style={styles.reportStatLabel}>Общий прогресс</Text>
                 </View>
                 <View style={styles.reportStatItem}>
@@ -433,20 +505,31 @@ export default function MentorStudentDetailScreen() {
               <View style={styles.reportSkillsSummary}>
                 <Text style={styles.reportSkillsTitle}>Развитые навыки:</Text>
                 <View style={styles.reportSkillsList}>
-                  {studentDetails.skills.map(skill => (
+                  {studentDetails.skills.map((skill) => (
                     <View key={skill.label} style={styles.reportSkillItem}>
-                      <View style={[styles.reportSkillDot, { backgroundColor: skill.color }]} />
-                      <Text style={styles.reportSkillLabel}>{skill.label}: {skill.value}%</Text>
+                      <View
+                        style={[
+                          styles.reportSkillDot,
+                          { backgroundColor: skill.color },
+                        ]}
+                      />
+                      <Text style={styles.reportSkillLabel}>
+                        {skill.label}: {skill.value}%
+                      </Text>
                     </View>
                   ))}
                 </View>
               </View>
             </View>
 
-            <TouchableOpacity style={styles.generateBtn} onPress={handleGenerateReport}>
-              <LinearGradient 
-                colors={["#6C5CE7", "#A78BFA"]} 
-                start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+            <TouchableOpacity
+              style={styles.generateBtn}
+              onPress={handleGenerateReport}
+            >
+              <LinearGradient
+                colors={["#6C5CE7", "#A78BFA"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
                 style={styles.generateBtnGradient}
               >
                 <Feather name="send" size={18} color="white" />
@@ -583,7 +666,7 @@ const styles = StyleSheet.create({
   emptyText: {
     color: COLORS.mutedForeground,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   infoCard: {
     backgroundColor: "white",

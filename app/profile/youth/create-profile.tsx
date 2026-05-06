@@ -1,7 +1,6 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -85,24 +84,28 @@ export default function CreateProfileTeen() {
       <View style={{ flex: 1 }}>
         {/* Background blobs */}
         <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
-          <View style={{
-            position: "absolute",
-            top: -50,
-            right: -50,
-            width: 200,
-            height: 200,
-            borderRadius: 100,
-            backgroundColor: `${ROLE_COLOR}10`,
-          }} />
-          <View style={{
-            position: "absolute",
-            bottom: "20%",
-            left: -80,
-            width: 250,
-            height: 250,
-            borderRadius: 125,
-            backgroundColor: `${ROLE_COLOR}05`,
-          }} />
+          <View
+            style={{
+              position: "absolute",
+              top: -50,
+              right: -50,
+              width: 200,
+              height: 200,
+              borderRadius: 100,
+              backgroundColor: `${ROLE_COLOR}10`,
+            }}
+          />
+          <View
+            style={{
+              position: "absolute",
+              bottom: "20%",
+              left: -80,
+              width: 250,
+              height: 250,
+              borderRadius: 125,
+              backgroundColor: `${ROLE_COLOR}05`,
+            }}
+          />
         </View>
 
         <SafeAreaView style={{ flex: 1 }}>
@@ -125,13 +128,31 @@ export default function CreateProfileTeen() {
               }}
             >
               {/* Header Nav */}
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 24,
+                }}
+              >
                 <TouchableOpacity
                   onPress={handleBack}
                   style={{ flexDirection: "row", alignItems: "center" }}
                 >
-                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
-                  <Text style={{ color: COLORS.mutedForeground, marginLeft: 8, fontSize: 15, fontWeight: "500" }}>
+                  <Feather
+                    name="arrow-left"
+                    size={20}
+                    color={COLORS.mutedForeground}
+                  />
+                  <Text
+                    style={{
+                      color: COLORS.mutedForeground,
+                      marginLeft: 8,
+                      fontSize: 15,
+                      fontWeight: "500",
+                    }}
+                  >
                     Назад
                   </Text>
                 </TouchableOpacity>
@@ -139,31 +160,69 @@ export default function CreateProfileTeen() {
                 {/* Step dots */}
                 <View style={{ flexDirection: "row", gap: 6 }}>
                   {[0, 1, 2, 3].map((i) => (
-                    <View key={i} style={{
-                      width: i === 3 ? 24 : 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: i === 3 ? ROLE_COLOR : COLORS.border,
-                    }} />
+                    <View
+                      key={i}
+                      style={{
+                        width: i === 3 ? 24 : 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: i === 3 ? ROLE_COLOR : COLORS.border,
+                      }}
+                    />
                   ))}
                 </View>
               </View>
 
               {/* Title Section */}
               <View style={{ marginBottom: 32 }}>
-                <Text style={{ fontSize: 32, fontWeight: "900", color: COLORS.foreground, marginBottom: 8, letterSpacing: -0.5 }}>
+                <Text
+                  style={{
+                    fontSize: 32,
+                    fontWeight: "900",
+                    color: COLORS.foreground,
+                    marginBottom: 8,
+                    letterSpacing: -0.5,
+                  }}
+                >
                   Твой профиль
                 </Text>
-                <Text style={{ color: COLORS.mutedForeground, fontSize: 16, lineHeight: 24 }}>
+                <Text
+                  style={{
+                    color: COLORS.mutedForeground,
+                    fontSize: 16,
+                    lineHeight: 24,
+                  }}
+                >
                   Расскажи о себе — это поможет найти подходящие кружки и цели
                 </Text>
               </View>
 
               {/* Personal Info Card */}
-              <View style={{ backgroundColor: "white", borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md, marginBottom: 20 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: RADIUS.xxl,
+                  padding: 24,
+                  ...SHADOWS.md,
+                  marginBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 20,
+                  }}
+                >
                   <Feather name="user" size={20} color={ROLE_COLOR} />
-                  <Text style={{ fontSize: 17, fontWeight: "700", color: COLORS.foreground, marginLeft: 10 }}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "700",
+                      color: COLORS.foreground,
+                      marginLeft: 10,
+                    }}
+                  >
                     Личная информация
                   </Text>
                 </View>
@@ -172,7 +231,9 @@ export default function CreateProfileTeen() {
                   <Text style={styles.fieldLabel}>Имя</Text>
                   <TextInput
                     value={formData.firstName}
-                    onChangeText={(text) => setFormData({ ...formData, firstName: text })}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, firstName: text })
+                    }
                     placeholder="Введите имя"
                     placeholderTextColor={COLORS.mutedForeground}
                     style={styles.input}
@@ -183,7 +244,9 @@ export default function CreateProfileTeen() {
                   <Text style={styles.fieldLabel}>Фамилия</Text>
                   <TextInput
                     value={formData.lastName}
-                    onChangeText={(text) => setFormData({ ...formData, lastName: text })}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, lastName: text })
+                    }
                     placeholder="Введите фамилию"
                     placeholderTextColor={COLORS.mutedForeground}
                     style={styles.input}
@@ -195,7 +258,12 @@ export default function CreateProfileTeen() {
                     <Text style={styles.fieldLabel}>Возраст</Text>
                     <TextInput
                       value={formData.age}
-                      onChangeText={(text) => setFormData({ ...formData, age: text.replace(/\D/g, "") })}
+                      onChangeText={(text) =>
+                        setFormData({
+                          ...formData,
+                          age: text.replace(/\D/g, ""),
+                        })
+                      }
                       placeholder="14"
                       maxLength={2}
                       placeholderTextColor={COLORS.mutedForeground}
@@ -204,43 +272,92 @@ export default function CreateProfileTeen() {
                         styles.input,
                         { textAlign: "center" },
                         formData.age.length > 0 &&
-                        (parseInt(formData.age, 10) < 6 || parseInt(formData.age, 10) > 17)
-                          ? { borderColor: "#EF4444", backgroundColor: "#FEF2F2" }
+                        (parseInt(formData.age, 10) < 6 ||
+                          parseInt(formData.age, 10) > 17)
+                          ? {
+                              borderColor: "#EF4444",
+                              backgroundColor: "#FEF2F2",
+                            }
                           : {},
                       ]}
                     />
-                    {formData.age.length > 0 && (parseInt(formData.age, 10) < 6 || parseInt(formData.age, 10) > 17) && (
-                      <Text style={{ color: "#EF4444", fontSize: 10, marginTop: 4, textAlign: "center", fontWeight: "bold" }}>
-                        От 6 до 17 лет
-                      </Text>
-                    )}
+                    {formData.age.length > 0 &&
+                      (parseInt(formData.age, 10) < 6 ||
+                        parseInt(formData.age, 10) > 17) && (
+                        <Text
+                          style={{
+                            color: "#EF4444",
+                            fontSize: 10,
+                            marginTop: 4,
+                            textAlign: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          От 6 до 17 лет
+                        </Text>
+                      )}
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.fieldLabel}>Пол</Text>
-                    <View style={{ flexDirection: "row", borderRadius: RADIUS.md, overflow: "hidden", borderWidth: 1, borderColor: COLORS.border, height: 50 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        borderRadius: RADIUS.md,
+                        overflow: "hidden",
+                        borderWidth: 1,
+                        borderColor: COLORS.border,
+                        height: 50,
+                      }}
+                    >
                       <TouchableOpacity
-                        onPress={() => setFormData({ ...formData, gender: "male" })}
+                        onPress={() =>
+                          setFormData({ ...formData, gender: "male" })
+                        }
                         style={{
                           flex: 1,
                           justifyContent: "center",
                           alignItems: "center",
-                          backgroundColor: formData.gender === "male" ? ROLE_COLOR : COLORS.muted,
+                          backgroundColor:
+                            formData.gender === "male"
+                              ? ROLE_COLOR
+                              : COLORS.muted,
                         }}
                       >
-                        <Text style={{ fontWeight: "600", color: formData.gender === "male" ? "white" : COLORS.mutedForeground }}>
+                        <Text
+                          style={{
+                            fontWeight: "600",
+                            color:
+                              formData.gender === "male"
+                                ? "white"
+                                : COLORS.mutedForeground,
+                          }}
+                        >
                           М
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={() => setFormData({ ...formData, gender: "female" })}
+                        onPress={() =>
+                          setFormData({ ...formData, gender: "female" })
+                        }
                         style={{
                           flex: 1,
                           justifyContent: "center",
                           alignItems: "center",
-                          backgroundColor: formData.gender === "female" ? "#EC4899" : COLORS.muted,
+                          backgroundColor:
+                            formData.gender === "female"
+                              ? "#EC4899"
+                              : COLORS.muted,
                         }}
                       >
-                        <Text style={{ fontWeight: "600", color: formData.gender === "female" ? "white" : COLORS.mutedForeground }}>
+                        <Text
+                          style={{
+                            fontWeight: "600",
+                            color:
+                              formData.gender === "female"
+                                ? "white"
+                                : COLORS.mutedForeground,
+                          }}
+                        >
                           Ж
                         </Text>
                       </TouchableOpacity>
@@ -250,17 +367,51 @@ export default function CreateProfileTeen() {
               </View>
 
               {/* Interests Card */}
-              <View style={{ backgroundColor: "white", borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md, marginBottom: 20 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
-                  <MaterialCommunityIcons name="star-four-points-outline" size={20} color={ROLE_COLOR} />
-                  <Text style={{ fontSize: 17, fontWeight: "700", color: COLORS.foreground, marginLeft: 10 }}>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: RADIUS.xxl,
+                  padding: 24,
+                  ...SHADOWS.md,
+                  marginBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 20,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="star-four-points-outline"
+                    size={20}
+                    color={ROLE_COLOR}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "700",
+                      color: COLORS.foreground,
+                      marginLeft: 10,
+                    }}
+                  >
                     Интересы
                   </Text>
                 </View>
 
-                <Text style={[styles.fieldLabel, { marginBottom: 12 }]}>Что тебе интересно?</Text>
+                <Text style={[styles.fieldLabel, { marginBottom: 12 }]}>
+                  Что тебе интересно?
+                </Text>
 
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: 8,
+                    marginBottom: 16,
+                  }}
+                >
                   {availableInterests.map((interest) => {
                     const isSelected = interests.includes(interest);
                     return (
@@ -273,10 +424,19 @@ export default function CreateProfileTeen() {
                           borderRadius: RADIUS.xl,
                           borderWidth: 2,
                           borderColor: isSelected ? ROLE_COLOR : COLORS.border,
-                          backgroundColor: isSelected ? `${ROLE_COLOR}10` : COLORS.muted,
+                          backgroundColor: isSelected
+                            ? `${ROLE_COLOR}10`
+                            : COLORS.muted,
                         }}
                       >
-                        <Text style={{ fontWeight: "600", color: isSelected ? ROLE_COLOR : COLORS.mutedForeground }}>
+                        <Text
+                          style={{
+                            fontWeight: "600",
+                            color: isSelected
+                              ? ROLE_COLOR
+                              : COLORS.mutedForeground,
+                          }}
+                        >
                           {interest}
                         </Text>
                       </TouchableOpacity>
@@ -284,11 +444,15 @@ export default function CreateProfileTeen() {
                   })}
                 </View>
 
-                <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>Другое:</Text>
+                <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>
+                  Другое:
+                </Text>
                 <View style={{ flexDirection: "row", gap: 10 }}>
                   <TextInput
                     value={formData.otherInterest}
-                    onChangeText={(text) => setFormData({ ...formData, otherInterest: text })}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, otherInterest: text })
+                    }
                     placeholder="Введите свой интерес"
                     placeholderTextColor={COLORS.mutedForeground}
                     style={[styles.input, { flex: 1 }]}
@@ -310,8 +474,16 @@ export default function CreateProfileTeen() {
                 </View>
 
                 {/* Selected custom interests */}
-                {interests.filter((i) => !availableInterests.includes(i)).length > 0 && (
-                  <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
+                {interests.filter((i) => !availableInterests.includes(i))
+                  .length > 0 && (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                      gap: 8,
+                      marginTop: 12,
+                    }}
+                  >
                     {interests
                       .filter((i) => !availableInterests.includes(i))
                       .map((interest) => (
@@ -326,10 +498,19 @@ export default function CreateProfileTeen() {
                             paddingVertical: 6,
                           }}
                         >
-                          <Text style={{ color: ROLE_COLOR, fontSize: 13, fontWeight: "600", marginRight: 6 }}>
+                          <Text
+                            style={{
+                              color: ROLE_COLOR,
+                              fontSize: 13,
+                              fontWeight: "600",
+                              marginRight: 6,
+                            }}
+                          >
                             {interest}
                           </Text>
-                          <TouchableOpacity onPress={() => toggleInterest(interest)}>
+                          <TouchableOpacity
+                            onPress={() => toggleInterest(interest)}
+                          >
                             <Feather name="x" size={13} color={ROLE_COLOR} />
                           </TouchableOpacity>
                         </View>
@@ -339,35 +520,71 @@ export default function CreateProfileTeen() {
               </View>
 
               {/* Goals Card */}
-              <View style={{ backgroundColor: "white", borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md, marginBottom: 20 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: RADIUS.xxl,
+                  padding: 24,
+                  ...SHADOWS.md,
+                  marginBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 20,
+                  }}
+                >
                   <Feather name="target" size={20} color={ROLE_COLOR} />
-                  <Text style={{ fontSize: 17, fontWeight: "700", color: COLORS.foreground, marginLeft: 10 }}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "700",
+                      color: COLORS.foreground,
+                      marginLeft: 10,
+                    }}
+                  >
                     Цели
                   </Text>
                 </View>
-                <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>Чего ты хочешь достичь?</Text>
+                <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>
+                  Чего ты хочешь достичь?
+                </Text>
                 <TextInput
                   value={formData.goals}
-                  onChangeText={(text) => setFormData({ ...formData, goals: text })}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, goals: text })
+                  }
                   placeholder="Опишите свои цели и стремления"
                   placeholderTextColor={COLORS.mutedForeground}
                   multiline
                   numberOfLines={4}
-                  style={[styles.input, { height: 100, textAlignVertical: "top", paddingTop: 14 }]}
+                  style={[
+                    styles.input,
+                    { height: 100, textAlignVertical: "top", paddingTop: 14 },
+                  ]}
                 />
               </View>
 
               {/* Submit Button */}
               <TouchableOpacity
-                disabled={!(formData.firstName.trim().length > 0 && parseInt(formData.age, 10) >= 6 && parseInt(formData.age, 10) <= 17)}
+                disabled={
+                  !(
+                    formData.firstName.trim().length > 0 &&
+                    parseInt(formData.age, 10) >= 6 &&
+                    parseInt(formData.age, 10) <= 17
+                  )
+                }
                 onPress={() => router.push("/profile/youth/testing")}
                 style={{ marginTop: 8, marginBottom: 40 }}
                 activeOpacity={0.8}
               >
                 <LinearGradient
                   colors={
-                    formData.firstName.trim().length > 0 && parseInt(formData.age, 10) >= 6 && parseInt(formData.age, 10) <= 17
+                    formData.firstName.trim().length > 0 &&
+                    parseInt(formData.age, 10) >= 6 &&
+                    parseInt(formData.age, 10) <= 17
                       ? ROLE_GRADIENT
                       : [COLORS.muted, COLORS.muted]
                   }

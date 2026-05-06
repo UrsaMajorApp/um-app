@@ -42,7 +42,12 @@ export default function EditChildModal({
   return (
     <Modal transparent animationType="fade" onRequestClose={onClose}>
       <Pressable
-        style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" }}
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
         onPress={onClose}
       >
         <Pressable
@@ -55,33 +60,76 @@ export default function EditChildModal({
             ...SHADOWS.lg,
           }}
         >
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <Text style={{ fontSize: 18, fontWeight: "700", color: COLORS.foreground }}>Редактировать профиль</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "700",
+                color: COLORS.foreground,
+              }}
+            >
+              Редактировать профиль
+            </Text>
             <Pressable onPress={onClose}>
               <Feather name="x" size={22} color={COLORS.mutedForeground} />
             </Pressable>
           </View>
 
-          <Text style={{ fontSize: 13, fontWeight: "600", color: COLORS.mutedForeground, marginBottom: 6 }}>Имя</Text>
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: "600",
+              color: COLORS.mutedForeground,
+              marginBottom: 6,
+            }}
+          >
+            Имя
+          </Text>
           <TextInput
             value={name}
             onChangeText={setName}
             style={{
-              borderWidth: 1, borderColor: COLORS.border, borderRadius: RADIUS.md,
-              padding: SPACING.md, marginBottom: 16, fontSize: 15, color: COLORS.foreground,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              borderRadius: RADIUS.md,
+              padding: SPACING.md,
+              marginBottom: 16,
+              fontSize: 15,
+              color: COLORS.foreground,
               backgroundColor: COLORS.background,
             }}
             placeholder="Имя ребёнка"
           />
 
-          <Text style={{ fontSize: 13, fontWeight: "600", color: COLORS.mutedForeground, marginBottom: 6 }}>Возраст</Text>
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: "600",
+              color: COLORS.mutedForeground,
+              marginBottom: 6,
+            }}
+          >
+            Возраст
+          </Text>
           <TextInput
             value={age}
             onChangeText={setAge}
             keyboardType="numeric"
             style={{
-              borderWidth: 1, borderColor: COLORS.border, borderRadius: RADIUS.md,
-              padding: SPACING.md, marginBottom: 24, fontSize: 15, color: COLORS.foreground,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              borderRadius: RADIUS.md,
+              padding: SPACING.md,
+              marginBottom: 24,
+              fontSize: 15,
+              color: COLORS.foreground,
               backgroundColor: COLORS.background,
             }}
             placeholder="Возраст"
@@ -90,15 +138,32 @@ export default function EditChildModal({
           <View style={{ flexDirection: "row", gap: 12 }}>
             <TouchableOpacity
               onPress={onClose}
-              style={{ flex: 1, padding: 14, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.border, alignItems: "center" }}
+              style={{
+                flex: 1,
+                padding: 14,
+                borderRadius: RADIUS.md,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                alignItems: "center",
+              }}
             >
-              <Text style={{ color: COLORS.foreground, fontWeight: "600" }}>Отмена</Text>
+              <Text style={{ color: COLORS.foreground, fontWeight: "600" }}>
+                Отмена
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSave}
-              style={{ flex: 1, padding: 14, borderRadius: RADIUS.md, backgroundColor: COLORS.primary, alignItems: "center" }}
+              style={{
+                flex: 1,
+                padding: 14,
+                borderRadius: RADIUS.md,
+                backgroundColor: COLORS.primary,
+                alignItems: "center",
+              }}
             >
-              <Text style={{ color: "white", fontWeight: "700" }}>Сохранить</Text>
+              <Text style={{ color: "white", fontWeight: "700" }}>
+                Сохранить
+              </Text>
             </TouchableOpacity>
           </View>
         </Pressable>

@@ -15,15 +15,29 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "../../../constants/theme";
-import { LEVEL_OPTIONS, ICON_OPTIONS, SKILL_OPTIONS, type CourseLevel as Level } from "../../../constants/courseOptions";
+import {
+  ICON_OPTIONS,
+  LEVEL_OPTIONS,
+  SKILL_OPTIONS,
+  type CourseLevel as Level,
+} from "../../../constants/courseOptions";
+import {
+  COLORS,
+  LAYOUT,
+  RADIUS,
+  SHADOWS,
+  SPACING,
+  TYPOGRAPHY,
+} from "../../../constants/theme";
 import { useOrgCourses } from "../../../hooks/useOrgData";
 
 export default function CreateCourseScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const paddingX = isDesktop
+    ? LAYOUT.dashboardHorizontalPaddingDesktop
+    : SPACING.xl;
 
   const { createCourse } = useOrgCourses();
   const [loading, setLoading] = useState(false);
@@ -69,35 +83,81 @@ export default function CreateCourseScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Header */}
-      <View style={{ backgroundColor: COLORS.primary, borderBottomLeftRadius: RADIUS.xxl, borderBottomRightRadius: RADIUS.xxl, overflow: "hidden" }}>
-        <LinearGradient colors={COLORS.gradients.header as any} style={{ paddingBottom: SPACING.xl }}>
+      <View
+        style={{
+          backgroundColor: COLORS.primary,
+          borderBottomLeftRadius: RADIUS.xxl,
+          borderBottomRightRadius: RADIUS.xxl,
+          overflow: "hidden",
+        }}
+      >
+        <LinearGradient
+          colors={COLORS.gradients.header as any}
+          style={{ paddingBottom: SPACING.xl }}
+        >
           <SafeAreaView edges={["top"]}>
-            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
+            <View
+              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
+            >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity
                   onPress={() => router.back()}
-                  style={{ width: 44, height: 44, borderRadius: RADIUS.md, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center", marginRight: SPACING.md }}
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: RADIUS.md,
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginRight: SPACING.md,
+                  }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
                 </TouchableOpacity>
-                <Text style={{ fontSize: TYPOGRAPHY.size.xl, fontWeight: TYPOGRAPHY.weight.semibold, color: "white" }}>Создать курс</Text>
+                <Text
+                  style={{
+                    fontSize: TYPOGRAPHY.size.xl,
+                    fontWeight: TYPOGRAPHY.weight.semibold,
+                    color: "white",
+                  }}
+                >
+                  Создать курс
+                </Text>
               </View>
             </View>
           </SafeAreaView>
         </LinearGradient>
       </View>
 
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         <ScrollView
-          contentContainerStyle={{ paddingHorizontal: paddingX, paddingTop: SPACING.xl, paddingBottom: 40 }}
+          contentContainerStyle={{
+            paddingHorizontal: paddingX,
+            paddingTop: SPACING.xl,
+            paddingBottom: 40,
+          }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
-
+          <MotiView
+            from={{ opacity: 0, translateY: 20 }}
+            animate={{ opacity: 1, translateY: 0 }}
+          >
             {/* Main fields */}
-            <View style={{ ...SHADOWS.strict, backgroundColor: COLORS.white, borderRadius: RADIUS.xxl, padding: SPACING.xl, borderWidth: 1, borderColor: COLORS.border, gap: SPACING.xl }}>
-
+            <View
+              style={{
+                ...SHADOWS.strict,
+                backgroundColor: COLORS.white,
+                borderRadius: RADIUS.xxl,
+                padding: SPACING.xl,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                gap: SPACING.xl,
+              }}
+            >
               <View>
                 <Text style={labelStyle}>Название курса *</Text>
                 <TextInput
@@ -137,20 +197,49 @@ export default function CreateCourseScreen() {
             </View>
 
             {/* Level selector */}
-            <View style={{ ...SHADOWS.strict, backgroundColor: COLORS.white, borderRadius: RADIUS.xxl, padding: SPACING.xl, marginTop: SPACING.xl, borderWidth: 1, borderColor: COLORS.border }}>
+            <View
+              style={{
+                ...SHADOWS.strict,
+                backgroundColor: COLORS.white,
+                borderRadius: RADIUS.xxl,
+                padding: SPACING.xl,
+                marginTop: SPACING.xl,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+              }}
+            >
               <Text style={labelStyle}>Уровень</Text>
-              <View style={{ flexDirection: "row", gap: SPACING.sm, marginTop: 8 }}>
+              <View
+                style={{ flexDirection: "row", gap: SPACING.sm, marginTop: 8 }}
+              >
                 {LEVEL_OPTIONS.map((opt) => (
                   <TouchableOpacity
                     key={opt.value}
                     onPress={() => setLevel(opt.value)}
                     style={{
-                      flex: 1, paddingVertical: 10, borderRadius: RADIUS.lg, alignItems: "center",
-                      backgroundColor: level === opt.value ? COLORS.primary : COLORS.background,
-                      borderWidth: 1, borderColor: level === opt.value ? COLORS.primary : COLORS.border,
+                      flex: 1,
+                      paddingVertical: 10,
+                      borderRadius: RADIUS.lg,
+                      alignItems: "center",
+                      backgroundColor:
+                        level === opt.value
+                          ? COLORS.primary
+                          : COLORS.background,
+                      borderWidth: 1,
+                      borderColor:
+                        level === opt.value ? COLORS.primary : COLORS.border,
                     }}
                   >
-                    <Text style={{ fontSize: 11, fontWeight: TYPOGRAPHY.weight.bold, color: level === opt.value ? "white" : COLORS.mutedForeground }}>
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        fontWeight: TYPOGRAPHY.weight.bold,
+                        color:
+                          level === opt.value
+                            ? "white"
+                            : COLORS.mutedForeground,
+                      }}
+                    >
                       {opt.label.toUpperCase()}
                     </Text>
                   </TouchableOpacity>
@@ -159,38 +248,101 @@ export default function CreateCourseScreen() {
             </View>
 
             {/* Icon picker */}
-            <View style={{ ...SHADOWS.strict, backgroundColor: COLORS.white, borderRadius: RADIUS.xxl, padding: SPACING.xl, marginTop: SPACING.xl, borderWidth: 1, borderColor: COLORS.border }}>
+            <View
+              style={{
+                ...SHADOWS.strict,
+                backgroundColor: COLORS.white,
+                borderRadius: RADIUS.xxl,
+                padding: SPACING.xl,
+                marginTop: SPACING.xl,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+              }}
+            >
               <Text style={labelStyle}>Иконка курса</Text>
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: SPACING.sm, marginTop: 8 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  gap: SPACING.sm,
+                  marginTop: 8,
+                }}
+              >
                 {ICON_OPTIONS.map((ic) => (
                   <TouchableOpacity
                     key={ic}
                     onPress={() => setIcon(ic)}
                     style={{
-                      width: 48, height: 48, borderRadius: RADIUS.lg, alignItems: "center", justifyContent: "center",
-                      backgroundColor: icon === ic ? "rgba(108,92,231,0.1)" : COLORS.background,
-                      borderWidth: 2, borderColor: icon === ic ? COLORS.primary : COLORS.border,
+                      width: 48,
+                      height: 48,
+                      borderRadius: RADIUS.lg,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor:
+                        icon === ic
+                          ? "rgba(108,92,231,0.1)"
+                          : COLORS.background,
+                      borderWidth: 2,
+                      borderColor: icon === ic ? COLORS.primary : COLORS.border,
                     }}
                   >
-                    <Feather name={ic as any} size={20} color={icon === ic ? COLORS.primary : COLORS.mutedForeground} />
+                    <Feather
+                      name={ic as any}
+                      size={20}
+                      color={
+                        icon === ic ? COLORS.primary : COLORS.mutedForeground
+                      }
+                    />
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
 
             {/* Skills */}
-            <View style={{ ...SHADOWS.strict, backgroundColor: COLORS.white, borderRadius: RADIUS.xxl, padding: SPACING.xl, marginTop: SPACING.xl, borderWidth: 1, borderColor: COLORS.border }}>
+            <View
+              style={{
+                ...SHADOWS.strict,
+                backgroundColor: COLORS.white,
+                borderRadius: RADIUS.xxl,
+                padding: SPACING.xl,
+                marginTop: SPACING.xl,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+              }}
+            >
               <Text style={labelStyle}>Развиваемые навыки</Text>
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: SPACING.sm, marginTop: 8 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  gap: SPACING.sm,
+                  marginTop: 8,
+                }}
+              >
                 {SKILL_OPTIONS.map((skill) => {
                   const selected = skills.includes(skill);
                   return (
                     <TouchableOpacity
                       key={skill}
                       onPress={() => toggleSkill(skill)}
-                      style={{ paddingHorizontal: 16, paddingVertical: 10, borderRadius: RADIUS.full, borderWidth: 1, borderColor: selected ? COLORS.primary : COLORS.border, backgroundColor: selected ? COLORS.primary : COLORS.white }}
+                      style={{
+                        paddingHorizontal: 16,
+                        paddingVertical: 10,
+                        borderRadius: RADIUS.full,
+                        borderWidth: 1,
+                        borderColor: selected ? COLORS.primary : COLORS.border,
+                        backgroundColor: selected
+                          ? COLORS.primary
+                          : COLORS.white,
+                      }}
                     >
-                      <Text style={{ fontSize: 11, fontWeight: TYPOGRAPHY.weight.bold, color: selected ? "white" : COLORS.mutedForeground }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          fontWeight: TYPOGRAPHY.weight.bold,
+                          color: selected ? "white" : COLORS.mutedForeground,
+                        }}
+                      >
                         {skill.toUpperCase()}
                       </Text>
                     </TouchableOpacity>
@@ -203,13 +355,27 @@ export default function CreateCourseScreen() {
             <TouchableOpacity
               onPress={handleSubmit}
               disabled={loading || !title.trim()}
-              style={{ ...SHADOWS.md, height: 60, borderRadius: RADIUS.xl, alignItems: "center", justifyContent: "center", marginTop: SPACING.xxxl, backgroundColor: loading || !title.trim() ? COLORS.border : COLORS.primary }}
+              style={{
+                ...SHADOWS.md,
+                height: 60,
+                borderRadius: RADIUS.xl,
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: SPACING.xxxl,
+                backgroundColor:
+                  loading || !title.trim() ? COLORS.border : COLORS.primary,
+              }}
             >
-              <Text style={{ color: "white", fontWeight: TYPOGRAPHY.weight.bold, fontSize: 16 }}>
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: TYPOGRAPHY.weight.bold,
+                  fontSize: 16,
+                }}
+              >
                 {loading ? "СОХРАНЕНИЕ..." : "СОЗДАТЬ КУРС"}
               </Text>
             </TouchableOpacity>
-
           </MotiView>
         </ScrollView>
       </KeyboardAvoidingView>

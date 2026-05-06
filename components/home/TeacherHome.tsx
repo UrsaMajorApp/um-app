@@ -32,7 +32,8 @@ export default function TeacherHome() {
   const paddingX = isDesktop ? 40 : 24;
   const activeGroups = groups.filter((group) => group.active);
   const nextGroup = activeGroups[0] ?? null;
-  const teacherName = user?.firstName && user.firstName !== "Dev" ? user.firstName : "учитель";
+  const teacherName =
+    user?.firstName && user.firstName !== "Dev" ? user.firstName : "учитель";
 
   const today = new Date().toLocaleDateString("ru-RU", {
     weekday: "long",
@@ -50,7 +51,9 @@ export default function TeacherHome() {
           style={styles.headerGradient}
         >
           <SafeAreaView edges={["top"]}>
-            <View style={[styles.headerContent, { paddingHorizontal: paddingX }]}>
+            <View
+              style={[styles.headerContent, { paddingHorizontal: paddingX }]}
+            >
               <View>
                 <Text style={styles.greeting}>Добрый день, {teacherName}!</Text>
                 <Text style={styles.dateText}>{today}</Text>
@@ -60,49 +63,58 @@ export default function TeacherHome() {
               </View>
             </View>
 
-            <MotiView 
-                from={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={[styles.nextLessonCard, { marginHorizontal: paddingX }]}
+            <MotiView
+              from={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={[styles.nextLessonCard, { marginHorizontal: paddingX }]}
             >
               {loading ? (
                 <View style={styles.loadingBlock}>
                   <ActivityIndicator size="small" color="white" />
                 </View>
               ) : nextGroup ? (
-                <TouchableOpacity 
-                    activeOpacity={0.9}
-                    onPress={() => router.push(`/teacher/group/${nextGroup.id}/journal` as any)}
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() =>
+                    router.push(`/teacher/group/${nextGroup.id}/journal` as any)
+                  }
                 >
-                    <View style={styles.nextLessonHeader}>
-                        <View style={styles.nextTag}>
-                            <Text style={styles.nextTagText}>БЛИЖАЙШАЯ ГРУППА</Text>
-                        </View>
-                        <Text style={styles.timerText}>{scheduleTimeLabel(nextGroup.schedule)}</Text>
+                  <View style={styles.nextLessonHeader}>
+                    <View style={styles.nextTag}>
+                      <Text style={styles.nextTagText}>БЛИЖАЙШАЯ ГРУППА</Text>
                     </View>
-                    
-                    <Text style={styles.lessonTitle}>{nextGroup.course_title || nextGroup.name}</Text>
-                    <Text style={styles.groupSubtitle}>
-                      {nextGroup.name}
-                      {nextGroup.schedule ? ` • ${nextGroup.schedule}` : ""}
+                    <Text style={styles.timerText}>
+                      {scheduleTimeLabel(nextGroup.schedule)}
                     </Text>
+                  </View>
 
-                    <View style={styles.lessonFooter}>
-                        <View style={styles.timeInfo}>
-                            <Feather name="users" size={16} color="white" />
-                            <Text style={styles.timeText}>
-                              {studentCounts[nextGroup.id] ?? 0} / {nextGroup.capacity}
-                            </Text>
-                        </View>
-                        <View style={styles.startButton}>
-                            <Text style={styles.startButtonText}>Журнал</Text>
-                        </View>
+                  <Text style={styles.lessonTitle}>
+                    {nextGroup.course_title || nextGroup.name}
+                  </Text>
+                  <Text style={styles.groupSubtitle}>
+                    {nextGroup.name}
+                    {nextGroup.schedule ? ` • ${nextGroup.schedule}` : ""}
+                  </Text>
+
+                  <View style={styles.lessonFooter}>
+                    <View style={styles.timeInfo}>
+                      <Feather name="users" size={16} color="white" />
+                      <Text style={styles.timeText}>
+                        {studentCounts[nextGroup.id] ?? 0} /{" "}
+                        {nextGroup.capacity}
+                      </Text>
                     </View>
+                    <View style={styles.startButton}>
+                      <Text style={styles.startButtonText}>Журнал</Text>
+                    </View>
+                  </View>
                 </TouchableOpacity>
               ) : (
                 <View>
                   <Text style={styles.lessonTitle}>Групп пока нет</Text>
-                  <Text style={styles.groupSubtitle}>Когда группы появятся в базе, они отобразятся здесь.</Text>
+                  <Text style={styles.groupSubtitle}>
+                    Когда группы появятся в базе, они отобразятся здесь.
+                  </Text>
                 </View>
               )}
             </MotiView>
@@ -112,73 +124,85 @@ export default function TeacherHome() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: paddingX }]}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingHorizontal: paddingX },
+        ]}
       >
         {/* Quick Actions */}
         <View style={styles.quickActions}>
-            <TouchableOpacity 
-                style={styles.actionCard}
-                onPress={() => router.push("/teacher/groups" as any)}
-            >
-                <View style={[styles.actionIcon, { backgroundColor: '#F5F3FF' }]}>
-                    <Feather name="users" size={24} color="#6C5CE7" />
-                </View>
-                <Text style={styles.actionLabel}>Мои группы</Text>
-            </TouchableOpacity>
-
+          <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => router.push("/teacher/groups" as any)}
+          >
+            <View style={[styles.actionIcon, { backgroundColor: "#F5F3FF" }]}>
+              <Feather name="users" size={24} color="#6C5CE7" />
+            </View>
+            <Text style={styles.actionLabel}>Мои группы</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Расписание групп</Text>
-            <TouchableOpacity onPress={() => router.push("/teacher/groups" as any)}>
-                <Text style={styles.seeAll}>Весь план</Text>
-            </TouchableOpacity>
+          <Text style={styles.sectionTitle}>Расписание групп</Text>
+          <TouchableOpacity
+            onPress={() => router.push("/teacher/groups" as any)}
+          >
+            <Text style={styles.seeAll}>Весь план</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.lessonList}>
-            {loading && (
-              <View style={styles.emptyState}>
-                <ActivityIndicator size="small" color={COLORS.primary} />
-              </View>
-            )}
+          {loading && (
+            <View style={styles.emptyState}>
+              <ActivityIndicator size="small" color={COLORS.primary} />
+            </View>
+          )}
 
-            {!loading && activeGroups.length === 0 && (
-              <View style={styles.emptyState}>
-                <Feather name="users" size={22} color={COLORS.mutedForeground} />
-                <Text style={styles.emptyTitle}>Нет активных групп</Text>
-                <Text style={styles.emptyText}>Группы появятся здесь после добавления в Supabase.</Text>
-              </View>
-            )}
+          {!loading && activeGroups.length === 0 && (
+            <View style={styles.emptyState}>
+              <Feather name="users" size={22} color={COLORS.mutedForeground} />
+              <Text style={styles.emptyTitle}>Нет активных групп</Text>
+              <Text style={styles.emptyText}>
+                Группы появятся здесь после добавления в Supabase.
+              </Text>
+            </View>
+          )}
 
-            {!loading && activeGroups.map((item, idx) => (
-                <MotiView
-                    key={item.id}
-                    from={{ opacity: 0, translateX: -20 }}
-                    animate={{ opacity: 1, translateX: 0 }}
-                    transition={{ delay: 300 + idx * 100 }}
-                    style={styles.scheduleItem}
+          {!loading &&
+            activeGroups.map((item, idx) => (
+              <MotiView
+                key={item.id}
+                from={{ opacity: 0, translateX: -20 }}
+                animate={{ opacity: 1, translateX: 0 }}
+                transition={{ delay: 300 + idx * 100 }}
+                style={styles.scheduleItem}
+              >
+                <View style={styles.timeColumn}>
+                  <Text style={styles.scheduleTime}>
+                    {scheduleTimeLabel(item.schedule)}
+                  </Text>
+                  <View style={styles.timeDot} />
+                </View>
+                <TouchableOpacity
+                  style={styles.scheduleCard}
+                  onPress={() =>
+                    router.push(`/teacher/group/${item.id}/journal` as any)
+                  }
                 >
-                    <View style={styles.timeColumn}>
-                        <Text style={styles.scheduleTime}>{scheduleTimeLabel(item.schedule)}</Text>
-                        <View style={styles.timeDot} />
-                    </View>
-                    <TouchableOpacity 
-                        style={styles.scheduleCard}
-                        onPress={() => router.push(`/teacher/group/${item.id}/journal` as any)}
-                    >
-                        <View style={styles.scheduleCardContent}>
-                            <Text style={styles.scheduleTitle}>{item.course_title || item.name}</Text>
-                            <Text style={styles.scheduleGroup}>
-                              {item.name}
-                              {item.schedule ? ` • ${item.schedule}` : ""}
-                            </Text>
-                        </View>
-                        <Feather name="chevron-right" size={18} color="#C7C7CC" />
-                    </TouchableOpacity>
-                </MotiView>
+                  <View style={styles.scheduleCardContent}>
+                    <Text style={styles.scheduleTitle}>
+                      {item.course_title || item.name}
+                    </Text>
+                    <Text style={styles.scheduleGroup}>
+                      {item.name}
+                      {item.schedule ? ` • ${item.schedule}` : ""}
+                    </Text>
+                  </View>
+                  <Feather name="chevron-right" size={18} color="#C7C7CC" />
+                </TouchableOpacity>
+              </MotiView>
             ))}
         </View>
-
       </ScrollView>
     </View>
   );
@@ -301,42 +325,42 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "flex-start",
     marginBottom: 32,
   },
   actionCard: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: 10,
   },
   actionIcon: {
     width: 64,
     height: 64,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     ...SHADOWS.sm,
   },
   actionLabel: {
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     color: COLORS.foreground,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     color: COLORS.foreground,
   },
   seeAll: {
     fontSize: 14,
     color: COLORS.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   lessonList: {
     gap: 0,
@@ -365,16 +389,16 @@ const styles = StyleSheet.create({
     color: COLORS.mutedForeground,
   },
   scheduleItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 16,
   },
   timeColumn: {
-    alignItems: 'center',
+    alignItems: "center",
     width: 45,
   },
   scheduleTime: {
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     color: COLORS.foreground,
   },
   timeDot: {
@@ -384,33 +408,33 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     marginTop: 8,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: "white",
     ...SHADOWS.sm,
   },
   scheduleCard: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 20,
     ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: "#F3F4F6",
   },
   scheduleCardContent: {
     flex: 1,
   },
   scheduleTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     color: COLORS.foreground,
   },
   scheduleGroup: {
     fontSize: 13,
     color: COLORS.mutedForeground,
     marginTop: 4,
-  }
+  },
 });

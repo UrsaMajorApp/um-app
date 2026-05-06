@@ -14,27 +14,33 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Platform,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   useWindowDimensions,
   View,
-  ActivityIndicator,
-  StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DiagnosticArchitects from "../../../components/diagnostic/DiagnosticArchitects";
+import DiagnosticCreators from "../../../components/diagnostic/DiagnosticCreators";
+import DiagnosticExplorer from "../../../components/diagnostic/DiagnosticExplorer";
+import DiagnosticRebels from "../../../components/diagnostic/DiagnosticRebels";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useParentData } from "../../../contexts/ParentDataContext";
 import { useDevSettings } from "../../../contexts/DevSettingsContext";
+import { useParentData } from "../../../contexts/ParentDataContext";
+import {
+  useOnboardingQuestions,
+  type OnboardingQuestion,
+} from "../../../hooks/usePlatformData";
+import {
+  generateGeminiDiagnosticJson,
+  isGeminiFallbackError,
+} from "../../../lib/geminiDiagnostics";
 import { Diagnostic } from "../../../models/types";
-import { useOnboardingQuestions, type OnboardingQuestion } from "../../../hooks/usePlatformData";
-import { generateGeminiDiagnosticJson, isGeminiFallbackError } from "../../../lib/geminiDiagnostics";
-import DiagnosticExplorer from "../../../components/diagnostic/DiagnosticExplorer";
-import DiagnosticCreators from "../../../components/diagnostic/DiagnosticCreators";
-import DiagnosticRebels from "../../../components/diagnostic/DiagnosticRebels";
-import DiagnosticArchitects from "../../../components/diagnostic/DiagnosticArchitects";
 
 /* ─────────────────────────────────────────────────────────────
    Main component
@@ -50,9 +56,15 @@ export default function YouthTesting() {
     : LAYOUT.profileHorizontalPaddingMobile;
 
   const { user, devMode } = useAuth();
-  const { childrenProfile, activeChildId, setActiveChildId, updateChildDiagnostic } = useParentData();
+  const {
+    childrenProfile,
+    activeChildId,
+    setActiveChildId,
+    updateChildDiagnostic,
+  } = useParentData();
   const { devYouthAge } = useDevSettings();
-  const { questions: fallbackQuestions, loading: fallbackLoading } = useOnboardingQuestions("youth");
+  const { questions: fallbackQuestions, loading: fallbackLoading } =
+    useOnboardingQuestions("youth");
 
   const requestedChildId = Array.isArray(childId) ? childId[0] : childId;
   const targetChild =
@@ -68,29 +80,42 @@ export default function YouthTesting() {
     }
   }, [activeChildId, setActiveChildId, targetChild?.id]);
 
-  if (childAge >= 6 && childAge <= 8) return <DiagnosticExplorer childId={targetChildId} />;
-  if (childAge >= 9 && childAge <= 11) return <DiagnosticCreators childId={targetChildId} />;
-  if (childAge >= 12 && childAge <= 14) return <DiagnosticRebels childId={targetChildId} />;
-  if (childAge >= 15 && childAge <= 17) return <DiagnosticArchitects childId={targetChildId} />;
+  if (childAge >= 6 && childAge <= 8)
+    return <DiagnosticExplorer childId={targetChildId} />;
+  if (childAge >= 9 && childAge <= 11)
+    return <DiagnosticCreators childId={targetChildId} />;
+  if (childAge >= 12 && childAge <= 14)
+    return <DiagnosticRebels childId={targetChildId} />;
+  if (childAge >= 15 && childAge <= 17)
+    return <DiagnosticArchitects childId={targetChildId} />;
 
   // FALLBACK: 18+ or unknown
   if (fallbackLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: COLORS.background }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: COLORS.background,
+        }}
+      >
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
 
-  return <LegacyQuestionTest
-    questions={fallbackQuestions}
-    user={user}
-    activeChildId={targetChildId}
-    updateChildDiagnostic={updateChildDiagnostic}
-    router={router}
-    isDesktop={isDesktop}
-    horizontalPadding={horizontalPadding}
-  />;
+  return (
+    <LegacyQuestionTest
+      questions={fallbackQuestions}
+      user={user}
+      activeChildId={targetChildId}
+      updateChildDiagnostic={updateChildDiagnostic}
+      router={router}
+      isDesktop={isDesktop}
+      horizontalPadding={horizontalPadding}
+    />
+  );
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -127,7 +152,10 @@ function LegacyQuestionTest({
     setAnswers(updated);
   };
 
-  const processWithAI = async (selectedAnswers: number[], isSkip: boolean = false) => {
+  const processWithAI = async (
+    selectedAnswers: number[],
+    isSkip: boolean = false,
+  ) => {
     setIsProcessing(true);
     try {
       let prompt = `You are an expert child psychologist and talent scout. Analyze this profile.\n`;
@@ -161,9 +189,16 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
 
       const targetDiagnostic: Diagnostic = {
         childId: activeChildId || user?.id || "unknown",
-        scores: diagnosticData.scores || { logical: 50, creative: 50, social: 50, physical: 50, linguistic: 50 },
+        scores: diagnosticData.scores || {
+          logical: 50,
+          creative: 50,
+          social: 50,
+          physical: 50,
+          linguistic: 50,
+        },
         summary: diagnosticData.summary || "Очень способный ученик!",
-        recommendedConstellation: diagnosticData.recommendedConstellation || "Универсал",
+        recommendedConstellation:
+          diagnosticData.recommendedConstellation || "Универсал",
         timestamp: new Date().toISOString(),
       };
 
@@ -177,12 +212,20 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
     } catch (e) {
       if (!isGeminiFallbackError(e)) {
         console.error("AI processing error:", e);
-        alert("Произошла ошибка при анализе. Мы используем запасные результаты.");
+        alert(
+          "Произошла ошибка при анализе. Мы используем запасные результаты.",
+        );
       }
       if (activeChildId) {
         await updateChildDiagnostic(activeChildId, {
           childId: activeChildId,
-          scores: { logical: 70, creative: 80, social: 60, physical: 50, linguistic: 65 },
+          scores: {
+            logical: 70,
+            creative: 80,
+            social: 60,
+            physical: 50,
+            linguistic: 65,
+          },
           summary: "Сильная сторона — творческий подход и любопытство.",
           recommendedConstellation: "Творческий новатор",
           timestamp: new Date().toISOString(),
@@ -211,9 +254,23 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
 
   if (isProcessing) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: COLORS.background }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: COLORS.background,
+        }}
+      >
         <ActivityIndicator size="large" color={COLORS.primary} />
-        <Text style={{ color: COLORS.foreground, marginTop: 20, fontSize: 18, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: COLORS.foreground,
+            marginTop: 20,
+            fontSize: 18,
+            fontWeight: "600",
+          }}
+        >
           ИИ анализирует ответы...
         </Text>
       </View>
@@ -224,34 +281,123 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Background Blobs */}
       <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
-        <View style={{ position: "absolute", top: -100, right: -100, width: 400, height: 400, borderRadius: 200, backgroundColor: `${COLORS.primary}08` }} />
-        <View style={{ position: "absolute", top: "40%", left: -150, width: 350, height: 350, borderRadius: 175, backgroundColor: `${COLORS.secondary}05` }} />
-        <View style={{ position: "absolute", bottom: -50, right: -50, width: 300, height: 300, borderRadius: 150, backgroundColor: `${COLORS.accent}05` }} />
+        <View
+          style={{
+            position: "absolute",
+            top: -100,
+            right: -100,
+            width: 400,
+            height: 400,
+            borderRadius: 200,
+            backgroundColor: `${COLORS.primary}08`,
+          }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: -150,
+            width: 350,
+            height: 350,
+            borderRadius: 175,
+            backgroundColor: `${COLORS.secondary}05`,
+          }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            bottom: -50,
+            right: -50,
+            width: 300,
+            height: 300,
+            borderRadius: 150,
+            backgroundColor: `${COLORS.accent}05`,
+          }}
+        />
       </View>
 
       <SafeAreaView edges={["top"]} style={{ zIndex: 20 }}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: horizontalPadding, paddingVertical: 12 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: horizontalPadding,
+            paddingVertical: 12,
+          }}
+        >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <TouchableOpacity onPress={() => router.back()} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: "white", alignItems: "center", justifyContent: "center", marginRight: 16, ...SHADOWS.sm }}>
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                marginRight: 16,
+                ...SHADOWS.sm,
+              }}
+            >
               <Feather name="arrow-left" size={20} color={COLORS.foreground} />
             </TouchableOpacity>
-            <Text style={{ fontSize: 22, fontWeight: "900", color: COLORS.foreground, letterSpacing: -0.5 }}>
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: "900",
+                color: COLORS.foreground,
+                letterSpacing: -0.5,
+              }}
+            >
               Тестирование
             </Text>
           </View>
           <TouchableOpacity onPress={handleSkip}>
-            <Text style={{ color: COLORS.mutedForeground, fontSize: 15, fontWeight: "600" }}>Пропустить</Text>
+            <Text
+              style={{
+                color: COLORS.mutedForeground,
+                fontSize: 15,
+                fontWeight: "600",
+              }}
+            >
+              Пропустить
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: horizontalPadding, paddingTop: 8, paddingBottom: 120, alignItems: "center" }}
+        contentContainerStyle={{
+          paddingHorizontal: horizontalPadding,
+          paddingTop: 8,
+          paddingBottom: 120,
+          alignItems: "center",
+        }}
       >
-        <View style={{ width: "100%", maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined }}>
+        <View
+          style={{
+            width: "100%",
+            maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined,
+          }}
+        >
           {/* PROGRESS */}
-          <View style={{ backgroundColor: "rgba(0,0,0,0.05)", height: 10, borderRadius: 10, overflow: "hidden", marginBottom: 30 }}>
-            <View style={{ width: `${progress}%`, height: "100%", backgroundColor: COLORS.primary }} />
+          <View
+            style={{
+              backgroundColor: "rgba(0,0,0,0.05)",
+              height: 10,
+              borderRadius: 10,
+              overflow: "hidden",
+              marginBottom: 30,
+            }}
+          >
+            <View
+              style={{
+                width: `${progress}%`,
+                height: "100%",
+                backgroundColor: COLORS.primary,
+              }}
+            />
           </View>
 
           {/* QUESTION CARD */}
@@ -260,12 +406,36 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             from={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 400 }}
-            style={{ backgroundColor: "white", borderRadius: 24, padding: 22, marginBottom: 40, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 10 }}
+            style={{
+              backgroundColor: "white",
+              borderRadius: 24,
+              padding: 22,
+              marginBottom: 40,
+              shadowColor: "#000",
+              shadowOpacity: 0.08,
+              shadowRadius: 10,
+            }}
           >
-            <Text style={{ fontSize: 14, fontWeight: "700", color: COLORS.mutedForeground, marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "700",
+                color: COLORS.mutedForeground,
+                marginBottom: 10,
+                textTransform: "uppercase",
+                letterSpacing: 1,
+              }}
+            >
               Вопрос {step + 1} из {QUESTIONS.length}
             </Text>
-            <Text style={{ fontSize: 20, fontWeight: "800", color: COLORS.foreground, marginBottom: 24 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "800",
+                color: COLORS.foreground,
+                marginBottom: 24,
+              }}
+            >
               {current.question_text}
             </Text>
             {current.answers.map((text, i) => {
@@ -274,9 +444,25 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
                 <TouchableOpacity
                   key={i}
                   onPress={() => selectAnswer(i)}
-                  style={{ backgroundColor: active ? `${COLORS.primary}15` : COLORS.muted, borderRadius: RADIUS.lg, paddingVertical: 16, paddingHorizontal: 20, marginBottom: 12, borderWidth: 2, borderColor: active ? COLORS.primary : "transparent" }}
+                  style={{
+                    backgroundColor: active
+                      ? `${COLORS.primary}15`
+                      : COLORS.muted,
+                    borderRadius: RADIUS.lg,
+                    paddingVertical: 16,
+                    paddingHorizontal: 20,
+                    marginBottom: 12,
+                    borderWidth: 2,
+                    borderColor: active ? COLORS.primary : "transparent",
+                  }}
                 >
-                  <Text style={{ fontSize: 16, color: active ? COLORS.primary : COLORS.foreground, fontWeight: active ? "800" : "500" }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: active ? COLORS.primary : COLORS.foreground,
+                      fontWeight: active ? "800" : "500",
+                    }}
+                  >
                     {text}
                   </Text>
                 </TouchableOpacity>
@@ -284,13 +470,38 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             })}
           </MotiView>
 
-          <TouchableOpacity disabled={answers[step] === undefined} onPress={next} style={{ marginTop: 8 }}>
+          <TouchableOpacity
+            disabled={answers[step] === undefined}
+            onPress={next}
+            style={{ marginTop: 8 }}
+          >
             <LinearGradient
-              colors={answers[step] === undefined ? [COLORS.muted, COLORS.muted] : [COLORS.primary, COLORS.secondary]}
-              style={{ paddingVertical: 18, borderRadius: RADIUS.xl, alignItems: "center", justifyContent: "center", ...SHADOWS.md }}
+              colors={
+                answers[step] === undefined
+                  ? [COLORS.muted, COLORS.muted]
+                  : [COLORS.primary, COLORS.secondary]
+              }
+              style={{
+                paddingVertical: 18,
+                borderRadius: RADIUS.xl,
+                alignItems: "center",
+                justifyContent: "center",
+                ...SHADOWS.md,
+              }}
             >
-              <Text style={{ fontSize: 18, fontWeight: "800", color: answers[step] === undefined ? COLORS.mutedForeground : "white" }}>
-                {step === QUESTIONS.length - 1 ? "Завершить" : "Следующий вопрос"}
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "800",
+                  color:
+                    answers[step] === undefined
+                      ? COLORS.mutedForeground
+                      : "white",
+                }}
+              >
+                {step === QUESTIONS.length - 1
+                  ? "Завершить"
+                  : "Следующий вопрос"}
               </Text>
             </LinearGradient>
           </TouchableOpacity>

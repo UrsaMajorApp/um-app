@@ -1,6 +1,11 @@
 import { Tabs, useRouter, useSegments } from "expo-router";
 import { useEffect, useMemo } from "react";
-import { ActivityIndicator, Platform, useWindowDimensions, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { COLORS, LAYOUT } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import CustomTabBar, { SideNav, TabIcon } from "./layout-container";
@@ -43,7 +48,14 @@ export default function TabsLayout() {
 
   if (isLoading || !user || shouldRedirect) {
     return (
-      <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.background,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );

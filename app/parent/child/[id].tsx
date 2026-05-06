@@ -3,13 +3,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
-   Platform,
-   Pressable,
-   ScrollView,
-   Text,
-   TouchableOpacity,
-   useWindowDimensions,
-   View,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";

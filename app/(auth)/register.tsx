@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MotiView } from "moti";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -16,8 +16,8 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { PressableScale } from "../../components/ui/PressableScale";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import { useDevSettings } from "../../contexts/DevSettingsContext";
 
@@ -73,7 +73,8 @@ type AuthMethod = "phone" | "email";
 export default function RegisterScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { sendRegistrationCode, registerWithIdentifier, devOtpCode, devMode } = useAuth();
+  const { sendRegistrationCode, registerWithIdentifier, devOtpCode, devMode } =
+    useAuth();
   const { useRealOtp } = useDevSettings();
 
   // step 0 = role, step 1 = phone/email + password, step 2 = OTP for phone, step 3 = name
@@ -102,16 +103,16 @@ export default function RegisterScreen() {
   const formatPhone = (text: string) => {
     // Remove all non-digit characters except +
     const cleaned = text.replace(/[^\d+]/g, "");
-    
+
     // Check if it starts with +
     const hasPlus = cleaned.startsWith("+");
-    
+
     // Get only digits (no +)
     const digitsOnly = cleaned.replace(/\D/g, "");
-    
+
     // Format based on length
     let formatted = "";
-    
+
     if (digitsOnly.length === 0) {
       // Allow typing just "+"
       formatted = hasPlus ? "+" : "";
@@ -131,7 +132,7 @@ export default function RegisterScreen() {
       const prefix = hasPlus ? `+${digitsOnly[0]}` : digitsOnly[0];
       formatted = `${prefix} (${digitsOnly.slice(1, 4)}) ${digitsOnly.slice(4, 7)}-${digitsOnly.slice(7, 9)}-${digitsOnly.slice(9, 11)}`;
     }
-    
+
     setIdentifier(formatted);
   };
 
@@ -233,7 +234,7 @@ export default function RegisterScreen() {
   };
 
   const handleBack = () => {
-    setError('');
+    setError("");
     if (step === 0) {
       if (router.canGoBack()) {
         router.back();
@@ -267,7 +268,7 @@ export default function RegisterScreen() {
     return "Создать аккаунт";
   };
 
-  const currentRoleInfo = ROLES.find(r => r.role === selectedRole);
+  const currentRoleInfo = ROLES.find((r) => r.role === selectedRole);
 
   return (
     <KeyboardAvoidingView
@@ -277,25 +278,29 @@ export default function RegisterScreen() {
       <StatusBar style="dark" />
       <View style={{ flex: 1 }}>
         {/* Background blobs for color */}
-        <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
-            <View style={{ 
-                position: 'absolute', 
-                top: -50, 
-                right: -50, 
-                width: 200, 
-                height: 200, 
-                borderRadius: 100, 
-                backgroundColor: `${selectedRole ? currentRoleInfo?.color : COLORS.primary}10`,
-            }} />
-            <View style={{ 
-                position: 'absolute', 
-                bottom: '20%', 
-                left: -80, 
-                width: 250, 
-                height: 250, 
-                borderRadius: 125, 
-                backgroundColor: `${selectedRole ? currentRoleInfo?.color : COLORS.secondary}05`,
-            }} />
+        <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+          <View
+            style={{
+              position: "absolute",
+              top: -50,
+              right: -50,
+              width: 200,
+              height: 200,
+              borderRadius: 100,
+              backgroundColor: `${selectedRole ? currentRoleInfo?.color : COLORS.primary}10`,
+            }}
+          />
+          <View
+            style={{
+              position: "absolute",
+              bottom: "20%",
+              left: -80,
+              width: 250,
+              height: 250,
+              borderRadius: 125,
+              backgroundColor: `${selectedRole ? currentRoleInfo?.color : COLORS.secondary}05`,
+            }}
+          />
         </View>
 
         <SafeAreaView style={{ flex: 1 }}>
@@ -319,28 +324,54 @@ export default function RegisterScreen() {
               }}
             >
               {/* Header Nav */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 24,
+                }}
+              >
                 <PressableScale
                   onPress={handleBack}
                   style={{ flexDirection: "row", alignItems: "center" }}
                   scaleTo={0.93}
                 >
-                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
-                  <Text style={{ color: COLORS.mutedForeground, marginLeft: 8, fontSize: 15, fontWeight: '500' }}>
+                  <Feather
+                    name="arrow-left"
+                    size={20}
+                    color={COLORS.mutedForeground}
+                  />
+                  <Text
+                    style={{
+                      color: COLORS.mutedForeground,
+                      marginLeft: 8,
+                      fontSize: 15,
+                      fontWeight: "500",
+                    }}
+                  >
                     Назад
                   </Text>
                 </PressableScale>
 
                 {/* Step Indicator */}
-                <View style={{ flexDirection: 'row', gap: 6 }}>
-                    {[0, 1, 2, 3].map((i) => (
-                        <View key={i} style={{
-                            width: step === i ? 24 : 8,
-                            height: 8,
-                            borderRadius: 4,
-                            backgroundColor: step === i ? (selectedRole ? currentRoleInfo?.color : COLORS.primary) : COLORS.border,
-                        }} />
-                    ))}
+                <View style={{ flexDirection: "row", gap: 6 }}>
+                  {[0, 1, 2, 3].map((i) => (
+                    <View
+                      key={i}
+                      style={{
+                        width: step === i ? 24 : 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor:
+                          step === i
+                            ? selectedRole
+                              ? currentRoleInfo?.color
+                              : COLORS.primary
+                            : COLORS.border,
+                      }}
+                    />
+                  ))}
                 </View>
               </View>
 
@@ -348,20 +379,43 @@ export default function RegisterScreen() {
               <MotiView
                 from={{ opacity: 0, translateY: 10 }}
                 animate={{ opacity: 1, translateY: 0 }}
-                transition={{ type: 'timing', duration: Platform.OS === 'web' ? 300 : 500 }}
+                transition={{
+                  type: "timing",
+                  duration: Platform.OS === "web" ? 300 : 500,
+                }}
                 style={{ marginBottom: 32 }}
               >
-                <Text style={{ fontSize: 32, fontWeight: "900", color: COLORS.foreground, marginBottom: 8, letterSpacing: -0.5 }}>
-                  {step === 0 ? "Давайте знакомиться" :
-                   step === 1 ? "Создайте аккаунт" :
-                   step === 2 ? "Подтвердите номер" :
-                   "Как вас зовут?"}
+                <Text
+                  style={{
+                    fontSize: 32,
+                    fontWeight: "900",
+                    color: COLORS.foreground,
+                    marginBottom: 8,
+                    letterSpacing: -0.5,
+                  }}
+                >
+                  {step === 0
+                    ? "Давайте знакомиться"
+                    : step === 1
+                      ? "Создайте аккаунт"
+                      : step === 2
+                        ? "Подтвердите номер"
+                        : "Как вас зовут?"}
                 </Text>
-                <Text style={{ color: COLORS.mutedForeground, fontSize: 16, lineHeight: 24 }}>
-                  {step === 0 ? "Выберите вашу роль, чтобы мы настроили приложение специально под вас" :
-                   step === 1 ? "Введите телефон или email и придумайте пароль" :
-                   step === 2 ? `Введите 6-значный код, отправленный на ${identifier}` :
-                   "Введите ваше имя для профиля"}
+                <Text
+                  style={{
+                    color: COLORS.mutedForeground,
+                    fontSize: 16,
+                    lineHeight: 24,
+                  }}
+                >
+                  {step === 0
+                    ? "Выберите вашу роль, чтобы мы настроили приложение специально под вас"
+                    : step === 1
+                      ? "Введите телефон или email и придумайте пароль"
+                      : step === 2
+                        ? `Введите 6-значный код, отправленный на ${identifier}`
+                        : "Введите ваше имя для профиля"}
                 </Text>
               </MotiView>
 
@@ -370,7 +424,7 @@ export default function RegisterScreen() {
                 <MotiView
                   from={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: 'timing', duration: 200, delay: 100 }}
+                  transition={{ type: "timing", duration: 200, delay: 100 }}
                 >
                   {ROLES.map((item) => {
                     const isSelected = selectedRole === item.role;
@@ -387,9 +441,9 @@ export default function RegisterScreen() {
                           padding: 18,
                           marginBottom: 12,
                           borderRadius: RADIUS.xl,
-                          backgroundColor: isSelected ? 'white' : COLORS.card,
+                          backgroundColor: isSelected ? "white" : COLORS.card,
                           borderWidth: 2,
-                          borderColor: isSelected ? item.color : 'transparent',
+                          borderColor: isSelected ? item.color : "transparent",
                           ...SHADOWS.sm,
                           elevation: isSelected ? 4 : 1,
                         }}
@@ -409,23 +463,60 @@ export default function RegisterScreen() {
                         </LinearGradient>
 
                         <View style={{ flex: 1, paddingRight: 12 }}>
-                          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
-                            <Text style={{ fontWeight: "800", fontSize: 16, color: COLORS.foreground }}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              marginBottom: 4,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontWeight: "800",
+                                fontSize: 16,
+                                color: COLORS.foreground,
+                              }}
+                            >
                               {item.title}
                             </Text>
                           </View>
-                          <Text style={{ fontSize: 13, color: COLORS.mutedForeground, lineHeight: 18 }}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              color: COLORS.mutedForeground,
+                              lineHeight: 18,
+                            }}
+                          >
                             {item.description}
                           </Text>
                         </View>
 
-                        <View style={{ width: 18, height: 18, alignItems: "center", justifyContent: "center" }}>
+                        <View
+                          style={{
+                            width: 18,
+                            height: 18,
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
                           <MotiView
-                            animate={{ opacity: isSelected ? 1 : 0, scale: isSelected ? 1 : 0.7 }}
-                            transition={{ type: 'spring' }}
+                            animate={{
+                              opacity: isSelected ? 1 : 0,
+                              scale: isSelected ? 1 : 0.7,
+                            }}
+                            transition={{ type: "spring" }}
                             style={{ pointerEvents: "none" }}
                           >
-                            <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: item.color, alignItems: 'center', justifyContent: 'center' }}>
+                            <View
+                              style={{
+                                width: 18,
+                                height: 18,
+                                borderRadius: 9,
+                                backgroundColor: item.color,
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
                               <Feather name="check" size={11} color="white" />
                             </View>
                           </MotiView>
@@ -441,51 +532,136 @@ export default function RegisterScreen() {
                 <MotiView
                   from={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: 'timing', duration: 200 }}
-                  style={{ backgroundColor: 'white', borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md }}
+                  transition={{ type: "timing", duration: 200 }}
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: RADIUS.xxl,
+                    padding: 24,
+                    ...SHADOWS.md,
+                  }}
                 >
                   {/* Inner content fades between steps without remounting the card */}
 
                   {/* Step 1: Phone + Password */}
                   {step === 1 && (
-                    <MotiView key="s1" from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 150 }}>
-                      <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
-                      <Field label={isEmail ? "Email" : "Номер телефона"} icon={isEmail ? "mail" : "phone"} value={identifier} onChange={handleIdentifierChange} placeholder={isEmail ? "you@example.com" : "+7 (___) ___-__-__"} keyboardType={isEmail ? "email-address" : "phone-pad"} autoFocus autoCapitalize="none" autoCorrect={false} />
-                      <Field label="Пароль" icon="lock" value={password} onChange={setPassword} placeholder="Минимум 6 символов" secure showToggle={() => setShowPassword(!showPassword)} shown={showPassword} />
-                      <Field label="Подтвердите пароль" icon="lock" value={confirmPassword} onChange={setConfirmPassword} placeholder="Повторите пароль" secure showToggle={() => setShowConfirmPassword(!showConfirmPassword)} shown={showConfirmPassword} last />
+                    <MotiView
+                      key="s1"
+                      from={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ type: "timing", duration: 150 }}
+                    >
+                      <AuthMethodSwitcher
+                        value={authMethod}
+                        onChange={handleAuthMethodChange}
+                      />
+                      <Field
+                        label={isEmail ? "Email" : "Номер телефона"}
+                        icon={isEmail ? "mail" : "phone"}
+                        value={identifier}
+                        onChange={handleIdentifierChange}
+                        placeholder={
+                          isEmail ? "you@example.com" : "+7 (___) ___-__-__"
+                        }
+                        keyboardType={isEmail ? "email-address" : "phone-pad"}
+                        autoFocus
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+                      <Field
+                        label="Пароль"
+                        icon="lock"
+                        value={password}
+                        onChange={setPassword}
+                        placeholder="Минимум 6 символов"
+                        secure
+                        showToggle={() => setShowPassword(!showPassword)}
+                        shown={showPassword}
+                      />
+                      <Field
+                        label="Подтвердите пароль"
+                        icon="lock"
+                        value={confirmPassword}
+                        onChange={setConfirmPassword}
+                        placeholder="Повторите пароль"
+                        secure
+                        showToggle={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        shown={showConfirmPassword}
+                        last
+                      />
                     </MotiView>
                   )}
 
                   {/* Step 2: OTP */}
                   {step === 2 && (
-                    <MotiView key="s2" from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 150 }}>
-                      <View style={{ alignItems: 'center' }}>
+                    <MotiView
+                      key="s2"
+                      from={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ type: "timing", duration: 150 }}
+                    >
+                      <View style={{ alignItems: "center" }}>
                         {!!devOtpCode && devMode && !useRealOtp && (
-                          <View style={{ backgroundColor: '#FEF9C3', padding: 8, borderRadius: 8, marginBottom: 20, width: '100%', alignItems: 'center' }}>
-                            <Text style={{ color: '#854D0E', fontSize: 12, fontWeight: 'bold' }}>DEV MODE: {devOtpCode}</Text>
+                          <View
+                            style={{
+                              backgroundColor: "#FEF9C3",
+                              padding: 8,
+                              borderRadius: 8,
+                              marginBottom: 20,
+                              width: "100%",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "#854D0E",
+                                fontSize: 12,
+                                fontWeight: "bold",
+                              }}
+                            >
+                              DEV MODE: {devOtpCode}
+                            </Text>
                           </View>
                         )}
                         <TextInput
                           placeholder="000000"
                           placeholderTextColor={COLORS.border}
                           value={otp}
-                          onChangeText={(t) => setOtp(t.replace(/\D/g, "").slice(0, 6))}
+                          onChangeText={(t) =>
+                            setOtp(t.replace(/\D/g, "").slice(0, 6))
+                          }
                           keyboardType="number-pad"
                           autoFocus
-                          style={{
-                            fontSize: 48,
-                            fontWeight: '900',
-                            textAlign: 'center',
-                            letterSpacing: 10,
-                            color: currentRoleInfo?.color || COLORS.primary,
-                            marginBottom: 20,
-                            outlineWidth: 0,
-                          } as any}
+                          style={
+                            {
+                              fontSize: 48,
+                              fontWeight: "900",
+                              textAlign: "center",
+                              letterSpacing: 10,
+                              color: currentRoleInfo?.color || COLORS.primary,
+                              marginBottom: 20,
+                              outlineWidth: 0,
+                            } as any
+                          }
                         />
-                        <PressableScale onPress={() => sendRegistrationCode(identifier)} scaleTo={0.93}>
-                          <Text style={{ color: COLORS.mutedForeground, fontSize: 14 }}>
+                        <PressableScale
+                          onPress={() => sendRegistrationCode(identifier)}
+                          scaleTo={0.93}
+                        >
+                          <Text
+                            style={{
+                              color: COLORS.mutedForeground,
+                              fontSize: 14,
+                            }}
+                          >
                             Не получили код?{" "}
-                            <Text style={{ color: currentRoleInfo?.color || COLORS.primary, fontWeight: 'bold' }}>
+                            <Text
+                              style={{
+                                color: currentRoleInfo?.color || COLORS.primary,
+                                fontWeight: "bold",
+                              }}
+                            >
                               Отправить еще раз
                             </Text>
                           </Text>
@@ -496,9 +672,28 @@ export default function RegisterScreen() {
 
                   {/* Step 3: Name */}
                   {step === 3 && (
-                    <MotiView key="s3" from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 150 }}>
-                      <Field label="Имя" icon="user" value={firstName} onChange={setFirstName} placeholder="Как к вам обращаться?" autoFocus />
-                      <Field label="Фамилия (опционально)" icon="user" value={lastName} onChange={setLastName} placeholder="Ваша фамилия" last />
+                    <MotiView
+                      key="s3"
+                      from={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ type: "timing", duration: 150 }}
+                    >
+                      <Field
+                        label="Имя"
+                        icon="user"
+                        value={firstName}
+                        onChange={setFirstName}
+                        placeholder="Как к вам обращаться?"
+                        autoFocus
+                      />
+                      <Field
+                        label="Фамилия (опционально)"
+                        icon="user"
+                        value={lastName}
+                        onChange={setLastName}
+                        placeholder="Ваша фамилия"
+                        last
+                      />
                     </MotiView>
                   )}
                 </MotiView>
@@ -508,26 +703,80 @@ export default function RegisterScreen() {
                 <MotiView
                   from={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: 'timing', duration: 200 }}
-                  style={{ backgroundColor: 'white', borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md }}
+                  transition={{ type: "timing", duration: 200 }}
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: RADIUS.xxl,
+                    padding: 24,
+                    ...SHADOWS.md,
+                  }}
                 >
                   <View style={{ alignItems: "center", gap: 14 }}>
-                    <View style={{ width: 54, height: 54, borderRadius: 16, backgroundColor: `${currentRoleInfo?.color || COLORS.primary}15`, alignItems: "center", justifyContent: "center" }}>
-                      <Feather name="mail" size={24} color={currentRoleInfo?.color || COLORS.primary} />
+                    <View
+                      style={{
+                        width: 54,
+                        height: 54,
+                        borderRadius: 16,
+                        backgroundColor: `${currentRoleInfo?.color || COLORS.primary}15`,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Feather
+                        name="mail"
+                        size={24}
+                        color={currentRoleInfo?.color || COLORS.primary}
+                      />
                     </View>
-                    <Text style={{ fontSize: 20, fontWeight: "900", color: COLORS.foreground, textAlign: "center" }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "900",
+                        color: COLORS.foreground,
+                        textAlign: "center",
+                      }}
+                    >
                       Проверьте почту
                     </Text>
-                    <Text style={{ fontSize: 15, lineHeight: 22, color: COLORS.mutedForeground, textAlign: "center" }}>
-                      Мы отправили письмо для подтверждения на {confirmationEmail}. После подтверждения вы сможете войти с email и паролем.
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        lineHeight: 22,
+                        color: COLORS.mutedForeground,
+                        textAlign: "center",
+                      }}
+                    >
+                      Мы отправили письмо для подтверждения на{" "}
+                      {confirmationEmail}. После подтверждения вы сможете войти
+                      с email и паролем.
                     </Text>
                   </View>
                 </MotiView>
               )}
 
               {!!error && (
-                <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ marginTop: 16, padding: 12, borderRadius: RADIUS.md, backgroundColor: '#FEE2E2', borderWidth: 1, borderColor: '#FCA5A5' }}>
-                   <Text style={{ color: '#B91C1C', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>{error}</Text>
+                <MotiView
+                  from={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{
+                    marginTop: 16,
+                    padding: 12,
+                    borderRadius: RADIUS.md,
+                    backgroundColor: "#FEE2E2",
+                    borderWidth: 1,
+                    borderColor: "#FCA5A5",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#B91C1C",
+                      textAlign: "center",
+                      fontSize: 13,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {error}
+                  </Text>
                 </MotiView>
               )}
             </View>
@@ -542,16 +791,33 @@ export default function RegisterScreen() {
             >
               <PressableScale
                 onPress={handleAction}
-                disabled={!!confirmationEmail || !isButtonEnabled() || isSubmitting}
+                disabled={
+                  !!confirmationEmail || !isButtonEnabled() || isSubmitting
+                }
               >
                 <LinearGradient
-                  colors={isButtonEnabled() ? (currentRoleInfo?.gradient || [COLORS.primary, COLORS.secondary]) : [COLORS.muted, COLORS.muted]}
+                  colors={
+                    isButtonEnabled()
+                      ? currentRoleInfo?.gradient || [
+                          COLORS.primary,
+                          COLORS.secondary,
+                        ]
+                      : [COLORS.muted, COLORS.muted]
+                  }
                   style={styles.footerActionButton}
                 >
                   {isSubmitting ? (
                     <ActivityIndicator size="small" color="white" />
                   ) : (
-                    <Text style={{ fontSize: 18, fontWeight: "800", color: isButtonEnabled() ? "white" : COLORS.mutedForeground }}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "800",
+                        color: isButtonEnabled()
+                          ? "white"
+                          : COLORS.mutedForeground,
+                      }}
+                    >
                       {getButtonLabel()}
                     </Text>
                   )}
@@ -560,8 +826,18 @@ export default function RegisterScreen() {
 
               <View style={styles.accountSwitchRow}>
                 <Text style={styles.accountSwitchText}>Уже есть аккаунт? </Text>
-                <PressableScale onPress={() => router.push("/login")} scaleTo={0.93}>
-                  <Text style={[styles.accountSwitchLink, { color: currentRoleInfo?.color || COLORS.primary }]}>Войти</Text>
+                <PressableScale
+                  onPress={() => router.push("/login")}
+                  scaleTo={0.93}
+                >
+                  <Text
+                    style={[
+                      styles.accountSwitchLink,
+                      { color: currentRoleInfo?.color || COLORS.primary },
+                    ]}
+                  >
+                    Войти
+                  </Text>
                 </PressableScale>
               </View>
             </View>
@@ -572,51 +848,87 @@ export default function RegisterScreen() {
   );
 }
 
-function Field({ label, icon, value, onChange, placeholder, keyboardType = 'default', secure = false, autoFocus = false, showToggle, shown, autoCapitalize, autoCorrect }: any) {
-    return (
-        <View style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 13, fontWeight: '700', color: COLORS.foreground, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5, opacity: 0.7 }}>
-                {label}
-            </Text>
-            <View style={{ position: 'relative', justifyContent: 'center' }}>
-                <Feather name={icon} size={18} color={COLORS.mutedForeground} style={{ position: 'absolute', left: 16, zIndex: 1 }} />
-                <TextInput
-                    value={value}
-                    onChangeText={onChange}
-                    placeholder=""
-                    placeholderTextColor={COLORS.mutedForeground}
-                    keyboardType={keyboardType as any}
-                    secureTextEntry={secure && !shown}
-                    autoFocus={autoFocus}
-                    autoCapitalize={autoCapitalize}
-                    autoCorrect={autoCorrect}
-                    className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
-                    style={{ fontSize: 15, fontWeight: '500' }}
-                />
-                {!value && (
-                    <Text
-                        style={{
-                            position: 'absolute',
-                            left: 48,
-                            right: 48,
-                            pointerEvents: "none",
-                            color: COLORS.mutedForeground,
-                            fontSize: 15,
-                            fontWeight: '500',
-                        }}
-                        numberOfLines={1}
-                    >
-                        {placeholder}
-                    </Text>
-                )}
-                {secure && showToggle && (
-                    <PressableScale onPress={showToggle} style={{ position: 'absolute', right: 16, zIndex: 1 }} scaleTo={0.85}>
-                        <Feather name={shown ? 'eye-off' : 'eye'} size={18} color={COLORS.mutedForeground} />
-                    </PressableScale>
-                )}
-            </View>
-        </View>
-    );
+function Field({
+  label,
+  icon,
+  value,
+  onChange,
+  placeholder,
+  keyboardType = "default",
+  secure = false,
+  autoFocus = false,
+  showToggle,
+  shown,
+  autoCapitalize,
+  autoCorrect,
+}: any) {
+  return (
+    <View style={{ marginBottom: 20 }}>
+      <Text
+        style={{
+          fontSize: 13,
+          fontWeight: "700",
+          color: COLORS.foreground,
+          marginBottom: 8,
+          textTransform: "uppercase",
+          letterSpacing: 0.5,
+          opacity: 0.7,
+        }}
+      >
+        {label}
+      </Text>
+      <View style={{ position: "relative", justifyContent: "center" }}>
+        <Feather
+          name={icon}
+          size={18}
+          color={COLORS.mutedForeground}
+          style={{ position: "absolute", left: 16, zIndex: 1 }}
+        />
+        <TextInput
+          value={value}
+          onChangeText={onChange}
+          placeholder=""
+          placeholderTextColor={COLORS.mutedForeground}
+          keyboardType={keyboardType as any}
+          secureTextEntry={secure && !shown}
+          autoFocus={autoFocus}
+          autoCapitalize={autoCapitalize}
+          autoCorrect={autoCorrect}
+          className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
+          style={{ fontSize: 15, fontWeight: "500" }}
+        />
+        {!value && (
+          <Text
+            style={{
+              position: "absolute",
+              left: 48,
+              right: 48,
+              pointerEvents: "none",
+              color: COLORS.mutedForeground,
+              fontSize: 15,
+              fontWeight: "500",
+            }}
+            numberOfLines={1}
+          >
+            {placeholder}
+          </Text>
+        )}
+        {secure && showToggle && (
+          <PressableScale
+            onPress={showToggle}
+            style={{ position: "absolute", right: 16, zIndex: 1 }}
+            scaleTo={0.85}
+          >
+            <Feather
+              name={shown ? "eye-off" : "eye"}
+              size={18}
+              color={COLORS.mutedForeground}
+            />
+          </PressableScale>
+        )}
+      </View>
+    </View>
+  );
 }
 
 function AuthMethodSwitcher({
@@ -626,81 +938,83 @@ function AuthMethodSwitcher({
   value: AuthMethod;
   onChange: (method: AuthMethod) => void;
 }) {
-    return (
-        <View style={styles.switcher}>
-            {(["phone", "email"] as const).map((method) => {
-                const active = method === value;
-                return (
-                    <PressableScale
-                        key={method}
-                        onPress={() => onChange(method)}
-                        style={[styles.switcherItem, active && styles.switcherItemActive]}
-                        scaleTo={0.94}
-                    >
-                        <Text style={[styles.switcherText, active && styles.switcherTextActive]}>
-                            {method === "phone" ? "Телефон" : "Email"}
-                        </Text>
-                    </PressableScale>
-                );
-            })}
-        </View>
-    );
+  return (
+    <View style={styles.switcher}>
+      {(["phone", "email"] as const).map((method) => {
+        const active = method === value;
+        return (
+          <PressableScale
+            key={method}
+            onPress={() => onChange(method)}
+            style={[styles.switcherItem, active && styles.switcherItemActive]}
+            scaleTo={0.94}
+          >
+            <Text
+              style={[styles.switcherText, active && styles.switcherTextActive]}
+            >
+              {method === "phone" ? "Телефон" : "Email"}
+            </Text>
+          </PressableScale>
+        );
+      })}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    switcher: {
-        flexDirection: "row",
-        backgroundColor: COLORS.muted,
-        borderRadius: RADIUS.md,
-        padding: 4,
-        marginBottom: 20,
-    },
-    switcherItem: {
-        flex: 1,
-        paddingVertical: 10,
-        borderRadius: RADIUS.md - 2,
-        alignItems: "center",
-        backgroundColor: "transparent",
-    },
-    switcherItemActive: {
-        backgroundColor: COLORS.card,
-    },
-    switcherText: {
-        fontWeight: "600",
-        fontSize: 13,
-        color: COLORS.mutedForeground,
-    },
-    switcherTextActive: {
-        color: COLORS.foreground,
-    },
-    bottomBar: {
-        alignItems: "center",
-        backgroundColor: COLORS.background,
-        paddingTop: 12,
-        paddingBottom: 10,
-        borderTopWidth: 1,
-        borderTopColor: `${COLORS.border}80`,
-    },
-    footerActionButton: {
-        paddingVertical: 18,
-        borderRadius: RADIUS.xl,
-        alignItems: "center",
-        justifyContent: "center",
-        ...SHADOWS.md,
-    },
-    accountSwitchRow: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: 32,
-        marginTop: 10,
-    },
-    accountSwitchText: {
-        color: COLORS.mutedForeground,
-        fontSize: 15,
-    },
-    accountSwitchLink: {
-        fontWeight: "800",
-        fontSize: 15,
-    },
+  switcher: {
+    flexDirection: "row",
+    backgroundColor: COLORS.muted,
+    borderRadius: RADIUS.md,
+    padding: 4,
+    marginBottom: 20,
+  },
+  switcherItem: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: RADIUS.md - 2,
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+  switcherItemActive: {
+    backgroundColor: COLORS.card,
+  },
+  switcherText: {
+    fontWeight: "600",
+    fontSize: 13,
+    color: COLORS.mutedForeground,
+  },
+  switcherTextActive: {
+    color: COLORS.foreground,
+  },
+  bottomBar: {
+    alignItems: "center",
+    backgroundColor: COLORS.background,
+    paddingTop: 12,
+    paddingBottom: 10,
+    borderTopWidth: 1,
+    borderTopColor: `${COLORS.border}80`,
+  },
+  footerActionButton: {
+    paddingVertical: 18,
+    borderRadius: RADIUS.xl,
+    alignItems: "center",
+    justifyContent: "center",
+    ...SHADOWS.md,
+  },
+  accountSwitchRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: 32,
+    marginTop: 10,
+  },
+  accountSwitchText: {
+    color: COLORS.mutedForeground,
+    fontSize: 15,
+  },
+  accountSwitchLink: {
+    fontWeight: "800",
+    fontSize: 15,
+  },
 });

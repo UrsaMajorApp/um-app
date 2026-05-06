@@ -53,7 +53,8 @@ function getRoleGuardRedirect(user: AuthUser, segments: string[]) {
     if (section === "organization" && role !== "org") return "/(tabs)/home";
     if (section === "teacher" && role !== "teacher") return "/(tabs)/home";
     if (section === "chats" && role === "child") return "/(tabs)/home";
-    if (section === "catalog" && (role === "mentor" || role === "org")) return "/(tabs)/home";
+    if (section === "catalog" && (role === "mentor" || role === "org"))
+      return "/(tabs)/home";
     return null;
   }
 
@@ -64,8 +65,13 @@ function getRoleGuardRedirect(user: AuthUser, segments: string[]) {
     if (section === "mentor" && role !== "mentor") return "/(tabs)/home";
     if (section === "teacher" && role !== "teacher") return "/(tabs)/home";
     if (section === "youth") {
-      if (screen === "create-profile-child" && role !== "parent") return "/(tabs)/home";
-      if ((screen === "create-profile" || screen === "create-profile-young-adult") && !isYouthRole(role)) {
+      if (screen === "create-profile-child" && role !== "parent")
+        return "/(tabs)/home";
+      if (
+        (screen === "create-profile" ||
+          screen === "create-profile-young-adult") &&
+        !isYouthRole(role)
+      ) {
         return "/(tabs)/home";
       }
       if (!canUseYouthDiagnostic(role)) return "/(tabs)/home";
@@ -99,7 +105,9 @@ function getRouteRedirectPath({
   const inOAuthFlow = root === "auth";
   const isOAuthCallbackScreen =
     inOAuthFlow &&
-    (authScreen === "callback" || authScreen === "complete-profile" || authScreen === "reset-password");
+    (authScreen === "callback" ||
+      authScreen === "complete-profile" ||
+      authScreen === "reset-password");
 
   if (!user && !inAuthGroup && !inOAuthFlow) {
     return "/intro";
@@ -178,7 +186,14 @@ function RootNavigator() {
   if (isLoading || redirectPath) {
     return (
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: "center", justifyContent: "center" }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.background,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
         <DevRoleSwitcher />

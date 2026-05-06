@@ -55,11 +55,15 @@ export default function SwipeableDecisionCard({
       setIsLeaving(true);
 
       const direction = liked ? 1 : -1;
-      translateX.value = withTiming(direction * EXIT_DISTANCE, { duration: 240 }, (finished) => {
-        if (finished) {
-          runOnJS(onSwipe)(liked);
-        }
-      });
+      translateX.value = withTiming(
+        direction * EXIT_DISTANCE,
+        { duration: 240 },
+        (finished) => {
+          if (finished) {
+            runOnJS(onSwipe)(liked);
+          }
+        },
+      );
       translateY.value = withTiming(-28, { duration: 240 });
     },
     [hasSwiped, onSwipe, translateX, translateY],
@@ -89,12 +93,18 @@ export default function SwipeableDecisionCard({
             hasSwiped.value = true;
             runOnJS(setIsLeaving)(true);
 
-            translateX.value = withTiming(direction * EXIT_DISTANCE, { duration: 240 }, (finished) => {
-              if (finished) {
-                runOnJS(onSwipe)(liked);
-              }
+            translateX.value = withTiming(
+              direction * EXIT_DISTANCE,
+              { duration: 240 },
+              (finished) => {
+                if (finished) {
+                  runOnJS(onSwipe)(liked);
+                }
+              },
+            );
+            translateY.value = withTiming(event.translationY, {
+              duration: 240,
             });
-            translateY.value = withTiming(event.translationY, { duration: 240 });
           } else {
             translateX.value = withSpring(0, { damping: 16, stiffness: 180 });
             translateY.value = withSpring(0, { damping: 16, stiffness: 180 });
@@ -128,12 +138,22 @@ export default function SwipeableDecisionCard({
   });
 
   const likeBadgeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(translateX.value, [20, SWIPE_THRESHOLD], [0, 1], Extrapolation.CLAMP),
+    opacity: interpolate(
+      translateX.value,
+      [20, SWIPE_THRESHOLD],
+      [0, 1],
+      Extrapolation.CLAMP,
+    ),
     transform: [{ rotateZ: "-8deg" }],
   }));
 
   const dislikeBadgeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(translateX.value, [-SWIPE_THRESHOLD, -20], [1, 0], Extrapolation.CLAMP),
+    opacity: interpolate(
+      translateX.value,
+      [-SWIPE_THRESHOLD, -20],
+      [1, 0],
+      Extrapolation.CLAMP,
+    ),
     transform: [{ rotateZ: "8deg" }],
   }));
 
@@ -143,10 +163,15 @@ export default function SwipeableDecisionCard({
         <Animated.Text style={[styles.badge, styles.likeBadge, likeBadgeStyle]}>
           {likeLabel}
         </Animated.Text>
-        <Animated.Text style={[styles.badge, styles.dislikeBadge, dislikeBadgeStyle]}>
+        <Animated.Text
+          style={[styles.badge, styles.dislikeBadge, dislikeBadgeStyle]}
+        >
           {dislikeLabel}
         </Animated.Text>
-        <View pointerEvents={isLeaving ? "none" : "auto"} style={styles.content}>
+        <View
+          pointerEvents={isLeaving ? "none" : "auto"}
+          style={styles.content}
+        >
           {children({ isLeaving, swipe })}
         </View>
       </Animated.View>

@@ -1,7 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { MotiView } from "moti";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -81,7 +80,16 @@ export default function CreateProfileParent() {
   }, [user]);
 
   const [children, setChildren] = useState<Child[]>([
-    { id: makeId(), name: "", ageGroup: null, hasPhone: null, phone: "", qrPin: null, qrPinExpiresAt: null, qrPinOneTimeUse: false },
+    {
+      id: makeId(),
+      name: "",
+      ageGroup: null,
+      hasPhone: null,
+      phone: "",
+      qrPin: null,
+      qrPinExpiresAt: null,
+      qrPinOneTimeUse: false,
+    },
   ]);
 
   const canContinue = useMemo(() => {
@@ -108,7 +116,16 @@ export default function CreateProfileParent() {
   function addChild() {
     setChildren((prev) => [
       ...prev,
-      { id: makeId(), name: "", ageGroup: null, hasPhone: null, phone: "", qrPin: null, qrPinExpiresAt: null, qrPinOneTimeUse: false },
+      {
+        id: makeId(),
+        name: "",
+        ageGroup: null,
+        hasPhone: null,
+        phone: "",
+        qrPin: null,
+        qrPinExpiresAt: null,
+        qrPinOneTimeUse: false,
+      },
     ]);
   }
 
@@ -116,7 +133,18 @@ export default function CreateProfileParent() {
     setChildren((prev) => {
       const next = prev.filter((c) => c.id !== id);
       return next.length === 0
-        ? [{ id: makeId(), name: "", ageGroup: null, hasPhone: null, phone: "", qrPin: null, qrPinExpiresAt: null, qrPinOneTimeUse: false }]
+        ? [
+            {
+              id: makeId(),
+              name: "",
+              ageGroup: null,
+              hasPhone: null,
+              phone: "",
+              qrPin: null,
+              qrPinExpiresAt: null,
+              qrPinOneTimeUse: false,
+            },
+          ]
         : next;
     });
   }
@@ -136,7 +164,9 @@ export default function CreateProfileParent() {
         ageGroup: c.ageGroup,
         phone: c.hasPhone ? c.phone : undefined,
         qrPin: !c.hasPhone ? (c.qrPin ?? undefined) : undefined,
-        qrPinExpiresAt: !c.hasPhone ? (c.qrPinExpiresAt ?? undefined) : undefined,
+        qrPinExpiresAt: !c.hasPhone
+          ? (c.qrPinExpiresAt ?? undefined)
+          : undefined,
         qrPinOneTimeUse: !c.hasPhone ? c.qrPinOneTimeUse : undefined,
       })),
     );
@@ -152,24 +182,28 @@ export default function CreateProfileParent() {
       <View style={{ flex: 1 }}>
         {/* Background blobs */}
         <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
-          <View style={{
-            position: "absolute",
-            top: -50,
-            right: -50,
-            width: 200,
-            height: 200,
-            borderRadius: 100,
-            backgroundColor: `${ROLE_COLOR}10`,
-          }} />
-          <View style={{
-            position: "absolute",
-            bottom: "20%",
-            left: -80,
-            width: 250,
-            height: 250,
-            borderRadius: 125,
-            backgroundColor: `${ROLE_COLOR}05`,
-          }} />
+          <View
+            style={{
+              position: "absolute",
+              top: -50,
+              right: -50,
+              width: 200,
+              height: 200,
+              borderRadius: 100,
+              backgroundColor: `${ROLE_COLOR}10`,
+            }}
+          />
+          <View
+            style={{
+              position: "absolute",
+              bottom: "20%",
+              left: -80,
+              width: 250,
+              height: 250,
+              borderRadius: 125,
+              backgroundColor: `${ROLE_COLOR}05`,
+            }}
+          />
         </View>
 
         <SafeAreaView style={{ flex: 1 }}>
@@ -192,13 +226,31 @@ export default function CreateProfileParent() {
               }}
             >
               {/* Header Nav */}
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 24,
+                }}
+              >
                 <TouchableOpacity
                   onPress={handleBack}
                   style={{ flexDirection: "row", alignItems: "center" }}
                 >
-                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
-                  <Text style={{ color: COLORS.mutedForeground, marginLeft: 8, fontSize: 15, fontWeight: "500" }}>
+                  <Feather
+                    name="arrow-left"
+                    size={20}
+                    color={COLORS.mutedForeground}
+                  />
+                  <Text
+                    style={{
+                      color: COLORS.mutedForeground,
+                      marginLeft: 8,
+                      fontSize: 15,
+                      fontWeight: "500",
+                    }}
+                  >
                     Назад
                   </Text>
                 </TouchableOpacity>
@@ -206,41 +258,87 @@ export default function CreateProfileParent() {
                 {/* Step dots: 1 step, last dot is active wide */}
                 <View style={{ flexDirection: "row", gap: 6 }}>
                   {[0, 1, 2, 3].map((i) => (
-                    <View key={i} style={{
-                      width: i === 3 ? 24 : 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: i === 3 ? ROLE_COLOR : COLORS.border,
-                    }} />
+                    <View
+                      key={i}
+                      style={{
+                        width: i === 3 ? 24 : 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: i === 3 ? ROLE_COLOR : COLORS.border,
+                      }}
+                    />
                   ))}
                 </View>
               </View>
 
               {/* Title Section */}
               <View style={{ marginBottom: 32 }}>
-                <Text style={{ fontSize: 32, fontWeight: "900", color: COLORS.foreground, marginBottom: 8, letterSpacing: -0.5 }}>
+                <Text
+                  style={{
+                    fontSize: 32,
+                    fontWeight: "900",
+                    color: COLORS.foreground,
+                    marginBottom: 8,
+                    letterSpacing: -0.5,
+                  }}
+                >
                   Профиль родителя
                 </Text>
-                <Text style={{ color: COLORS.mutedForeground, fontSize: 16, lineHeight: 24 }}>
+                <Text
+                  style={{
+                    color: COLORS.mutedForeground,
+                    fontSize: 16,
+                    lineHeight: 24,
+                  }}
+                >
                   Расскажите о себе и добавьте информацию о детях
                 </Text>
               </View>
 
               {/* Personal Info Card */}
-              <View style={{ backgroundColor: "white", borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md, marginBottom: 20 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: RADIUS.xxl,
+                  padding: 24,
+                  ...SHADOWS.md,
+                  marginBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 20,
+                  }}
+                >
                   <Feather name="user" size={20} color={ROLE_COLOR} />
-                  <Text style={{ fontSize: 17, fontWeight: "700", color: COLORS.foreground, marginLeft: 10 }}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "700",
+                      color: COLORS.foreground,
+                      marginLeft: 10,
+                    }}
+                  >
                     Ваши данные
                   </Text>
                 </View>
 
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 16 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginBottom: 16,
+                  }}
+                >
                   <View style={{ flex: 1, marginRight: 8 }}>
                     <Text style={styles.fieldLabel}>Имя</Text>
                     <ProfileTextInput
                       value={parentData.firstName}
-                      onChangeText={(text) => setParentData({ ...parentData, firstName: text })}
+                      onChangeText={(text) =>
+                        setParentData({ ...parentData, firstName: text })
+                      }
                       placeholder="Имя"
                       style={styles.input}
                     />
@@ -249,7 +347,9 @@ export default function CreateProfileParent() {
                     <Text style={styles.fieldLabel}>Фамилия</Text>
                     <ProfileTextInput
                       value={parentData.lastName}
-                      onChangeText={(text) => setParentData({ ...parentData, lastName: text })}
+                      onChangeText={(text) =>
+                        setParentData({ ...parentData, lastName: text })
+                      }
                       placeholder="Фамилия"
                       style={styles.input}
                     />
@@ -260,7 +360,9 @@ export default function CreateProfileParent() {
                   <Text style={styles.fieldLabel}>Телефон</Text>
                   <ProfileTextInput
                     value={parentData.phone}
-                    onChangeText={(text) => setParentData({ ...parentData, phone: formatPhone(text) })}
+                    onChangeText={(text) =>
+                      setParentData({ ...parentData, phone: formatPhone(text) })
+                    }
                     placeholder="+7 777 777 7777"
                     keyboardType="phone-pad"
                     style={styles.input}
@@ -269,29 +371,83 @@ export default function CreateProfileParent() {
               </View>
 
               {/* Children Section Header */}
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12, paddingHorizontal: 4 }}>
-                <Text style={{ fontSize: 20, fontWeight: "800", color: COLORS.foreground }}>Дети</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 12,
+                  paddingHorizontal: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "800",
+                    color: COLORS.foreground,
+                  }}
+                >
+                  Дети
+                </Text>
                 <TouchableOpacity
                   onPress={addChild}
-                  style={{ flexDirection: "row", alignItems: "center", backgroundColor: `${ROLE_COLOR}15`, paddingHorizontal: 16, paddingVertical: 8, borderRadius: RADIUS.xl }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: `${ROLE_COLOR}15`,
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: RADIUS.xl,
+                  }}
                 >
                   <Feather name="plus" size={16} color={ROLE_COLOR} />
-                  <Text style={{ color: ROLE_COLOR, fontWeight: "700", marginLeft: 6 }}>Добавить</Text>
+                  <Text
+                    style={{
+                      color: ROLE_COLOR,
+                      fontWeight: "700",
+                      marginLeft: 6,
+                    }}
+                  >
+                    Добавить
+                  </Text>
                 </TouchableOpacity>
               </View>
 
               {children.map((child, index) => (
                 <View
                   key={child.id}
-                  style={{ backgroundColor: "white", borderRadius: RADIUS.xxl, padding: 24, ...SHADOWS.md, marginBottom: 16 }}
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: RADIUS.xxl,
+                    padding: 24,
+                    ...SHADOWS.md,
+                    marginBottom: 16,
+                  }}
                 >
-                  <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                    <Text style={{ color: ROLE_COLOR, fontWeight: "800", fontSize: 16 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: 16,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: ROLE_COLOR,
+                        fontWeight: "800",
+                        fontSize: 16,
+                      }}
+                    >
                       Ребенок {index + 1}
                     </Text>
                     {children.length > 1 && (
                       <TouchableOpacity onPress={() => removeChild(child.id)}>
-                        <Feather name="trash-2" size={20} color={COLORS.destructive} />
+                        <Feather
+                          name="trash-2"
+                          size={20}
+                          color={COLORS.destructive}
+                        />
                       </TouchableOpacity>
                     )}
                   </View>
@@ -300,7 +456,9 @@ export default function CreateProfileParent() {
                     <Text style={styles.fieldLabel}>Имя ребенка</Text>
                     <ProfileTextInput
                       value={child.name}
-                      onChangeText={(text) => updateChild(child.id, { name: text })}
+                      onChangeText={(text) =>
+                        updateChild(child.id, { name: text })
+                      }
                       placeholder="Например, Анна"
                       style={styles.input}
                     />
@@ -313,35 +471,63 @@ export default function CreateProfileParent() {
                       return (
                         <TouchableOpacity
                           key={opt.value}
-                          onPress={() => updateChild(child.id, { ageGroup: opt.value })}
+                          onPress={() =>
+                            updateChild(child.id, { ageGroup: opt.value })
+                          }
                           style={{
                             padding: 14,
                             borderRadius: RADIUS.md,
                             borderWidth: 2,
                             borderColor: active ? ROLE_COLOR : COLORS.border,
-                            backgroundColor: active ? `${ROLE_COLOR}08` : COLORS.muted,
+                            backgroundColor: active
+                              ? `${ROLE_COLOR}08`
+                              : COLORS.muted,
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "space-between",
                           }}
                         >
-                          <Text style={{ fontWeight: "600", color: active ? ROLE_COLOR : COLORS.mutedForeground }}>
+                          <Text
+                            style={{
+                              fontWeight: "600",
+                              color: active
+                                ? ROLE_COLOR
+                                : COLORS.mutedForeground,
+                            }}
+                          >
                             {opt.label}
                           </Text>
-                          {active && <Feather name="check-circle" size={20} color={ROLE_COLOR} />}
+                          {active && (
+                            <Feather
+                              name="check-circle"
+                              size={20}
+                              color={ROLE_COLOR}
+                            />
+                          )}
                         </TouchableOpacity>
                       );
                     })}
                   </View>
 
                   {/* Phone / QR section */}
-                  <View style={{ borderTopWidth: 1, borderTopColor: COLORS.border, paddingTop: 16 }}>
+                  <View
+                    style={{
+                      borderTopWidth: 1,
+                      borderTopColor: COLORS.border,
+                      paddingTop: 16,
+                    }}
+                  >
                     <Text style={[styles.fieldLabel, { marginBottom: 12 }]}>
                       Есть ли у ребёнка свой номер телефона?
                     </Text>
-                    <View style={{ flexDirection: "row", gap: 8, marginBottom: 12 }}>
+                    <View
+                      style={{ flexDirection: "row", gap: 8, marginBottom: 12 }}
+                    >
                       {(["YES", "NO"] as const).map((opt) => {
-                        const active = opt === "YES" ? child.hasPhone === true : child.hasPhone === false;
+                        const active =
+                          opt === "YES"
+                            ? child.hasPhone === true
+                            : child.hasPhone === false;
                         return (
                           <TouchableOpacity
                             key={opt}
@@ -358,11 +544,20 @@ export default function CreateProfileParent() {
                               borderRadius: RADIUS.md,
                               borderWidth: 2,
                               borderColor: active ? ROLE_COLOR : COLORS.border,
-                              backgroundColor: active ? `${ROLE_COLOR}08` : COLORS.muted,
+                              backgroundColor: active
+                                ? `${ROLE_COLOR}08`
+                                : COLORS.muted,
                               alignItems: "center",
                             }}
                           >
-                            <Text style={{ fontWeight: "600", color: active ? ROLE_COLOR : COLORS.mutedForeground }}>
+                            <Text
+                              style={{
+                                fontWeight: "600",
+                                color: active
+                                  ? ROLE_COLOR
+                                  : COLORS.mutedForeground,
+                              }}
+                            >
                               {opt === "YES" ? "Да" : "Нет"}
                             </Text>
                           </TouchableOpacity>
@@ -372,7 +567,9 @@ export default function CreateProfileParent() {
 
                     {child.hasPhone === true && (
                       <View>
-                        <Text style={styles.fieldLabel}>Номер телефона ребёнка</Text>
+                        <Text style={styles.fieldLabel}>
+                          Номер телефона ребёнка
+                        </Text>
                         <ProfileTextInput
                           value={child.phone}
                           onChangeText={(text) =>
@@ -389,28 +586,64 @@ export default function CreateProfileParent() {
                       <View style={{ alignItems: "center" }}>
                         {child.qrPin ? (
                           <>
-                            <View style={{ padding: 20, backgroundColor: COLORS.muted, borderRadius: RADIUS.lg, marginBottom: 12, alignItems: "center" }}>
-                              <QRCode
-                                value={child.qrPin}
-                                size={140}
-                              />
-                              <Text style={{ fontSize: 32, fontWeight: "700", color: COLORS.foreground, marginTop: 16, letterSpacing: 4 }}>
+                            <View
+                              style={{
+                                padding: 20,
+                                backgroundColor: COLORS.muted,
+                                borderRadius: RADIUS.lg,
+                                marginBottom: 12,
+                                alignItems: "center",
+                              }}
+                            >
+                              <QRCode value={child.qrPin} size={140} />
+                              <Text
+                                style={{
+                                  fontSize: 32,
+                                  fontWeight: "700",
+                                  color: COLORS.foreground,
+                                  marginTop: 16,
+                                  letterSpacing: 4,
+                                }}
+                              >
                                 {child.qrPin}
                               </Text>
                               {child.qrPinExpiresAt && (
-                                <Text style={{ fontSize: 11, color: COLORS.mutedForeground, marginTop: 8 }}>
-                                  Действителен {Math.round((child.qrPinExpiresAt.getTime() - Date.now()) / (1000 * 60))} мин
+                                <Text
+                                  style={{
+                                    fontSize: 11,
+                                    color: COLORS.mutedForeground,
+                                    marginTop: 8,
+                                  }}
+                                >
+                                  Действителен{" "}
+                                  {Math.round(
+                                    (child.qrPinExpiresAt.getTime() -
+                                      Date.now()) /
+                                      (1000 * 60),
+                                  )}{" "}
+                                  мин
                                   {child.qrPinOneTimeUse && " • Одноразовый"}
                                 </Text>
                               )}
                             </View>
-                            <Text style={{ fontSize: 12, color: COLORS.mutedForeground, textAlign: "center", marginBottom: 10 }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: COLORS.mutedForeground,
+                                textAlign: "center",
+                                marginBottom: 10,
+                              }}
+                            >
                               Покажите этот код ребёнку для входа в приложение
                             </Text>
 
                             {/* One-time use toggle */}
                             <TouchableOpacity
-                              onPress={() => updateChild(child.id, { qrPinOneTimeUse: !child.qrPinOneTimeUse })}
+                              onPress={() =>
+                                updateChild(child.id, {
+                                  qrPinOneTimeUse: !child.qrPinOneTimeUse,
+                                })
+                              }
                               style={{
                                 flexDirection: "row",
                                 alignItems: "center",
@@ -422,34 +655,68 @@ export default function CreateProfileParent() {
                                 marginBottom: 10,
                               }}
                             >
-                              <View style={{
-                                width: 20,
-                                height: 20,
-                                borderRadius: 4,
-                                borderWidth: 2,
-                                borderColor: child.qrPinOneTimeUse ? ROLE_COLOR : COLORS.border,
-                                backgroundColor: child.qrPinOneTimeUse ? ROLE_COLOR : "transparent",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}>
+                              <View
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  borderRadius: 4,
+                                  borderWidth: 2,
+                                  borderColor: child.qrPinOneTimeUse
+                                    ? ROLE_COLOR
+                                    : COLORS.border,
+                                  backgroundColor: child.qrPinOneTimeUse
+                                    ? ROLE_COLOR
+                                    : "transparent",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
                                 {child.qrPinOneTimeUse && (
-                                  <Feather name="check" size={14} color="white" />
+                                  <Feather
+                                    name="check"
+                                    size={14}
+                                    color="white"
+                                  />
                                 )}
                               </View>
-                              <Text style={{ fontSize: 13, color: COLORS.foreground }}>
+                              <Text
+                                style={{
+                                  fontSize: 13,
+                                  color: COLORS.foreground,
+                                }}
+                              >
                                 Одноразовый код
                               </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                               onPress={() => {
-                                const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-                                updateChild(child.id, { qrPin: generateQRPin(), qrPinExpiresAt: expiresAt });
+                                const expiresAt = new Date(
+                                  Date.now() + 15 * 60 * 1000,
+                                );
+                                updateChild(child.id, {
+                                  qrPin: generateQRPin(),
+                                  qrPinExpiresAt: expiresAt,
+                                });
                               }}
-                              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 6,
+                              }}
                             >
-                              <Feather name="refresh-cw" size={14} color={ROLE_COLOR} />
-                              <Text style={{ fontSize: 13, color: ROLE_COLOR, fontWeight: "600" }}>
+                              <Feather
+                                name="refresh-cw"
+                                size={14}
+                                color={ROLE_COLOR}
+                              />
+                              <Text
+                                style={{
+                                  fontSize: 13,
+                                  color: ROLE_COLOR,
+                                  fontWeight: "600",
+                                }}
+                              >
                                 Обновить код
                               </Text>
                             </TouchableOpacity>
@@ -457,8 +724,13 @@ export default function CreateProfileParent() {
                         ) : (
                           <TouchableOpacity
                             onPress={() => {
-                              const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-                              updateChild(child.id, { qrPin: generateQRPin(), qrPinExpiresAt: expiresAt });
+                              const expiresAt = new Date(
+                                Date.now() + 15 * 60 * 1000,
+                              );
+                              updateChild(child.id, {
+                                qrPin: generateQRPin(),
+                                qrPinExpiresAt: expiresAt,
+                              });
                             }}
                             style={{
                               flexDirection: "row",
@@ -475,7 +747,13 @@ export default function CreateProfileParent() {
                             }}
                           >
                             <Feather name="grid" size={18} color={ROLE_COLOR} />
-                            <Text style={{ color: ROLE_COLOR, fontWeight: "700", fontSize: 14 }}>
+                            <Text
+                              style={{
+                                color: ROLE_COLOR,
+                                fontWeight: "700",
+                                fontSize: 14,
+                              }}
+                            >
                               Создать код для входа
                             </Text>
                           </TouchableOpacity>
@@ -494,7 +772,9 @@ export default function CreateProfileParent() {
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={canContinue ? ROLE_GRADIENT : [COLORS.muted, COLORS.muted]}
+                  colors={
+                    canContinue ? ROLE_GRADIENT : [COLORS.muted, COLORS.muted]
+                  }
                   style={{
                     paddingVertical: 18,
                     borderRadius: RADIUS.xl,
@@ -503,7 +783,13 @@ export default function CreateProfileParent() {
                     ...SHADOWS.md,
                   }}
                 >
-                  <Text style={{ fontSize: 18, fontWeight: "800", color: canContinue ? "white" : COLORS.mutedForeground }}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "800",
+                      color: canContinue ? "white" : COLORS.mutedForeground,
+                    }}
+                  >
                     Продолжить
                   </Text>
                 </LinearGradient>
@@ -524,12 +810,7 @@ function ProfileTextInput({
 }: React.ComponentProps<typeof TextInput>) {
   return (
     <View style={{ position: "relative", justifyContent: "center" }}>
-      <TextInput
-        {...props}
-        value={value}
-        placeholder=""
-        style={style}
-      />
+      <TextInput {...props} value={value} placeholder="" style={style} />
       {!value && !!placeholder && (
         <Text
           numberOfLines={1}

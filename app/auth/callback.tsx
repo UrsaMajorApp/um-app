@@ -75,7 +75,10 @@ export default function AuthCallback() {
         const code = queryParams.get("code");
 
         if (accessToken && refreshToken) {
-          await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+          await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
           sessionReady.current = true;
         } else if (code) {
           await supabase.auth.exchangeCodeForSession(code);
@@ -95,7 +98,9 @@ export default function AuthCallback() {
 
     // Case 2: app was already running in background and was brought to
     // foreground via the deep link (e.g. user opened browser manually)
-    const sub = Linking.addEventListener("url", ({ url }) => parseAndSetSession(url));
+    const sub = Linking.addEventListener("url", ({ url }) =>
+      parseAndSetSession(url),
+    );
     return () => sub.remove();
   }, []);
 
@@ -140,9 +145,23 @@ export default function AuthCallback() {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.background }}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: COLORS.background,
+      }}
+    >
       <ActivityIndicator size="large" color={COLORS.primary} />
-      <Text style={{ marginTop: 16, color: COLORS.mutedForeground, fontSize: 15, fontWeight: "500" }}>
+      <Text
+        style={{
+          marginTop: 16,
+          color: COLORS.mutedForeground,
+          fontSize: 15,
+          fontWeight: "500",
+        }}
+      >
         {status}
       </Text>
     </View>

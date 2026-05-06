@@ -3,13 +3,13 @@ import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import { useState } from "react";
 import {
-    ActivityIndicator,
-    Platform,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
 import { useOnboardingQuestions } from "../../../hooks/usePlatformData";
@@ -27,7 +27,8 @@ export default function OrgTesting() {
   const [answers, setAnswers] = useState<number[]>([]);
 
   const current = questions[step];
-  const progress = questions.length > 0 ? ((step + 1) / questions.length) * 100 : 0;
+  const progress =
+    questions.length > 0 ? ((step + 1) / questions.length) * 100 : 0;
 
   const selectAnswer = (index: number) => {
     const updated = [...answers];
@@ -45,7 +46,10 @@ export default function OrgTesting() {
 
   if (loading || !current) {
     return (
-      <LinearGradient colors={["#6C5CE7", "#C7C4F2"]} style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <LinearGradient
+        colors={["#6C5CE7", "#C7C4F2"]}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      >
         <ActivityIndicator color="white" size="large" />
       </LinearGradient>
     );
@@ -78,7 +82,14 @@ export default function OrgTesting() {
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 400 }}
           >
-            <Text style={{ fontSize: 28, fontWeight: "700", color: "white", marginBottom: 16 }}>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "700",
+                color: "white",
+                marginBottom: 16,
+              }}
+            >
               Тестирование организации
             </Text>
           </MotiView>
@@ -93,7 +104,13 @@ export default function OrgTesting() {
               marginBottom: 30,
             }}
           >
-            <View style={{ width: `${progress}%`, height: "100%", backgroundColor: "white" }} />
+            <View
+              style={{
+                width: `${progress}%`,
+                height: "100%",
+                backgroundColor: "white",
+              }}
+            />
           </View>
 
           {/* QUESTION CARD */}
@@ -112,7 +129,14 @@ export default function OrgTesting() {
               shadowRadius: 10,
             }}
           >
-            <Text style={{ fontSize: 14, fontWeight: "700", opacity: 0.6, marginBottom: 10 }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "700",
+                opacity: 0.6,
+                marginBottom: 10,
+              }}
+            >
               Вопрос {step + 1} из {questions.length}
             </Text>
 
@@ -159,7 +183,14 @@ export default function OrgTesting() {
               borderRadius: 30,
             }}
           >
-            <Text style={{ textAlign: "center", color: "white", fontSize: 18, fontWeight: "600" }}>
+            <Text
+              style={{
+                textAlign: "center",
+                color: "white",
+                fontSize: 18,
+                fontWeight: "600",
+              }}
+            >
               {step === questions.length - 1 ? "Завершить" : "Следующий вопрос"}
             </Text>
           </TouchableOpacity>

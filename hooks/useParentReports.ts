@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 function ok<T = any>(res: { data: any; error: any }): T[] {
   if (res.error || !res.data) return [];
@@ -39,7 +39,12 @@ export function useChildReports(childName: string | null) {
 
   const refresh = useCallback(async () => {
     if (!supabase || !isSupabaseConfigured || !user?.id || !childName) {
-      setReport({ skills: [], attendance: [], totalClasses: 0, avgAttendance: 0 });
+      setReport({
+        skills: [],
+        attendance: [],
+        totalClasses: 0,
+        avgAttendance: 0,
+      });
       setLoading(false);
       return;
     }
@@ -61,12 +66,12 @@ export function useChildReports(childName: string | null) {
 
     const skills = ok<ChildSkillSnapshot>(skillsRes);
     const attendance = ok<ChildAttendanceMonth>(attRes);
-    const avgAttendance =
-      attendance.length
-        ? Math.round(
-            attendance.reduce((s, a) => s + a.attendance_pct, 0) / attendance.length
-          )
-        : 0;
+    const avgAttendance = attendance.length
+      ? Math.round(
+          attendance.reduce((s, a) => s + a.attendance_pct, 0) /
+            attendance.length,
+        )
+      : 0;
 
     setReport({
       skills,

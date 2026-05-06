@@ -76,11 +76,26 @@ export default function ForgotPasswordScreen() {
           >
             <PressableScale
               onPress={() => router.back()}
-              style={{ flexDirection: "row", alignItems: "center", marginBottom: 32 }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 32,
+              }}
               scaleTo={0.93}
             >
-              <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
-              <Text style={{ color: COLORS.mutedForeground, marginLeft: 8, fontSize: 15, fontWeight: "500" }}>
+              <Feather
+                name="arrow-left"
+                size={20}
+                color={COLORS.mutedForeground}
+              />
+              <Text
+                style={{
+                  color: COLORS.mutedForeground,
+                  marginLeft: 8,
+                  fontSize: 15,
+                  fontWeight: "500",
+                }}
+              >
                 Назад
               </Text>
             </PressableScale>
@@ -93,7 +108,8 @@ export default function ForgotPasswordScreen() {
             >
               <Text style={styles.title}>Восстановление пароля</Text>
               <Text style={styles.subtitle}>
-                Укажите email аккаунта, и мы отправим ссылку для создания нового пароля.
+                Укажите email аккаунта, и мы отправим ссылку для создания нового
+                пароля.
               </Text>
             </MotiView>
 
@@ -110,9 +126,13 @@ export default function ForgotPasswordScreen() {
                   </View>
                   <Text style={styles.sentTitle}>Письмо отправлено</Text>
                   <Text style={styles.sentText}>
-                    Проверьте {email.trim().toLowerCase()} и перейдите по ссылке, чтобы задать новый пароль.
+                    Проверьте {email.trim().toLowerCase()} и перейдите по
+                    ссылке, чтобы задать новый пароль.
                   </Text>
-                  <PressableScale onPress={() => router.replace("/login")} scaleTo={0.93}>
+                  <PressableScale
+                    onPress={() => router.replace("/login")}
+                    scaleTo={0.93}
+                  >
                     <Text style={styles.linkText}>Вернуться ко входу</Text>
                   </PressableScale>
                 </View>
@@ -120,7 +140,12 @@ export default function ForgotPasswordScreen() {
                 <>
                   <Text style={styles.label}>EMAIL</Text>
                   <View style={styles.inputWrapper}>
-                    <Feather name="mail" size={18} color={COLORS.mutedForeground} style={styles.inputIcon} />
+                    <Feather
+                      name="mail"
+                      size={18}
+                      color={COLORS.mutedForeground}
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       placeholder="you@example.com"
                       placeholderTextColor={COLORS.mutedForeground}
@@ -135,20 +160,37 @@ export default function ForgotPasswordScreen() {
                   </View>
 
                   {!!error && (
-                    <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={styles.errorBox}>
+                    <MotiView
+                      from={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      style={styles.errorBox}
+                    >
                       <Text style={styles.errorText}>{error}</Text>
                     </MotiView>
                   )}
 
-                  <PressableScale onPress={handleSubmit} disabled={!canSubmit || isSubmitting} style={{ marginTop: 24 }}>
+                  <PressableScale
+                    onPress={handleSubmit}
+                    disabled={!canSubmit || isSubmitting}
+                    style={{ marginTop: 24 }}
+                  >
                     <LinearGradient
-                      colors={canSubmit ? [COLORS.primary, COLORS.secondary] : [COLORS.muted, COLORS.muted]}
+                      colors={
+                        canSubmit
+                          ? [COLORS.primary, COLORS.secondary]
+                          : [COLORS.muted, COLORS.muted]
+                      }
                       style={styles.submitBtn}
                     >
                       {isSubmitting ? (
                         <ActivityIndicator size="small" color="white" />
                       ) : (
-                        <Text style={[styles.submitText, !canSubmit && { color: COLORS.mutedForeground }]}>
+                        <Text
+                          style={[
+                            styles.submitText,
+                            !canSubmit && { color: COLORS.mutedForeground },
+                          ]}
+                        >
                           Отправить ссылку
                         </Text>
                       )}

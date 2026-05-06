@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
-import * as Linking from "expo-linking";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MotiView } from "moti";
@@ -54,14 +54,19 @@ export default function ResetPasswordScreen() {
       const code = queryParams.get("code");
 
       if (accessToken && refreshToken) {
-        await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+        await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
       } else if (code) {
         await supabase.auth.exchangeCodeForSession(code);
       }
     };
 
     Linking.getInitialURL().then(parseAndSetSession);
-    const sub = Linking.addEventListener("url", ({ url }) => parseAndSetSession(url));
+    const sub = Linking.addEventListener("url", ({ url }) =>
+      parseAndSetSession(url),
+    );
     return () => sub.remove();
   }, []);
 
@@ -133,7 +138,10 @@ export default function ResetPasswordScreen() {
                     <Feather name="check" size={24} color={COLORS.primary} />
                   </View>
                   <Text style={styles.doneTitle}>Пароль обновлен</Text>
-                  <PressableScale onPress={() => router.replace("/login")} scaleTo={0.93}>
+                  <PressableScale
+                    onPress={() => router.replace("/login")}
+                    scaleTo={0.93}
+                  >
                     <Text style={styles.linkText}>Войти</Text>
                   </PressableScale>
                 </View>
@@ -151,24 +159,43 @@ export default function ResetPasswordScreen() {
                     value={confirmPassword}
                     onChange={setConfirmPassword}
                     shown={showConfirmPassword}
-                    onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onToggle={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
                   />
 
                   {!!error && (
-                    <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={styles.errorBox}>
+                    <MotiView
+                      from={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      style={styles.errorBox}
+                    >
                       <Text style={styles.errorText}>{error}</Text>
                     </MotiView>
                   )}
 
-                  <PressableScale onPress={handleSubmit} disabled={!canSubmit || isSubmitting} style={{ marginTop: 4 }}>
+                  <PressableScale
+                    onPress={handleSubmit}
+                    disabled={!canSubmit || isSubmitting}
+                    style={{ marginTop: 4 }}
+                  >
                     <LinearGradient
-                      colors={canSubmit ? [COLORS.primary, COLORS.secondary] : [COLORS.muted, COLORS.muted]}
+                      colors={
+                        canSubmit
+                          ? [COLORS.primary, COLORS.secondary]
+                          : [COLORS.muted, COLORS.muted]
+                      }
                       style={styles.submitBtn}
                     >
                       {isSubmitting ? (
                         <ActivityIndicator size="small" color="white" />
                       ) : (
-                        <Text style={[styles.submitText, !canSubmit && { color: COLORS.mutedForeground }]}>
+                        <Text
+                          style={[
+                            styles.submitText,
+                            !canSubmit && { color: COLORS.mutedForeground },
+                          ]}
+                        >
                           Сохранить пароль
                         </Text>
                       )}
@@ -189,7 +216,12 @@ function PasswordField({ label, value, onChange, shown, onToggle }: any) {
     <View style={{ marginBottom: 20 }}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputWrapper}>
-        <Feather name="lock" size={18} color={COLORS.mutedForeground} style={styles.inputIcon} />
+        <Feather
+          name="lock"
+          size={18}
+          color={COLORS.mutedForeground}
+          style={styles.inputIcon}
+        />
         <TextInput
           placeholder="Минимум 6 символов"
           placeholderTextColor={COLORS.mutedForeground}
@@ -199,8 +231,16 @@ function PasswordField({ label, value, onChange, shown, onToggle }: any) {
           className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
           style={styles.inputText}
         />
-        <PressableScale onPress={onToggle} style={styles.eyeIcon} scaleTo={0.85}>
-          <Feather name={shown ? "eye-off" : "eye"} size={18} color={COLORS.mutedForeground} />
+        <PressableScale
+          onPress={onToggle}
+          style={styles.eyeIcon}
+          scaleTo={0.85}
+        >
+          <Feather
+            name={shown ? "eye-off" : "eye"}
+            size={18}
+            color={COLORS.mutedForeground}
+          />
         </PressableScale>
       </View>
     </View>

@@ -1,21 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-    Easing,
-    FadeOut,
-    runOnJS,
-    useAnimatedStyle,
-    useSharedValue,
-    withSequence,
-    withTiming,
+  Easing,
+  FadeOut,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
 } from "react-native-reanimated";
 import { COLORS, RADIUS } from "../../constants/theme";
 
@@ -181,7 +181,7 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
     if (tile.isMerged) {
       scale.value = withSequence(
         withTiming(1.12, { duration: 80 }),
-        withTiming(1, { duration: 120 })
+        withTiming(1, { duration: 120 }),
       );
     }
   }, [tile.isMerged, tile.value]);

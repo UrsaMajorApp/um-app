@@ -1,3 +1,6 @@
+import { Feather } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useRef, useState } from "react";
 import {
@@ -11,9 +14,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Feather } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../../constants/theme";
 import { useChatMessages } from "../../../hooks/useChats";
 
@@ -54,7 +54,17 @@ export default function ChatScreen() {
             style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
           >
             <SafeAreaView edges={["top"]}>
-              <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: IS_DESKTOP ? LAYOUT.dashboardHorizontalPaddingDesktop : 20, paddingTop: 12, paddingBottom: 20 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: IS_DESKTOP
+                    ? LAYOUT.dashboardHorizontalPaddingDesktop
+                    : 20,
+                  paddingTop: 12,
+                  paddingBottom: 20,
+                }}
+              >
                 <TouchableOpacity
                   onPress={handleBackToChats}
                   style={{
@@ -69,7 +79,9 @@ export default function ChatScreen() {
                 >
                   <Feather name="arrow-left" size={20} color="white" />
                 </TouchableOpacity>
-                <Text style={{ fontSize: 18, fontWeight: "700", color: "white" }}>
+                <Text
+                  style={{ fontSize: 18, fontWeight: "700", color: "white" }}
+                >
                   {name}
                 </Text>
               </View>
@@ -81,15 +93,29 @@ export default function ChatScreen() {
         <ScrollView
           ref={scrollRef}
           contentContainerStyle={{ padding: 16, paddingBottom: 16 }}
-          onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
+          onContentSizeChange={() =>
+            scrollRef.current?.scrollToEnd({ animated: false })
+          }
         >
           {loading && (
-            <Text style={{ textAlign: "center", color: "#9CA3AF", marginVertical: 16 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#9CA3AF",
+                marginVertical: 16,
+              }}
+            >
               Загрузка...
             </Text>
           )}
           {!loading && messages.length === 0 && (
-            <Text style={{ textAlign: "center", color: "#9CA3AF", marginVertical: 32 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#9CA3AF",
+                marginVertical: 32,
+              }}
+            >
               Нет сообщений. Напишите первым!
             </Text>
           )}
@@ -109,7 +135,9 @@ export default function ChatScreen() {
                 maxWidth: "80%",
               }}
             >
-              <Text style={{ color: msg.is_mine ? "white" : "black", fontSize: 15 }}>
+              <Text
+                style={{ color: msg.is_mine ? "white" : "black", fontSize: 15 }}
+              >
                 {msg.body}
               </Text>
             </MotiView>
@@ -151,7 +179,12 @@ export default function ChatScreen() {
               borderRadius: 20,
             }}
           >
-            <Text style={{ color: input.trim() ? "white" : "#9CA3AF", fontWeight: "600" }}>
+            <Text
+              style={{
+                color: input.trim() ? "white" : "#9CA3AF",
+                fontWeight: "600",
+              }}
+            >
               Отпр.
             </Text>
           </TouchableOpacity>

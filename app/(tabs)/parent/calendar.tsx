@@ -17,7 +17,20 @@ import { useParentData } from "../../../contexts/ParentDataContext";
 import { isUuid } from "../../../lib/idUtils";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 
-const MONTHS = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+const MONTHS = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
 const WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
 type CalendarEnrollment = {
@@ -51,7 +64,9 @@ function scheduleMatchesDate(schedule: string | null, date: Date) {
   if (!schedule) return false;
   const normalized = schedule.toLowerCase().replace(/ё/g, "е");
   const aliases = DAY_ALIASES[date.getDay()] ?? [];
-  return aliases.some((alias) => new RegExp(`(^|[^а-яa-z])${alias}`, "i").test(normalized));
+  return aliases.some((alias) =>
+    new RegExp(`(^|[^а-яa-z])${alias}`, "i").test(normalized),
+  );
 }
 
 function getScheduleTime(schedule: string | null) {
@@ -65,14 +80,20 @@ export default function ParentCalendar() {
   const { childrenProfile, activeChildId } = useParentData();
   const { width } = useWindowDimensions();
   const now = new Date();
-  const [currentDate, setCurrentDate] = useState({ year: now.getFullYear(), month: now.getMonth() });
+  const [currentDate, setCurrentDate] = useState({
+    year: now.getFullYear(),
+    month: now.getMonth(),
+  });
   const [selectedDay, setSelectedDay] = useState(now.getDate());
   const [enrollments, setEnrollments] = useState<CalendarEnrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
+  const horizontalPadding = isDesktop
+    ? LAYOUT.dashboardHorizontalPaddingDesktop
+    : 20;
   const activeChild =
-    childrenProfile.find((child) => child.id === activeChildId) || childrenProfile[0];
+    childrenProfile.find((child) => child.id === activeChildId) ||
+    childrenProfile[0];
 
   const days = getCalendarDays(currentDate.year, currentDate.month);
   const selectedDate = useMemo(
@@ -80,7 +101,10 @@ export default function ParentCalendar() {
     [currentDate.month, currentDate.year, selectedDay],
   );
   const selectedEvents = useMemo(
-    () => enrollments.filter((item) => scheduleMatchesDate(item.group_schedule, selectedDate)),
+    () =>
+      enrollments.filter((item) =>
+        scheduleMatchesDate(item.group_schedule, selectedDate),
+      ),
     [enrollments, selectedDate],
   );
 
@@ -88,7 +112,12 @@ export default function ParentCalendar() {
     let cancelled = false;
 
     const loadCalendar = async () => {
-      if (!supabase || !isSupabaseConfigured || !user?.id || !activeChild?.name) {
+      if (
+        !supabase ||
+        !isSupabaseConfigured ||
+        !user?.id ||
+        !activeChild?.name
+      ) {
         setEnrollments([]);
         setLoading(false);
         return;
@@ -121,7 +150,7 @@ export default function ParentCalendar() {
   }, [activeChild?.id, activeChild?.name, user?.id]);
 
   const shiftMonth = (delta: number) => {
-    setCurrentDate(prev => {
+    setCurrentDate((prev) => {
       const d = new Date(prev.year, prev.month + delta);
       return { year: d.getFullYear(), month: d.getMonth() };
     });
@@ -130,32 +159,56 @@ export default function ParentCalendar() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
-      <LinearGradient
-        colors={COLORS.gradients.header as any}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
-      >
-        <SafeAreaView edges={["top"]}>
-          <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12, paddingBottom: 32 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
-              <Text style={{ fontSize: 20, fontWeight: "800", color: "white" }}>Календарь</Text>
-            </View>
-            
-            <View className="flex-row justify-between items-center">
-               <Text className="text-white text-2xl font-black">{MONTHS[currentDate.month]} {currentDate.year}</Text>
-               <View className="flex-row gap-2">
-                  <Pressable onPress={() => shiftMonth(-1)} className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center">
-                     <Feather name="chevron-left" size={20} color="white" />
+        <LinearGradient
+          colors={COLORS.gradients.header as any}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+        >
+          <SafeAreaView edges={["top"]}>
+            <View
+              style={{
+                paddingHorizontal: horizontalPadding,
+                paddingTop: 12,
+                paddingBottom: 32,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 20,
+                }}
+              >
+                <Text
+                  style={{ fontSize: 20, fontWeight: "800", color: "white" }}
+                >
+                  Календарь
+                </Text>
+              </View>
+
+              <View className="flex-row justify-between items-center">
+                <Text className="text-white text-2xl font-black">
+                  {MONTHS[currentDate.month]} {currentDate.year}
+                </Text>
+                <View className="flex-row gap-2">
+                  <Pressable
+                    onPress={() => shiftMonth(-1)}
+                    className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
+                  >
+                    <Feather name="chevron-left" size={20} color="white" />
                   </Pressable>
-                  <Pressable onPress={() => shiftMonth(1)} className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center">
-                     <Feather name="chevron-right" size={20} color="white" />
+                  <Pressable
+                    onPress={() => shiftMonth(1)}
+                    className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
+                  >
+                    <Feather name="chevron-right" size={20} color="white" />
                   </Pressable>
-               </View>
+                </View>
+              </View>
             </View>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+          </SafeAreaView>
+        </LinearGradient>
       </View>
 
       <ScrollView
@@ -171,39 +224,100 @@ export default function ParentCalendar() {
         showsVerticalScrollIndicator={false}
       >
         {/* Calendar Grid */}
-        <View style={{ ...SHADOWS.md, backgroundColor: "white", borderRadius: 32, padding: 20, marginBottom: 32, borderWidth: 1, borderColor: "#F9FAFB" }}>
-           {/* Weekday headers */}
-           <View style={{ flexDirection: "row", marginBottom: 8 }}>
-              {WEEKDAYS.map(d => (
-                 <Text key={d} style={{ flex: 1, textAlign: "center", fontSize: 10, fontWeight: "900", color: "#9CA3AF", textTransform: "uppercase", letterSpacing: 1 }}>{d}</Text>
-              ))}
-           </View>
-           {/* Day cells — fixed 40px height avoids giant cells on wide web */}
-           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-              {days.map((day, idx) => (
-                 <View key={idx} style={{ width: "14.2857%", height: 44, padding: 2, alignItems: "center", justifyContent: "center" }}>
-                    {day && (
-                       <Pressable
-                          onPress={() => setSelectedDay(day)}
+        <View
+          style={{
+            ...SHADOWS.md,
+            backgroundColor: "white",
+            borderRadius: 32,
+            padding: 20,
+            marginBottom: 32,
+            borderWidth: 1,
+            borderColor: "#F9FAFB",
+          }}
+        >
+          {/* Weekday headers */}
+          <View style={{ flexDirection: "row", marginBottom: 8 }}>
+            {WEEKDAYS.map((d) => (
+              <Text
+                key={d}
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  fontSize: 10,
+                  fontWeight: "900",
+                  color: "#9CA3AF",
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                }}
+              >
+                {d}
+              </Text>
+            ))}
+          </View>
+          {/* Day cells — fixed 40px height avoids giant cells on wide web */}
+          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+            {days.map((day, idx) => (
+              <View
+                key={idx}
+                style={{
+                  width: "14.2857%",
+                  height: 44,
+                  padding: 2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {day && (
+                  <Pressable
+                    onPress={() => setSelectedDay(day)}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: 12,
+                      backgroundColor:
+                        day === selectedDay ? "#7C3AED" : "transparent",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 14,
+                        color: day === selectedDay ? "white" : "#111827",
+                      }}
+                    >
+                      {day}
+                    </Text>
+                    {enrollments.some((item) =>
+                      scheduleMatchesDate(
+                        item.group_schedule,
+                        new Date(currentDate.year, currentDate.month, day),
+                      ),
+                    ) &&
+                      day !== selectedDay && (
+                        <View
                           style={{
-                            width: "100%", height: "100%", borderRadius: 12,
-                            backgroundColor: day === selectedDay ? "#7C3AED" : "transparent",
-                            alignItems: "center", justifyContent: "center",
+                            position: "absolute",
+                            bottom: 4,
+                            width: 4,
+                            height: 4,
+                            borderRadius: 2,
+                            backgroundColor: "#7C3AED",
                           }}
-                       >
-                          <Text style={{ fontWeight: "700", fontSize: 14, color: day === selectedDay ? "white" : "#111827" }}>{day}</Text>
-                          {enrollments.some((item) => scheduleMatchesDate(item.group_schedule, new Date(currentDate.year, currentDate.month, day))) && day !== selectedDay && (
-                             <View style={{ position: "absolute", bottom: 4, width: 4, height: 4, borderRadius: 2, backgroundColor: "#7C3AED" }} />
-                          )}
-                       </Pressable>
-                    )}
-                 </View>
-              ))}
-           </View>
+                        />
+                      )}
+                  </Pressable>
+                )}
+              </View>
+            ))}
+          </View>
         </View>
 
-        <Text className="text-xl font-black text-gray-900 mb-4 px-1">Занятия на {selectedDay} {MONTHS[currentDate.month].toLowerCase()}</Text>
-        
+        <Text className="text-xl font-black text-gray-900 mb-4 px-1">
+          Занятия на {selectedDay} {MONTHS[currentDate.month].toLowerCase()}
+        </Text>
+
         {loading ? (
           <View className="bg-gray-50 rounded-[32px] p-10 items-center border border-gray-100">
             <ActivityIndicator size="small" color={COLORS.primary} />
@@ -211,15 +325,60 @@ export default function ParentCalendar() {
         ) : selectedEvents.length > 0 ? (
           <View style={{ gap: 12 }}>
             {selectedEvents.map((item) => (
-              <View key={item.id} style={{ ...SHADOWS.sm, backgroundColor: "white", borderRadius: 24, padding: 16, borderWidth: 1, borderColor: "#F3F4F6" }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-                  <View style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: COLORS.primary + "12", alignItems: "center", justifyContent: "center" }}>
-                    <Feather name="book-open" size={20} color={COLORS.primary} />
+              <View
+                key={item.id}
+                style={{
+                  ...SHADOWS.sm,
+                  backgroundColor: "white",
+                  borderRadius: 24,
+                  padding: 16,
+                  borderWidth: 1,
+                  borderColor: "#F3F4F6",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 16,
+                      backgroundColor: COLORS.primary + "12",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Feather
+                      name="book-open"
+                      size={20}
+                      color={COLORS.primary}
+                    />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 15, fontWeight: "900", color: COLORS.foreground }}>{item.club ?? "Занятие"}</Text>
-                    <Text style={{ fontSize: 12, fontWeight: "700", color: COLORS.mutedForeground, marginTop: 3 }}>
-                      {item.group_name || "Группа"} · {getScheduleTime(item.group_schedule)}
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "900",
+                        color: COLORS.foreground,
+                      }}
+                    >
+                      {item.club ?? "Занятие"}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: "700",
+                        color: COLORS.mutedForeground,
+                        marginTop: 3,
+                      }}
+                    >
+                      {item.group_name || "Группа"} ·{" "}
+                      {getScheduleTime(item.group_schedule)}
                     </Text>
                   </View>
                 </View>
@@ -228,10 +387,12 @@ export default function ParentCalendar() {
           </View>
         ) : (
           <View className="bg-gray-50 rounded-[32px] p-10 items-center border border-gray-100">
-             <View className="w-16 h-16 bg-white rounded-3xl items-center justify-center mb-4 border border-gray-100">
-                <Feather name="coffee" size={28} color="#D1D5DB" />
-             </View>
-             <Text className="text-gray-400 font-bold text-center">На этот день ничего не запланировано</Text>
+            <View className="w-16 h-16 bg-white rounded-3xl items-center justify-center mb-4 border border-gray-100">
+              <Feather name="coffee" size={28} color="#D1D5DB" />
+            </View>
+            <Text className="text-gray-400 font-bold text-center">
+              На этот день ничего не запланировано
+            </Text>
           </View>
         )}
       </ScrollView>

@@ -23,8 +23,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
 import type { UserRole } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ROLES: {
   title: string;
@@ -87,11 +87,19 @@ export default function CompleteProfile() {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (isLoading) return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: "center", justifyContent: "center" }}>
-      <ActivityIndicator size="large" color={COLORS.primary} />
-    </View>
-  );
+  if (isLoading)
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.background,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
 
   const currentRoleInfo = ROLES.find((r) => r.role === selectedRole)!;
 
@@ -142,7 +150,9 @@ export default function CompleteProfile() {
               </View>
 
               <Text style={styles.title}>
-                {displayName ? `Добро пожаловать,\n${displayName}!` : "Добро пожаловать!"}
+                {displayName
+                  ? `Добро пожаловать,\n${displayName}!`
+                  : "Добро пожаловать!"}
               </Text>
               <Text style={styles.subtitle}>
                 {user?.email ? user.email : ""}
@@ -163,7 +173,10 @@ export default function CompleteProfile() {
                     animate={{ opacity: 1, translateX: 0 }}
                     transition={{ delay: 100 + idx * 60, duration: 400 }}
                   >
-                    <PressableScale onPress={() => setSelectedRole(item.role)} scaleTo={0.98}>
+                    <PressableScale
+                      onPress={() => setSelectedRole(item.role)}
+                      scaleTo={0.98}
+                    >
                       <View
                         style={[
                           styles.roleCard,
@@ -176,7 +189,10 @@ export default function CompleteProfile() {
                       >
                         <LinearGradient
                           colors={item.gradient}
-                          style={[styles.roleIcon, isSelected && styles.roleIconSelected]}
+                          style={[
+                            styles.roleIcon,
+                            isSelected && styles.roleIconSelected,
+                          ]}
                         >
                           <Feather name={item.icon} size={22} color="white" />
                         </LinearGradient>
@@ -190,11 +206,18 @@ export default function CompleteProfile() {
                           >
                             {item.title}
                           </Text>
-                          <Text style={styles.roleDesc}>{item.description}</Text>
+                          <Text style={styles.roleDesc}>
+                            {item.description}
+                          </Text>
                         </View>
 
                         {isSelected && (
-                          <View style={[styles.checkCircle, { backgroundColor: item.color }]}>
+                          <View
+                            style={[
+                              styles.checkCircle,
+                              { backgroundColor: item.color },
+                            ]}
+                          >
                             <Feather name="check" size={14} color="white" />
                           </View>
                         )}
@@ -221,7 +244,13 @@ export default function CompleteProfile() {
                   {isSubmitting ? (
                     <ActivityIndicator color="white" />
                   ) : (
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
                       <Text style={styles.continueBtnText}>Продолжить</Text>
                       <Feather name="arrow-right" size={20} color="white" />
                     </View>
@@ -239,7 +268,11 @@ export default function CompleteProfile() {
                 Вы сможете изменить роль позже в настройках профиля
               </Text>
 
-              <PressableScale onPress={() => logout()} style={styles.signOutBtn} scaleTo={0.97}>
+              <PressableScale
+                onPress={() => logout()}
+                style={styles.signOutBtn}
+                scaleTo={0.97}
+              >
                 <Feather name="log-out" size={15} color="#EF4444" />
                 <Text style={styles.signOutText}>Выйти из аккаунта</Text>
               </PressableScale>

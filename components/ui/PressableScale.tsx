@@ -1,5 +1,12 @@
 import React, { useRef } from "react";
-import { Animated, Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import {
+  Animated,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 
 interface PressableScaleProps extends Omit<PressableProps, "style"> {
   children: React.ReactNode;
@@ -16,10 +23,26 @@ interface PressableScaleProps extends Omit<PressableProps, "style"> {
 // Everything else (width, height, padding, backgroundColor, flexDirection, etc.)
 // goes on the inner Animated.View so visuals and children layout correctly.
 const OUTER_PROPS = new Set([
-  "position", "top", "bottom", "left", "right", "zIndex",
-  "flex", "flexGrow", "flexShrink", "flexBasis", "alignSelf",
-  "margin", "marginTop", "marginBottom", "marginLeft", "marginRight",
-  "marginHorizontal", "marginVertical", "marginStart", "marginEnd",
+  "position",
+  "top",
+  "bottom",
+  "left",
+  "right",
+  "zIndex",
+  "flex",
+  "flexGrow",
+  "flexShrink",
+  "flexBasis",
+  "alignSelf",
+  "margin",
+  "marginTop",
+  "marginBottom",
+  "marginLeft",
+  "marginRight",
+  "marginHorizontal",
+  "marginVertical",
+  "marginStart",
+  "marginEnd",
 ]);
 
 function splitStyle(style: StyleProp<ViewStyle>) {

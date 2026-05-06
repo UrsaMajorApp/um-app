@@ -8,13 +8,11 @@
 
 import { useCallback, useRef, useState } from "react";
 import {
+  ANCHOR_MAP,
   CAREER_CARDS,
   PRO_TASKS_1517,
-  ANCHOR_MAP,
   type AnchorType,
-  type StealthEvent1517,
-  type CareerCard,
-  type ProTask1517,
+  type StealthEvent1517
 } from "../data/diagnosticData1517";
 import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
 import type { Diagnostic } from "../models/types";
@@ -36,17 +34,22 @@ export function useDiagnosticEngine1517(opts: {
   const [results, setResults] = useState<Diagnostic | null>(null);
 
   // Collected data
-  const basicVotes = useRef<{ cardId: string; anchor: AnchorType; liked: boolean; latency: number }[]>([]);
+  const basicVotes = useRef<
+    { cardId: string; anchor: AnchorType; liked: boolean; latency: number }[]
+  >([]);
   const stealthEvents = useRef<StealthEvent1517[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
 
   // ── Progress ──
   const totalSteps = CAREER_CARDS.length + (isPro ? PRO_TASKS_1517.length : 0);
   const currentStep =
-    phase === "basic" ? basicIndex
-      : phase === "pro" ? CAREER_CARDS.length + proIndex
-      : phase === "processing" || phase === "done" ? totalSteps
-      : 0;
+    phase === "basic"
+      ? basicIndex
+      : phase === "pro"
+        ? CAREER_CARDS.length + proIndex
+        : phase === "processing" || phase === "done"
+          ? totalSteps
+          : 0;
   const progress = totalSteps > 0 ? currentStep / totalSteps : 0;
 
   // ── Transitions ──
@@ -73,7 +76,12 @@ export function useDiagnosticEngine1517(opts: {
       if (!card) return;
 
       const latency = Date.now() - taskEnteredAt.current;
-      basicVotes.current.push({ cardId: card.id, anchor: card.anchor, liked, latency });
+      basicVotes.current.push({
+        cardId: card.id,
+        anchor: card.anchor,
+        liked,
+        latency,
+      });
 
       const nextIndex = basicIndex + 1;
       if (nextIndex < CAREER_CARDS.length) {
@@ -83,7 +91,7 @@ export function useDiagnosticEngine1517(opts: {
         await advanceToPro();
       }
     },
-    [basicIndex, advanceToPro]
+    [basicIndex, advanceToPro],
   );
 
   // ── PRO: Answer ──
@@ -111,17 +119,23 @@ export function useDiagnosticEngine1517(opts: {
         await finishDiagnostic();
       }
     },
-    [proIndex]
+    [proIndex],
   );
 
   // ── Scoring ──
   const computeResults = useCallback(() => {
     // 1. Career Anchors from basic (with Stealth Analytics: Latency Math)
-    const anchorCounts: Record<AnchorType, number> = { 
-      Autonomy: 0, Stability: 0, Mastery: 0, Management: 0, 
-      Entrepreneurship: 0, Service: 0, Challenge: 0, Lifestyle: 0 
+    const anchorCounts: Record<AnchorType, number> = {
+      Autonomy: 0,
+      Stability: 0,
+      Mastery: 0,
+      Management: 0,
+      Entrepreneurship: 0,
+      Service: 0,
+      Challenge: 0,
+      Lifestyle: 0,
     };
-    basicVotes.current.forEach((v) => { 
+    basicVotes.current.forEach((v) => {
       if (v.liked) {
         let weight = 1.0;
         if (v.latency < 2000) weight = 1.2; // Быстро и уверенно (K_latency)
@@ -129,9 +143,10 @@ export function useDiagnosticEngine1517(opts: {
         anchorCounts[v.anchor] += weight;
       }
     });
-    
-    const sortedAnchors = (Object.entries(anchorCounts) as [AnchorType, number][])
-      .sort((a, b) => b[1] - a[1]);
+
+    const sortedAnchors = (
+      Object.entries(anchorCounts) as [AnchorType, number][]
+    ).sort((a, b) => b[1] - a[1]);
     const top3Anchors = sortedAnchors.slice(0, 3);
     const weakestAnchor = sortedAnchors.slice(-1)[0];
 
@@ -160,11 +175,14 @@ export function useDiagnosticEngine1517(opts: {
       }
     });
 
-    const stealthProfile = 
-      franticCount > 1 ? "Склонен к панике при жестких дедлайнах (Высокий риск выгорания)" :
-      erasedCount > 1 ? "Высокий EQ (Обдумывает резкие ответы перед отправкой)" :
-      fastClicks > 4 ? "Низкое внимание к деталям (Игнорирует длинные тексты)" : 
-      "Ответственный Исполнитель (Стрессоустойчив, сбалансирован)";
+    const stealthProfile =
+      franticCount > 1
+        ? "Склонен к панике при жестких дедлайнах (Высокий риск выгорания)"
+        : erasedCount > 1
+          ? "Высокий EQ (Обдумывает резкие ответы перед отправкой)"
+          : fastClicks > 4
+            ? "Низкое внимание к деталям (Игнорирует длинные тексты)"
+            : "Ответственный Исполнитель (Стрессоустойчив, сбалансирован)";
 
     const scores: Record<string, number> = { ...anchorCounts, ...proScores };
 
@@ -175,15 +193,18 @@ export function useDiagnosticEngine1517(opts: {
       proScores,
       stealthProfile,
       fastClicks,
-      franticCount
+      franticCount,
     };
   }, []);
 
-  const processWithAI = useCallback(async (computed: ReturnType<typeof computeResults>) => {
-    const topSkillsStr = computed.top3Anchors.map(t => ANCHOR_MAP[t[0]]).join(", ");
-    const weakSkillStr = ANCHOR_MAP[computed.weakestAnchor[0]];
+  const processWithAI = useCallback(
+    async (computed: ReturnType<typeof computeResults>) => {
+      const topSkillsStr = computed.top3Anchors
+        .map((t) => ANCHOR_MAP[t[0]])
+        .join(", ");
+      const weakSkillStr = ANCHOR_MAP[computed.weakestAnchor[0]];
 
-    const prompt = `Analyze diagnostic data for a 15-17 year old teenager ("Architects" group).
+      const prompt = `Analyze diagnostic data for a 15-17 year old teenager ("Architects" group).
 BASIC (Career Anchors): Top drivers: ${topSkillsStr}. Weak area: ${weakSkillStr}.
 ${isPro ? `PRO (Office Simulation): Scores: ${JSON.stringify(computed.proScores)}. Stealth Analytics: ${computed.stealthProfile}` : ""}
 
@@ -191,17 +212,23 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
 {
   "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Professional 2-word talent title in Russian (e.g. 'Data Scientist')"
-  ${isPro ? `,
+  ${
+    isPro
+      ? `,
   "topStrengths": ["Top 3 Hard/Soft skills in Russian"],
   "developmentAreas": ["1-2 growth areas (e.g., Attention to routine)"],
   "intellectType": "Type of intelligence & recommended UNT (ЕНТ) profile in Russian",
   "personalityBehavior": "Personality pattern and Burnout Risk based on stealth data: ${computed.stealthProfile}. In Russian.",
   "careerArchetypes": ["3 future career vectors based on Shain anchors and UNT"],
-  "parentAdvice": "Pragmatic advice for parents in Russian regarding university prep and burnout prevention"` : ""}
+  "parentAdvice": "Pragmatic advice for parents in Russian regarding university prep and burnout prevention"`
+      : ""
+  }
 }`;
 
-    return generateGeminiDiagnosticJson(prompt);
-  }, [isPro]);
+      return generateGeminiDiagnosticJson(prompt);
+    },
+    [isPro],
+  );
 
   const finishDiagnostic = useCallback(async () => {
     setPhase("processing");
@@ -215,14 +242,26 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
       aiData = {
         summary: "Сильная сторона подростка — самоорганизация и лидерство.",
         recommendedConstellation: "Менеджер Проектов",
-        ...(isPro ? {
-          topStrengths: ["Стрессоустойчивость", "Командная работа", "Аналитическое мышление"],
-          developmentAreas: ["Внимание к рутинным документам"],
-          intellectType: "Аналитико-Математический (ЕНТ: Физмат / Информатика)",
-          personalityBehavior: computed.stealthProfile,
-          careerArchetypes: ["Data Scientist", "Backend-разработчик", "Продакт-менеджер"],
-          parentAdvice: "Поддерживайте фокус на технических навыках. Риск выгорания низкий, подросток хорошо справляется со стрессом."
-        } : {})
+        ...(isPro
+          ? {
+              topStrengths: [
+                "Стрессоустойчивость",
+                "Командная работа",
+                "Аналитическое мышление",
+              ],
+              developmentAreas: ["Внимание к рутинным документам"],
+              intellectType:
+                "Аналитико-Математический (ЕНТ: Физмат / Информатика)",
+              personalityBehavior: computed.stealthProfile,
+              careerArchetypes: [
+                "Data Scientist",
+                "Backend-разработчик",
+                "Продакт-менеджер",
+              ],
+              parentAdvice:
+                "Поддерживайте фокус на технических навыках. Риск выгорания низкий, подросток хорошо справляется со стрессом.",
+            }
+          : {}),
       };
     }
 
@@ -239,18 +278,22 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
         franticCount: computed.franticCount,
         stealthProfile: computed.stealthProfile,
       },
-      ...(isPro ? {
-        topStrengths: aiData.topStrengths,
-        developmentAreas: aiData.developmentAreas,
-        intellectType: aiData.intellectType,
-        personalityBehavior: aiData.personalityBehavior,
-        careerArchetypes: aiData.careerArchetypes,
-        parentAdvice: aiData.parentAdvice,
-      } : {})
+      ...(isPro
+        ? {
+            topStrengths: aiData.topStrengths,
+            developmentAreas: aiData.developmentAreas,
+            intellectType: aiData.intellectType,
+            personalityBehavior: aiData.personalityBehavior,
+            careerArchetypes: aiData.careerArchetypes,
+            parentAdvice: aiData.parentAdvice,
+          }
+        : {}),
     };
 
     setResults(diagnostic);
-    try { await onComplete(diagnostic); } catch (e) {}
+    try {
+      await onComplete(diagnostic);
+    } catch (e) {}
     setIsProcessing(false);
     setPhase("done");
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
@@ -269,7 +312,9 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
     startBasic,
     handleCareerSwipe,
     handleProAnswer,
-    markTaskEntry: () => { taskEnteredAt.current = Date.now(); },
-    finishDiagnostic
+    markTaskEntry: () => {
+      taskEnteredAt.current = Date.now();
+    },
+    finishDiagnostic,
   };
 }

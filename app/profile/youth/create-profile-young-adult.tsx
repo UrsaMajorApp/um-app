@@ -3,14 +3,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LAYOUT } from "../../../constants/theme";
@@ -71,10 +71,7 @@ export default function CreateProfileYoungAdult() {
               paddingHorizontal: horizontalPadding,
             }}
           >
-            <TouchableOpacity
-              onPress={handleBack}
-              className="p-2 mr-2"
-            >
+            <TouchableOpacity onPress={handleBack} className="p-2 mr-2">
               <Feather name="arrow-left" size={24} color="white" />
             </TouchableOpacity>
             <Text className="text-xl font-bold text-white">

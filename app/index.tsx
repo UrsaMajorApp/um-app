@@ -12,7 +12,10 @@ const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, string>> = {
 
 export default function Index() {
   const { user, isLoading } = useAuth();
-  const params = useLocalSearchParams<{ error?: string; error_code?: string }>();
+  const params = useLocalSearchParams<{
+    error?: string;
+    error_code?: string;
+  }>();
 
   if (isLoading) return null;
 
@@ -27,7 +30,11 @@ export default function Index() {
       if (user.hasSelectedRole === false) {
         return <Redirect href="/auth/complete-profile" />;
       }
-      return <Redirect href={(PROFILE_SETUP_ROUTES[user.role] ?? "/(tabs)/home") as any} />;
+      return (
+        <Redirect
+          href={(PROFILE_SETUP_ROUTES[user.role] ?? "/(tabs)/home") as any}
+        />
+      );
     }
     return <Redirect href="/(tabs)/home" />;
   }

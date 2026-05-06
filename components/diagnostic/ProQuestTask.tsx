@@ -7,14 +7,9 @@ import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SHADOWS } from "../../constants/theme";
 import type { ProTask } from "../../data/diagnosticData";
-import { COLORS, RADIUS, SHADOWS } from "../../constants/theme";
 
 interface Props {
   task: ProTask;

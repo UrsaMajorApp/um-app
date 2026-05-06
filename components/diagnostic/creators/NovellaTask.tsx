@@ -5,12 +5,11 @@
  * messenger style. Messages appear from virtual friends (Макс, Алиса)
  * or the SYSTEM.
  */
-import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
+import { RADIUS, SHADOWS } from "../../../constants/theme";
 import type { ProTask911 } from "../../../data/diagnosticData911";
 
 const SPEAKER_CONFIG = {
@@ -65,7 +64,9 @@ export default function NovellaTask({ task, index, total, onAnswer }: Props) {
       {/* Act label */}
       <View style={styles.actRow}>
         <Text style={styles.actLabel}>{ACT_LABELS[task.act]}</Text>
-        <Text style={styles.stepLabel}>{index + 1} / {total}</Text>
+        <Text style={styles.stepLabel}>
+          {index + 1} / {total}
+        </Text>
       </View>
 
       {/* Construct tag */}
@@ -83,7 +84,9 @@ export default function NovellaTask({ task, index, total, onAnswer }: Props) {
           {/* Speaker */}
           <View style={styles.speakerRow}>
             <Text style={styles.speakerAvatar}>{cfg.avatar}</Text>
-            <Text style={[styles.speakerName, { color: cfg.nameColor }]}>{cfg.name}</Text>
+            <Text style={[styles.speakerName, { color: cfg.nameColor }]}>
+              {cfg.name}
+            </Text>
           </View>
 
           {/* Message text */}
@@ -102,7 +105,11 @@ export default function NovellaTask({ task, index, total, onAnswer }: Props) {
               key={opt.id}
               from={{ opacity: 0, translateX: 20 }}
               animate={{ opacity: 1, translateX: 0 }}
-              transition={{ type: "timing", duration: 300, delay: 200 + i * 80 }}
+              transition={{
+                type: "timing",
+                duration: 300,
+                delay: 200 + i * 80,
+              }}
             >
               <TouchableOpacity
                 onPress={() => onAnswer(opt.id)}

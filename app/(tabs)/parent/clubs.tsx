@@ -23,8 +23,14 @@ import {
 
 // Skill-based filter chips shown in the catalog
 const SKILL_FILTERS = [
-  "Все", "Код", "Логика", "Математика", "Дизайн",
-  "Языки", "Команда", "Креативность",
+  "Все",
+  "Код",
+  "Логика",
+  "Математика",
+  "Дизайн",
+  "Языки",
+  "Команда",
+  "Креативность",
 ];
 
 export default function ParentClubs() {
@@ -34,7 +40,9 @@ export default function ParentClubs() {
   const [activeSkill, setActiveSkill] = useState("Все");
   const [search, setSearch] = useState("");
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
+  const horizontalPadding = isDesktop
+    ? LAYOUT.dashboardHorizontalPaddingDesktop
+    : 20;
 
   const { courses, loading } = usePublicCourses();
 
@@ -76,45 +84,90 @@ export default function ParentClubs() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
-      <LinearGradient
-        colors={COLORS.gradients.header as any}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
-      >
-        <SafeAreaView edges={["top"]}>
-          <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12, paddingBottom: 32 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
-              <Text style={{ fontSize: 20, fontWeight: "800", color: "white", flex: 1 }}>
-                Каталог кружков
-              </Text>
-              <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, fontWeight: "600" }}>
-                {courses.length > 0 ? `${courses.length} курсов` : ""}
-              </Text>
-            </View>
+        <LinearGradient
+          colors={COLORS.gradients.header as any}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+        >
+          <SafeAreaView edges={["top"]}>
+            <View
+              style={{
+                paddingHorizontal: horizontalPadding,
+                paddingTop: 12,
+                paddingBottom: 32,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 20,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "800",
+                    color: "white",
+                    flex: 1,
+                  }}
+                >
+                  Каталог кружков
+                </Text>
+                <Text
+                  style={{
+                    color: "rgba(255,255,255,0.6)",
+                    fontSize: 13,
+                    fontWeight: "600",
+                  }}
+                >
+                  {courses.length > 0 ? `${courses.length} курсов` : ""}
+                </Text>
+              </View>
 
-            <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: "rgba(255,255,255,0.15)", borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, borderWidth: 1, borderColor: "rgba(255,255,255,0.2)" }}>
-              <Feather name="search" size={18} color="rgba(255,255,255,0.6)" style={{ marginRight: 10 }} />
-              <TextInput
-                value={search}
-                onChangeText={setSearch}
-                placeholder="Найти кружок..."
-                placeholderTextColor="rgba(255,255,255,0.6)"
-                style={{ flex: 1, color: "white", fontWeight: "500" }}
-              />
-              {search.length > 0 && (
-                <Pressable onPress={() => setSearch("")}>
-                  <Feather name="x" size={16} color="rgba(255,255,255,0.6)" />
-                </Pressable>
-              )}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  borderRadius: 16,
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderWidth: 1,
+                  borderColor: "rgba(255,255,255,0.2)",
+                }}
+              >
+                <Feather
+                  name="search"
+                  size={18}
+                  color="rgba(255,255,255,0.6)"
+                  style={{ marginRight: 10 }}
+                />
+                <TextInput
+                  value={search}
+                  onChangeText={setSearch}
+                  placeholder="Найти кружок..."
+                  placeholderTextColor="rgba(255,255,255,0.6)"
+                  style={{ flex: 1, color: "white", fontWeight: "500" }}
+                />
+                {search.length > 0 && (
+                  <Pressable onPress={() => setSearch("")}>
+                    <Feather name="x" size={16} color="rgba(255,255,255,0.6)" />
+                  </Pressable>
+                )}
+              </View>
             </View>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+          </SafeAreaView>
+        </LinearGradient>
       </View>
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: horizontalPadding, paddingTop: 24, paddingBottom: 120 }}
+        contentContainerStyle={{
+          paddingHorizontal: horizontalPadding,
+          paddingTop: 24,
+          paddingBottom: 120,
+        }}
         showsVerticalScrollIndicator={false}
       >
         {/* Skill filter chips */}
@@ -137,7 +190,13 @@ export default function ParentClubs() {
                 borderColor: activeSkill === skill ? "#6C5CE7" : "#E5E7EB",
               }}
             >
-              <Text style={{ fontWeight: "700", fontSize: 13, color: activeSkill === skill ? "white" : "#6B7280" }}>
+              <Text
+                style={{
+                  fontWeight: "700",
+                  fontSize: 13,
+                  color: activeSkill === skill ? "white" : "#6B7280",
+                }}
+              >
                 {skill}
               </Text>
             </Pressable>
@@ -146,87 +205,235 @@ export default function ParentClubs() {
 
         {/* Loading */}
         {loading && (
-          <ActivityIndicator size="large" color="#6C5CE7" style={{ marginVertical: 60 }} />
+          <ActivityIndicator
+            size="large"
+            color="#6C5CE7"
+            style={{ marginVertical: 60 }}
+          />
         )}
 
         {/* Empty DB state */}
         {!loading && courses.length === 0 && (
           <View style={{ alignItems: "center", paddingVertical: 60 }}>
             <Feather name="inbox" size={48} color="#E5E7EB" />
-            <Text style={{ marginTop: 16, fontSize: 18, fontWeight: "800", color: "#1F2937", textAlign: "center" }}>
+            <Text
+              style={{
+                marginTop: 16,
+                fontSize: 18,
+                fontWeight: "800",
+                color: "#1F2937",
+                textAlign: "center",
+              }}
+            >
               Курсов пока нет
             </Text>
-            <Text style={{ marginTop: 8, color: "#6B7280", textAlign: "center", lineHeight: 20 }}>
+            <Text
+              style={{
+                marginTop: 8,
+                color: "#6B7280",
+                textAlign: "center",
+                lineHeight: 20,
+              }}
+            >
               Организации ещё не добавили курсы.{"\n"}Загляните позже.
             </Text>
           </View>
         )}
 
         {/* AI Recommendations */}
-        {!loading && activeChild?.talentProfile && recommendedCourses.length > 0 && search === "" && activeSkill === "Все" && (
-          <View style={{ marginBottom: 32 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 16, paddingHorizontal: 4 }}>
-              <View style={{ width: 32, height: 32, backgroundColor: "#EDE9FE", borderRadius: 16, alignItems: "center", justifyContent: "center" }}>
-                <Feather name="zap" size={16} color="#6C5CE7" />
-              </View>
-              <View>
-                <Text style={{ fontSize: 18, fontWeight: "900", color: "#111827" }}>
-                  Идеально для {activeChild.name}
-                </Text>
-                <Text style={{ fontSize: 10, fontWeight: "800", color: "#6C5CE7", textTransform: "uppercase", letterSpacing: 0.5 }}>
-                  Подобрано ИИ · Карта Талантов
-                </Text>
-              </View>
-            </View>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
-              {recommendedCourses.map((club, idx) => {
-                const grad = courseGradient(idx);
-                return (
-                  <Pressable
-                    key={club.id}
-                    onPress={() => router.push(`/parent/club/${club.id}` as any)}
-                    style={[SHADOWS.md, { marginRight: 16, width: 220, backgroundColor: "white", borderRadius: 28, padding: 4, borderWidth: 1, borderColor: "#EDE9FE" }]}
+        {!loading &&
+          activeChild?.talentProfile &&
+          recommendedCourses.length > 0 &&
+          search === "" &&
+          activeSkill === "Все" && (
+            <View style={{ marginBottom: 32 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 16,
+                  paddingHorizontal: 4,
+                }}
+              >
+                <View
+                  style={{
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "#EDE9FE",
+                    borderRadius: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Feather name="zap" size={16} color="#6C5CE7" />
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "900",
+                      color: "#111827",
+                    }}
                   >
-                    <LinearGradient
-                      colors={grad}
-                      style={{ height: 110, borderRadius: 24, padding: 12, justifyContent: "space-between" }}
+                    Идеально для {activeChild.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      fontWeight: "800",
+                      color: "#6C5CE7",
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    Подобрано ИИ · Карта Талантов
+                  </Text>
+                </View>
+              </View>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ marginHorizontal: -4 }}
+              >
+                {recommendedCourses.map((club, idx) => {
+                  const grad = courseGradient(idx);
+                  return (
+                    <Pressable
+                      key={club.id}
+                      onPress={() =>
+                        router.push(`/parent/club/${club.id}` as any)
+                      }
+                      style={[
+                        SHADOWS.md,
+                        {
+                          marginRight: 16,
+                          width: 220,
+                          backgroundColor: "white",
+                          borderRadius: 28,
+                          padding: 4,
+                          borderWidth: 1,
+                          borderColor: "#EDE9FE",
+                        },
+                      ]}
                     >
-                      <View style={{ backgroundColor: "rgba(255,255,255,0.25)", alignSelf: "flex-start", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 }}>
-                        <Text style={{ color: "white", fontSize: 9, fontWeight: "900", textTransform: "uppercase" }}>Мастхэв</Text>
-                      </View>
-                      <Feather name={(club.icon as any) || "star"} size={30} color="rgba(255,255,255,0.8)" style={{ alignSelf: "flex-end" }} />
-                    </LinearGradient>
-                    <View style={{ padding: 12 }}>
-                      <Text style={{ fontWeight: "800", fontSize: 14, color: "#111827", marginBottom: 2 }} numberOfLines={1}>
-                        {club.title}
-                      </Text>
-                      {club.org_name ? (
-                        <Text style={{ fontSize: 11, color: "#9CA3AF", fontWeight: "600", marginBottom: 8 }} numberOfLines={1}>
-                          {club.org_name}
+                      <LinearGradient
+                        colors={grad}
+                        style={{
+                          height: 110,
+                          borderRadius: 24,
+                          padding: 12,
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <View
+                          style={{
+                            backgroundColor: "rgba(255,255,255,0.25)",
+                            alignSelf: "flex-start",
+                            paddingHorizontal: 8,
+                            paddingVertical: 3,
+                            borderRadius: 8,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "white",
+                              fontSize: 9,
+                              fontWeight: "900",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            Мастхэв
+                          </Text>
+                        </View>
+                        <Feather
+                          name={(club.icon as any) || "star"}
+                          size={30}
+                          color="rgba(255,255,255,0.8)"
+                          style={{ alignSelf: "flex-end" }}
+                        />
+                      </LinearGradient>
+                      <View style={{ padding: 12 }}>
+                        <Text
+                          style={{
+                            fontWeight: "800",
+                            fontSize: 14,
+                            color: "#111827",
+                            marginBottom: 2,
+                          }}
+                          numberOfLines={1}
+                        >
+                          {club.title}
                         </Text>
-                      ) : null}
-                      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                        <Text style={{ color: "#6C5CE7", fontWeight: "900", fontSize: 13 }}>
-                          {club.price.toLocaleString()} ₸
-                        </Text>
-                        <View style={{ backgroundColor: "#F9FAFB", padding: 6, borderRadius: 999 }}>
-                          <Feather name="arrow-right" size={13} color="#6B7280" />
+                        {club.org_name ? (
+                          <Text
+                            style={{
+                              fontSize: 11,
+                              color: "#9CA3AF",
+                              fontWeight: "600",
+                              marginBottom: 8,
+                            }}
+                            numberOfLines={1}
+                          >
+                            {club.org_name}
+                          </Text>
+                        ) : null}
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "#6C5CE7",
+                              fontWeight: "900",
+                              fontSize: 13,
+                            }}
+                          >
+                            {club.price.toLocaleString()} ₸
+                          </Text>
+                          <View
+                            style={{
+                              backgroundColor: "#F9FAFB",
+                              padding: 6,
+                              borderRadius: 999,
+                            }}
+                          >
+                            <Feather
+                              name="arrow-right"
+                              size={13}
+                              color="#6B7280"
+                            />
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-          </View>
-        )}
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
 
         {/* All courses list */}
         {!loading && courses.length > 0 && (
           <>
-            <Text style={{ fontSize: 18, fontWeight: "900", color: "#111827", marginBottom: 16, paddingHorizontal: 4 }}>
-              {search ? "Результаты поиска" : activeSkill === "Все" ? "Все кружки" : `Навык: ${activeSkill}`}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "900",
+                color: "#111827",
+                marginBottom: 16,
+                paddingHorizontal: 4,
+              }}
+            >
+              {search
+                ? "Результаты поиска"
+                : activeSkill === "Все"
+                  ? "Все кружки"
+                  : `Навык: ${activeSkill}`}
             </Text>
 
             <View style={{ gap: 12 }}>
@@ -235,27 +442,93 @@ export default function ParentClubs() {
                 return (
                   <Pressable
                     key={club.id}
-                    onPress={() => router.push(`/parent/club/${club.id}` as any)}
-                    style={[SHADOWS.sm, { flexDirection: "row", alignItems: "center", padding: 16, backgroundColor: "white", borderRadius: 24, borderWidth: 1, borderColor: "#F9FAFB" }]}
+                    onPress={() =>
+                      router.push(`/parent/club/${club.id}` as any)
+                    }
+                    style={[
+                      SHADOWS.sm,
+                      {
+                        flexDirection: "row",
+                        alignItems: "center",
+                        padding: 16,
+                        backgroundColor: "white",
+                        borderRadius: 24,
+                        borderWidth: 1,
+                        borderColor: "#F9FAFB",
+                      },
+                    ]}
                   >
-                    <View style={{ width: 60, height: 60, borderRadius: 18, backgroundColor: color + "15", alignItems: "center", justifyContent: "center", marginRight: 14 }}>
-                      <Feather name={(club.icon as any) || "book-open"} size={24} color={color} />
+                    <View
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 18,
+                        backgroundColor: color + "15",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginRight: 14,
+                      }}
+                    >
+                      <Feather
+                        name={(club.icon as any) || "book-open"}
+                        size={24}
+                        color={color}
+                      />
                     </View>
 
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontWeight: "800", fontSize: 15, color: "#111827" }} numberOfLines={1}>
+                      <Text
+                        style={{
+                          fontWeight: "800",
+                          fontSize: 15,
+                          color: "#111827",
+                        }}
+                        numberOfLines={1}
+                      >
                         {club.title}
                       </Text>
                       {club.org_name ? (
-                        <Text style={{ fontSize: 12, color: "#9CA3AF", fontWeight: "600", marginTop: 1 }} numberOfLines={1}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "#9CA3AF",
+                            fontWeight: "600",
+                            marginTop: 1,
+                          }}
+                          numberOfLines={1}
+                        >
                           {club.org_name}
                         </Text>
                       ) : null}
                       {club.skills.length > 0 && (
-                        <View style={{ flexDirection: "row", gap: 4, marginTop: 5, flexWrap: "wrap" }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            gap: 4,
+                            marginTop: 5,
+                            flexWrap: "wrap",
+                          }}
+                        >
                           {club.skills.slice(0, 3).map((s) => (
-                            <View key={s} style={{ backgroundColor: color + "15", paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6 }}>
-                              <Text style={{ fontSize: 9, fontWeight: "800", color, textTransform: "uppercase" }}>{s}</Text>
+                            <View
+                              key={s}
+                              style={{
+                                backgroundColor: color + "15",
+                                paddingHorizontal: 7,
+                                paddingVertical: 2,
+                                borderRadius: 6,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 9,
+                                  fontWeight: "800",
+                                  color,
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                {s}
+                              </Text>
                             </View>
                           ))}
                         </View>
@@ -263,11 +536,25 @@ export default function ParentClubs() {
                     </View>
 
                     <View style={{ alignItems: "flex-end", marginLeft: 8 }}>
-                      <Text style={{ color: "#6C5CE7", fontWeight: "900", fontSize: 13 }} numberOfLines={1}>
+                      <Text
+                        style={{
+                          color: "#6C5CE7",
+                          fontWeight: "900",
+                          fontSize: 13,
+                        }}
+                        numberOfLines={1}
+                      >
                         {club.price.toLocaleString()} ₸
                       </Text>
-                      {(club.age_min || club.age_max) ? (
-                        <Text style={{ fontSize: 10, color: "#9CA3AF", fontWeight: "700", marginTop: 2 }}>
+                      {club.age_min || club.age_max ? (
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            color: "#9CA3AF",
+                            fontWeight: "700",
+                            marginTop: 2,
+                          }}
+                        >
                           {club.age_min ?? ""}–{club.age_max ?? ""} лет
                         </Text>
                       ) : null}
@@ -280,7 +567,14 @@ export default function ParentClubs() {
             {filtered.length === 0 && (
               <View style={{ alignItems: "center", paddingVertical: 40 }}>
                 <Feather name="search" size={40} color="#E5E7EB" />
-                <Text style={{ marginTop: 12, color: "#9CA3AF", fontWeight: "700", textAlign: "center" }}>
+                <Text
+                  style={{
+                    marginTop: 12,
+                    color: "#9CA3AF",
+                    fontWeight: "700",
+                    textAlign: "center",
+                  }}
+                >
                   Ничего не найдено
                 </Text>
               </View>

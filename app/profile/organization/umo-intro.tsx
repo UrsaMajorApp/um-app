@@ -3,13 +3,13 @@ import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import { useRef, useState } from "react";
 import {
-    Animated,
-    Image,
-    PanResponder,
-    Platform,
-    Text,
-    useWindowDimensions,
-    View,
+  Animated,
+  Image,
+  PanResponder,
+  Platform,
+  Text,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
 

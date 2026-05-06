@@ -8,13 +8,11 @@
 
 import { useCallback, useRef, useState } from "react";
 import {
-  VIBE_CARDS,
   PRO_TASKS_1214,
   RIASEC_MAP,
+  VIBE_CARDS,
   type RiasecType,
-  type StealthEvent1214,
-  type VibeCard,
-  type ProTask1214,
+  type StealthEvent1214
 } from "../data/diagnosticData1214";
 import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
 import type { Diagnostic } from "../models/types";
@@ -36,17 +34,22 @@ export function useDiagnosticEngine1214(opts: {
   const [results, setResults] = useState<Diagnostic | null>(null);
 
   // Collected data
-  const vibes = useRef<{ cardId: string; type: RiasecType; liked: boolean }[]>([]);
+  const vibes = useRef<{ cardId: string; type: RiasecType; liked: boolean }[]>(
+    [],
+  );
   const stealthEvents = useRef<StealthEvent1214[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
 
   // ── Progress ──
   const totalSteps = VIBE_CARDS.length + (isPro ? PRO_TASKS_1214.length : 0);
   const currentStep =
-    phase === "basic" ? basicIndex
-      : phase === "pro" ? VIBE_CARDS.length + proIndex
-      : phase === "processing" || phase === "done" ? totalSteps
-      : 0;
+    phase === "basic"
+      ? basicIndex
+      : phase === "pro"
+        ? VIBE_CARDS.length + proIndex
+        : phase === "processing" || phase === "done"
+          ? totalSteps
+          : 0;
   const progress = totalSteps > 0 ? currentStep / totalSteps : 0;
 
   // ── Transitions ──
@@ -80,7 +83,7 @@ export function useDiagnosticEngine1214(opts: {
         await advanceToPro();
       }
     },
-    [basicIndex, advanceToPro]
+    [basicIndex, advanceToPro],
   );
 
   // ── PRO: Answer ──
@@ -108,17 +111,27 @@ export function useDiagnosticEngine1214(opts: {
         await finishDiagnostic();
       }
     },
-    [proIndex]
+    [proIndex],
   );
 
   // ── Scoring ──
   const computeResults = useCallback(() => {
     // 1. RIASEC from basic
-    const riasecCounts: Record<RiasecType, number> = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
-    vibes.current.forEach((v) => { if (v.liked) riasecCounts[v.type]++; });
-    
-    const sortedRiasec = (Object.entries(riasecCounts) as [RiasecType, number][])
-      .sort((a, b) => b[1] - a[1]);
+    const riasecCounts: Record<RiasecType, number> = {
+      R: 0,
+      I: 0,
+      A: 0,
+      S: 0,
+      E: 0,
+      C: 0,
+    };
+    vibes.current.forEach((v) => {
+      if (v.liked) riasecCounts[v.type]++;
+    });
+
+    const sortedRiasec = (
+      Object.entries(riasecCounts) as [RiasecType, number][]
+    ).sort((a, b) => b[1] - a[1]);
     const top2Riasec = sortedRiasec.slice(0, 2);
     const weakestRiasec = sortedRiasec.slice(-1)[0];
 
@@ -140,10 +153,14 @@ export function useDiagnosticEngine1214(opts: {
       if (ev.erasedAggressive) erasedCount++;
     });
 
-    const stealthProfile = 
-      erasedCount > 1 ? "Высокий самоконтроль (Стирает агрессивные ответы)" :
-      fastClicks > 4 ? "Импульсивность (Быстрое прокликивание)" :
-      delayedAnswers > 5 ? "Стратегический/Осторожный (Долгая задержка)" : "Сбалансированный";
+    const stealthProfile =
+      erasedCount > 1
+        ? "Высокий самоконтроль (Стирает агрессивные ответы)"
+        : fastClicks > 4
+          ? "Импульсивность (Быстрое прокликивание)"
+          : delayedAnswers > 5
+            ? "Стратегический/Осторожный (Долгая задержка)"
+            : "Сбалансированный";
 
     const scores: Record<string, number> = { ...riasecCounts, ...proScores };
 
@@ -154,15 +171,18 @@ export function useDiagnosticEngine1214(opts: {
       proScores,
       stealthProfile,
       fastClicks,
-      erasedCount
+      erasedCount,
     };
   }, []);
 
-  const processWithAI = useCallback(async (computed: ReturnType<typeof computeResults>) => {
-    const topSkillsStr = computed.top2Riasec.map(t => RIASEC_MAP[t[0]]).join(", ");
-    const weakSkillStr = RIASEC_MAP[computed.weakestRiasec[0]];
+  const processWithAI = useCallback(
+    async (computed: ReturnType<typeof computeResults>) => {
+      const topSkillsStr = computed.top2Riasec
+        .map((t) => RIASEC_MAP[t[0]])
+        .join(", ");
+      const weakSkillStr = RIASEC_MAP[computed.weakestRiasec[0]];
 
-    const prompt = `Analyze diagnostic data for a 12-14 year old teenager.
+      const prompt = `Analyze diagnostic data for a 12-14 year old teenager.
 BASIC (Vibe check): Top skills: ${topSkillsStr}. Weak area: ${weakSkillStr}.
 ${isPro ? `PRO (Hackathon simulation): Scores: ${JSON.stringify(computed.proScores)}. Stealth Analytics: ${computed.stealthProfile}` : ""}
 
@@ -170,17 +190,23 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
 {
   "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Creative 2-word talent title in Russian (e.g. 'Креативный Предприниматель')"
-  ${isPro ? `,
+  ${
+    isPro
+      ? `,
   "topStrengths": ["Top 3 skills in Russian (Hard or Soft)"],
   "developmentAreas": ["1-2 growth areas"],
   "intellectType": "Type of intelligence & recommended UNT (ЕНТ) profile in Russian",
   "personalityBehavior": "Personality pattern based on stealth data: ${computed.stealthProfile}. In Russian.",
   "careerArchetypes": ["3 future career vectors in Russian"],
-  "parentAdvice": "Advice for parents in Russian"` : ""}
+  "parentAdvice": "Advice for parents in Russian"`
+      : ""
+  }
 }`;
 
-    return generateGeminiDiagnosticJson(prompt);
-  }, [isPro]);
+      return generateGeminiDiagnosticJson(prompt);
+    },
+    [isPro],
+  );
 
   const finishDiagnostic = useCallback(async () => {
     setPhase("processing");
@@ -194,14 +220,25 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
       aiData = {
         summary: "Сильная сторона подростка — аналитика и креативный подход.",
         recommendedConstellation: "Творческий аналитик",
-        ...(isPro ? {
-          topStrengths: ["Аналитическое мышление", "Креативность", "Лидерство"],
-          developmentAreas: ["Организованность"],
-          intellectType: "Аналитико-технический (ЕНТ: Физмат / Информатика)",
-          personalityBehavior: computed.stealthProfile,
-          careerArchetypes: ["IT Product Manager", "Системный аналитик", "Предприниматель"],
-          parentAdvice: "Поддерживайте его интерес к технологиям."
-        } : {})
+        ...(isPro
+          ? {
+              topStrengths: [
+                "Аналитическое мышление",
+                "Креативность",
+                "Лидерство",
+              ],
+              developmentAreas: ["Организованность"],
+              intellectType:
+                "Аналитико-технический (ЕНТ: Физмат / Информатика)",
+              personalityBehavior: computed.stealthProfile,
+              careerArchetypes: [
+                "IT Product Manager",
+                "Системный аналитик",
+                "Предприниматель",
+              ],
+              parentAdvice: "Поддерживайте его интерес к технологиям.",
+            }
+          : {}),
       };
     }
 
@@ -218,18 +255,22 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
         erasedCount: computed.erasedCount,
         stealthProfile: computed.stealthProfile,
       },
-      ...(isPro ? {
-        topStrengths: aiData.topStrengths,
-        developmentAreas: aiData.developmentAreas,
-        intellectType: aiData.intellectType,
-        personalityBehavior: aiData.personalityBehavior,
-        careerArchetypes: aiData.careerArchetypes,
-        parentAdvice: aiData.parentAdvice,
-      } : {})
+      ...(isPro
+        ? {
+            topStrengths: aiData.topStrengths,
+            developmentAreas: aiData.developmentAreas,
+            intellectType: aiData.intellectType,
+            personalityBehavior: aiData.personalityBehavior,
+            careerArchetypes: aiData.careerArchetypes,
+            parentAdvice: aiData.parentAdvice,
+          }
+        : {}),
     };
 
     setResults(diagnostic);
-    try { await onComplete(diagnostic); } catch (e) {}
+    try {
+      await onComplete(diagnostic);
+    } catch (e) {}
     setIsProcessing(false);
     setPhase("done");
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
@@ -248,7 +289,9 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
     startBasic,
     handleVibeSwipe,
     handleProAnswer,
-    markTaskEntry: () => { taskEnteredAt.current = Date.now(); },
-    finishDiagnostic
+    markTaskEntry: () => {
+      taskEnteredAt.current = Date.now();
+    },
+    finishDiagnostic,
   };
 }

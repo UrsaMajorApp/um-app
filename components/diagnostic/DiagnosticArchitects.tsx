@@ -32,10 +32,17 @@ interface Props {
 export default function DiagnosticArchitects({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
-  const { childrenProfile, activeChildId, updateChildDiagnostic, parentProfile } = useParentData();
+  const {
+    childrenProfile,
+    activeChildId,
+    updateChildDiagnostic,
+    parentProfile,
+  } = useParentData();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const hPad = isDesktop ? LAYOUT.profileHorizontalPaddingDesktop : LAYOUT.profileHorizontalPaddingMobile;
+  const hPad = isDesktop
+    ? LAYOUT.profileHorizontalPaddingDesktop
+    : LAYOUT.profileHorizontalPaddingMobile;
 
   const isPro = parentProfile?.tariff === "pro";
   const targetChildId = childId || activeChildId;
@@ -65,7 +72,10 @@ export default function DiagnosticArchitects({ childId }: Props) {
 
   if (engine.isProcessing || engine.phase === "processing") {
     return (
-      <LinearGradient colors={["#0F0A2A", "#1A1040", "#2D1B69"]} style={styles.fullScreen}>
+      <LinearGradient
+        colors={["#0F0A2A", "#1A1040", "#2D1B69"]}
+        style={styles.fullScreen}
+      >
         <SafeAreaView style={styles.centered}>
           <ActivityIndicator size="large" color="#A78BFA" />
           <Text style={styles.processingTitle}>Анализ профиля...</Text>
@@ -76,18 +86,27 @@ export default function DiagnosticArchitects({ childId }: Props) {
 
   if (engine.phase === "intro") {
     return (
-      <LinearGradient colors={["#5B21B6", "#7C3AED", "#A78BFA"]} style={styles.fullScreen}>
+      <LinearGradient
+        colors={["#5B21B6", "#7C3AED", "#A78BFA"]}
+        style={styles.fullScreen}
+      >
         <SafeAreaView style={styles.centered}>
           <Text style={{ fontSize: 80, marginBottom: 20 }}>🎓</Text>
           <Text style={styles.introTitle}>Привет, Архитектор!</Text>
           <Text style={styles.introSubtitle}>
-            Узнай свои карьерные драйверы и{'\n'}подходящий профиль ЕНТ 🚀
+            Узнай свои карьерные драйверы и{"\n"}подходящий профиль ЕНТ 🚀
           </Text>
           <View style={{ width: "100%", paddingHorizontal: 32, marginTop: 40 }}>
-            <TouchableOpacity onPress={engine.startBasic} style={styles.startBtn}>
+            <TouchableOpacity
+              onPress={engine.startBasic}
+              style={styles.startBtn}
+            >
               <Text style={styles.startBtnText}>Начать</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleSkip} style={{ alignItems: "center", marginTop: 20 }}>
+            <TouchableOpacity
+              onPress={handleSkip}
+              style={{ alignItems: "center", marginTop: 20 }}
+            >
               <Text style={styles.skipText}>Пропустить</Text>
             </TouchableOpacity>
           </View>
@@ -103,23 +122,54 @@ export default function DiagnosticArchitects({ childId }: Props) {
     <View style={[styles.screen, isProPhase && styles.screenDark]}>
       <SafeAreaView edges={["top"]} style={{ zIndex: 20 }}>
         <View style={[styles.header, { paddingHorizontal: hPad }]}>
-          <TouchableOpacity onPress={() => router.back()} style={[styles.backBtn, isProPhase && styles.backBtnDark]}>
-            <Feather name="arrow-left" size={20} color={isProPhase ? "white" : COLORS.foreground} />
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={[styles.backBtn, isProPhase && styles.backBtnDark]}
+          >
+            <Feather
+              name="arrow-left"
+              size={20}
+              color={isProPhase ? "white" : COLORS.foreground}
+            />
           </TouchableOpacity>
           <Text style={[styles.headerTitle, isProPhase && { color: "white" }]}>
             {isProPhase ? "💻 День Стажера" : "🎯 Карьерный Мэтч"}
           </Text>
           <TouchableOpacity onPress={handleSkip}>
-            <Text style={[styles.skipHeader, isProPhase && { color: "rgba(255,255,255,0.5)" }]}>Скип</Text>
+            <Text
+              style={[
+                styles.skipHeader,
+                isProPhase && { color: "rgba(255,255,255,0.5)" },
+              ]}
+            >
+              Скип
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
 
-      <View style={[styles.progressTrack, { marginHorizontal: hPad }, isProPhase && styles.progressTrackDark]}>
-        <MotiView animate={{ width: `${progressPct}%` }} transition={{ type: "timing", duration: 300 }} style={[styles.progressFill, isProPhase && styles.progressFillPro]} />
+      <View
+        style={[
+          styles.progressTrack,
+          { marginHorizontal: hPad },
+          isProPhase && styles.progressTrackDark,
+        ]}
+      >
+        <MotiView
+          animate={{ width: `${progressPct}%` }}
+          transition={{ type: "timing", duration: 300 }}
+          style={[styles.progressFill, isProPhase && styles.progressFillPro]}
+        />
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: hPad, paddingTop: 16, paddingBottom: 80, alignItems: "center" }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: hPad,
+          paddingTop: 16,
+          paddingBottom: 80,
+          alignItems: "center",
+        }}
+      >
         <View style={{ width: "100%", maxWidth: isDesktop ? 560 : undefined }}>
           {engine.phase === "basic" && engine.currentCard && (
             <CareerSwipeCard
@@ -145,22 +195,77 @@ export default function DiagnosticArchitects({ childId }: Props) {
 
 const styles = StyleSheet.create({
   fullScreen: { flex: 1 },
-  centered: { flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 32 },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 32,
+  },
   screen: { flex: 1, backgroundColor: COLORS.background },
   screenDark: { backgroundColor: "#0A0718" }, // Using dark violet
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 12 },
-  backBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: "white", alignItems: "center", justifyContent: "center", marginRight: 12, ...SHADOWS.sm },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 12,
+  },
+  backBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+    ...SHADOWS.sm,
+  },
   backBtnDark: { backgroundColor: "rgba(255,255,255,0.1)" },
   headerTitle: { fontSize: 18, fontWeight: "900", color: COLORS.foreground },
-  skipHeader: { fontSize: 14, fontWeight: "600", color: COLORS.mutedForeground },
-  progressTrack: { height: 6, backgroundColor: COLORS.muted, borderRadius: 3, overflow: "hidden", marginBottom: 16 },
+  skipHeader: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.mutedForeground,
+  },
+  progressTrack: {
+    height: 6,
+    backgroundColor: COLORS.muted,
+    borderRadius: 3,
+    overflow: "hidden",
+    marginBottom: 16,
+  },
   progressTrackDark: { backgroundColor: "rgba(255,255,255,0.1)" },
-  progressFill: { height: "100%", backgroundColor: COLORS.primary, borderRadius: 3 },
+  progressFill: {
+    height: "100%",
+    backgroundColor: COLORS.primary,
+    borderRadius: 3,
+  },
   progressFillPro: { backgroundColor: "#A78BFA" },
-  introTitle: { fontSize: 32, fontWeight: "900", color: "white", textAlign: "center", marginBottom: 12 },
-  introSubtitle: { fontSize: 16, color: "rgba(255,255,255,0.7)", textAlign: "center", lineHeight: 24 },
-  startBtn: { backgroundColor: "white", paddingVertical: 20, borderRadius: RADIUS.lg, alignItems: "center", ...SHADOWS.lg },
+  introTitle: {
+    fontSize: 32,
+    fontWeight: "900",
+    color: "white",
+    textAlign: "center",
+    marginBottom: 12,
+  },
+  introSubtitle: {
+    fontSize: 16,
+    color: "rgba(255,255,255,0.7)",
+    textAlign: "center",
+    lineHeight: 24,
+  },
+  startBtn: {
+    backgroundColor: "white",
+    paddingVertical: 20,
+    borderRadius: RADIUS.lg,
+    alignItems: "center",
+    ...SHADOWS.lg,
+  },
   startBtnText: { fontSize: 18, fontWeight: "900", color: "#7C3AED" },
   skipText: { color: "rgba(255,255,255,0.5)", fontSize: 14, fontWeight: "600" },
-  processingTitle: { color: "white", fontSize: 18, fontWeight: "700", marginTop: 20 }
+  processingTitle: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "700",
+    marginTop: 20,
+  },
 });

@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
+import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useOrgApplications } from "../../../hooks/useOrgData";
 
 export default function OrgAttendance() {
@@ -24,22 +24,26 @@ export default function OrgAttendance() {
 
   const { apps, loading } = useOrgApplications();
   // Build club list dynamically from applications
-  const clubs = Array.from(new Set(apps.map((a) => a.club).filter(Boolean))).map((c) => ({
+  const clubs = Array.from(
+    new Set(apps.map((a) => a.club).filter(Boolean)),
+  ).map((c) => ({
     id: c as string,
     name: c as string,
   }));
   const [selectedClub, setSelectedClub] = useState<string>("");
 
   // Students for selected club (activated/paid applications)
-  const activeStudents = apps.filter(
-    (a) =>
-      (a.status === "activated" || a.status === "paid") &&
-      (selectedClub === "" || a.club === selectedClub)
-  ).map((a) => ({
-    id: a.id,
-    name: a.child_name,
-    club: a.club,
-  }));
+  const activeStudents = apps
+    .filter(
+      (a) =>
+        (a.status === "activated" || a.status === "paid") &&
+        (selectedClub === "" || a.club === selectedClub),
+    )
+    .map((a) => ({
+      id: a.id,
+      name: a.child_name,
+      club: a.club,
+    }));
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -106,7 +110,8 @@ export default function OrgAttendance() {
                 >
                   <Text
                     style={{
-                      color: selectedClub === club.id ? COLORS.primary : "white",
+                      color:
+                        selectedClub === club.id ? COLORS.primary : "white",
                       fontWeight: "700",
                       fontSize: 13,
                     }}
@@ -134,7 +139,9 @@ export default function OrgAttendance() {
             style={SHADOWS.sm}
             className="flex-1 bg-white p-5 rounded-3xl border border-gray-100"
           >
-            <Text className="text-2xl font-black text-green-600">{activeStudents.length}</Text>
+            <Text className="text-2xl font-black text-green-600">
+              {activeStudents.length}
+            </Text>
             <Text className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">
               Активных учеников
             </Text>
@@ -143,7 +150,9 @@ export default function OrgAttendance() {
             style={SHADOWS.sm}
             className="flex-1 bg-white p-5 rounded-3xl border border-gray-100"
           >
-            <Text className="text-2xl font-black text-primary">{clubs.length}</Text>
+            <Text className="text-2xl font-black text-primary">
+              {clubs.length}
+            </Text>
             <Text className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">
               Направлений
             </Text>
@@ -174,8 +183,15 @@ export default function OrgAttendance() {
           {!loading && activeStudents.length === 0 && (
             <View style={{ padding: 20, alignItems: "center" }}>
               <Feather name="clipboard" size={28} color="#D1D5DB" />
-              <Text style={{ color: COLORS.mutedForeground, marginTop: 10, textAlign: "center" }}>
-                Активных учеников пока нет. Данные посещаемости появятся после отметок учителя.
+              <Text
+                style={{
+                  color: COLORS.mutedForeground,
+                  marginTop: 10,
+                  textAlign: "center",
+                }}
+              >
+                Активных учеников пока нет. Данные посещаемости появятся после
+                отметок учителя.
               </Text>
             </View>
           )}
@@ -191,7 +207,15 @@ export default function OrgAttendance() {
               >
                 <View className="flex-1 flex-row items-center gap-2">
                   <View className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center">
-                    <Text style={{ fontWeight: "700", color: COLORS.primary, fontSize: 12 }}>{student.name.charAt(0)}</Text>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        color: COLORS.primary,
+                        fontSize: 12,
+                      }}
+                    >
+                      {student.name.charAt(0)}
+                    </Text>
                   </View>
                   <Text
                     numberOfLines={1}
@@ -200,7 +224,9 @@ export default function OrgAttendance() {
                     {student.name}
                   </Text>
                 </View>
-                <Text className="text-xs font-bold text-gray-500">{student.club || "—"}</Text>
+                <Text className="text-xs font-bold text-gray-500">
+                  {student.club || "—"}
+                </Text>
               </View>
             ))}
           </View>

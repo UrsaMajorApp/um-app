@@ -1,22 +1,22 @@
+import { SideNav } from "@/app/(tabs)/layout-container";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SideNav } from "@/app/(tabs)/layout-container";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
@@ -142,7 +142,13 @@ export default function CreateProfileChild() {
 
   const pageContent = (
     <View style={styles.page}>
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden", pointerEvents: "none" }}>
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
         <View style={styles.bgOrbTop} />
         <View style={styles.bgOrbBottom} />
       </View>
@@ -154,8 +160,16 @@ export default function CreateProfileChild() {
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
         >
           <SafeAreaView edges={["top"]}>
-            <View style={[styles.gradientHeader, { paddingHorizontal: horizontalPadding }]}>
-              <TouchableOpacity onPress={handleBack} style={styles.headerBackButton}>
+            <View
+              style={[
+                styles.gradientHeader,
+                { paddingHorizontal: horizontalPadding },
+              ]}
+            >
+              <TouchableOpacity
+                onPress={handleBack}
+                style={styles.headerBackButton}
+              >
                 <Feather name="arrow-left" size={20} color={COLORS.white} />
                 <Text style={styles.headerBackText}>Назад</Text>
               </TouchableOpacity>
@@ -179,7 +193,12 @@ export default function CreateProfileChild() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ width: "100%", maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined }}>
+        <View
+          style={{
+            width: "100%",
+            maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
+          }}
+        >
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <Feather name="user" size={20} color={ROLE_COLOR} />
@@ -191,10 +210,15 @@ export default function CreateProfileChild() {
                 <RequiredLabel>Имя</RequiredLabel>
                 <TextInput
                   value={formData.firstName}
-                  onChangeText={(text) => setFormData({ ...formData, firstName: text })}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, firstName: text })
+                  }
                   placeholder="Как зовут ребенка?"
                   placeholderTextColor={COLORS.mutedForeground}
-                  style={[styles.input, hasSubmitted && !validation.firstName && styles.inputError]}
+                  style={[
+                    styles.input,
+                    hasSubmitted && !validation.firstName && styles.inputError,
+                  ]}
                 />
                 {hasSubmitted && !validation.firstName && (
                   <Text style={styles.errorText}>Введите имя ребенка</Text>
@@ -205,15 +229,25 @@ export default function CreateProfileChild() {
                 <Text style={styles.fieldLabel}>Телефон</Text>
                 <TextInput
                   value={formData.phone}
-                  onChangeText={(text) => setFormData({ ...formData, phone: formatPhone(text) })}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, phone: formatPhone(text) })
+                  }
                   placeholder="+7 777 777 7777"
                   placeholderTextColor={COLORS.mutedForeground}
                   keyboardType="phone-pad"
-                  style={[styles.input, hasSubmitted && !validation.phone && styles.inputError]}
+                  style={[
+                    styles.input,
+                    hasSubmitted && !validation.phone && styles.inputError,
+                  ]}
                 />
-                <Text style={styles.helpText}>Необязательно. Если номера нет, ребенок сможет войти по QR-коду.</Text>
+                <Text style={styles.helpText}>
+                  Необязательно. Если номера нет, ребенок сможет войти по
+                  QR-коду.
+                </Text>
                 {hasSubmitted && !validation.phone && (
-                  <Text style={styles.errorText}>Введите полный номер из 11 цифр или оставьте поле пустым</Text>
+                  <Text style={styles.errorText}>
+                    Введите полный номер из 11 цифр или оставьте поле пустым
+                  </Text>
                 )}
               </View>
 
@@ -221,12 +255,24 @@ export default function CreateProfileChild() {
                 <RequiredLabel>Возраст</RequiredLabel>
                 <TouchableOpacity
                   onPress={() => setShowAgePicker(true)}
-                  style={[styles.selectInput, hasSubmitted && !validation.age && styles.inputError]}
+                  style={[
+                    styles.selectInput,
+                    hasSubmitted && !validation.age && styles.inputError,
+                  ]}
                 >
-                  <Text style={[styles.selectText, !formData.age && styles.placeholderText]}>
-                    {formData.age ? `${formData.age} лет` : 'Выберите возраст'}
+                  <Text
+                    style={[
+                      styles.selectText,
+                      !formData.age && styles.placeholderText,
+                    ]}
+                  >
+                    {formData.age ? `${formData.age} лет` : "Выберите возраст"}
                   </Text>
-                  <Feather name="chevron-down" size={18} color={COLORS.mutedForeground} />
+                  <Feather
+                    name="chevron-down"
+                    size={18}
+                    color={COLORS.mutedForeground}
+                  />
                 </TouchableOpacity>
                 {hasSubmitted && !validation.age && (
                   <Text style={styles.errorText}>Выберите возраст</Text>
@@ -244,7 +290,14 @@ export default function CreateProfileChild() {
                       hasSubmitted && !validation.gender && styles.inputError,
                     ]}
                   >
-                    <Text style={[styles.segmentText, formData.gender === "boy" && styles.segmentTextActive]}>Мальчик</Text>
+                    <Text
+                      style={[
+                        styles.segmentText,
+                        formData.gender === "boy" && styles.segmentTextActive,
+                      ]}
+                    >
+                      Мальчик
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setFormData({ ...formData, gender: "girl" })}
@@ -254,7 +307,14 @@ export default function CreateProfileChild() {
                       hasSubmitted && !validation.gender && styles.inputError,
                     ]}
                   >
-                    <Text style={[styles.segmentText, formData.gender === "girl" && styles.segmentTextActive]}>Девочка</Text>
+                    <Text
+                      style={[
+                        styles.segmentText,
+                        formData.gender === "girl" && styles.segmentTextActive,
+                      ]}
+                    >
+                      Девочка
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 {hasSubmitted && !validation.gender && (
@@ -270,7 +330,9 @@ export default function CreateProfileChild() {
               <Text style={styles.cardTitle}>Интересы</Text>
               <Text style={styles.requiredMark}>*</Text>
             </View>
-            <Text style={styles.cardDescription}>Что нравится ребенку сейчас?</Text>
+            <Text style={styles.cardDescription}>
+              Что нравится ребенку сейчас?
+            </Text>
             <View style={styles.chipGrid}>
               {availableInterests.map((interest) => {
                 const isSelected = interests.includes(interest);
@@ -280,20 +342,33 @@ export default function CreateProfileChild() {
                     onPress={() => toggleInterest(interest)}
                     style={[styles.chip, isSelected && styles.chipActive]}
                   >
-                    <Text style={[styles.chipText, isSelected && styles.chipTextActive]}>{interest}</Text>
+                    <Text
+                      style={[
+                        styles.chipText,
+                        isSelected && styles.chipTextActive,
+                      ]}
+                    >
+                      {interest}
+                    </Text>
                   </TouchableOpacity>
                 );
               })}
             </View>
             {hasSubmitted && !validation.interests && (
-              <Text style={styles.errorText}>Выберите хотя бы один интерес</Text>
+              <Text style={styles.errorText}>
+                Выберите хотя бы один интерес
+              </Text>
             )}
 
-            <Text style={[styles.fieldLabel, { marginTop: 10 }]}>Другой интерес</Text>
+            <Text style={[styles.fieldLabel, { marginTop: 10 }]}>
+              Другой интерес
+            </Text>
             <View style={styles.inlineInputRow}>
               <TextInput
                 value={formData.otherInterest}
-                onChangeText={(text) => setFormData({ ...formData, otherInterest: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, otherInterest: text })
+                }
                 placeholder="Введите интерес ребенка"
                 placeholderTextColor={COLORS.mutedForeground}
                 style={[styles.input, { flex: 1 }]}
@@ -313,7 +388,9 @@ export default function CreateProfileChild() {
               <Text style={styles.cardTitle}>Цель</Text>
               <Text style={styles.requiredMark}>*</Text>
             </View>
-            <Text style={styles.cardDescription}>Чему ребенок хочет научиться?</Text>
+            <Text style={styles.cardDescription}>
+              Чему ребенок хочет научиться?
+            </Text>
             <TextInput
               value={formData.goals}
               onChangeText={(text) => setFormData({ ...formData, goals: text })}
@@ -321,7 +398,11 @@ export default function CreateProfileChild() {
               placeholderTextColor={COLORS.mutedForeground}
               multiline
               numberOfLines={3}
-              style={[styles.input, styles.textArea, hasSubmitted && !validation.goals && styles.inputError]}
+              style={[
+                styles.input,
+                styles.textArea,
+                hasSubmitted && !validation.goals && styles.inputError,
+              ]}
             />
             {hasSubmitted && !validation.goals && (
               <Text style={styles.errorText}>Опишите цель ребенка</Text>
@@ -333,24 +414,35 @@ export default function CreateProfileChild() {
               <Text style={styles.submitErrorText}>{submitError}</Text>
             ) : null}
             <TouchableOpacity
-                onPress={handleNext}
-                disabled={isSubmitting || !isFormValid}
-                activeOpacity={0.8}
-                style={[styles.submitButton, (isSubmitting || !isFormValid) && styles.submitButtonDisabled]}
+              onPress={handleNext}
+              disabled={isSubmitting || !isFormValid}
+              activeOpacity={0.8}
+              style={[
+                styles.submitButton,
+                (isSubmitting || !isFormValid) && styles.submitButtonDisabled,
+              ]}
             >
               <LinearGradient
-                colors={(isFormValid ? COLORS.gradients.header : [COLORS.muted, COLORS.muted]) as any}
+                colors={
+                  (isFormValid
+                    ? COLORS.gradients.header
+                    : [COLORS.muted, COLORS.muted]) as any
+                }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.submitGradient}
               >
-                <Text style={[styles.submitText, !isFormValid && styles.submitTextDisabled]}>
+                <Text
+                  style={[
+                    styles.submitText,
+                    !isFormValid && styles.submitTextDisabled,
+                  ]}
+                >
                   {isSubmitting ? "Сохранение..." : "Добавить ребенка"}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
-
         </View>
 
         {/* Age Picker Modal */}
@@ -360,15 +452,33 @@ export default function CreateProfileChild() {
           animationType={isDesktop ? "fade" : "slide"}
         >
           <Pressable
-            style={[styles.agePickerOverlay, isDesktop && styles.agePickerOverlayDesktop]}
+            style={[
+              styles.agePickerOverlay,
+              isDesktop && styles.agePickerOverlayDesktop,
+            ]}
             onPress={() => setShowAgePicker(false)}
           >
             <Pressable
               style={[styles.modalSheet, isDesktop && styles.modalSheetDesktop]}
               onPress={(e) => e.stopPropagation()}
             >
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.foreground }}>Выберите возраст</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 16,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: "700",
+                    color: COLORS.foreground,
+                  }}
+                >
+                  Выберите возраст
+                </Text>
                 <TouchableOpacity onPress={() => setShowAgePicker(false)}>
                   <Feather name="x" size={24} color="#9CA3AF" />
                 </TouchableOpacity>
@@ -385,18 +495,22 @@ export default function CreateProfileChild() {
                       paddingVertical: 16,
                       paddingHorizontal: 16,
                       borderRadius: 12,
-                      backgroundColor: formData.age === age ? '#F3F0FF' : 'transparent',
+                      backgroundColor:
+                        formData.age === age ? "#F3F0FF" : "transparent",
                       marginBottom: 4,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <Text style={{
-                      fontSize: 16,
-                      fontWeight: formData.age === age ? '700' : '400',
-                      color: formData.age === age ? '#6C5CE7' : COLORS.foreground
-                    }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: formData.age === age ? "700" : "400",
+                        color:
+                          formData.age === age ? "#6C5CE7" : COLORS.foreground,
+                      }}
+                    >
                       {age} лет
                     </Text>
                     {formData.age === age && (

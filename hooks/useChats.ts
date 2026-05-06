@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { useDevDataVersion } from "../lib/devDataEvents";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export interface Chat {
   id: string;
@@ -68,7 +68,7 @@ export function useChats() {
         last_message_at: c.last_message_at,
         unread_count: unreadMap.get(c.id) ?? 0,
         archived: c.archived ?? false,
-      }))
+      })),
     );
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -79,7 +79,10 @@ export function useChats() {
 
   const archiveChat = async (id: string) => {
     if (!supabase) return;
-    await supabase.from("conversations").update({ archived: true }).eq("id", id);
+    await supabase
+      .from("conversations")
+      .update({ archived: true })
+      .eq("id", id);
     refresh();
   };
 
@@ -133,7 +136,7 @@ export function useChatMessages(conversationId: string | null) {
         body: m.body,
         created_at: m.created_at,
         is_mine: m.sender_id === user?.id,
-      }))
+      })),
     );
     setLoading(false);
   }, [conversationId, user?.id, devDataVersion]);
@@ -152,7 +155,10 @@ export function useChatMessages(conversationId: string | null) {
     // Update conversation last_message
     await supabase
       .from("conversations")
-      .update({ last_message: text.trim(), last_message_at: new Date().toISOString() })
+      .update({
+        last_message: text.trim(),
+        last_message_at: new Date().toISOString(),
+      })
       .eq("id", conversationId);
     refresh();
   };

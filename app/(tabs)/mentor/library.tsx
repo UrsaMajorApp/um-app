@@ -1,39 +1,97 @@
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Platform, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "../../../constants/theme";
+import {
+  COLORS,
+  LAYOUT,
+  RADIUS,
+  SHADOWS,
+  SPACING,
+  TYPOGRAPHY,
+} from "../../../constants/theme";
 import { useLearningMaterials } from "../../../hooks/useMentorData";
 
 export default function MentorLibrary() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const paddingX = isDesktop
+    ? LAYOUT.dashboardHorizontalPaddingDesktop
+    : SPACING.xl;
   const { materials, loading } = useLearningMaterials();
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <SafeAreaView edges={["top"]} style={{ backgroundColor: COLORS.primary }}>
-        <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: paddingX, paddingVertical: 16, gap: 12 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: paddingX,
+            paddingVertical: 16,
+            gap: 12,
+          }}
+        >
           <TouchableOpacity
             onPress={() => router.back()}
-            style={{ width: 40, height: 40, borderRadius: RADIUS.md, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: RADIUS.md,
+              backgroundColor: "rgba(255,255,255,0.2)",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <Feather name="arrow-left" size={20} color="white" />
           </TouchableOpacity>
-          <Text style={{ fontSize: TYPOGRAPHY.size.xl, fontWeight: TYPOGRAPHY.weight.bold, color: "white" }}>База материалов</Text>
+          <Text
+            style={{
+              fontSize: TYPOGRAPHY.size.xl,
+              fontWeight: TYPOGRAPHY.weight.bold,
+              color: "white",
+            }}
+          >
+            База материалов
+          </Text>
         </View>
       </SafeAreaView>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: paddingX, paddingTop: 24, paddingBottom: 110 }}>
-        <Text style={{ fontSize: TYPOGRAPHY.size.lg, fontWeight: TYPOGRAPHY.weight.semibold, color: COLORS.foreground, marginBottom: 16 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: paddingX,
+          paddingTop: 24,
+          paddingBottom: 110,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: TYPOGRAPHY.size.lg,
+            fontWeight: TYPOGRAPHY.weight.semibold,
+            color: COLORS.foreground,
+            marginBottom: 16,
+          }}
+        >
           Учебные материалы
         </Text>
 
         {loading && (
-          <Text style={{ textAlign: "center", marginTop: 20, color: COLORS.mutedForeground }}>
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: 20,
+              color: COLORS.mutedForeground,
+            }}
+          >
             Загрузка...
           </Text>
         )}
@@ -64,17 +122,37 @@ export default function MentorLibrary() {
                   marginRight: 14,
                 }}
               >
-                <Feather name={item.icon_name as any} size={22} color={item.color} />
+                <Feather
+                  name={item.icon_name as any}
+                  size={22}
+                  color={item.color}
+                />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: TYPOGRAPHY.size.md, fontWeight: TYPOGRAPHY.weight.semibold, color: COLORS.foreground }}>
+                <Text
+                  style={{
+                    fontSize: TYPOGRAPHY.size.md,
+                    fontWeight: TYPOGRAPHY.weight.semibold,
+                    color: COLORS.foreground,
+                  }}
+                >
                   {item.title}
                 </Text>
-                <Text style={{ fontSize: 12, color: COLORS.mutedForeground, marginTop: 2 }}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: COLORS.mutedForeground,
+                    marginTop: 2,
+                  }}
+                >
                   {item.material_type} · {item.size_label}
                 </Text>
               </View>
-              <Feather name="download" size={18} color={COLORS.mutedForeground} />
+              <Feather
+                name="download"
+                size={18}
+                color={COLORS.mutedForeground}
+              />
             </TouchableOpacity>
           ))}
         </View>

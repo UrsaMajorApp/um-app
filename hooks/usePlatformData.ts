@@ -32,8 +32,11 @@ export interface SubscriptionPlan {
   display_order: number;
 }
 
-function subscriptionRole(role: UserRole | null | undefined): SubscriptionPlanRole | null {
-  if (role === "child" || role === "young-adult" || role === "youth") return "youth";
+function subscriptionRole(
+  role: UserRole | null | undefined,
+): SubscriptionPlanRole | null {
+  if (role === "child" || role === "young-adult" || role === "youth")
+    return "youth";
   if (role === "parent" || role === "org") return role;
   return null;
 }
@@ -54,7 +57,9 @@ export function useSubscriptionPlans(role: UserRole | null | undefined) {
     setLoading(true);
     const res = await supabase
       .from("subscription_plans")
-      .select("id, role, title, price_kzt, billing_period, features, popular, display_order")
+      .select(
+        "id, role, title, price_kzt, billing_period, features, popular, display_order",
+      )
       .eq("role", planRole)
       .eq("active", true)
       .order("display_order", { ascending: true });
@@ -110,7 +115,9 @@ export function useWalletData(ownerType: "mentor" | "org") {
     setLoading(true);
     let query = supabase
       .from("wallet_transactions")
-      .select("id, transaction_at, description, student_name, amount_kzt, platform_commission_kzt, status, method")
+      .select(
+        "id, transaction_at, description, student_name, amount_kzt, platform_commission_kzt, status, method",
+      )
       .eq("owner_type", ownerType)
       .order("transaction_at", { ascending: false });
 
@@ -141,7 +148,9 @@ export function useWalletData(ownerType: "mentor" | "org") {
     const now = new Date();
     const month = now.getMonth();
     const year = now.getFullYear();
-    const completed = transactions.filter((tx) => tx.status === "completed" || tx.status === "withdrawal");
+    const completed = transactions.filter(
+      (tx) => tx.status === "completed" || tx.status === "withdrawal",
+    );
     const positive = completed.filter((tx) => tx.amount_kzt > 0);
     const currentMonthPositive = positive.filter((tx) => {
       const txDate = new Date(tx.transaction_at);
@@ -151,8 +160,14 @@ export function useWalletData(ownerType: "mentor" | "org") {
     return {
       availableBalance: completed.reduce((sum, tx) => sum + tx.amount_kzt, 0),
       totalRevenue: positive.reduce((sum, tx) => sum + tx.amount_kzt, 0),
-      commission: completed.reduce((sum, tx) => sum + tx.platform_commission_kzt, 0),
-      periodRevenue: currentMonthPositive.reduce((sum, tx) => sum + tx.amount_kzt, 0),
+      commission: completed.reduce(
+        (sum, tx) => sum + tx.platform_commission_kzt,
+        0,
+      ),
+      periodRevenue: currentMonthPositive.reduce(
+        (sum, tx) => sum + tx.amount_kzt,
+        0,
+      ),
       periodCount: currentMonthPositive.length,
       periodLabel: monthLabel(now),
     };
@@ -185,7 +200,8 @@ export function useWalletData(ownerType: "mentor" | "org") {
               recipient_name: params.recipientName ?? null,
             };
 
-      if (ownerType === "org" && !orgId) return { error: "Organisation not found" };
+      if (ownerType === "org" && !orgId)
+        return { error: "Organisation not found" };
       const res = await supabase.from("withdrawal_requests").insert(payload);
       if (res.error) return { error: res.error.message };
       await refresh();
@@ -227,7 +243,9 @@ export function useTeacherGroups() {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
   const [groups, setGroups] = useState<TeacherGroup[]>([]);
-  const [studentCounts, setStudentCounts] = useState<Record<string, number>>({});
+  const [studentCounts, setStudentCounts] = useState<Record<string, number>>(
+    {},
+  );
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
@@ -270,7 +288,10 @@ export function useTeacherGroups() {
   return { groups, studentCounts, loading, refresh };
 }
 
-export function useTeacherGroup(groupId: string | undefined, classDate?: string) {
+export function useTeacherGroup(
+  groupId: string | undefined,
+  classDate?: string,
+) {
   const { user } = useAuth();
   const [group, setGroup] = useState<TeacherGroup | null>(null);
   const [students, setStudents] = useState<TeacherGroupStudent[]>([]);
@@ -318,8 +339,20 @@ export function useTeacherGroup(groupId: string | undefined, classDate?: string)
   }, [refresh]);
 
   const saveAttendance = useCallback(
-    async (entries: Array<{ studentId: string; status: "present" | "absent"; comment?: string | null }>) => {
-      if (!supabase || !user?.id || !groupId || !classDate || entries.length === 0) {
+    async (
+      entries: Array<{
+        studentId: string;
+        status: "present" | "absent";
+        comment?: string | null;
+      }>,
+    ) => {
+      if (
+        !supabase ||
+        !user?.id ||
+        !groupId ||
+        !classDate ||
+        entries.length === 0
+      ) {
         return { error: "Nothing to save" };
       }
 
@@ -348,7 +381,12 @@ export function useTeacherGroup(groupId: string | undefined, classDate?: string)
 
 // ─── useOnboardingQuestions ───────────────────────────────────────────────────
 
-export type OnboardingAudience = "parent" | "org" | "child" | "youth" | "parent_diagnostic";
+export type OnboardingAudience =
+  | "parent"
+  | "org"
+  | "child"
+  | "youth"
+  | "parent_diagnostic";
 
 export interface OnboardingQuestion {
   id: string;
@@ -359,34 +397,200 @@ export interface OnboardingQuestion {
 
 const QUESTION_FALLBACKS: Record<OnboardingAudience, OnboardingQuestion[]> = {
   parent: [
-    { id: "p1", display_order: 1, question_text: "Сколько лет вашему ребёнку?", answers: ["6–8 лет", "9–11 лет", "12–14 лет", "15–17 лет"] },
-    { id: "p2", display_order: 2, question_text: "Что ему интересно больше всего?", answers: ["Технологии", "Творчество", "Спорт", "Точные науки"] },
-    { id: "p3", display_order: 3, question_text: "Какой формат обучения вам подходит?", answers: ["Онлайн", "Офлайн", "Смешанный"] },
-    { id: "p4", display_order: 4, question_text: "Какая цель обучения для вас важнее?", answers: ["Подготовка к экзаменам", "Развитие мышления", "Профориентация", "Общее развитие"] },
-    { id: "p5", display_order: 5, question_text: "Сколько времени в неделю ребёнок готов учиться дополнительно?", answers: ["1–2 раза", "3–4 раза", "Каждый день"] },
+    {
+      id: "p1",
+      display_order: 1,
+      question_text: "Сколько лет вашему ребёнку?",
+      answers: ["6–8 лет", "9–11 лет", "12–14 лет", "15–17 лет"],
+    },
+    {
+      id: "p2",
+      display_order: 2,
+      question_text: "Что ему интересно больше всего?",
+      answers: ["Технологии", "Творчество", "Спорт", "Точные науки"],
+    },
+    {
+      id: "p3",
+      display_order: 3,
+      question_text: "Какой формат обучения вам подходит?",
+      answers: ["Онлайн", "Офлайн", "Смешанный"],
+    },
+    {
+      id: "p4",
+      display_order: 4,
+      question_text: "Какая цель обучения для вас важнее?",
+      answers: [
+        "Подготовка к экзаменам",
+        "Развитие мышления",
+        "Профориентация",
+        "Общее развитие",
+      ],
+    },
+    {
+      id: "p5",
+      display_order: 5,
+      question_text:
+        "Сколько времени в неделю ребёнок готов учиться дополнительно?",
+      answers: ["1–2 раза", "3–4 раза", "Каждый день"],
+    },
   ],
   org: [
-    { id: "o1", display_order: 1, question_text: "Какого типа у вас организация?", answers: ["Образовательный центр", "Частная школа", "Кружок/студия", "Онлайн-платформа"] },
-    { id: "o2", display_order: 2, question_text: "Основное направление занятий:", answers: ["IT и технологии", "Творчество", "Спорт", "Точные науки"] },
-    { id: "o3", display_order: 3, question_text: "С каким возрастом вы работаете?", answers: ["6–9 лет", "10–13 лет", "14–17 лет", "Все возраста"] },
-    { id: "o4", display_order: 4, question_text: "Какой формат занятий у вас основной?", answers: ["Офлайн", "Онлайн", "Смешанный"] },
-    { id: "o5", display_order: 5, question_text: "Какая главная цель для вашей организации?", answers: ["Масштабирование", "Привлечение учеников", "Автоматизация процессов", "Повышение качества обучения"] },
+    {
+      id: "o1",
+      display_order: 1,
+      question_text: "Какого типа у вас организация?",
+      answers: [
+        "Образовательный центр",
+        "Частная школа",
+        "Кружок/студия",
+        "Онлайн-платформа",
+      ],
+    },
+    {
+      id: "o2",
+      display_order: 2,
+      question_text: "Основное направление занятий:",
+      answers: ["IT и технологии", "Творчество", "Спорт", "Точные науки"],
+    },
+    {
+      id: "o3",
+      display_order: 3,
+      question_text: "С каким возрастом вы работаете?",
+      answers: ["6–9 лет", "10–13 лет", "14–17 лет", "Все возраста"],
+    },
+    {
+      id: "o4",
+      display_order: 4,
+      question_text: "Какой формат занятий у вас основной?",
+      answers: ["Офлайн", "Онлайн", "Смешанный"],
+    },
+    {
+      id: "o5",
+      display_order: 5,
+      question_text: "Какая главная цель для вашей организации?",
+      answers: [
+        "Масштабирование",
+        "Привлечение учеников",
+        "Автоматизация процессов",
+        "Повышение качества обучения",
+      ],
+    },
   ],
   child: [
-    { id: "c1", display_order: 1, question_text: "Какая твоя любимая игра?", answers: ["Собери конструктор", "Рисование", "Догонялки", "Головоломки"] },
-    { id: "c2", display_order: 2, question_text: "Что тебе нравится делать в свободное время?", answers: ["Смотреть мультики", "Гулять с друзьями", "Читать сказки", "Строить базы"] },
-    { id: "c3", display_order: 3, question_text: "Представь, что у тебя есть суперсила. Какая она?", answers: ["Летать", "Читать мысли", "Создавать предметы", "Становиться невидимым"] },
+    {
+      id: "c1",
+      display_order: 1,
+      question_text: "Какая твоя любимая игра?",
+      answers: ["Собери конструктор", "Рисование", "Догонялки", "Головоломки"],
+    },
+    {
+      id: "c2",
+      display_order: 2,
+      question_text: "Что тебе нравится делать в свободное время?",
+      answers: [
+        "Смотреть мультики",
+        "Гулять с друзьями",
+        "Читать сказки",
+        "Строить базы",
+      ],
+    },
+    {
+      id: "c3",
+      display_order: 3,
+      question_text: "Представь, что у тебя есть суперсила. Какая она?",
+      answers: [
+        "Летать",
+        "Читать мысли",
+        "Создавать предметы",
+        "Становиться невидимым",
+      ],
+    },
   ],
   youth: [
-    { id: "y1", display_order: 1, question_text: "Что тебе сейчас интереснее всего изучать?", answers: ["Программирование", "Дизайн", "Бизнес/Управление", "Наука/Исследования"] },
-    { id: "y2", display_order: 2, question_text: "Как ты предпочитаешь работать над проектами?", answers: ["Полностью самостоятельно", "С наставником 1 на 1", "В небольшой команде", "В большой группе"] },
-    { id: "y3", display_order: 3, question_text: "Кем ты видишь себя через 5 лет?", answers: ["Специалистом (IT/Дизайн)", "Предпринимателем", "Лидером команды", "Свободным фрилансером"] },
-    { id: "y4", display_order: 4, question_text: "Где ты черпаешь вдохновение или информацию?", answers: ["YouTube/Курсы", "Книги/Статьи", "Общение с людьми", "Практика методом ошибок"] },
+    {
+      id: "y1",
+      display_order: 1,
+      question_text: "Что тебе сейчас интереснее всего изучать?",
+      answers: [
+        "Программирование",
+        "Дизайн",
+        "Бизнес/Управление",
+        "Наука/Исследования",
+      ],
+    },
+    {
+      id: "y2",
+      display_order: 2,
+      question_text: "Как ты предпочитаешь работать над проектами?",
+      answers: [
+        "Полностью самостоятельно",
+        "С наставником 1 на 1",
+        "В небольшой команде",
+        "В большой группе",
+      ],
+    },
+    {
+      id: "y3",
+      display_order: 3,
+      question_text: "Кем ты видишь себя через 5 лет?",
+      answers: [
+        "Специалистом (IT/Дизайн)",
+        "Предпринимателем",
+        "Лидером команды",
+        "Свободным фрилансером",
+      ],
+    },
+    {
+      id: "y4",
+      display_order: 4,
+      question_text: "Где ты черпаешь вдохновение или информацию?",
+      answers: [
+        "YouTube/Курсы",
+        "Книги/Статьи",
+        "Общение с людьми",
+        "Практика методом ошибок",
+      ],
+    },
   ],
   parent_diagnostic: [
-    { id: "pd1", display_order: 1, question_text: "Что ребенку нравится делать больше всего в свободное время?", answers: ["Рисовать, лепить, создавать что-то руками.", "Играть в подвижные игры, бегать, танцевать.", "Собирать конструкторы по схемам, решать задачки.", "Общаться с друзьями, придумывать совместные игры.", "Слушать сказки, сочинять истории, много болтать."] },
-    { id: "pd2", display_order: 2, question_text: "Как ребенок относится к новым правилам или сложным задачам?", answers: ["Часто находит нестандартное решение в обход правил.", "Любит соревновательный элемент, старается сделать физически быстрее.", "Пытается понять систему, почему правило именно такое.", "Просит помощи или договаривается с другими.", "Пытается обсудить или переубедить вас словами."] },
-    { id: "pd3", display_order: 3, question_text: "Какая любимая игрушка или игра?", answers: ["Краски, пластилин, наборы для творчества.", "Мяч, велосипед, спортивный инвентарь.", "Головоломки, шашки, кубики с цифрами.", "Настольные игры для компании, ролевые игры.", "Книжки, аудиосказки, карточки со словами."] },
+    {
+      id: "pd1",
+      display_order: 1,
+      question_text:
+        "Что ребенку нравится делать больше всего в свободное время?",
+      answers: [
+        "Рисовать, лепить, создавать что-то руками.",
+        "Играть в подвижные игры, бегать, танцевать.",
+        "Собирать конструкторы по схемам, решать задачки.",
+        "Общаться с друзьями, придумывать совместные игры.",
+        "Слушать сказки, сочинять истории, много болтать.",
+      ],
+    },
+    {
+      id: "pd2",
+      display_order: 2,
+      question_text:
+        "Как ребенок относится к новым правилам или сложным задачам?",
+      answers: [
+        "Часто находит нестандартное решение в обход правил.",
+        "Любит соревновательный элемент, старается сделать физически быстрее.",
+        "Пытается понять систему, почему правило именно такое.",
+        "Просит помощи или договаривается с другими.",
+        "Пытается обсудить или переубедить вас словами.",
+      ],
+    },
+    {
+      id: "pd3",
+      display_order: 3,
+      question_text: "Какая любимая игрушка или игра?",
+      answers: [
+        "Краски, пластилин, наборы для творчества.",
+        "Мяч, велосипед, спортивный инвентарь.",
+        "Головоломки, шашки, кубики с цифрами.",
+        "Настольные игры для компании, ролевые игры.",
+        "Книжки, аудиосказки, карточки со словами.",
+      ],
+    },
   ],
 };
 
@@ -409,9 +613,11 @@ export function useOnboardingQuestions(audience: OnboardingAudience) {
       .eq("active", true)
       .order("display_order", { ascending: true })
       .then(({ data, error }) => {
-        setQuestions(!error && data && data.length > 0
-          ? (data as OnboardingQuestion[])
-          : QUESTION_FALLBACKS[audience]);
+        setQuestions(
+          !error && data && data.length > 0
+            ? (data as OnboardingQuestion[])
+            : QUESTION_FALLBACKS[audience],
+        );
         setLoading(false);
       });
   }, [audience, devDataVersion]);

@@ -79,7 +79,10 @@ export const WYR_CARDS: WYRCard[] = [
     id: "B02",
     situation: "Подарили сложную настольную игру.",
     optionA: { label: "Сначала внимательно прочитаю правила", skill: "logic" },
-    optionB: { label: "Начну играть, разберёмся по ходу", skill: "adaptability" },
+    optionB: {
+      label: "Начну играть, разберёмся по ходу",
+      skill: "adaptability",
+    },
   },
   {
     id: "B03",
@@ -121,7 +124,10 @@ export const WYR_CARDS: WYRCard[] = [
     id: "B09",
     situation: "Ты придумал новую игру для двора.",
     optionA: { label: "Сразу расскажу всем правила", skill: "leadership" },
-    optionB: { label: "Сначала протестирую с лучшим другом", skill: "analytics" },
+    optionB: {
+      label: "Сначала протестирую с лучшим другом",
+      skill: "analytics",
+    },
   },
   {
     id: "B10",
@@ -132,14 +138,26 @@ export const WYR_CARDS: WYRCard[] = [
   {
     id: "B11",
     situation: "Твоя команда проигрывает в спорте.",
-    optionA: { label: "Буду играть ещё агрессивнее ради победы", skill: "leadership" },
-    optionB: { label: "Сплочу команду: «Главное — участие!»", skill: "empathy" },
+    optionA: {
+      label: "Буду играть ещё агрессивнее ради победы",
+      skill: "leadership",
+    },
+    optionB: {
+      label: "Сплочу команду: «Главное — участие!»",
+      skill: "empathy",
+    },
   },
   {
     id: "B12",
     situation: "Ты хочешь завести блог. О чём он будет?",
-    optionA: { label: "О том, как собирать вещи / проходить игры", skill: "analytics" },
-    optionB: { label: "Развлекательный: пранки и челленджи", skill: "creativity" },
+    optionA: {
+      label: "О том, как собирать вещи / проходить игры",
+      skill: "analytics",
+    },
+    optionB: {
+      label: "Развлекательный: пранки и челленджи",
+      skill: "creativity",
+    },
   },
 ];
 
@@ -161,7 +179,9 @@ export const SKILL_LABELS_911: Record<BasicSkill911, string> = {
 export const PRO_TASKS_911: ProTask911[] = [
   // ── ACT 1: Intelligence & Attention ──────────────────────────────────────
   {
-    id: "P01", act: 1, construct: "Логика",
+    id: "P01",
+    act: 1,
+    construct: "Логика",
     speaker: "system",
     situation: "Дверь закрыта. Код: 🌞 🌙 ⭐ ⭐ 🌙 …что следующее?",
     options: [
@@ -171,9 +191,12 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P02", act: 1, construct: "Пространство",
+    id: "P02",
+    act: 1,
+    construct: "Пространство",
     speaker: "system",
-    situation: "Схема вентиляции. Стрелка указывает на Север, мы смотрим на Восток. Куда идти?",
+    situation:
+      "Схема вентиляции. Стрелка указывает на Север, мы смотрим на Восток. Куда идти?",
     options: [
       { id: 0, label: "← Влево", scoreMap: { spatial: 10 }, isCorrect: true },
       { id: 1, label: "→ Вправо", scoreMap: {} },
@@ -181,7 +204,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P03", act: 1, construct: "Классификация",
+    id: "P03",
+    act: 1,
+    construct: "Классификация",
     speaker: "system",
     situation: "Пароль — «лишнее» слово: Микроскоп, Телескоп, Лупа, Кирпич.",
     options: [
@@ -191,7 +216,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P04", act: 1, construct: "Внимание",
+    id: "P04",
+    act: 1,
+    construct: "Внимание",
     speaker: "system",
     situation: "Лампы мигают: 🔵 🔴 🟢. Повтори код!",
     options: [
@@ -201,9 +228,12 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P05", act: 1, construct: "Математика",
+    id: "P05",
+    act: 1,
+    construct: "Математика",
     speaker: "system",
-    situation: "На столе 3 красных колбы и 5 синих. Сколько убрать синих, чтобы стало поровну?",
+    situation:
+      "На столе 3 красных колбы и 5 синих. Сколько убрать синих, чтобы стало поровну?",
     options: [
       { id: 0, label: "Одну", scoreMap: {} },
       { id: 1, label: "Две", scoreMap: { logic: 10 }, isCorrect: true },
@@ -211,7 +241,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P06", act: 1, construct: "Аналогия",
+    id: "P06",
+    act: 1,
+    construct: "Аналогия",
     speaker: "system",
     situation: "Подсказка на стене: «Лёд — Вода, Камень — ?»",
     options: [
@@ -221,27 +253,44 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P07", act: 1, construct: "Пространство",
+    id: "P07",
+    act: 1,
+    construct: "Пространство",
     speaker: "system",
     situation: "Нужно повернуть шестерёнку генератора. Куда крутим?",
     options: [
       { id: 0, label: "По часовой ↻", scoreMap: {} },
-      { id: 1, label: "Против часовой ↺", scoreMap: { spatial: 10 }, isCorrect: true },
+      {
+        id: 1,
+        label: "Против часовой ↺",
+        scoreMap: { spatial: 10 },
+        isCorrect: true,
+      },
       { id: 2, label: "Оставить", scoreMap: {} },
     ],
   },
   {
-    id: "P08", act: 1, construct: "Алгоритмы",
+    id: "P08",
+    act: 1,
+    construct: "Алгоритмы",
     speaker: "system",
-    situation: "Инструкция: «Сначала нажми красную кнопку, затем потяни рычаг.»",
+    situation:
+      "Инструкция: «Сначала нажми красную кнопку, затем потяни рычаг.»",
     options: [
       { id: 0, label: "Тяну рычаг", scoreMap: {} },
-      { id: 1, label: "Жму красную кнопку", scoreMap: { logic: 10 }, isCorrect: true },
+      {
+        id: 1,
+        label: "Жму красную кнопку",
+        scoreMap: { logic: 10 },
+        isCorrect: true,
+      },
       { id: 2, label: "Жму всё сразу", scoreMap: {} },
     ],
   },
   {
-    id: "P09", act: 1, construct: "Натуралист",
+    id: "P09",
+    act: 1,
+    construct: "Натуралист",
     speaker: "system",
     situation: "Робот просит отсортировать мусор. Куда кинуть яблоко?",
     options: [
@@ -251,7 +300,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P10", act: 1, construct: "Логика (ШТУР)",
+    id: "P10",
+    act: 1,
+    construct: "Логика (ШТУР)",
     speaker: "system",
     situation: "На весах 2 кубика весят как 1 шар. Что тяжелее?",
     options: [
@@ -262,7 +313,9 @@ export const PRO_TASKS_911: ProTask911[] = [
   },
   // ── ACT 2: Soft Skills / 4K ───────────────────────────────────────────────
   {
-    id: "P11", act: 2, construct: "Коллаборация",
+    id: "P11",
+    act: 2,
+    construct: "Коллаборация",
     speaker: "max",
     situation: "Макс: «Я устал, уходим! Тут страшно!»",
     options: [
@@ -272,17 +325,25 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P12", act: 2, construct: "Коммуникация",
+    id: "P12",
+    act: 2,
+    construct: "Коммуникация",
     speaker: "alice",
     situation: "Алиса и Макс спорят, кто понесёт фонарь.",
     options: [
       { id: 0, label: "«Я заберу, я лидер»", scoreMap: {} },
-      { id: 1, label: "«Несёт тот, у кого лучше зрение»", scoreMap: { communication: 10 } },
+      {
+        id: 1,
+        label: "«Несёт тот, у кого лучше зрение»",
+        scoreMap: { communication: 10 },
+      },
       { id: 2, label: "«Решайте сами»", scoreMap: {} },
     ],
   },
   {
-    id: "P13", act: 2, construct: "Креативность",
+    id: "P13",
+    act: 2,
+    construct: "Креативность",
     speaker: "system",
     situation: "Провод искрит. Изоленты нет. Чем обмотаем?",
     options: [
@@ -292,7 +353,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P14", act: 2, construct: "Лидерство",
+    id: "P14",
+    act: 2,
+    construct: "Лидерство",
     speaker: "system",
     situation: "Мост выдержит только двоих. Вас трое.",
     options: [
@@ -302,17 +365,25 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P15", act: 2, construct: "Эмпатия",
+    id: "P15",
+    act: 2,
+    construct: "Эмпатия",
     speaker: "alice",
     situation: "Алиса разбила колено и плачет.",
     options: [
       { id: 0, label: "«Хватит ныть!»", scoreMap: {} },
-      { id: 1, label: "«Перевяжем, обопрись на меня»", scoreMap: { communication: 10 } },
+      {
+        id: 1,
+        label: "«Перевяжем, обопрись на меня»",
+        scoreMap: { communication: 10 },
+      },
       { id: 2, label: "«Оставим её тут»", scoreMap: {} },
     ],
   },
   {
-    id: "P16", act: 2, construct: "Делегирование",
+    id: "P16",
+    act: 2,
+    construct: "Делегирование",
     speaker: "system",
     situation: "Нужно нажать 3 кнопки в разных углах одновременно.",
     options: [
@@ -322,7 +393,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P17", act: 2, construct: "Критическое мышление",
+    id: "P17",
+    act: 2,
+    construct: "Критическое мышление",
     speaker: "max",
     situation: "ИИ говорит: «Идите в красную дверь». Макс верит.",
     options: [
@@ -332,38 +405,58 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P18", act: 2, construct: "Креативность",
+    id: "P18",
+    act: 2,
+    construct: "Креативность",
     speaker: "system",
     situation: "Нужно достать ключ с полки. Есть швабра и скотч.",
     options: [
       { id: 0, label: "Прыгать до посинения", scoreMap: {} },
-      { id: 1, label: "Примотать скотч к швабре", scoreMap: { creativity: 10 } },
+      {
+        id: 1,
+        label: "Примотать скотч к швабре",
+        scoreMap: { creativity: 10 },
+      },
       { id: 2, label: "Искать стул", scoreMap: {} },
     ],
   },
   {
-    id: "P19", act: 2, construct: "Медиация",
+    id: "P19",
+    act: 2,
+    construct: "Медиация",
     speaker: "alice",
     situation: "Макс сломал прибор. Алиса на него кричит.",
     options: [
       { id: 0, label: "Присоединюсь к Алисе", scoreMap: {} },
-      { id: 1, label: "«Успокойтесь, починим»", scoreMap: { communication: 10 } },
+      {
+        id: 1,
+        label: "«Успокойтесь, починим»",
+        scoreMap: { communication: 10 },
+      },
       { id: 2, label: "Буду молчать", scoreMap: {} },
     ],
   },
   {
-    id: "P20", act: 2, construct: "Креативность",
+    id: "P20",
+    act: 2,
+    construct: "Креативность",
     speaker: "system",
     situation: "Нас заметил дрон! Нужно его отвлечь.",
     options: [
       { id: 0, label: "Побежим от него", scoreMap: {} },
-      { id: 1, label: "Бросим банку в другой угол", scoreMap: { creativity: 10 } },
+      {
+        id: 1,
+        label: "Бросим банку в другой угол",
+        scoreMap: { creativity: 10 },
+      },
       { id: 2, label: "Замрем", scoreMap: {} },
     ],
   },
   // ── ACT 3: Crisis & Growth Mindset ───────────────────────────────────────
   {
-    id: "P21", act: 3, construct: "Growth Mindset",
+    id: "P21",
+    act: 3,
+    construct: "Growth Mindset",
     speaker: "system",
     situation: "СИСТЕМА: ОШИБКА! Дверь заблокирована.",
     options: [
@@ -373,7 +466,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P22", act: 3, construct: "Упорство",
+    id: "P22",
+    act: 3,
+    construct: "Упорство",
     speaker: "max",
     situation: "Нашли рубильник под током. Макс хочет рискнуть.",
     options: [
@@ -383,17 +478,25 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P23", act: 3, construct: "Гибкость",
+    id: "P23",
+    act: 3,
+    construct: "Гибкость",
     speaker: "system",
     situation: "План лаборатории сгорел. Что делаем?",
     options: [
       { id: 0, label: "«Мы обречены»", scoreMap: {} },
-      { id: 1, label: "«Нарисуем карту углём»", scoreMap: { creativity: 10, growth: 10 } },
+      {
+        id: 1,
+        label: "«Нарисуем карту углём»",
+        scoreMap: { creativity: 10, growth: 10 },
+      },
       { id: 2, label: "«Идём наугад»", scoreMap: {} },
     ],
   },
   {
-    id: "P24", act: 3, construct: "Стресс-тест",
+    id: "P24",
+    act: 3,
+    construct: "Стресс-тест",
     speaker: "system",
     situation: "⏱️ Таймер тикает (10 сек)! Какой провод режем?",
     options: [
@@ -403,7 +506,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P25", act: 3, construct: "Просоциальность",
+    id: "P25",
+    act: 3,
+    construct: "Просоциальность",
     speaker: "max",
     situation: "Выход открыт, но Макс застрял.",
     options: [
@@ -413,17 +518,25 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P26", act: 3, construct: "Критика",
+    id: "P26",
+    act: 3,
+    construct: "Критика",
     speaker: "alice",
     situation: "Алиса говорит: «Твоя идея была глупой».",
     options: [
       { id: 0, label: "«Сама ты глупая!»", scoreMap: {} },
-      { id: 1, label: "«Давай обсудим почему»", scoreMap: { growth: 10, communication: 10 } },
+      {
+        id: 1,
+        label: "«Давай обсудим почему»",
+        scoreMap: { growth: 10, communication: 10 },
+      },
       { id: 2, label: "«Мне всё равно»", scoreMap: {} },
     ],
   },
   {
-    id: "P27", act: 3, construct: "Рефлексия",
+    id: "P27",
+    act: 3,
+    construct: "Рефлексия",
     speaker: "system",
     situation: "Квест пройден! Что помогло выжить?",
     options: [
@@ -433,17 +546,25 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P28", act: 3, construct: "Упорство",
+    id: "P28",
+    act: 3,
+    construct: "Упорство",
     speaker: "system",
     situation: "Дверь тяжёлая. Что делаем?",
     options: [
       { id: 0, label: "Толкну и брошу", scoreMap: {} },
-      { id: 1, label: "Толкаем вместе на счёт «3»", scoreMap: { collab: 10, growth: 10 } },
+      {
+        id: 1,
+        label: "Толкаем вместе на счёт «3»",
+        scoreMap: { collab: 10, growth: 10 },
+      },
       { id: 2, label: "Ждём спасателей", scoreMap: {} },
     ],
   },
   {
-    id: "P29", act: 3, construct: "Аналитика",
+    id: "P29",
+    act: 3,
+    construct: "Аналитика",
     speaker: "system",
     situation: "СИСТЕМА: Оцените сложность миссии.",
     options: [
@@ -453,7 +574,9 @@ export const PRO_TASKS_911: ProTask911[] = [
     ],
   },
   {
-    id: "P30", act: 3, construct: "Финал",
+    id: "P30",
+    act: 3,
+    construct: "Финал",
     speaker: "system",
     situation: "ИИ: «Готовы стать Исследователями?»",
     options: [
@@ -476,12 +599,12 @@ export const STEALTH_PATTERNS_911: StealthPattern911[] = [
   {
     id: "decisive",
     label: "Решительный",
-    match: (e) => (e.answeredAt - e.enteredAt) < 4000,
+    match: (e) => e.answeredAt - e.enteredAt < 4000,
   },
   {
     id: "thoughtful",
     label: "Вдумчивый",
-    match: (e) => (e.answeredAt - e.enteredAt) > 9000,
+    match: (e) => e.answeredAt - e.enteredAt > 9000,
   },
   {
     id: "growth_responder",

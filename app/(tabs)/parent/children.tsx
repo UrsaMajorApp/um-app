@@ -9,7 +9,7 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EditChildModal from "../../../components/parent/EditChildModal";

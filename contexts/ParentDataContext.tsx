@@ -1,14 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
 } from "react";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { createClientUuid, isUuid } from "../lib/idUtils";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import { Child, Diagnostic } from "../models/types";
 import { useAuth } from "./AuthContext";
 
@@ -41,9 +41,7 @@ interface ParentDataContextType {
   addChild: (child: Child) => Promise<void>;
   removeChild: (childId: string) => Promise<void>;
   updateChild: (childId: string, patch: Partial<Child>) => Promise<void>;
-  updateParentProfile: (
-    profile: Partial<ParentProfileData>,
-  ) => Promise<void>;
+  updateParentProfile: (profile: Partial<ParentProfileData>) => Promise<void>;
   saveParentProfile: (
     profile: ParentProfileData,
     draftChildren: ChildDraft[],
@@ -121,8 +119,15 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
 
         if (!realSession) {
           // Dev-bypass or unauthenticated: skip DB, hydrate from auth user only.
-          const storedTariff = await AsyncStorage.getItem(devTariffKey(user.id));
-          setParentProfile({ firstName: user.firstName, lastName: user.lastName, phone: user.phone, tariff: (storedTariff as "basic" | "pro") || "basic" });
+          const storedTariff = await AsyncStorage.getItem(
+            devTariffKey(user.id),
+          );
+          setParentProfile({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            tariff: (storedTariff as "basic" | "pro") || "basic",
+          });
           setChildrenProfile([]);
           setActiveChildId(null);
           setIsLoading(false);
@@ -205,9 +210,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
     loadParentData();
   }, [user, devDataVersion]);
 
-  const updateParentProfile = async (
-    profile: Partial<ParentProfileData>,
-  ) => {
+  const updateParentProfile = async (profile: Partial<ParentProfileData>) => {
     if (!user || !parentProfile) return;
 
     const updatedProfile: ParentProfileData = {
@@ -248,7 +251,8 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
       .filter((entry) => entry.name.trim() && entry.ageGroup)
       .map((entry) =>
         normalizeChild({
-          id: hasRealSession && !isUuid(entry.id) ? createClientUuid() : entry.id,
+          id:
+            hasRealSession && !isUuid(entry.id) ? createClientUuid() : entry.id,
           parentId: user.id,
           name: entry.name.trim(),
           age: ageGroupToAge(entry.ageGroup),
@@ -256,7 +260,9 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
           interests: [],
           phone: entry.phone?.trim() || undefined,
           qrPin: entry.qrPin || undefined,
-          qrPinExpiresAt: entry.qrPinExpiresAt ? entry.qrPinExpiresAt.toISOString() : undefined,
+          qrPinExpiresAt: entry.qrPinExpiresAt
+            ? entry.qrPinExpiresAt.toISOString()
+            : undefined,
           qrPinOneTimeUse: entry.qrPinOneTimeUse || false,
         }),
       );
@@ -345,17 +351,20 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
     setChildrenProfile(next);
     const updated = next.find((c) => c.id === childId);
     if (supabase && isSupabaseConfigured && hasRealSession && updated) {
-      await supabase.from("child_profiles").update({
-        name: updated.name,
-        age: updated.age,
-        age_category: updated.ageCategory,
-        interests: updated.interests,
-        phone: updated.phone || null,
-        qr_pin: updated.qrPin || null,
-        qr_pin_expires_at: updated.qrPinExpiresAt || null,
-        qr_pin_one_time_use: updated.qrPinOneTimeUse || false,
-        updated_at: new Date().toISOString(),
-      }).eq("id", childId);
+      await supabase
+        .from("child_profiles")
+        .update({
+          name: updated.name,
+          age: updated.age,
+          age_category: updated.ageCategory,
+          interests: updated.interests,
+          phone: updated.phone || null,
+          qr_pin: updated.qrPin || null,
+          qr_pin_expires_at: updated.qrPinExpiresAt || null,
+          qr_pin_one_time_use: updated.qrPinOneTimeUse || false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", childId);
     }
   };
 
@@ -390,7 +399,10 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
     setParentProfile(updatedProfile);
 
     if (supabase && isSupabaseConfigured && hasRealSession) {
-      await supabase.from("parent_profiles").update({ tariff }).eq("user_id", user.id);
+      await supabase
+        .from("parent_profiles")
+        .update({ tariff })
+        .eq("user_id", user.id);
     } else {
       await AsyncStorage.setItem(devTariffKey(user.id), tariff);
     }
