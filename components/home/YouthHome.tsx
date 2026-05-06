@@ -350,7 +350,12 @@ export default function YouthHome() {
           <View className="mt-6 pt-6 border-t border-gray-100">
             {isPro ? (
               <Pressable
-                onPress={() => router.push("/profile/youth/testing" as any)}
+                onPress={() => {
+                  router.push({
+                    pathname: "/profile/youth/testing",
+                    params: activeChild?.id ? { childId: activeChild.id } : undefined,
+                  } as any);
+                }}
                 className="bg-purple-600 p-4 rounded-2xl items-center flex-row justify-center gap-2"
               >
                 <Feather name="zap" size={18} color="white" />

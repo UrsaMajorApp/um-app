@@ -25,7 +25,11 @@ import { useDiagnosticEngine1517 } from "../../hooks/useDiagnosticEngine1517";
 import CareerSwipeCard from "./architects/CareerSwipeCard";
 import OsTask from "./architects/OsTask";
 
-export default function DiagnosticArchitects() {
+interface Props {
+  childId?: string | null;
+}
+
+export default function DiagnosticArchitects({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
   const { childrenProfile, activeChildId, updateChildDiagnostic, parentProfile } = useParentData();
@@ -34,19 +38,26 @@ export default function DiagnosticArchitects() {
   const hPad = isDesktop ? LAYOUT.profileHorizontalPaddingDesktop : LAYOUT.profileHorizontalPaddingMobile;
 
   const isPro = parentProfile?.tariff === "pro";
+  const targetChildId = childId || activeChildId;
+  const engineChildId = targetChildId || user?.id || "unknown";
 
   const engine = useDiagnosticEngine1517({
-    childId: activeChildId || user?.id || "unknown",
+    childId: engineChildId,
     userId: user?.id || "unknown",
     isPro,
     onComplete: async (diagnostic) => {
-      if (activeChildId) await updateChildDiagnostic(activeChildId, diagnostic);
+      if (targetChildId) await updateChildDiagnostic(targetChildId, diagnostic);
     },
   });
 
   useEffect(() => {
-    if (engine.phase === "done") router.push("/profile/youth/results");
-  }, [engine.phase]);
+    if (engine.phase === "done") {
+      router.push({
+        pathname: "/profile/youth/results",
+        params: targetChildId ? { childId: targetChildId } : undefined,
+      } as any);
+    }
+  }, [engine.phase, router, targetChildId]);
 
   const handleSkip = useCallback(async () => {
     router.back();

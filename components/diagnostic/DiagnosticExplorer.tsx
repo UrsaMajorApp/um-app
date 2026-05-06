@@ -29,7 +29,11 @@ import { useSpeech } from "../../hooks/useSpeech";
 import BasicSwipeCard from "./BasicSwipeCard";
 import ProQuestTask from "./ProQuestTask";
 
-export default function DiagnosticExplorer() {
+interface Props {
+  childId?: string | null;
+}
+
+export default function DiagnosticExplorer({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
   const { childrenProfile, activeChildId, updateChildDiagnostic, parentProfile } =
@@ -42,14 +46,16 @@ export default function DiagnosticExplorer() {
 
   const isPro = parentProfile?.tariff === "pro";
   const { speak, stop: stopSpeech } = useSpeech();
+  const targetChildId = childId || activeChildId;
+  const engineChildId = targetChildId || user?.id || "unknown";
 
   const engine = useDiagnosticEngine({
-    childId: activeChildId || user?.id || "unknown",
+    childId: engineChildId,
     userId: user?.id || "unknown",
     isPro,
     onComplete: async (diagnostic) => {
-      if (activeChildId) {
-        await updateChildDiagnostic(activeChildId, diagnostic);
+      if (targetChildId) {
+        await updateChildDiagnostic(targetChildId, diagnostic);
       }
     },
   });
@@ -72,9 +78,12 @@ export default function DiagnosticExplorer() {
   // Navigate to results when done
   useEffect(() => {
     if (engine.phase === "done") {
-      router.push("/profile/youth/results");
+      router.push({
+        pathname: "/profile/youth/results",
+        params: targetChildId ? { childId: targetChildId } : undefined,
+      } as any);
     }
-  }, [engine.phase]);
+  }, [engine.phase, router, targetChildId]);
 
   // Cleanup speech on unmount
   useEffect(() => () => stopSpeech(), []);

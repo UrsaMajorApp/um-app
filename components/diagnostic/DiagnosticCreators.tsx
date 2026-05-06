@@ -33,7 +33,11 @@ import { useDiagnosticEngine911 } from "../../hooks/useDiagnosticEngine911";
 import WYRCard from "./creators/WYRCard";
 import NovellaTask from "./creators/NovellaTask";
 
-export default function DiagnosticCreators() {
+interface Props {
+  childId?: string | null;
+}
+
+export default function DiagnosticCreators({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
   const { childrenProfile, activeChildId, updateChildDiagnostic, parentProfile } = useParentData();
@@ -42,14 +46,16 @@ export default function DiagnosticCreators() {
   const hPad = isDesktop ? LAYOUT.profileHorizontalPaddingDesktop : LAYOUT.profileHorizontalPaddingMobile;
 
   const isPro = parentProfile?.tariff === "pro";
+  const targetChildId = childId || activeChildId;
+  const engineChildId = targetChildId || user?.id || "unknown";
 
   const engine = useDiagnosticEngine911({
-    childId: activeChildId || user?.id || "unknown",
+    childId: engineChildId,
     userId: user?.id || "unknown",
     isPro,
     onComplete: async (diagnostic) => {
-      if (activeChildId) {
-        await updateChildDiagnostic(activeChildId, diagnostic);
+      if (targetChildId) {
+        await updateChildDiagnostic(targetChildId, diagnostic);
       }
     },
   });
@@ -57,9 +63,12 @@ export default function DiagnosticCreators() {
   // Navigate when done
   useEffect(() => {
     if (engine.phase === "done") {
-      router.push("/profile/youth/results");
+      router.push({
+        pathname: "/profile/youth/results",
+        params: targetChildId ? { childId: targetChildId } : undefined,
+      } as any);
     }
-  }, [engine.phase]);
+  }, [engine.phase, router, targetChildId]);
 
   // ── Skip handler ─────────────────────────────────────────────────────────
 

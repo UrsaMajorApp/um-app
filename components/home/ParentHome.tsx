@@ -385,7 +385,10 @@ export default function ParentHome() {
                   onPress={() => {
                     if (!activeChild) return;
                     setActiveChildId(activeChild.id);
-                    router.push("/profile/youth/testing" as any);
+                    router.push({
+                      pathname: "/profile/youth/testing",
+                      params: { childId: activeChild.id },
+                    } as any);
                   }}
                   className="mt-3 bg-white self-start px-3 py-1.5 rounded-full border border-blue-200"
                 >

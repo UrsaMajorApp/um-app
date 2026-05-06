@@ -10,7 +10,7 @@
  */
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import {
   Platform,
@@ -26,8 +26,20 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { useAuth } from "../../../contexts/AuthContext";
 
+function compactSummary(summary?: string) {
+  const normalized = (summary || "").replace(/\s+/g, " ").trim();
+  if (!normalized) return "Отличный результат и сильный потенциал для развития.";
+
+  const firstSentence = normalized.match(/^[^.!?]+[.!?]/)?.[0]?.trim() || normalized;
+  if (firstSentence.length <= 130) return firstSentence;
+
+  const trimmed = firstSentence.slice(0, 127);
+  return `${trimmed.slice(0, trimmed.lastIndexOf(" "))}.`;
+}
+
 export default function YouthResults() {
   const router = useRouter();
+  const { childId } = useLocalSearchParams<{ childId?: string | string[] }>();
   const { finalizeRegistration } = useAuth();
 
   const handleGoHome = async () => {
@@ -41,9 +53,13 @@ export default function YouthResults() {
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
 
+  const requestedChildId = Array.isArray(childId) ? childId[0] : childId;
   const child =
-    childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
+    childrenProfile.find((c) => c.id === requestedChildId) ||
+    childrenProfile.find((c) => c.id === activeChildId) ||
+    childrenProfile[0];
   const diagnostic = child?.talentProfile;
+  const summary = compactSummary(diagnostic?.summary);
 
   if (!child || !diagnostic) {
     return (
@@ -236,7 +252,7 @@ export default function YouthResults() {
                 {diagnostic.recommendedConstellation}
               </Text>
             </View>
-            <Text style={s.summaryText}>{diagnostic.summary}</Text>
+            <Text style={s.summaryText}>{summary}</Text>
           </MotiView>
 
           {/* ── 2. Talent Map Bars ── */}

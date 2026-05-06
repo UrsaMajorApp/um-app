@@ -211,7 +211,10 @@ export default function ParentChildDetails() {
                 <TouchableOpacity
                   onPress={() => {
                     setActiveChildId(child.id);
-                    router.push("/profile/youth/testing" as any);
+                    router.push({
+                      pathname: "/profile/youth/testing",
+                      params: { childId: child.id },
+                    } as any);
                   }}
                   className="bg-blue-50 py-3 px-5 rounded-2xl self-start"
                 >
@@ -341,7 +344,10 @@ export default function ParentChildDetails() {
             <Pressable
               onPress={() => {
                 setActiveChildId(child.id);
-                router.push("/profile/youth/testing" as any);
+                router.push({
+                  pathname: "/profile/youth/testing",
+                  params: { childId: child.id },
+                } as any);
               }}
               className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
             >

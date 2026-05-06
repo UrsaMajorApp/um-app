@@ -37,7 +37,12 @@ export default function ParentResults() {
           Пройдите тест, чтобы узнать таланты вашего ребёнка
         </Text>
         <TouchableOpacity
-          onPress={() => router.push("/profile/youth/testing" as any)}
+          onPress={() => {
+            router.push({
+              pathname: "/profile/youth/testing",
+              params: child?.id ? { childId: child.id } : undefined,
+            } as any);
+          }}
           style={{ backgroundColor: "white", paddingVertical: 16, paddingHorizontal: 32, borderRadius: 24 }}
         >
           <Text style={{ color: COLORS.primary, fontWeight: "800", fontSize: 16 }}>Начать тестирование</Text>
@@ -124,7 +129,12 @@ export default function ParentResults() {
 
           {/* Actions */}
           <TouchableOpacity
-            onPress={() => router.push("/profile/youth/testing" as any)}
+            onPress={() => {
+              router.push({
+                pathname: "/profile/youth/testing",
+                params: { childId: child.id },
+              } as any);
+            }}
             style={{ borderWidth: 2, borderColor: "white", paddingVertical: 16, borderRadius: 24, marginBottom: 12 }}
           >
             <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "700" }}>

@@ -6,14 +6,13 @@
  *   9–11 years → legacy CHILD_QUESTIONS
  *   12–17      → legacy YOUTH_QUESTIONS
  *
- * The devYouthAge from DevSettingsContext can override the child's real age
- * for testing purposes.
+ * Falls back to devYouthAge only when no child profile is available.
  */
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
-import { useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import {
   Platform,
   ScrollView,
@@ -31,6 +30,7 @@ import { useParentData } from "../../../contexts/ParentDataContext";
 import { useDevSettings } from "../../../contexts/DevSettingsContext";
 import { Diagnostic } from "../../../models/types";
 import { useOnboardingQuestions, type OnboardingQuestion } from "../../../hooks/usePlatformData";
+import { generateGeminiDiagnosticJson, isGeminiFallbackError } from "../../../lib/geminiDiagnostics";
 import DiagnosticExplorer from "../../../components/diagnostic/DiagnosticExplorer";
 import DiagnosticCreators from "../../../components/diagnostic/DiagnosticCreators";
 import DiagnosticRebels from "../../../components/diagnostic/DiagnosticRebels";
@@ -42,24 +42,36 @@ import DiagnosticArchitects from "../../../components/diagnostic/DiagnosticArchi
 
 export default function YouthTesting() {
   const router = useRouter();
+  const { childId } = useLocalSearchParams<{ childId?: string | string[] }>();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
 
-  const { user } = useAuth();
-  const { childrenProfile, activeChildId, updateChildDiagnostic } = useParentData();
+  const { user, devMode } = useAuth();
+  const { childrenProfile, activeChildId, setActiveChildId, updateChildDiagnostic } = useParentData();
   const { devYouthAge } = useDevSettings();
   const { questions: fallbackQuestions, loading: fallbackLoading } = useOnboardingQuestions("youth");
 
-  const activeChild = childrenProfile.find((c) => c.id === activeChildId);
-  const childAge = __DEV__ ? devYouthAge : (activeChild?.age ?? 10);
+  const requestedChildId = Array.isArray(childId) ? childId[0] : childId;
+  const targetChild =
+    childrenProfile.find((c) => c.id === requestedChildId) ||
+    childrenProfile.find((c) => c.id === activeChildId) ||
+    childrenProfile[0];
+  const targetChildId = targetChild?.id || activeChildId;
+  const childAge = targetChild?.age ?? (devMode ? devYouthAge : 10);
 
-  if (childAge >= 6 && childAge <= 8) return <DiagnosticExplorer />;
-  if (childAge >= 9 && childAge <= 11) return <DiagnosticCreators />;
-  if (childAge >= 12 && childAge <= 14) return <DiagnosticRebels />;
-  if (childAge >= 15 && childAge <= 17) return <DiagnosticArchitects />;
+  useEffect(() => {
+    if (targetChild?.id && targetChild.id !== activeChildId) {
+      setActiveChildId(targetChild.id);
+    }
+  }, [activeChildId, setActiveChildId, targetChild?.id]);
+
+  if (childAge >= 6 && childAge <= 8) return <DiagnosticExplorer childId={targetChildId} />;
+  if (childAge >= 9 && childAge <= 11) return <DiagnosticCreators childId={targetChildId} />;
+  if (childAge >= 12 && childAge <= 14) return <DiagnosticRebels childId={targetChildId} />;
+  if (childAge >= 15 && childAge <= 17) return <DiagnosticArchitects childId={targetChildId} />;
 
   // FALLBACK: 18+ or unknown
   if (fallbackLoading) {
@@ -73,7 +85,7 @@ export default function YouthTesting() {
   return <LegacyQuestionTest
     questions={fallbackQuestions}
     user={user}
-    activeChildId={activeChildId}
+    activeChildId={targetChildId}
     updateChildDiagnostic={updateChildDiagnostic}
     router={router}
     isDesktop={isDesktop}
@@ -118,9 +130,6 @@ function LegacyQuestionTest({
   const processWithAI = async (selectedAnswers: number[], isSkip: boolean = false) => {
     setIsProcessing(true);
     try {
-      const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-      if (!apiKey) throw new Error("Gemini API Key is missing");
-
       let prompt = `You are an expert child psychologist and talent scout. Analyze this profile.\n`;
 
       if (!isSkip) {
@@ -144,25 +153,11 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
     "physical": number (0-100),
     "linguistic": number (0-100)
   },
-  "summary": "string (A short, encouraging paragraph in Russian about their potential)",
+  "summary": "string (One short, plain Russian sentence, max 110 characters)",
   "recommendedConstellation": "string (A creative 1-2 word title for their talent type in Russian, e.g. 'Техно-энтузиаст' or 'Творческий лидер')"
 }`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7 },
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error?.message || "Failed to fetch from Gemini");
-
-      const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-      const cleanedJson = textOutput.replace(/```json/g, "").replace(/```/g, "").trim();
-      const diagnosticData = JSON.parse(cleanedJson);
+      const diagnosticData = await generateGeminiDiagnosticJson(prompt);
 
       const targetDiagnostic: Diagnostic = {
         childId: activeChildId || user?.id || "unknown",
@@ -175,20 +170,28 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
       if (activeChildId) {
         await updateChildDiagnostic(activeChildId, targetDiagnostic);
       }
-      router.push("/profile/youth/results");
+      router.push({
+        pathname: "/profile/youth/results",
+        params: activeChildId ? { childId: activeChildId } : undefined,
+      } as any);
     } catch (e) {
-      console.error("AI processing error:", e);
-      alert("Произошла ошибка при анализе. Мы используем запасные результаты.");
+      if (!isGeminiFallbackError(e)) {
+        console.error("AI processing error:", e);
+        alert("Произошла ошибка при анализе. Мы используем запасные результаты.");
+      }
       if (activeChildId) {
         await updateChildDiagnostic(activeChildId, {
           childId: activeChildId,
           scores: { logical: 70, creative: 80, social: 60, physical: 50, linguistic: 65 },
-          summary: "У тебя отличный потенциал! Мы видим сильную творческую жилку.",
+          summary: "Сильная сторона — творческий подход и любопытство.",
           recommendedConstellation: "Творческий новатор",
           timestamp: new Date().toISOString(),
         });
       }
-      router.push("/profile/youth/results");
+      router.push({
+        pathname: "/profile/youth/results",
+        params: activeChildId ? { childId: activeChildId } : undefined,
+      } as any);
     } finally {
       setIsProcessing(false);
     }
