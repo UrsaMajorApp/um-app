@@ -1,18 +1,53 @@
-import { Tabs } from "expo-router";
-import { useMemo } from "react";
-import { Platform, useWindowDimensions, View } from "react-native";
-import { LAYOUT } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
+import { Tabs, useRouter, useSegments } from "expo-router";
+import { useEffect, useMemo } from "react";
+import { ActivityIndicator, Platform, useWindowDimensions, View } from "react-native";
+import { COLORS, LAYOUT } from "../../constants/theme";
+import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import CustomTabBar, { SideNav, TabIcon } from "./layout-container";
 
+const YOUTH_ROLES = new Set<UserRole>(["youth", "child", "young-adult"]);
+
+function canRenderTabSection(role: UserRole, section?: string) {
+  if (section === "admin") return role === "admin";
+  if (section === "parent") return role === "parent";
+  if (section === "youth") return YOUTH_ROLES.has(role);
+  if (section === "mentor") return role === "mentor";
+  if (section === "organization") return role === "org";
+  if (section === "teacher") return role === "teacher";
+  if (section === "chats") return role !== "child";
+  if (section === "catalog") return role !== "mentor" && role !== "org";
+  return true;
+}
+
 export default function TabsLayout() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  const segments = useSegments();
   const { width } = useWindowDimensions();
 
   const role = useMemo(() => user?.role || "parent", [user?.role]);
   const hideForMentor = role === "mentor" || role === "org";
+  const isTabsRoute = segments[0] === "(tabs)";
+  const section = isTabsRoute ? (segments[1] as string | undefined) : undefined;
+  const shouldRedirect = Boolean(
+    isTabsRoute && user && !canRenderTabSection(user.role, section),
+  );
 
   const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.replace("/(tabs)/home");
+    }
+  }, [router, shouldRedirect]);
+
+  if (isLoading || !user || shouldRedirect) {
+    return (
+      <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
 
   const screens = (
     <Tabs
@@ -64,6 +99,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="chats/[id]" options={{ href: null }} />
 
       {/* PARENT SCREENS */}
+      <Tabs.Screen name="parent/children" options={{ href: null }} />
       <Tabs.Screen name="parent/calendar" options={{ href: null }} />
       <Tabs.Screen name="parent/clubs" options={{ href: null }} />
       <Tabs.Screen name="parent/reports" options={{ href: null }} />

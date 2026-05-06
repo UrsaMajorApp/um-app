@@ -5,8 +5,8 @@ import {
 } from "@react-navigation/native";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
-import { COLORS, LAYOUT, RADIUS, SHADOWS, TYPOGRAPHY } from "../constants/theme";
+import { ActivityIndicator, useColorScheme, View } from "react-native";
+import { COLORS } from "../constants/theme";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import { DevSettingsProvider } from "../contexts/DevSettingsContext";
 import { ParentDataProvider } from "../contexts/ParentDataContext";
@@ -14,7 +14,7 @@ import "../global.css";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DevRoleSwitcher } from "../components/DevRoleSwitcher";
-import type { UserRole } from "../contexts/AuthContext";
+import type { AuthUser, UserRole } from "../contexts/AuthContext";
 
 const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, string>> = {
   parent: "/profile/parent/create-profile",
@@ -29,71 +29,162 @@ function getProfileSetupRoute(role: UserRole) {
   return PROFILE_SETUP_ROUTES[role] ?? "/(tabs)/home";
 }
 
+const YOUTH_ROLES = new Set<UserRole>(["youth", "child", "young-adult"]);
+
+function isYouthRole(role: UserRole) {
+  return YOUTH_ROLES.has(role);
+}
+
+function canUseYouthDiagnostic(role: UserRole) {
+  return role === "parent" || isYouthRole(role);
+}
+
+function getRoleGuardRedirect(user: AuthUser, segments: string[]) {
+  const root = segments[0];
+  const section = segments[1];
+  const screen = segments[2];
+  const role = user.role;
+
+  if (root === "(tabs)") {
+    if (section === "admin" && role !== "admin") return "/(tabs)/home";
+    if (section === "parent" && role !== "parent") return "/(tabs)/home";
+    if (section === "youth" && !isYouthRole(role)) return "/(tabs)/home";
+    if (section === "mentor" && role !== "mentor") return "/(tabs)/home";
+    if (section === "organization" && role !== "org") return "/(tabs)/home";
+    if (section === "teacher" && role !== "teacher") return "/(tabs)/home";
+    if (section === "chats" && role === "child") return "/(tabs)/home";
+    if (section === "catalog" && (role === "mentor" || role === "org")) return "/(tabs)/home";
+    return null;
+  }
+
+  if (root === "profile") {
+    if (section === "admin" && role !== "admin") return "/(tabs)/home";
+    if (section === "parent" && role !== "parent") return "/(tabs)/home";
+    if (section === "organization" && role !== "org") return "/(tabs)/home";
+    if (section === "mentor" && role !== "mentor") return "/(tabs)/home";
+    if (section === "teacher" && role !== "teacher") return "/(tabs)/home";
+    if (section === "youth") {
+      if (screen === "create-profile-child" && role !== "parent") return "/(tabs)/home";
+      if ((screen === "create-profile" || screen === "create-profile-young-adult") && !isYouthRole(role)) {
+        return "/(tabs)/home";
+      }
+      if (!canUseYouthDiagnostic(role)) return "/(tabs)/home";
+    }
+    return null;
+  }
+
+  if (root === "parent" && role !== "parent") return "/(tabs)/home";
+  if (root === "mentor" && role !== "mentor") return "/(tabs)/home";
+  if (root === "organization" && role !== "org") return "/(tabs)/home";
+
+  return null;
+}
+
+function getRouteRedirectPath({
+  devMode,
+  isLoading,
+  segments,
+  user,
+}: {
+  devMode: boolean;
+  isLoading: boolean;
+  segments: string[];
+  user: AuthUser | null;
+}) {
+  if (isLoading) return null;
+
+  const root = segments[0];
+  const authScreen = segments[1] as string | undefined;
+  const inAuthGroup = root === "(auth)";
+  const inOAuthFlow = root === "auth";
+  const isOAuthCallbackScreen =
+    inOAuthFlow &&
+    (authScreen === "callback" || authScreen === "complete-profile" || authScreen === "reset-password");
+
+  if (!user && !inAuthGroup && !inOAuthFlow) {
+    return "/intro";
+  }
+
+  if (user && !user.profileComplete && !devMode && !isOAuthCallbackScreen) {
+    if (user.hasSelectedRole === false) {
+      return "/auth/complete-profile";
+    }
+
+    const setupRoute = getProfileSetupRoute(user.role);
+    const setupRouteParts = setupRoute.split("/").filter(Boolean);
+    const onProfileSetupRoute = setupRouteParts.every(
+      (part, index) => segments[index] === part,
+    );
+
+    if (!onProfileSetupRoute) {
+      return setupRoute;
+    }
+  }
+
+  if (user && inAuthGroup && authScreen === "intro") {
+    return "/(tabs)/home";
+  }
+
+  if (
+    user &&
+    inAuthGroup &&
+    authScreen !== "role" &&
+    authScreen !== "register" &&
+    !devMode
+  ) {
+    return "/(tabs)/home";
+  }
+
+  if (user && inOAuthFlow && !isOAuthCallbackScreen && !devMode) {
+    return "/(tabs)/home";
+  }
+
+  if (user && root === "profile" && !segments[1]) {
+    if (!user.profileComplete && !devMode) {
+      if (user.hasSelectedRole === false) {
+        return "/auth/complete-profile";
+      }
+      return getProfileSetupRoute(user.role);
+    }
+
+    return "/(tabs)/home";
+  }
+
+  if (user) {
+    return getRoleGuardRedirect(user, segments);
+  }
+
+  return null;
+}
+
 function RootNavigator() {
   const colorScheme = useColorScheme();
   const { user, isLoading, devMode } = useAuth();
   const router = useRouter();
   const segments = useSegments();
+  const redirectPath = getRouteRedirectPath({
+    devMode,
+    isLoading,
+    segments,
+    user,
+  });
 
   useEffect(() => {
-    if (isLoading) return;
-
-    const inAuthGroup = segments[0] === "(auth)";
-    // The `auth/` directory (no parens) hosts the OAuth callback flow.
-    // Treat it the same as (auth) for guard purposes.
-    const inOAuthFlow = segments[0] === "auth";
-    const authScreen = segments[1] as string;
-
-    // Allow unauthenticated users through both auth groups
-    if (!user && !inAuthGroup && !inOAuthFlow) {
-      router.replace("/intro");
-      return;
+    if (redirectPath) {
+      router.replace(redirectPath as any);
     }
+  }, [redirectPath, router]);
 
-    // Don't bounce the OAuth callback / complete-profile pages even when
-    // the user is technically signed in — they need to finish the flow.
-    const isOAuthCallbackScreen =
-      inOAuthFlow &&
-      (authScreen === "callback" || authScreen === "complete-profile" || authScreen === "reset-password");
-
-    if (user && !user.profileComplete && !devMode && !isOAuthCallbackScreen) {
-      if (user.hasSelectedRole === false) {
-        router.replace("/auth/complete-profile" as any);
-        return;
-      }
-      const setupRoute = getProfileSetupRoute(user.role);
-      const setupRouteParts = setupRoute.split("/").filter(Boolean);
-      const onProfileSetupRoute = setupRouteParts.every(
-        (part, index) => segments[index] === part,
-      );
-      if (!onProfileSetupRoute) {
-        router.replace(setupRoute as any);
-        return;
-      }
-    }
-
-    if (user && inAuthGroup && authScreen === "intro") {
-      router.replace("/(tabs)/home");
-      return;
-    }
-
-    // Skip auto-redirect to home if devMode is enabled or user is mid-register
-    if (
-      user &&
-      inAuthGroup &&
-      (authScreen as string) !== "role" &&
-      (authScreen as string) !== "register" &&
-      !devMode
-    ) {
-      router.replace("/(tabs)/home");
-    }
-
-    // For the `auth/` directory: redirect to home once the flow completes,
-    // but leave callback/complete-profile alone so they can do their work.
-    if (user && inOAuthFlow && !isOAuthCallbackScreen && !devMode) {
-      router.replace("/(tabs)/home");
-    }
-  }, [isLoading, router, segments, user, devMode]);
+  if (isLoading || redirectPath) {
+    return (
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <View style={{ flex: 1, backgroundColor: COLORS.background, alignItems: "center", justifyContent: "center" }}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+        <DevRoleSwitcher />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>

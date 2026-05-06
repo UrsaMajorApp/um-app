@@ -27,12 +27,17 @@ export function DevRoleSwitcher() {
   const [clearingRole, setClearingRole] = useState(false);
 
   // All hooks up-front so they're in scope for toggleDevTools
-  const { user, setUserRole, devLogin, logout, devMode, setDevMode, devOtpCode } = useAuth();
+  const { user, devLogin, logout, devMode, setDevMode, devOtpCode } = useAuth();
   const { parentProfile, setParentTariff } = useParentData();
-  const { mentorApproved, setMentorApproved, orgVerified, setOrgVerified, useRealOtp, setUseRealOtp, devYouthAge, setDevYouthAge } = useDevSettings();
+  const { mentorApproved, setMentorApproved, orgVerified, setOrgVerified, useRealOtp, setUseRealOtp } = useDevSettings();
   const { width } = useWindowDimensions();
+  const router = useRouter();
   const isDesktop = Platform.OS === 'web' && width >= 768;
-  const canManageDevData = devToolsEnabled && Boolean(user) && !syncingDevData;
+  const isDevSessionUser = Boolean(
+    user &&
+    (user.email.endsWith('@dev.local') || (user.email.endsWith('@example.com') && user.phone === '79991234567'))
+  );
+  const canManageDevData = devToolsEnabled && isDevSessionUser && !syncingDevData;
 
   const notifyDevDataError = (message: string) => {
     Alert.alert('Dev data sync failed', message);
@@ -47,9 +52,14 @@ export function DevRoleSwitcher() {
       // Enabling → switch to fake OTP
       if (useRealOtp) await setUseRealOtp(false);
     } else {
-      // Disabling → restore real OTP, clear user, go to landing
+      // Disabling → restore real OTP and close any active dev-switcher session.
       if (!useRealOtp) await setUseRealOtp(true);
-      await logout();
+      setDevDataEnabled(false);
+      await AsyncStorage.setItem(DEV_DATA_KEY, 'false');
+      if (isDevSessionUser) {
+        await logout();
+        router.replace('/intro');
+      }
       setVisible(false);
     }
   };
@@ -115,10 +125,17 @@ export function DevRoleSwitcher() {
   // Restore persisted master state when modal opens
   const handleOpen = async () => {
     const stored = await AsyncStorage.getItem(DEV_TOOLS_KEY);
-    if (stored !== null) setDevToolsEnabledState(stored === 'true');
+    const nextDevToolsEnabled = stored !== null ? stored === 'true' : devMode;
+    setDevToolsEnabledState(nextDevToolsEnabled);
 
     const storedDevData = await AsyncStorage.getItem(DEV_DATA_KEY);
     if (storedDevData !== null) setDevDataEnabled(storedDevData === 'true');
+
+    if (!nextDevToolsEnabled) {
+      setDevDataEnabled(false);
+      setVisible(true);
+      return;
+    }
 
     try {
       const remoteSeeded = await getDevDataSeeded();
@@ -132,21 +149,14 @@ export function DevRoleSwitcher() {
     setVisible(true);
   };
 
-  const router = useRouter();
   const roles: UserRole[] = ['parent', 'youth', 'child', 'mentor', 'org', 'teacher', 'admin'];
 
   const handleSwitch = async (role: UserRole) => {
-    if (switchingRole || clearingRole) return;
+    if (!devToolsEnabled || switchingRole || clearingRole) return;
 
     setSwitchingRole(role);
     try {
-      if (devToolsEnabled) {
-        await devLogin(role);
-      } else if (user) {
-        await setUserRole(role);
-      } else {
-        await devLogin(role);
-      }
+      await devLogin(role);
       setVisible(false);
       router.replace('/(tabs)/home');
     } finally {
@@ -155,7 +165,7 @@ export function DevRoleSwitcher() {
   };
 
   const handleClearRole = async () => {
-    if (switchingRole || clearingRole || !user) return;
+    if (!devToolsEnabled || switchingRole || clearingRole || !user || !isDevSessionUser) return;
 
     setClearingRole(true);
     try {
@@ -215,11 +225,13 @@ export function DevRoleSwitcher() {
                 />
               </View>
 
-              <View style={[styles.devModeRow, !devToolsEnabled && styles.optionMuted]}>
+              {devToolsEnabled && (
+                <>
+              <View style={styles.devModeRow}>
                 <View style={{ flex: 1, marginRight: 12 }}>
                   <Text style={styles.devModeTitle}>Populated Dev Data</Text>
                   <Text style={styles.devModeSubtitle}>
-                    {user
+                    {isDevSessionUser
                       ? 'Seed or restore deterministic Supabase demo records'
                       : 'Switch into any dev role first'}
                   </Text>
@@ -254,9 +266,6 @@ export function DevRoleSwitcher() {
                 <Text style={styles.clearAllDevDataText}>Clear all populated data</Text>
               </TouchableOpacity>
 
-              {/* ── All options gated by devToolsEnabled ── */}
-              <View style={{ opacity: devToolsEnabled ? 1 : 0.35, pointerEvents: devToolsEnabled ? 'auto' : 'none' }}>
-
                 {/* OTP mode toggle */}
                 <View style={styles.devModeRow}>
                   <View style={{ flex: 1, marginRight: 12 }}>
@@ -269,9 +278,10 @@ export function DevRoleSwitcher() {
                   </View>
                   <Switch
                     value={useRealOtp}
-                    onValueChange={setUseRealOtp}
+                    onValueChange={(val) => {
+                      if (devToolsEnabled) setUseRealOtp(val);
+                    }}
                     trackColor={{ false: COLORS.muted, true: '#F59E0B' }}
-                    disabled={!devToolsEnabled}
                   />
                 </View>
 
@@ -286,9 +296,10 @@ export function DevRoleSwitcher() {
                     </View>
                     <Switch
                       value={parentProfile?.tariff === 'pro'}
-                      onValueChange={(val) => setParentTariff(val ? 'pro' : 'basic')}
+                      onValueChange={(val) => {
+                        if (devToolsEnabled) setParentTariff(val ? 'pro' : 'basic');
+                      }}
                       trackColor={{ false: COLORS.muted, true: '#A78BFA' }}
-                      disabled={!devToolsEnabled}
                     />
                   </View>
                 )}
@@ -304,9 +315,10 @@ export function DevRoleSwitcher() {
                     </View>
                     <Switch
                       value={mentorApproved}
-                      onValueChange={setMentorApproved}
+                      onValueChange={(val) => {
+                        if (devToolsEnabled) setMentorApproved(val);
+                      }}
                       trackColor={{ false: COLORS.muted, true: COLORS.success }}
-                      disabled={!devToolsEnabled}
                     />
                   </View>
                 )}
@@ -322,9 +334,10 @@ export function DevRoleSwitcher() {
                     </View>
                     <Switch
                       value={orgVerified}
-                      onValueChange={setOrgVerified}
+                      onValueChange={(val) => {
+                        if (devToolsEnabled) setOrgVerified(val);
+                      }}
                       trackColor={{ false: COLORS.muted, true: COLORS.success }}
-                      disabled={!devToolsEnabled}
                     />
                   </View>
                 )}
@@ -353,10 +366,10 @@ export function DevRoleSwitcher() {
                         style={[
                           styles.roleButton,
                           isActive && styles.activeRoleButton,
-                          (clearingRole || (switchingRole && !isSwitching)) && styles.disabledRoleButton,
+                          (!devToolsEnabled || clearingRole || (switchingRole && !isSwitching)) && styles.disabledRoleButton,
                         ]}
                         onPress={() => handleSwitch(role)}
-                        disabled={Boolean(switchingRole) || clearingRole}
+                        disabled={!devToolsEnabled || Boolean(switchingRole) || clearingRole}
                         activeOpacity={0.75}
                       >
                         {isSwitching && (
@@ -376,10 +389,10 @@ export function DevRoleSwitcher() {
                     style={[
                       styles.roleButton,
                       styles.clearRoleButton,
-                      (!user || switchingRole || clearingRole) && styles.disabledRoleButton,
+                      (!user || !isDevSessionUser || !devToolsEnabled || switchingRole || clearingRole) && styles.disabledRoleButton,
                     ]}
                     onPress={handleClearRole}
-                    disabled={!user || Boolean(switchingRole) || clearingRole}
+                    disabled={!user || !isDevSessionUser || !devToolsEnabled || Boolean(switchingRole) || clearingRole}
                     activeOpacity={0.75}
                   >
                     {clearingRole ? (
@@ -401,8 +414,8 @@ export function DevRoleSwitcher() {
                     </Text>
                   </TouchableOpacity>
                 </View>
-
-              </View>
+                </>
+              )}
             </ScrollView>
           </Pressable>
         </Pressable>

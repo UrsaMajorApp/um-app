@@ -73,7 +73,7 @@ type AuthMethod = "phone" | "email";
 export default function RegisterScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { sendRegistrationCode, registerWithIdentifier, devOtpCode } = useAuth();
+  const { sendRegistrationCode, registerWithIdentifier, devOtpCode, devMode } = useAuth();
   const { useRealOtp } = useDevSettings();
 
   // step 0 = role, step 1 = phone/email + password, step 2 = OTP for phone, step 3 = name
@@ -460,7 +460,7 @@ export default function RegisterScreen() {
                   {step === 2 && (
                     <MotiView key="s2" from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 150 }}>
                       <View style={{ alignItems: 'center' }}>
-                        {!!devOtpCode && !useRealOtp && (
+                        {!!devOtpCode && devMode && !useRealOtp && (
                           <View style={{ backgroundColor: '#FEF9C3', padding: 8, borderRadius: 8, marginBottom: 20, width: '100%', alignItems: 'center' }}>
                             <Text style={{ color: '#854D0E', fontSize: 12, fontWeight: 'bold' }}>DEV MODE: {devOtpCode}</Text>
                           </View>
