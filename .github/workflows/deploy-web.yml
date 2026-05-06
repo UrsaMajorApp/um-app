@@ -29,12 +29,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL || vars.EXPO_PUBLIC_SUPABASE_URL }}
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_ANON_KEY || vars.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+      EXPO_PUBLIC_GEMINI_API_KEY: ${{ secrets.EXPO_PUBLIC_GEMINI_API_KEY || vars.EXPO_PUBLIC_GEMINI_API_KEY }}
+      EXPO_PUBLIC_ENABLE_GEMINI_DIAGNOSTICS: ${{ secrets.EXPO_PUBLIC_ENABLE_GEMINI_DIAGNOSTICS || vars.EXPO_PUBLIC_ENABLE_GEMINI_DIAGNOSTICS }}
+      EXPO_PUBLIC_DEV_OTP: ${{ secrets.EXPO_PUBLIC_DEV_OTP || vars.EXPO_PUBLIC_DEV_OTP }}
     steps:
-      - name: Check for EXPO_TOKEN
+      - name: Check required environment
         run: |
           if [ -z "$EXPO_TOKEN" ]; then
             echo "You must add an EXPO_TOKEN repository secret before this workflow can deploy."
             echo "Create one at https://expo.dev/settings/access-tokens, then add it in GitHub Actions secrets."
+            exit 1
+          fi
+          if [ -z "$EXPO_PUBLIC_SUPABASE_URL" ]; then
+            echo "You must add EXPO_PUBLIC_SUPABASE_URL as a repository secret or variable before deploying."
+            exit 1
+          fi
+          if [ -z "$EXPO_PUBLIC_SUPABASE_ANON_KEY" ]; then
+            echo "You must add EXPO_PUBLIC_SUPABASE_ANON_KEY as a repository secret or variable before deploying."
             exit 1
           fi
 
