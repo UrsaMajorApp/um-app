@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { isUuid } from "../lib/idUtils";
 import type { OrgCourse, OrgGroup } from "./useOrgData";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -170,10 +171,11 @@ export async function applyToCourse(params: {
   groupSchedule?: string | null;
 }): Promise<{ error: string | null }> {
   if (!supabase || !isSupabaseConfigured) return { error: "Not configured" };
+  const childProfileId = isUuid(params.childProfileId) ? params.childProfileId : null;
   const res = await supabase.from("org_applications").insert({
     org_id: params.orgId,
     parent_user_id: params.parentUserId ?? null,
-    child_profile_id: params.childProfileId ?? null,
+    child_profile_id: childProfileId,
     group_id: params.groupId ?? null,
     group_name: params.groupName ?? null,
     group_schedule: params.groupSchedule ?? null,
@@ -205,7 +207,7 @@ export async function checkEnrollment(params: {
     .neq("status", "rejected")
     .limit(1);
 
-  if (params.childProfileId) {
+  if (isUuid(params.childProfileId)) {
     query = query.eq("child_profile_id", params.childProfileId);
   }
 
@@ -233,9 +235,10 @@ export async function applyToTrialLesson(params: {
   selectedSlot: { day: string; time: string };
 }): Promise<{ error: string | null }> {
   if (!supabase || !isSupabaseConfigured) return { error: "Not configured" };
+  const childId = isUuid(params.childId) ? params.childId : null;
   
   const res = await supabase.from("trial_lesson_requests").insert({
-    child_id: params.childId ?? null,
+    child_id: childId,
     child_name: params.childName,
     child_age: params.childAge ?? null,
     parent_id: params.parentId ?? null,

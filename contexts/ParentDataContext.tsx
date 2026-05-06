@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import { useDevDataVersion } from "../lib/devDataEvents";
+import { createClientUuid, isUuid } from "../lib/idUtils";
 import { Child, Diagnostic } from "../models/types";
 import { useAuth } from "./AuthContext";
 
@@ -247,7 +248,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
       .filter((entry) => entry.name.trim() && entry.ageGroup)
       .map((entry) =>
         normalizeChild({
-          id: entry.id,
+          id: hasRealSession && !isUuid(entry.id) ? createClientUuid() : entry.id,
           parentId: user.id,
           name: entry.name.trim(),
           age: ageGroupToAge(entry.ageGroup),
@@ -303,6 +304,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
 
     const normalizedChild = normalizeChild({
       ...child,
+      id: hasRealSession && !isUuid(child.id) ? createClientUuid() : child.id,
       parentId: user.id,
     });
 

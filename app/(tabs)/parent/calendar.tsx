@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
+import { isUuid } from "../../../lib/idUtils";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 
 const MONTHS = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
@@ -94,13 +95,18 @@ export default function ParentCalendar() {
       }
 
       setLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from("org_applications")
         .select("id, club, group_name, group_schedule")
         .eq("parent_user_id", user.id)
-        .eq("child_profile_id", activeChild.id)
         .in("status", ["activated", "completed"])
         .order("created_at", { ascending: false });
+
+      if (isUuid(activeChild.id)) {
+        query = query.eq("child_profile_id", activeChild.id);
+      }
+
+      const { data, error } = await query;
 
       if (cancelled) return;
       setEnrollments(error || !data ? [] : (data as CalendarEnrollment[]));
