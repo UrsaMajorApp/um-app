@@ -1,21 +1,17 @@
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import {
+  MEMORY_CARDS,
+  MEMORY_GRID_GAP as GRID_GAP,
+  MEMORY_GRID_SIZE as GRID_SIZE,
+  MEMORY_MAX_BOARD_SIZE as MAX_BOARD_SIZE,
+} from '$constants/games';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
-
-const GRID_SIZE = 4;
-const GRID_GAP = 12;
-const MAX_BOARD_SIZE = 560;
-
-const EMOJIS = ['🚀', '🎨', '🧩', '🧪', '🧬', '🧠', '💻', '🎮'];
-const ALL_CARDS = EMOJIS.flatMap((emoji) => [
-  { id: `${emoji}-first`, emoji },
-  { id: `${emoji}-second`, emoji },
-]);
 
 export default function MemoryGame({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
-  const [cards, setCards] = useState<typeof ALL_CARDS>([]);
+  const [cards, setCards] = useState<typeof MEMORY_CARDS>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [solved, setSolved] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -26,7 +22,7 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
   const emojiSize = Math.max(28, Math.min(44, cardSize * 0.36));
 
   const shuffle = useCallback(() => {
-    const shuffled = [...ALL_CARDS].sort(() => Math.random() - 0.5);
+    const shuffled = [...MEMORY_CARDS].sort(() => Math.random() - 0.5);
     setCards(shuffled);
     setFlipped([]);
     setSolved([]);

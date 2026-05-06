@@ -12,22 +12,12 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FEEDBACK_TAGS } from '$constants/feedback';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useOrgApplications } from '$hooks/useOrgData';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-const FEEDBACK_TAGS = [
-  'Внимательно слушал',
-  'Проявил лидерство',
-  'Задавал вопросы',
-  'Старался',
-  'Отвлекался',
-  'Творческий подход',
-  'Помогал другим',
-  'Не сделал ДЗ',
-];
 
 export default function FeedbackFormScreen() {
   const { id } = useLocalSearchParams();

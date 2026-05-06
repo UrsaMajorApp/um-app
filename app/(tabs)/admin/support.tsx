@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
-import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useTickets } from '$hooks/useAdminData';
+import { formatAdminDate, useAdminLayout } from '$lib/adminUtils';
 import type { AdminSupportTab } from '$types/admin';
 
 export default function AdminSupportScreen() {

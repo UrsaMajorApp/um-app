@@ -10,11 +10,12 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import {
+  DIAGNOSTIC_SWIPE_EXIT_DISTANCE,
+  DIAGNOSTIC_SWIPE_THRESHOLD,
+  DIAGNOSTIC_SWIPE_VELOCITY,
+} from '$constants/diagnosticUi';
 import type { SwipeRenderArgs } from '$types/diagnostic';
-
-const SWIPE_THRESHOLD = 90;
-const SWIPE_VELOCITY = 850;
-const EXIT_DISTANCE = 1200;
 
 interface Props {
   cardKey: string;
@@ -52,11 +53,15 @@ export default function SwipeableDecisionCard({
       setIsLeaving(true);
 
       const direction = liked ? 1 : -1;
-      translateX.value = withTiming(direction * EXIT_DISTANCE, { duration: 240 }, (finished) => {
-        if (finished) {
-          runOnJS(onSwipe)(liked);
-        }
-      });
+      translateX.value = withTiming(
+        direction * DIAGNOSTIC_SWIPE_EXIT_DISTANCE,
+        { duration: 240 },
+        (finished) => {
+          if (finished) {
+            runOnJS(onSwipe)(liked);
+          }
+        },
+      );
       translateY.value = withTiming(-28, { duration: 240 });
     },
     [hasSwiped, onSwipe, translateX, translateY],
@@ -76,8 +81,8 @@ export default function SwipeableDecisionCard({
           if (hasSwiped.value) return;
 
           const shouldSwipe =
-            Math.abs(event.translationX) > SWIPE_THRESHOLD ||
-            Math.abs(event.velocityX) > SWIPE_VELOCITY;
+            Math.abs(event.translationX) > DIAGNOSTIC_SWIPE_THRESHOLD ||
+            Math.abs(event.velocityX) > DIAGNOSTIC_SWIPE_VELOCITY;
 
           if (shouldSwipe) {
             const liked = event.translationX > 0 || event.velocityX > 0;
@@ -87,7 +92,7 @@ export default function SwipeableDecisionCard({
             runOnJS(setIsLeaving)(true);
 
             translateX.value = withTiming(
-              direction * EXIT_DISTANCE,
+              direction * DIAGNOSTIC_SWIPE_EXIT_DISTANCE,
               { duration: 240 },
               (finished) => {
                 if (finished) {
@@ -110,7 +115,7 @@ export default function SwipeableDecisionCard({
     const rotate = interpolate(translateX.value, [-220, 0, 220], [-10, 0, 10], Extrapolation.CLAMP);
     const scale = interpolate(
       Math.abs(translateX.value),
-      [0, SWIPE_THRESHOLD],
+      [0, DIAGNOSTIC_SWIPE_THRESHOLD],
       [1, 0.97],
       Extrapolation.CLAMP,
     );
@@ -126,12 +131,22 @@ export default function SwipeableDecisionCard({
   });
 
   const likeBadgeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(translateX.value, [20, SWIPE_THRESHOLD], [0, 1], Extrapolation.CLAMP),
+    opacity: interpolate(
+      translateX.value,
+      [20, DIAGNOSTIC_SWIPE_THRESHOLD],
+      [0, 1],
+      Extrapolation.CLAMP,
+    ),
     transform: [{ rotateZ: '-8deg' }],
   }));
 
   const dislikeBadgeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(translateX.value, [-SWIPE_THRESHOLD, -20], [1, 0], Extrapolation.CLAMP),
+    opacity: interpolate(
+      translateX.value,
+      [-DIAGNOSTIC_SWIPE_THRESHOLD, -20],
+      [1, 0],
+      Extrapolation.CLAMP,
+    ),
     transform: [{ rotateZ: '8deg' }],
   }));
 

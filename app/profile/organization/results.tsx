@@ -2,15 +2,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ORG_RESULT_BARS } from '$constants/profile';
 import { LAYOUT } from '$constants/theme';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-const ORG_RESULT_BARS = [
-  { id: 'training', height: 80 },
-  { id: 'marketing', height: 60 },
-  { id: 'methodology', height: 95 },
-  { id: 'management', height: 50 },
-] as const;
 
 export default function OrgResults() {
   const router = useRouter();

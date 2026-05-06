@@ -8,23 +8,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { PRO_QUEST_STAR_POSITIONS } from '$constants/diagnosticUi';
 import { SHADOWS } from '$constants/theme';
 import type { ProTask } from '$data/diagnosticData';
-
-const STAR_POSITIONS = [
-  { id: 'star-alpha', top: '12%', left: '18%', size: 3, opacity: 0.62 },
-  { id: 'star-beta', top: '18%', left: '72%', size: 4, opacity: 0.48 },
-  { id: 'star-gamma', top: '25%', left: '42%', size: 2, opacity: 0.72 },
-  { id: 'star-delta', top: '34%', left: '86%', size: 3, opacity: 0.38 },
-  { id: 'star-epsilon', top: '45%', left: '9%', size: 5, opacity: 0.52 },
-  { id: 'star-zeta', top: '52%', left: '64%', size: 2, opacity: 0.8 },
-  { id: 'star-eta', top: '61%', left: '31%', size: 4, opacity: 0.45 },
-  { id: 'star-theta', top: '69%', left: '78%', size: 3, opacity: 0.68 },
-  { id: 'star-iota', top: '76%', left: '15%', size: 2, opacity: 0.58 },
-  { id: 'star-kappa', top: '82%', left: '53%', size: 5, opacity: 0.34 },
-  { id: 'star-lambda', top: '88%', left: '91%', size: 3, opacity: 0.5 },
-  { id: 'star-mu', top: '8%', left: '51%', size: 2, opacity: 0.74 },
-] as const;
 
 interface Props {
   task: ProTask;
@@ -71,7 +57,7 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
       >
         {/* Stars background decoration */}
         <View style={styles.starsContainer}>
-          {STAR_POSITIONS.map((star) => (
+          {PRO_QUEST_STAR_POSITIONS.map((star) => (
             <View
               key={star.id}
               style={[

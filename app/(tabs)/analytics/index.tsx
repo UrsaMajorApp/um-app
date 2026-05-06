@@ -3,44 +3,12 @@ import { useMemo, useState } from 'react';
 import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { RUSSIAN_CALENDAR_LOCALE, RUSSIAN_GENITIVE_MONTHS } from '$constants/calendar';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useOrgSchedule } from '$hooks/useOrgData';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
-/* ---------- русская локаль для календаря ---------- */
-LocaleConfig.locales.ru = {
-  monthNames: [
-    'Январь',
-    'Февраль',
-    'Март',
-    'Апрель',
-    'Май',
-    'Июнь',
-    'Июль',
-    'Август',
-    'Сентябрь',
-    'Октябрь',
-    'Ноябрь',
-    'Декабрь',
-  ],
-  monthNamesShort: [
-    'Янв',
-    'Фев',
-    'Мар',
-    'Апр',
-    'Май',
-    'Июн',
-    'Июл',
-    'Авг',
-    'Сен',
-    'Окт',
-    'Ноя',
-    'Дек',
-  ],
-  dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-  dayNamesShort: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
-  today: 'Сегодня',
-};
+LocaleConfig.locales.ru = RUSSIAN_CALENDAR_LOCALE;
 LocaleConfig.defaultLocale = 'ru';
 
 /** JS getDay() returns 0=Sun…6=Sat. Convert to Mon=0…Sun=6 used in DB. */
@@ -50,21 +18,7 @@ function jsDayToDow(jsDay: number): number {
 
 function formatDate(dateStr: string) {
   const [y, m, d] = dateStr.split('-').map(Number);
-  const months = [
-    'января',
-    'февраля',
-    'марта',
-    'апреля',
-    'мая',
-    'июня',
-    'июля',
-    'августа',
-    'сентября',
-    'октября',
-    'ноября',
-    'декабря',
-  ];
-  return `${d} ${months[(m || 1) - 1]} ${y}`;
+  return `${d} ${RUSSIAN_GENITIVE_MONTHS[(m || 1) - 1]} ${y}`;
 }
 
 export default function AnalyticsScreen() {

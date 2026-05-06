@@ -8,6 +8,7 @@ import {
   StyleSheet,
   type ViewStyle,
 } from 'react-native';
+import { PRESSABLE_SCALE_OUTER_PROPS } from '$constants/ui';
 import type { PressableEvent } from '$types/ui';
 
 interface PressableScaleProps extends Omit<PressableProps, 'style'> {
@@ -24,35 +25,12 @@ interface PressableScaleProps extends Omit<PressableProps, 'style'> {
 //   - margin: outer spacing that should not scale with the animation
 // Everything else (width, height, padding, backgroundColor, flexDirection, etc.)
 // goes on the inner Animated.View so visuals and children layout correctly.
-const OUTER_PROPS = new Set([
-  'position',
-  'top',
-  'bottom',
-  'left',
-  'right',
-  'zIndex',
-  'flex',
-  'flexGrow',
-  'flexShrink',
-  'flexBasis',
-  'alignSelf',
-  'margin',
-  'marginTop',
-  'marginBottom',
-  'marginLeft',
-  'marginRight',
-  'marginHorizontal',
-  'marginVertical',
-  'marginStart',
-  'marginEnd',
-]);
-
 function splitStyle(style: StyleProp<ViewStyle>) {
   const flat = StyleSheet.flatten(style) ?? {};
   const outer: Record<string, unknown> = {};
   const inner: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(flat)) {
-    (OUTER_PROPS.has(key) ? outer : inner)[key] = val;
+    (PRESSABLE_SCALE_OUTER_PROPS.has(key) ? outer : inner)[key] = val;
   }
   return { outer, inner };
 }

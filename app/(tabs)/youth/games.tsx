@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { GAMES, getDailyChallenge } from '$components/games/gameCatalog';
+import { GAMES, getDailyChallenge } from '$constants/games';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
 import { useYouthGameIq } from '$hooks/useYouthGameIq';
 import { appHref } from '$lib/router';

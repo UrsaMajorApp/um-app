@@ -5,10 +5,10 @@ import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Game2048 from '$components/games/Game2048';
-import { getGameById } from '$components/games/gameCatalog';
 import MemoryGame from '$components/games/MemoryGame';
 import Minesweeper from '$components/games/Minesweeper';
 import Sudoku from '$components/games/Sudoku';
+import { getGameById } from '$constants/games';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useYouthGameIq } from '$hooks/useYouthGameIq';
 import { useIsDesktop } from '$lib/useIsDesktop';

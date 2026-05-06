@@ -16,40 +16,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PressableScale } from '$components/ui/PressableScale';
+import { QR_SCAN_CORNER_GUIDES } from '$constants/qrScan';
 import { COLORS, LAYOUT, RADIUS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-const CORNER_GUIDES = [
-  {
-    id: 'top-left',
-    top: 20,
-    left: 20,
-    borderTopWidth: 3,
-    borderLeftWidth: 3,
-  },
-  {
-    id: 'top-right',
-    top: 20,
-    right: 20,
-    borderTopWidth: 3,
-    borderRightWidth: 3,
-  },
-  {
-    id: 'bottom-left',
-    bottom: 20,
-    left: 20,
-    borderBottomWidth: 3,
-    borderLeftWidth: 3,
-  },
-  {
-    id: 'bottom-right',
-    bottom: 20,
-    right: 20,
-    borderBottomWidth: 3,
-    borderRightWidth: 3,
-  },
-] as const;
 
 export default function QRScanScreen() {
   const router = useRouter();
@@ -393,7 +363,7 @@ export default function QRScanScreen() {
                       />
                       <canvas ref={canvasRef} style={{ display: 'none' }} />
                       {/* Corner guides */}
-                      {CORNER_GUIDES.map(({ id, ...style }) => (
+                      {QR_SCAN_CORNER_GUIDES.map(({ id, ...style }) => (
                         <View
                           key={id}
                           style={[
@@ -498,7 +468,7 @@ export default function QRScanScreen() {
                         onBarcodeScanned={({ data }) => handleQRData(data)}
                       />
                       {/* Corner guides */}
-                      {CORNER_GUIDES.map(({ id, ...style }) => (
+                      {QR_SCAN_CORNER_GUIDES.map(({ id, ...style }) => (
                         <View
                           key={id}
                           style={[

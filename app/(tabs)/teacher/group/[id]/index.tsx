@@ -12,22 +12,13 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SCHEDULE_TOKENS } from '$constants/calendar';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroup } from '$hooks/usePlatformData';
 import { useTeacherAttendanceEditor } from '$hooks/useTeacherAttendanceEditor';
 import { formatDateKey } from '$lib/date';
 import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
-const SCHEDULE_TOKENS = [
-  ['Вс', 'Воскресенье'],
-  ['Пн', 'Понедельник'],
-  ['Вт', 'Вторник'],
-  ['Ср', 'Среда'],
-  ['Чт', 'Четверг'],
-  ['Пт', 'Пятница'],
-  ['Сб', 'Суббота'],
-];
 
 export default function TeacherGroupDetail() {
   const { id } = useLocalSearchParams();

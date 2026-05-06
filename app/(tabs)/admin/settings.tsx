@@ -2,10 +2,10 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
-import { useAdminLayout } from '$components/admin/adminUtils';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAdminOnboardingQuestions, useAIRules, useTags } from '$hooks/useAdminData';
+import { useAdminLayout } from '$lib/adminUtils';
 import type { AdminSettingsTab } from '$types/admin';
 
 export default function AdminSettingsScreen() {

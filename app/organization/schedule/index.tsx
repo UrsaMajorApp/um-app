@@ -4,11 +4,10 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { WEEKDAYS_SHORT } from '$constants/calendar';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useOrgSchedule } from '$hooks/useOrgData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
-const DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 export default function OrgScheduleScreen() {
   const router = useRouter();
@@ -81,7 +80,7 @@ export default function OrgScheduleScreen() {
                 showsHorizontalScrollIndicator={false}
                 className="-mx-1 px-1 overflow-visible"
               >
-                {DAYS.map((day, index) => (
+                {WEEKDAYS_SHORT.map((day, index) => (
                   <Pressable
                     key={day}
                     onPress={() => setSelectedDay(index)}

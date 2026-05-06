@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
-import { ensureConversation, formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
 import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from '$constants/admin';
@@ -16,6 +15,7 @@ import {
   useFamilies,
   useMentorApps,
 } from '$hooks/useAdminData';
+import { ensureConversation, formatAdminDate, useAdminLayout } from '$lib/adminUtils';
 import type { AdminUsersTab } from '$types/admin';
 
 export default function AdminUsersScreen() {

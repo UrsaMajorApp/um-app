@@ -9,16 +9,18 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import {
+  MINESWEEPER_GRID_SIZE as GRID_SIZE,
+  MINESWEEPER_MAX_BOARD_SIZE as MAX_BOARD_SIZE,
+  MINESWEEPER_MINES_COUNT as MINES_COUNT,
+  MINESWEEPER_NUMBER_COLORS as NUMBER_COLORS,
+} from '$constants/games';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { MinesweeperCell as Cell } from '$types/games';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const GRID_SIZE = 10;
-const MINES_COUNT = 15;
-const MAX_BOARD_SIZE = 620;
 
 export default function Minesweeper({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
@@ -246,17 +248,6 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
     </View>
   );
 }
-
-const NUMBER_COLORS: Record<number, string> = {
-  1: '#3B82F6',
-  2: '#10B981',
-  3: '#EF4444',
-  4: '#6366F1',
-  5: '#8B5CF6',
-  6: '#EC4899',
-  7: '#F59E0B',
-  8: '#1F2937',
-};
 
 const styles = StyleSheet.create({
   container: {

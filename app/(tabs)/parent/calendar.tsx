@@ -3,38 +3,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { DAY_ALIASES, RUSSIAN_MONTHS, WEEKDAYS_SHORT } from '$constants/calendar';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useParentCalendar } from '$hooks/useParentCalendar';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { CalendarDay } from '$types/calendar';
-
-const MONTHS = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Октябрь',
-  'Ноябрь',
-  'Декабрь',
-];
-const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-
-const DAY_ALIASES: Record<number, string[]> = {
-  0: ['вс', 'воск'],
-  1: ['пн', 'пон'],
-  2: ['вт', 'втор'],
-  3: ['ср', 'сред'],
-  4: ['чт', 'чет', 'четв'],
-  5: ['пт', 'пят'],
-  6: ['сб', 'суб'],
-};
 
 function getCalendarDays(year: number, month: number): CalendarDay[] {
   const firstDay = new Date(year, month, 1).getDay();
@@ -124,7 +99,7 @@ export default function ParentCalendar() {
 
               <View className="flex-row justify-between items-center">
                 <Text className="text-white text-2xl font-black">
-                  {MONTHS[currentDate.month]} {currentDate.year}
+                  {RUSSIAN_MONTHS[currentDate.month]} {currentDate.year}
                 </Text>
                 <View className="flex-row gap-2">
                   <Pressable
@@ -172,7 +147,7 @@ export default function ParentCalendar() {
         >
           {/* Weekday headers */}
           <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-            {WEEKDAYS.map((d) => (
+            {WEEKDAYS_SHORT.map((d) => (
               <Text
                 key={d}
                 style={{
@@ -253,7 +228,7 @@ export default function ParentCalendar() {
         </View>
 
         <Text className="text-xl font-black text-gray-900 mb-4 px-1">
-          Занятия на {selectedDay} {MONTHS[currentDate.month].toLowerCase()}
+          Занятия на {selectedDay} {RUSSIAN_MONTHS[currentDate.month].toLowerCase()}
         </Text>
 
         {loading ? (

@@ -1,12 +1,12 @@
 import { Feather } from '@expo/vector-icons';
-import { useRouter, type Href } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { NotificationsModal } from '$components/navigation/NotificationsModal';
+import { useTabNav } from '$hooks/useTabNav';
+import type { Role } from '$constants/navigation/tabItems';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
-import { NotificationsModal } from '$components/navigation/NotificationsModal';
-import { useTabNav } from '$components/navigation/useTabNav';
-import type { Role } from '$constants/navigation/tabItems';
 import type { PressableInteractionState } from '$types/navigation';
 
 interface SideNavProps {

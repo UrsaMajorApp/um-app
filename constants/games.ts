@@ -1,5 +1,76 @@
 import type { DailyChallenge, GameCard } from '$types/games';
 
+export const GAME_2048_GRID_SIZE = 4;
+export const GAME_2048_CELL_MARGIN = 10;
+export const GAME_2048_MAX_BOARD_SIZE = 520;
+export const GAME_2048_GRID_COORDINATES = Array.from({ length: GAME_2048_GRID_SIZE }, (_, row) => ({
+  row,
+  key: `row-${row}`,
+  cells: Array.from({ length: GAME_2048_GRID_SIZE }, (__, col) => ({
+    col,
+    key: `cell-${row}-${col}`,
+  })),
+}));
+
+export const GAME_2048_TILE_COLORS: Record<number, string> = {
+  2: '#EEE4DA',
+  4: '#EDE0C8',
+  8: '#F2B179',
+  16: '#F59563',
+  32: '#F67C5F',
+  64: '#F65E3B',
+  128: '#EDCF72',
+  256: '#EDCC61',
+  512: '#EDC850',
+  1024: '#EDC53F',
+  2048: '#EDC22E',
+};
+
+export const GAME_2048_TEXT_COLORS: Record<string | number, string> = {
+  2: '#776E65',
+  4: '#776E65',
+  default: 'white',
+};
+
+export const MEMORY_GRID_SIZE = 4;
+export const MEMORY_GRID_GAP = 12;
+export const MEMORY_MAX_BOARD_SIZE = 560;
+
+export const MEMORY_EMOJIS = ['🚀', '🎨', '🧩', '🧪', '🧬', '🧠', '💻', '🎮'];
+export const MEMORY_CARDS = MEMORY_EMOJIS.flatMap((emoji) => [
+  { id: `${emoji}-first`, emoji },
+  { id: `${emoji}-second`, emoji },
+]);
+
+export const MINESWEEPER_GRID_SIZE = 10;
+export const MINESWEEPER_MINES_COUNT = 15;
+export const MINESWEEPER_MAX_BOARD_SIZE = 620;
+export const MINESWEEPER_NUMBER_COLORS: Record<number, string> = {
+  1: '#3B82F6',
+  2: '#10B981',
+  3: '#EF4444',
+  4: '#6366F1',
+  5: '#8B5CF6',
+  6: '#EC4899',
+  7: '#F59E0B',
+  8: '#1F2937',
+};
+
+export const SUDOKU_GRID_SIZE = 9;
+export const SUDOKU_BOARD_PADDING = 24;
+export const SUDOKU_MAX_BOARD_SIZE = 560;
+export const SUDOKU_BASE_BOARD = [
+  [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [4, 5, 6, 7, 8, 9, 1, 2, 3],
+  [7, 8, 9, 1, 2, 3, 4, 5, 6],
+  [2, 3, 1, 5, 6, 4, 8, 9, 7],
+  [5, 6, 4, 8, 9, 7, 2, 3, 1],
+  [8, 9, 7, 2, 3, 1, 5, 6, 4],
+  [3, 1, 2, 6, 4, 5, 9, 7, 8],
+  [6, 4, 5, 9, 7, 8, 3, 1, 2],
+  [9, 7, 8, 3, 1, 2, 6, 4, 5],
+];
+
 export const GAMES: GameCard[] = [
   {
     id: 'memory',

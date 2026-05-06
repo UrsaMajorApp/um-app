@@ -8,38 +8,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  CREATORS_NOVELLA_ACT_LABELS,
+  CREATORS_NOVELLA_SPEAKER_CONFIG,
+} from '$constants/diagnosticUi';
 import { RADIUS, SHADOWS } from '$constants/theme';
 import type { ProTask911 } from '$data/diagnosticData911';
-
-const SPEAKER_CONFIG = {
-  system: {
-    name: '🖥️ СИСТЕМА',
-    avatar: '🖥️',
-    bubbleColor: '#1E1B4B',
-    textColor: '#C7D2FE',
-    nameColor: '#818CF8',
-  },
-  max: {
-    name: '👦 Макс',
-    avatar: '👦',
-    bubbleColor: '#0F172A',
-    textColor: '#BAE6FD',
-    nameColor: '#38BDF8',
-  },
-  alice: {
-    name: '👧 Алиса',
-    avatar: '👧',
-    bubbleColor: '#1F0B2E',
-    textColor: '#F5D0FE',
-    nameColor: '#E879F9',
-  },
-};
-
-const ACT_LABELS: Record<1 | 2 | 3, string> = {
-  1: 'АКТ 1 · Вход в систему',
-  2: 'АКТ 2 · Командная работа',
-  3: 'АКТ 3 · Кризис',
-};
 
 interface Props {
   task: ProTask911;
@@ -49,7 +23,7 @@ interface Props {
 }
 
 export default function NovellaTask({ task, index, total, onAnswer }: Props) {
-  const cfg = SPEAKER_CONFIG[task.speaker];
+  const cfg = CREATORS_NOVELLA_SPEAKER_CONFIG[task.speaker];
 
   return (
     <MotiView
@@ -62,7 +36,7 @@ export default function NovellaTask({ task, index, total, onAnswer }: Props) {
     >
       {/* Act label */}
       <View style={styles.actRow}>
-        <Text style={styles.actLabel}>{ACT_LABELS[task.act]}</Text>
+        <Text style={styles.actLabel}>{CREATORS_NOVELLA_ACT_LABELS[task.act]}</Text>
         <Text style={styles.stepLabel}>
           {index + 1} / {total}
         </Text>

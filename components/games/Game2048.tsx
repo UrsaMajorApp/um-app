@@ -17,41 +17,17 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
+import {
+  GAME_2048_CELL_MARGIN as CELL_MARGIN,
+  GAME_2048_GRID_COORDINATES as GRID_COORDINATES,
+  GAME_2048_GRID_SIZE as GRID_SIZE,
+  GAME_2048_MAX_BOARD_SIZE as MAX_BOARD_SIZE,
+  GAME_2048_TEXT_COLORS as TEXT_COLORS,
+  GAME_2048_TILE_COLORS as TILE_COLORS,
+} from '$constants/games';
 import { COLORS, RADIUS } from '$constants/theme';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 import type { Game2048Direction as Direction, Game2048Tile as Tile } from '$types/games';
-
-const GRID_SIZE = 4;
-const CELL_MARGIN = 10;
-const MAX_BOARD_SIZE = 520;
-const GRID_COORDINATES = Array.from({ length: GRID_SIZE }, (_, row) => ({
-  row,
-  key: `row-${row}`,
-  cells: Array.from({ length: GRID_SIZE }, (__, col) => ({
-    col,
-    key: `cell-${row}-${col}`,
-  })),
-}));
-
-const TILE_COLORS: Record<number, string> = {
-  2: '#EEE4DA',
-  4: '#EDE0C8',
-  8: '#F2B179',
-  16: '#F59563',
-  32: '#F67C5F',
-  64: '#F65E3B',
-  128: '#EDCF72',
-  256: '#EDCC61',
-  512: '#EDC850',
-  1024: '#EDC53F',
-  2048: '#EDC22E',
-};
-
-const TEXT_COLORS: Record<string | number, string> = {
-  2: '#776E65',
-  4: '#776E65',
-  default: 'white',
-};
 
 function createEmptyGrid() {
   return Array(GRID_SIZE)

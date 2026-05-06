@@ -4,16 +4,9 @@
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { REBELS_HACKATHON_SPEAKERS } from '$constants/diagnosticUi';
 import { COLORS, RADIUS } from '$constants/theme';
 import type { ProTask1214 } from '$data/diagnosticData1214';
-
-const SPEAKERS = {
-  system: { name: 'СИСТЕМА', color: '#818CF8', bg: '#1E1B4B' },
-  max: { name: 'Макс', color: '#38BDF8', bg: '#0F172A' },
-  alice: { name: 'Алиса', color: '#E879F9', bg: '#1F0B2E' },
-  bot: { name: 'Бот', color: '#34D399', bg: '#064E3B' },
-  jury: { name: 'Жюри', color: '#FBBF24', bg: '#451A03' },
-};
 
 interface Props {
   task: ProTask1214;
@@ -23,7 +16,7 @@ interface Props {
 }
 
 export default function HackathonTask({ task, index, total, onAnswer }: Props) {
-  const cfg = SPEAKERS[task.speaker];
+  const cfg = REBELS_HACKATHON_SPEAKERS[task.speaker];
   const [erased] = useState(false);
 
   const handleSelect = (optId: number) => {

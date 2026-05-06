@@ -4,14 +4,15 @@ import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Dimensions,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CATALOG_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
@@ -20,22 +21,9 @@ import { featherIconName } from '$lib/icons';
 import { appHref } from '$lib/router';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
-const { width } = Dimensions.get('window');
-const IS_DESKTOP = isWebMinWidth(width, 900);
-
-const SKILL_FILTERS = [
-  '⭐ Рекомендовано AI',
-  'Все',
-  'Код',
-  'Логика',
-  'Математика',
-  'Дизайн',
-  'Языки',
-  'Команда',
-  'Креативность',
-];
-
 export default function CatalogScreen() {
+  const { width } = useWindowDimensions();
+  const isDesktop = isWebMinWidth(width, 900);
   const [activeCategory, setActiveCategory] = useState('⭐ Рекомендовано AI');
   const [search, setSearch] = useState('');
   const router = useRouter();
@@ -90,7 +78,7 @@ export default function CatalogScreen() {
             </Text>
           </View>
 
-          <View style={{ width: IS_DESKTOP ? '50%' : '100%', alignSelf: 'center' }}>
+          <View style={{ width: isDesktop ? '50%' : '100%', alignSelf: 'center' }}>
             {/* Search */}
             <View
               style={{
@@ -130,7 +118,7 @@ export default function CatalogScreen() {
               showsHorizontalScrollIndicator={false}
               style={{ paddingLeft: 20, marginBottom: 20 }}
             >
-              {SKILL_FILTERS.map((cat) => {
+              {CATALOG_SKILL_FILTERS.map((cat) => {
                 const active = cat === activeCategory;
                 return (
                   <TouchableOpacity
@@ -202,7 +190,7 @@ export default function CatalogScreen() {
           {!loading && (
             <View
               style={{
-                width: IS_DESKTOP ? '50%' : '100%',
+                width: isDesktop ? '50%' : '100%',
                 alignSelf: 'center',
                 padding: 20,
                 paddingTop: 0,

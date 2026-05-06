@@ -3,12 +3,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TASK_COLORS } from '$constants/dashboard';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useStudentTasks } from '$hooks/useStudentData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
-// Color palette cycling for tasks
-const TASK_COLORS = ['#A78BFA', '#6C5CE7', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
 
 export default function YouthTasks() {
   const router = useRouter();

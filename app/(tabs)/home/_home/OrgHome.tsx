@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ORG_HOME_QUICK_ACTIONS } from '$constants/dashboard';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useOrgProfile, useOrgSchedule, useOrgStats } from '$hooks/useOrgData';
 import { useWalletData } from '$hooks/usePlatformData';
@@ -11,33 +12,6 @@ import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
 import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
-const QUICK_ACTIONS = [
-  {
-    label: 'Заявки',
-    icon: 'clipboard',
-    route: '/organization/applications',
-    color: '#F59E0B',
-  },
-  {
-    label: 'Курсы',
-    icon: 'book',
-    route: '/organization/courses',
-    color: COLORS.primary,
-  },
-  {
-    label: 'Учителя',
-    icon: 'users',
-    route: '/organization/staff',
-    color: '#6366F1',
-  },
-  {
-    label: 'Группы',
-    icon: 'layers',
-    route: '/organization/groups',
-    color: '#10B981',
-  },
-];
 
 export default function OrgHome() {
   const router = useRouter();
@@ -542,7 +516,7 @@ export default function OrgHome() {
               marginBottom: 32,
             }}
           >
-            {QUICK_ACTIONS.map((item, idx) => {
+            {ORG_HOME_QUICK_ACTIONS.map((item, idx) => {
               const badge = item.label === 'Заявки' ? stats.pendingCount : 0;
               return (
                 <MotiView

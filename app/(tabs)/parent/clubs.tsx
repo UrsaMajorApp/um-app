@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CLUB_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
@@ -19,18 +20,6 @@ import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
 import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-
-// Skill-based filter chips shown in the catalog
-const SKILL_FILTERS = [
-  'Все',
-  'Код',
-  'Логика',
-  'Математика',
-  'Дизайн',
-  'Языки',
-  'Команда',
-  'Креативность',
-];
 
 export default function ParentClubs() {
   const router = useRouter();
@@ -164,7 +153,7 @@ export default function ParentClubs() {
           showsHorizontalScrollIndicator={false}
           style={{ marginBottom: 24, marginHorizontal: -4 }}
         >
-          {SKILL_FILTERS.map((skill) => (
+          {CLUB_SKILL_FILTERS.map((skill) => (
             <Pressable
               key={skill}
               onPress={() => setActiveSkill(skill)}

@@ -2,7 +2,6 @@ import { Feather } from '@expo/vector-icons';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { AdminCard } from '$components/admin/AdminCard';
 import { AdminHeader } from '$components/admin/AdminHeader';
-import { useAdminLayout, useAdminNavigation } from '$components/admin/adminUtils';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import {
   useAdminCourses,
@@ -15,6 +14,7 @@ import {
   useTickets,
   useTransactions,
 } from '$hooks/useAdminData';
+import { useAdminLayout, useAdminNavigation } from '$lib/adminUtils';
 import { formatKZT } from '$lib/formatCurrency';
 import type { AdminMetricItem, AdminQueueItem } from '$types/admin';
 

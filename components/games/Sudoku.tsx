@@ -9,16 +9,18 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import {
+  SUDOKU_BASE_BOARD,
+  SUDOKU_BOARD_PADDING as BOARD_PADDING,
+  SUDOKU_GRID_SIZE as GRID_SIZE,
+  SUDOKU_MAX_BOARD_SIZE as MAX_BOARD_SIZE,
+} from '$constants/games';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { SudokuCell as Cell } from '$types/games';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const GRID_SIZE = 9;
-const BOARD_PADDING = 24;
-const MAX_BOARD_SIZE = 560;
 
 export default function Sudoku({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
@@ -33,25 +35,13 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
 
   const generateSudoku = useCallback(() => {
     // Simple Sudoku generator using shuffling of a base board
-    const base = [
-      [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      [4, 5, 6, 7, 8, 9, 1, 2, 3],
-      [7, 8, 9, 1, 2, 3, 4, 5, 6],
-      [2, 3, 1, 5, 6, 4, 8, 9, 7],
-      [5, 6, 4, 8, 9, 7, 2, 3, 1],
-      [8, 9, 7, 2, 3, 1, 5, 6, 4],
-      [3, 1, 2, 6, 4, 5, 9, 7, 8],
-      [6, 4, 5, 9, 7, 8, 3, 1, 2],
-      [9, 7, 8, 3, 1, 2, 6, 4, 5],
-    ];
-
     // Shuffle rows within 3x3 blocks
     const shuffle = <T,>(arr: T[]) => arr.sort(() => Math.random() - 0.5);
 
     const rowBlocks = [0, 1, 2].map((i) => shuffle([i * 3, i * 3 + 1, i * 3 + 2]));
     const shuffledRows = rowBlocks.flat();
 
-    let board = shuffledRows.map((r) => base[r]);
+    let board = shuffledRows.map((r) => SUDOKU_BASE_BOARD[r]);
 
     // Shuffle columns within 3x3 blocks
     const colBlocks = [0, 1, 2].map((i) => shuffle([i * 3, i * 3 + 1, i * 3 + 2]));

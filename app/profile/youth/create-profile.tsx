@@ -13,12 +13,14 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  YOUTH_PROFILE_COLOR as ROLE_COLOR,
+  YOUTH_PROFILE_GRADIENT as ROLE_GRADIENT,
+  YOUTH_PROFILE_INTERESTS,
+} from '$constants/profile';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-const ROLE_COLOR = '#3B82F6';
-const ROLE_GRADIENT: [string, string] = ['#3B82F6', '#60A5FA'];
 
 export default function CreateProfileTeen() {
   const router = useRouter();
@@ -40,16 +42,7 @@ export default function CreateProfileTeen() {
 
   const [interests, setInterests] = useState<string[]>([]);
 
-  const availableInterests = [
-    'Рисование',
-    'Музыка',
-    'Спорт',
-    'Программирование',
-    'Фото/Видео',
-    'Чтение',
-    'Танцы',
-    'Дизайн',
-  ];
+  const availableInterests = YOUTH_PROFILE_INTERESTS;
 
   const toggleInterest = (interest: string) => {
     if (interests.includes(interest)) {

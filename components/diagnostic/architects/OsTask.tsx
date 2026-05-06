@@ -5,6 +5,7 @@
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ARCHITECTS_OS_MODULE_STYLES } from '$constants/diagnosticUi';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { ProTask1517 } from '$data/diagnosticData1517';
 
@@ -15,32 +16,8 @@ interface Props {
   onAnswer: (optionId: number, erasedOrFrantic?: boolean) => void;
 }
 
-const MODULE_STYLES = {
-  mail: {
-    icon: '📧',
-    title: 'Корпоративная Почта',
-    bg: '#FFFFFF',
-    headerBg: '#F3F4F6',
-    color: '#4B5563',
-  },
-  slack: {
-    icon: '💬',
-    title: 'Чат Команды',
-    bg: '#4A154B',
-    headerBg: '#350D36',
-    color: '#FFFFFF',
-  },
-  trello: {
-    icon: '📊',
-    title: 'Task Tracker',
-    bg: '#0079BF',
-    headerBg: '#005C91',
-    color: '#FFFFFF',
-  },
-};
-
 export default function OsTask({ task, index, total, onAnswer }: Props) {
-  const stylesCfg = MODULE_STYLES[task.module];
+  const stylesCfg = ARCHITECTS_OS_MODULE_STYLES[task.module];
   const [interacted, setInteracted] = useState(false);
 
   const handleSelect = (optId: number) => {

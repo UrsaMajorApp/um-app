@@ -16,6 +16,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import { DEV_DATA_KEY, DEV_TOOLS_KEY } from '$constants/dev';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
@@ -23,9 +24,6 @@ import { useParentData } from '$contexts/ParentDataContext';
 import { emitDevDataChanged } from '$lib/devDataEvents';
 import { clearAllDevData, clearDevData, getDevDataSeeded, seedDevData } from '$lib/devSeedData';
 import { isWebMinWidth } from '$lib/useIsDesktop';
-
-const DEV_TOOLS_KEY = 'um_dev_tools_enabled';
-const DEV_DATA_KEY = 'um_dev_seed_data_enabled';
 
 export function DevRoleSwitcher() {
   const [visible, setVisible] = useState(false);

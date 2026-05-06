@@ -15,27 +15,22 @@ import {
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  PARENT_CHILD_AGE_OPTIONS as AGE_OPTIONS,
+  PARENT_PROFILE_COLOR as ROLE_COLOR,
+  PARENT_PROFILE_GRADIENT as ROLE_GRADIENT,
+} from '$constants/profile';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
-import type { ChildAgeGroup, ParentProfileChildDraft } from '$types/profile';
-
-const ROLE_COLOR = '#6C5CE7';
-const ROLE_GRADIENT: [string, string] = ['#6C5CE7', '#8B7FE8'];
+import type { ParentProfileChildDraft } from '$types/profile';
 
 function generateQRPin(): string {
   // Generate a 6-digit PIN (100000-999999)
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
-
-const AGE_OPTIONS: { label: string; value: ChildAgeGroup }[] = [
-  { label: '6-8', value: '6-8' },
-  { label: '9-11', value: '9-11' },
-  { label: '12-14', value: '12-14' },
-  { label: '15-17', value: '15-17' },
-];
 
 function makeId() {
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;

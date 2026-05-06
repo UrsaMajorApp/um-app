@@ -17,15 +17,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SideNav } from '$components/navigation/SideNav';
+import {
+  CHILD_PROFILE_AGE_OPTIONS as AGE_OPTIONS,
+  CHILD_PROFILE_COLOR as ROLE_COLOR,
+  CHILD_PROFILE_INTERESTS,
+} from '$constants/profile';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-// Age options from 6 to 20
-const AGE_OPTIONS = Array.from({ length: 15 }, (_, i) => i + 6);
-const ROLE_COLOR = '#6C5CE7';
 
 function RequiredLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -57,16 +58,7 @@ export default function CreateProfileChild() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  const availableInterests = [
-    'Рисование',
-    'Музыка',
-    'Математика',
-    'Спорт',
-    'Чтение',
-    'Конструкторы',
-    'Игры',
-    'Языки',
-  ];
+  const availableInterests = CHILD_PROFILE_INTERESTS;
 
   const phoneDigits = formData.phone.replace(/\D/g, '');
   const validation = {

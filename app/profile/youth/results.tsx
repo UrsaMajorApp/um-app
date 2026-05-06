@@ -14,6 +14,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { YOUTH_RESULT_COLOR_PALETTE } from '$constants/profile';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -91,16 +92,6 @@ export default function YouthResults() {
 
   const isPro = diagnostic.tier === 'pro';
 
-  const colorPalette = [
-    '#10B981',
-    '#8B5CF6',
-    '#3B82F6',
-    '#F59E0B',
-    '#EC4899',
-    '#14B8A6',
-    '#F43F5E',
-  ];
-
   const sortedScores = Object.entries(diagnostic.scores || {})
     .filter(([, v]) => typeof v === 'number' && v > 0)
     .sort((a, b) => b[1] - a[1])
@@ -147,7 +138,7 @@ export default function YouthResults() {
     return {
       label,
       value: normalizedValue,
-      color: colorPalette[idx % colorPalette.length],
+      color: YOUTH_RESULT_COLOR_PALETTE[idx % YOUTH_RESULT_COLOR_PALETTE.length],
     };
   });
 

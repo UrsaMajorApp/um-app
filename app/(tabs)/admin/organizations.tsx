@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
-import { ensureConversation } from '$components/admin/adminUtils';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
 import { LEVEL_LABELS } from '$constants/courseOptions';
@@ -15,6 +14,7 @@ import {
   useAdminEnrollments,
   useOrganizations,
 } from '$hooks/useAdminData';
+import { ensureConversation } from '$lib/adminUtils';
 import { formatKZT } from '$lib/formatCurrency';
 import type { AdminOrgTab } from '$types/admin';
 
