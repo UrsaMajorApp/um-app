@@ -2,6 +2,7 @@
   "name": "um-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
