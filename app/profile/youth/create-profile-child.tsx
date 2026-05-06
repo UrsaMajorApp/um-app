@@ -26,6 +26,14 @@ import { formatPhone } from "../../../lib/formatPhone";
 const AGE_OPTIONS = Array.from({ length: 15 }, (_, i) => i + 6);
 const ROLE_COLOR = "#6C5CE7";
 
+function RequiredLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <Text style={styles.fieldLabel}>
+      {children} <Text style={styles.requiredMark}>*</Text>
+    </Text>
+  );
+}
+
 export default function CreateProfileChild() {
   const router = useRouter();
   const { addChild } = useParentData();
@@ -38,7 +46,7 @@ export default function CreateProfileChild() {
   const [formData, setFormData] = useState({
     firstName: "",
     age: 0,
-    gender: "boy",
+    gender: "",
     phone: "",
     otherInterest: "",
     goals: "",
@@ -46,6 +54,8 @@ export default function CreateProfileChild() {
   const [interests, setInterests] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAgePicker, setShowAgePicker] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const availableInterests = [
     "Рисование",
@@ -58,18 +68,33 @@ export default function CreateProfileChild() {
     "Языки",
   ];
 
+  const phoneDigits = formData.phone.replace(/\D/g, "");
+  const validation = {
+    firstName: formData.firstName.trim().length > 0,
+    phone: phoneDigits.length === 0 || phoneDigits.length === 11,
+    age: formData.age >= 6 && formData.age <= 20,
+    gender: formData.gender === "boy" || formData.gender === "girl",
+    interests: interests.length > 0,
+    goals: formData.goals.trim().length > 0,
+  };
+  const isFormValid = Object.values(validation).every(Boolean);
+
   const handleNext = async () => {
-    if (!formData.firstName.trim()) {
-      alert("Пожалуйста, введите имя ребенка");
+    setHasSubmitted(true);
+    setSubmitError("");
+
+    if (!isFormValid) {
+      setSubmitError("Заполните обязательные поля");
       return;
     }
 
     setIsSubmitting(true);
     try {
       const ageNum = formData.age || 8;
+      const childId = `child_${Date.now()}`;
 
       await addChild({
-        id: `child_${Date.now()}`,
+        id: childId,
         name: formData.firstName.trim(),
         age: ageNum,
         phone: formData.phone.trim() || undefined,
@@ -79,10 +104,13 @@ export default function CreateProfileChild() {
         goals: formData.goals.trim() || undefined,
       });
 
-      router.push("/profile/youth/umo-intro");
+      router.push({
+        pathname: "/profile/youth/testing",
+        params: { childId },
+      } as any);
     } catch (error) {
       console.error("Error adding child:", error);
-      alert("Произошла ошибка при сохранении профиля");
+      setSubmitError("Произошла ошибка при сохранении профиля");
     } finally {
       setIsSubmitting(false);
     }
@@ -160,14 +188,17 @@ export default function CreateProfileChild() {
 
             <View style={styles.fieldStack}>
               <View style={styles.field}>
-                <Text style={styles.fieldLabel}>Имя</Text>
+                <RequiredLabel>Имя</RequiredLabel>
                 <TextInput
                   value={formData.firstName}
                   onChangeText={(text) => setFormData({ ...formData, firstName: text })}
                   placeholder="Как зовут ребенка?"
                   placeholderTextColor={COLORS.mutedForeground}
-                  style={styles.input}
+                  style={[styles.input, hasSubmitted && !validation.firstName && styles.inputError]}
                 />
+                {hasSubmitted && !validation.firstName && (
+                  <Text style={styles.errorText}>Введите имя ребенка</Text>
+                )}
               </View>
 
               <View style={styles.field}>
@@ -178,40 +209,57 @@ export default function CreateProfileChild() {
                   placeholder="+7 777 777 7777"
                   placeholderTextColor={COLORS.mutedForeground}
                   keyboardType="phone-pad"
-                  style={styles.input}
+                  style={[styles.input, hasSubmitted && !validation.phone && styles.inputError]}
                 />
                 <Text style={styles.helpText}>Необязательно. Если номера нет, ребенок сможет войти по QR-коду.</Text>
+                {hasSubmitted && !validation.phone && (
+                  <Text style={styles.errorText}>Введите полный номер из 11 цифр или оставьте поле пустым</Text>
+                )}
               </View>
 
               <View style={styles.field}>
-                <Text style={styles.fieldLabel}>Возраст</Text>
+                <RequiredLabel>Возраст</RequiredLabel>
                 <TouchableOpacity
                   onPress={() => setShowAgePicker(true)}
-                  style={styles.selectInput}
+                  style={[styles.selectInput, hasSubmitted && !validation.age && styles.inputError]}
                 >
                   <Text style={[styles.selectText, !formData.age && styles.placeholderText]}>
                     {formData.age ? `${formData.age} лет` : 'Выберите возраст'}
                   </Text>
                   <Feather name="chevron-down" size={18} color={COLORS.mutedForeground} />
                 </TouchableOpacity>
+                {hasSubmitted && !validation.age && (
+                  <Text style={styles.errorText}>Выберите возраст</Text>
+                )}
               </View>
 
               <View style={styles.field}>
-                <Text style={styles.fieldLabel}>Пол</Text>
+                <RequiredLabel>Пол</RequiredLabel>
                 <View style={styles.segmented}>
                   <TouchableOpacity
                     onPress={() => setFormData({ ...formData, gender: "boy" })}
-                    style={[styles.segment, formData.gender === "boy" && styles.segmentActive]}
+                    style={[
+                      styles.segment,
+                      formData.gender === "boy" && styles.segmentActive,
+                      hasSubmitted && !validation.gender && styles.inputError,
+                    ]}
                   >
                     <Text style={[styles.segmentText, formData.gender === "boy" && styles.segmentTextActive]}>Мальчик</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setFormData({ ...formData, gender: "girl" })}
-                    style={[styles.segment, formData.gender === "girl" && styles.segmentActive]}
+                    style={[
+                      styles.segment,
+                      formData.gender === "girl" && styles.segmentActive,
+                      hasSubmitted && !validation.gender && styles.inputError,
+                    ]}
                   >
                     <Text style={[styles.segmentText, formData.gender === "girl" && styles.segmentTextActive]}>Девочка</Text>
                   </TouchableOpacity>
                 </View>
+                {hasSubmitted && !validation.gender && (
+                  <Text style={styles.errorText}>Выберите пол</Text>
+                )}
               </View>
             </View>
           </View>
@@ -220,6 +268,7 @@ export default function CreateProfileChild() {
             <View style={styles.cardHeader}>
               <Feather name="heart" size={20} color={ROLE_COLOR} />
               <Text style={styles.cardTitle}>Интересы</Text>
+              <Text style={styles.requiredMark}>*</Text>
             </View>
             <Text style={styles.cardDescription}>Что нравится ребенку сейчас?</Text>
             <View style={styles.chipGrid}>
@@ -236,6 +285,9 @@ export default function CreateProfileChild() {
                 );
               })}
             </View>
+            {hasSubmitted && !validation.interests && (
+              <Text style={styles.errorText}>Выберите хотя бы один интерес</Text>
+            )}
 
             <Text style={[styles.fieldLabel, { marginTop: 10 }]}>Другой интерес</Text>
             <View style={styles.inlineInputRow}>
@@ -259,6 +311,7 @@ export default function CreateProfileChild() {
             <View style={styles.cardHeader}>
               <Feather name="target" size={20} color={ROLE_COLOR} />
               <Text style={styles.cardTitle}>Цель</Text>
+              <Text style={styles.requiredMark}>*</Text>
             </View>
             <Text style={styles.cardDescription}>Чему ребенок хочет научиться?</Text>
             <TextInput
@@ -268,24 +321,30 @@ export default function CreateProfileChild() {
               placeholderTextColor={COLORS.mutedForeground}
               multiline
               numberOfLines={3}
-              style={[styles.input, styles.textArea]}
+              style={[styles.input, styles.textArea, hasSubmitted && !validation.goals && styles.inputError]}
             />
+            {hasSubmitted && !validation.goals && (
+              <Text style={styles.errorText}>Опишите цель ребенка</Text>
+            )}
           </View>
 
           <View style={styles.footer}>
+            {submitError ? (
+              <Text style={styles.submitErrorText}>{submitError}</Text>
+            ) : null}
             <TouchableOpacity
                 onPress={handleNext}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isFormValid}
                 activeOpacity={0.8}
-                style={[styles.submitButton, isSubmitting && { opacity: 0.7 }]}
+                style={[styles.submitButton, (isSubmitting || !isFormValid) && styles.submitButtonDisabled]}
             >
               <LinearGradient
-                colors={COLORS.gradients.header as any}
+                colors={(isFormValid ? COLORS.gradients.header : [COLORS.muted, COLORS.muted]) as any}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.submitGradient}
               >
-                <Text style={styles.submitText}>
+                <Text style={[styles.submitText, !isFormValid && styles.submitTextDisabled]}>
                   {isSubmitting ? "Сохранение..." : "Добавить ребенка"}
                 </Text>
               </LinearGradient>
@@ -461,6 +520,17 @@ const styles = StyleSheet.create({
     color: COLORS.foreground,
     marginBottom: 8,
   },
+  requiredMark: {
+    color: COLORS.destructive,
+    fontWeight: "900",
+    marginLeft: 4,
+  },
+  errorText: {
+    color: COLORS.destructive,
+    fontSize: 12,
+    fontWeight: "700",
+    marginTop: 6,
+  },
   input: {
     width: "100%",
     minHeight: 50,
@@ -472,6 +542,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
     color: COLORS.foreground,
     fontSize: 15,
+  },
+  inputError: {
+    borderColor: COLORS.destructive,
+    backgroundColor: "#FFF7F7",
   },
   helpText: {
     color: COLORS.mutedForeground,
@@ -601,9 +675,19 @@ const styles = StyleSheet.create({
     padding: 12,
     ...SHADOWS.lg,
   },
+  submitErrorText: {
+    color: COLORS.destructive,
+    fontSize: 13,
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 10,
+  },
   submitButton: {
     overflow: "hidden",
     borderRadius: RADIUS.lg,
+  },
+  submitButtonDisabled: {
+    opacity: 1,
   },
   submitGradient: {
     minHeight: 54,
@@ -616,5 +700,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     letterSpacing: 0.5,
     textTransform: "uppercase",
+  },
+  submitTextDisabled: {
+    color: COLORS.mutedForeground,
   },
 });

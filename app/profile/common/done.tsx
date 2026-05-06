@@ -26,7 +26,7 @@ export default function DoneScreen() {
 
     const handleStart = () => {
         if (role === "youth" || role === "child") {
-            router.replace("/profile/youth/umo-intro" as any);
+            router.replace("/profile/youth/testing" as any);
             return;
         }
         router.replace("/(tabs)/home");
