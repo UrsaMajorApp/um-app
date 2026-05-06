@@ -1,22 +1,38 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, ActivityIndicator, Alert, Platform } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { useParentData } from "../../../contexts/ParentDataContext";
 import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useParentData } from "../../../contexts/ParentDataContext";
 import { useOnboardingQuestions } from "../../../hooks/usePlatformData";
 
 // Answer order matches the DB seed: creative, physical, logical, social, linguistic
-const ANSWER_VALUES = ["creative", "physical", "logical", "social", "linguistic"] as const;
+const ANSWER_VALUES = [
+  "creative",
+  "physical",
+  "logical",
+  "social",
+  "linguistic",
+] as const;
 
 export default function DiagnosticTest() {
   const router = useRouter();
   const { childId } = useLocalSearchParams();
-  const { childrenProfile, updateChildDiagnostic, activeChildId } = useParentData();
-  const { questions: QUESTIONS, loading: questionsLoading } = useOnboardingQuestions("parent_diagnostic");
+  const { childrenProfile, updateChildDiagnostic, activeChildId } =
+    useParentData();
+  const { questions: QUESTIONS, loading: questionsLoading } =
+    useOnboardingQuestions("parent_diagnostic");
 
   const targetId = childId || activeChildId;
-  const child = childrenProfile.find(c => c.id === targetId) || childrenProfile[0];
+  const child =
+    childrenProfile.find((c) => c.id === targetId) || childrenProfile[0];
 
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -24,7 +40,14 @@ export default function DiagnosticTest() {
 
   if (!child) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#6C5CE7", justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#6C5CE7",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Text style={{ color: "white", fontSize: 18 }}>Ребенок не найден.</Text>
       </View>
     );
@@ -36,7 +59,7 @@ export default function DiagnosticTest() {
 
     if (currentQ < QUESTIONS.length - 1) {
       setAnswers(newAnswers);
-      setCurrentQ(prev => prev + 1);
+      setCurrentQ((prev) => prev + 1);
     } else {
       processWithAI(newAnswers);
     }
@@ -47,7 +70,9 @@ export default function DiagnosticTest() {
     try {
       const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
       if (!apiKey) {
-         throw new Error("Missing Gemini API Key in .env. Please add EXPO_PUBLIC_GEMINI_API_KEY.");
+        throw new Error(
+          "Missing Gemini API Key in .env. Please add EXPO_PUBLIC_GEMINI_API_KEY.",
+        );
       }
 
       // Prepare data summary
@@ -69,18 +94,21 @@ export default function DiagnosticTest() {
         "recommendedConstellation": "A short 1-3 word title in Russian (e.g. 'Юный Исследователь', 'Инженер')"
       }`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
               temperature: 0.7,
-          }
-        })
-      });
+            },
+          }),
+        },
+      );
 
       const data = await response.json();
       if (data.error) {
@@ -88,29 +116,30 @@ export default function DiagnosticTest() {
       }
 
       const textOutput = data.candidates[0].content.parts[0].text;
-      
+
       let parsed;
       try {
-          parsed = JSON.parse(textOutput.replace(/```json/g, "").replace(/```/g, ""));
+        parsed = JSON.parse(
+          textOutput.replace(/```json/g, "").replace(/```/g, ""),
+        );
       } catch (e) {
-          throw new Error("Failed to parse AI output: " + textOutput);
+        throw new Error("Failed to parse AI output: " + textOutput);
       }
 
       updateChildDiagnostic(child.id, {
-          childId: child.id,
-          scores: parsed.scores,
-          summary: parsed.summary,
-          recommendedConstellation: parsed.recommendedConstellation
+        childId: child.id,
+        scores: parsed.scores,
+        summary: parsed.summary,
+        recommendedConstellation: parsed.recommendedConstellation,
       });
 
       router.back();
-
     } catch (error: any) {
       console.error("AI Diagnostic Error:", error);
-      if (Platform.OS === 'web') {
-          window.alert("Ошибка тестирования ИИ: " + error.message);
+      if (Platform.OS === "web") {
+        window.alert("Ошибка тестирования ИИ: " + error.message);
       } else {
-          Alert.alert("Ошибка тестирования ИИ", error.message);
+        Alert.alert("Ошибка тестирования ИИ", error.message);
       }
       setIsAnalyzing(false);
     }
@@ -119,7 +148,10 @@ export default function DiagnosticTest() {
   if (questionsLoading) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#6C5CE7" }}>
-        <LinearGradient colors={["#6C5CE7", "#8B7FE8"]} style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <LinearGradient
+          colors={["#6C5CE7", "#8B7FE8"]}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
           <ActivityIndicator size="large" color="#FFFFFF" />
         </LinearGradient>
       </SafeAreaView>
@@ -128,31 +160,76 @@ export default function DiagnosticTest() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#6C5CE7" }}>
-      <LinearGradient colors={["#6C5CE7", "#8B7FE8"]} style={{ flex: 1, padding: 20 }}>
-        <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 30}}>
-             <Pressable onPress={() => router.back()} disabled={isAnalyzing}>
-                 <Text style={{color: "rgba(255,255,255,0.7)", fontWeight: "600"}}>Отмена</Text>
-             </Pressable>
-             <Text style={{color: "white", fontWeight: "800"}}>Анализ: {child.name}</Text>
-             <View style={{width: 50}} />
+      <LinearGradient
+        colors={["#6C5CE7", "#8B7FE8"]}
+        style={{ flex: 1, padding: 20 }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 30,
+          }}
+        >
+          <Pressable onPress={() => router.back()} disabled={isAnalyzing}>
+            <Text style={{ color: "rgba(255,255,255,0.7)", fontWeight: "600" }}>
+              Отмена
+            </Text>
+          </Pressable>
+          <Text style={{ color: "white", fontWeight: "800" }}>
+            Анализ: {child.name}
+          </Text>
+          <View style={{ width: 50 }} />
         </View>
 
         {isAnalyzing ? (
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
             <ActivityIndicator size="large" color="#FFFFFF" />
-            <Text style={{ color: "white", fontSize: 18, fontWeight: "700", marginTop: 24, textAlign: "center" }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                fontWeight: "700",
+                marginTop: 24,
+                textAlign: "center",
+              }}
+            >
               ИИ Gemini составляет карту талантов...
             </Text>
-            <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14, fontWeight: "500", marginTop: 12, textAlign: "center" }}>
+            <Text
+              style={{
+                color: "rgba(255,255,255,0.8)",
+                fontSize: 14,
+                fontWeight: "500",
+                marginTop: 12,
+                textAlign: "center",
+              }}
+            >
               Это может занять пару секунд.
             </Text>
           </View>
         ) : (
           <View style={{ flex: 1 }}>
-            <Text style={{ color: "rgba(255, 255, 255, 0.7)", fontWeight: "800", marginBottom: 12 }}>
+            <Text
+              style={{
+                color: "rgba(255, 255, 255, 0.7)",
+                fontWeight: "800",
+                marginBottom: 12,
+              }}
+            >
               ВОПРОС {currentQ + 1} ИЗ {QUESTIONS.length}
             </Text>
-            <Text style={{ color: "white", fontSize: 24, fontWeight: "900", marginBottom: 32 }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 24,
+                fontWeight: "900",
+                marginBottom: 32,
+              }}
+            >
               {QUESTIONS[currentQ].question_text}
             </Text>
 
@@ -167,10 +244,14 @@ export default function DiagnosticTest() {
                   marginBottom: 12,
                   borderWidth: 1,
                   borderColor: "rgba(255, 255, 255, 0.1)",
-                  opacity: pressed ? 0.7 : 1
+                  opacity: pressed ? 0.7 : 1,
                 })}
               >
-                <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>{optText}</Text>
+                <Text
+                  style={{ color: "white", fontSize: 16, fontWeight: "600" }}
+                >
+                  {optText}
+                </Text>
               </Pressable>
             ))}
           </View>
