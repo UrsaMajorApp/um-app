@@ -78,8 +78,8 @@ export default function Sudoku({
     setSolution(board.map((row) => [...row]));
 
     // Mask cells for difficulty
-    const maskedGrid: Cell[][] = board.map((row, r) =>
-      row.map((val, c) => ({
+    const maskedGrid: Cell[][] = board.map((row) =>
+      row.map((val) => ({
         value: Math.random() > 0.4 ? val : 0,
         original: true,
         error: false,

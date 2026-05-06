@@ -10,11 +10,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS, TYPOGRAPHY } from "@/constants/theme";
+import { COLORS, SHADOWS, TYPOGRAPHY } from "@/constants/theme";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTeacherGroups } from "@/hooks/usePlatformData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
@@ -25,7 +24,6 @@ function scheduleTimeLabel(schedule: string | null) {
 }
 
 export default function TeacherHome() {
-  const { width } = useWindowDimensions();
   const router = useRouter();
   const { user } = useAuth();
   const { groups, studentCounts, loading } = useTeacherGroups();

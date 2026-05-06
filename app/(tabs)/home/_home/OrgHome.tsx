@@ -9,13 +9,11 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   COLORS,
-  LAYOUT,
   RADIUS,
   SHADOWS,
   TYPOGRAPHY
@@ -57,7 +55,6 @@ const QUICK_ACTIONS = [
 
 export default function OrgHome() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const { status: orgStatus, name: orgName } = useOrgProfile();

@@ -7,11 +7,10 @@ import {
   Pressable,
   ScrollView,
   Text,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { isUuid } from "../../../lib/idUtils";
@@ -79,7 +78,6 @@ function getScheduleTime(schedule: string | null) {
 export default function ParentCalendar() {
   const { user } = useAuth();
   const { childrenProfile, activeChildId } = useParentData();
-  const { width } = useWindowDimensions();
   const now = new Date();
   const [currentDate, setCurrentDate] = useState({
     year: now.getFullYear(),

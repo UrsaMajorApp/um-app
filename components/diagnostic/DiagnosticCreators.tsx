@@ -18,12 +18,10 @@ import { MotiView } from "moti";
 import React, { useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -42,12 +40,10 @@ export default function DiagnosticCreators({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
   const {
-    childrenProfile,
     activeChildId,
     updateChildDiagnostic,
     parentProfile,
   } = useParentData();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const hPad = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop

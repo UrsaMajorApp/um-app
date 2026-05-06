@@ -4,7 +4,7 @@ import {
   ActivityIndicator,
   View,
 } from "react-native";
-import { COLORS, LAYOUT } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import CustomTabBar, { SideNav, TabIcon } from "./layout-container";
 import { useIsDesktop } from "../../lib/useIsDesktop";

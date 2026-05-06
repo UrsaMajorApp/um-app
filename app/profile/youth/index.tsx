@@ -7,7 +7,6 @@ import {
   Pressable,
   ScrollView,
   Text,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,7 +19,6 @@ import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsD
 export default function YouthProfile() {
   const router = useRouter();
   const { logout, user } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop);
   const { parentProfile, childrenProfile, activeChildId } = useParentData();

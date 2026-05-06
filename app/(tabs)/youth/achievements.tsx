@@ -3,7 +3,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -11,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT } from "../../../constants/theme";
+import { COLORS } from "../../../constants/theme";
 import { useYouthAchievements } from "../../../hooks/useStudentData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 

@@ -13,7 +13,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,7 +32,6 @@ import {
 export default function MentorCreateProfile() {
   const router = useRouter();
   const { user, finalizeRegistration } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
@@ -808,7 +806,6 @@ function InputField({
   height,
   suffix,
   maxLength,
-  roleColor,
 }: any) {
   return (
     <View style={{ marginBottom: 20 }}>

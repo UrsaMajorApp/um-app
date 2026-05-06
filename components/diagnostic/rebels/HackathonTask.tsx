@@ -4,7 +4,7 @@
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
+import { COLORS, RADIUS } from "../../../constants/theme";
 import type { ProTask1214 } from "../../../data/diagnosticData1214";
 
 const SPEAKERS = {
@@ -24,7 +24,7 @@ interface Props {
 
 export default function HackathonTask({ task, index, total, onAnswer }: Props) {
   const cfg = SPEAKERS[task.speaker];
-  const [erased, setErased] = useState(false);
+  const [erased] = useState(false);
 
   const handleSelect = (optId: number) => {
     // Basic stealth simulation: 
@@ -54,7 +54,7 @@ export default function HackathonTask({ task, index, total, onAnswer }: Props) {
       </View>
 
       <View style={styles.optionsList}>
-        {task.options.map((opt, i) => (
+        {task.options.map((opt) => (
           <TouchableOpacity
             key={opt.id}
             onPress={() => handleSelect(opt.id)}

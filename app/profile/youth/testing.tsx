@@ -16,12 +16,10 @@ import { MotiView } from "moti";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -50,7 +48,6 @@ import { Diagnostic } from "../../../models/types";
 export default function YouthTesting() {
   const router = useRouter();
   const { childId } = useLocalSearchParams<{ childId?: string | string[] }>();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop

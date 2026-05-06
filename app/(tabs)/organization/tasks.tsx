@@ -4,11 +4,9 @@ import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,7 +23,6 @@ import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgTasks() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop

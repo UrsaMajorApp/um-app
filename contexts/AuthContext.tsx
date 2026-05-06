@@ -94,7 +94,6 @@ const DEV_MODE_KEY = "um_dev_mode";
 const PROFILE_COMPLETE_PREFIX = "um_profile_complete:";
 
 const DEV_OTP = process.env.EXPO_PUBLIC_DEV_OTP?.trim() || null;
-const PLACEHOLDER_VERIFICATION_CODE = DEV_OTP ?? "1234";
 
 // Stable, valid UUIDs for each dev role so FK constraints don't fail.
 // Used by both devLogin() and the fake-OTP bypass in verifyOtpAndRegister().

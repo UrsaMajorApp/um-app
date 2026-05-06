@@ -13,12 +13,11 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    useWindowDimensions,
     View,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { formatPhone } from "../../../lib/formatPhone";
@@ -33,7 +32,6 @@ function generateQRPin(): string {
 export default function ParentProfile() {
   const router = useRouter();
   const { user, logout } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop);
 
@@ -653,23 +651,6 @@ export default function ParentProfile() {
           </View>
         </View>
       </Modal>
-    </View>
-  );
-}
-
-function StatItem({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={{ alignItems: "center" }}>
-      <Text
-        style={{ fontSize: 16, fontWeight: "800", color: COLORS.foreground }}
-      >
-        {value}
-      </Text>
-      <Text
-        style={{ fontSize: 11, color: COLORS.mutedForeground, marginTop: 2 }}
-      >
-        {label}
-      </Text>
     </View>
   );
 }

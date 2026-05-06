@@ -71,10 +71,6 @@ function ageGroupToAge(ageGroup: AgeGroup | null) {
   return 10;
 }
 
-function buildDevChildId(parentUserId: string) {
-  return `dev_child_${parentUserId.replace(/[^a-zA-Z0-9]/g, "").slice(0, 24)}`;
-}
-
 function normalizeChild(child: Child): Child {
   return {
     ...child,

@@ -13,7 +13,6 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "../../components/ui/PressableScale";
@@ -73,7 +72,6 @@ type AuthMethod = "phone" | "email";
 
 export default function RegisterScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const { sendRegistrationCode, registerWithIdentifier, devOtpCode, devMode } =
     useAuth();
   const { useRealOtp } = useDevSettings();

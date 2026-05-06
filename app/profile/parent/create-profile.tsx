@@ -10,7 +10,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
@@ -57,7 +56,6 @@ export default function CreateProfileParent() {
   const router = useRouter();
   const { user, finalizeRegistration } = useAuth();
   const { saveParentProfile } = useParentData();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop

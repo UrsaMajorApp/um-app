@@ -13,7 +13,6 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "../../components/ui/PressableScale";
@@ -25,7 +24,6 @@ type AuthMethod = "phone" | "email";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const { loginWithIdentifier, loginWithGoogle } = useAuth();
 
   const [authMethod, setAuthMethod] = useState<AuthMethod>("phone");

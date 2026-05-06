@@ -8,7 +8,6 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,7 +27,6 @@ type Teacher = OrgStaffMember;
 
 export default function OrgStaffScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop

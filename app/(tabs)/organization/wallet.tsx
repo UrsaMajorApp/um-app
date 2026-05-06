@@ -12,17 +12,15 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../constants/theme";
 import { useWalletData } from "../../../hooks/usePlatformData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgWalletScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 

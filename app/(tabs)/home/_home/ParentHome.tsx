@@ -14,7 +14,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NotificationsModal } from "../../layout-container";
 import {
   COLORS,
-  LAYOUT,
   RADIUS,
   SHADOWS,
   TYPOGRAPHY,
@@ -361,7 +360,7 @@ export default function ParentHome() {
               </View>
             ) : (
               recommendations.map((rec, idx) => {
-                const [c1, c2] = courseGradient(idx);
+                const [c1] = courseGradient(idx);
                 return (
                   <Pressable
                     key={rec.id}

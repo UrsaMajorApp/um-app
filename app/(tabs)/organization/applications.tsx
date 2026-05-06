@@ -1,14 +1,11 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React from "react";
 import {
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,14 +21,12 @@ import { useOrgApplications } from "../../../hooks/useOrgData";
 import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgApplicationsScreen() {
-  const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;
 
-  const { apps, approve, reject: rejectApp, loading } = useOrgApplications();
+  const { apps, approve, reject: rejectApp } = useOrgApplications();
 
   const getStatusBadge = (status: string) => {
     switch (status) {

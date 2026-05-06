@@ -13,7 +13,6 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "../../components/ui/PressableScale";
@@ -23,7 +22,6 @@ import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const { requestPasswordReset } = useAuth();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");

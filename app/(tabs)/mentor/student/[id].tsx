@@ -6,17 +6,15 @@ import React, { useEffect, useState } from "react";
 import {
   Alert,
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../../constants/theme";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useMentorStudents } from "../../../../hooks/useMentorData";
 import { isSupabaseConfigured, supabase } from "../../../../lib/supabase";
@@ -25,23 +23,21 @@ import { getDashboardHorizontalPadding, useIsDesktop } from "../../../../lib/use
 export default function MentorStudentDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
   const { user } = useAuth();
 
-  const { students, loading } = useMentorStudents();
+  const { students } = useMentorStudents();
   const student = students.find((s) => s.id === (id as string)) || students[0];
 
   // State for editable notes
   const [notes, setNotes] = useState("");
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [tempNotes, setTempNotes] = useState(notes);
-  const [notesLoading, setNotesLoading] = useState(true);
 
   // State for monthly report modal
   const [showReportModal, setShowReportModal] = useState(false);
-  const [reportMonth, setReportMonth] = useState(
+  const [reportMonth] = useState(
     new Date().toLocaleDateString("ru-RU", { month: "long", year: "numeric" }),
   );
 
@@ -54,11 +50,9 @@ export default function MentorStudentDetailScreen() {
 
   const loadNotes = async () => {
     if (!supabase || !isSupabaseConfigured || !student?.id || !user?.id) {
-      setNotesLoading(false);
       return;
     }
 
-    setNotesLoading(true);
     try {
       const { data, error } = await supabase
         .from("mentor_student_notes")
@@ -77,8 +71,6 @@ export default function MentorStudentDetailScreen() {
       }
     } catch (error) {
       console.error("Error loading notes:", error);
-    } finally {
-      setNotesLoading(false);
     }
   };
 

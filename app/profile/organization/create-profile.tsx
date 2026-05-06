@@ -12,7 +12,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,7 +29,6 @@ const ORG_GRADIENT: [string, string] = ["#10B981", "#34D399"];
 export default function CreateProfileOrganization() {
   const router = useRouter();
   const { user, finalizeRegistration } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop

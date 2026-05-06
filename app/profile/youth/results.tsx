@@ -14,12 +14,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import {
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -49,7 +47,6 @@ export default function YouthResults() {
     await finalizeRegistration();
     router.replace("/(tabs)/home");
   };
-  const { width } = useWindowDimensions();
   const { childrenProfile, activeChildId } = useParentData();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
@@ -115,7 +112,7 @@ export default function YouthResults() {
   ];
 
   const sortedScores = Object.entries(diagnostic.scores || {})
-    .filter(([k, v]) => typeof v === "number" && v > 0)
+    .filter(([, v]) => typeof v === "number" && v > 0)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 6);
 

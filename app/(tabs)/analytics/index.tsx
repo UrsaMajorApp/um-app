@@ -97,7 +97,6 @@ export default function AnalyticsScreen() {
 
   // Mark every date in a ±60-day window that falls on an active day_of_week
   const markedDates = useMemo(() => {
-    const allItems = items; // all items for selected day - but we need ALL days' items for marking
     // For marking the calendar, we use a separate "all items" set — see note below.
     // Since useOrgSchedule filters by dayOfWeek, we can't know which OTHER days have events.
     // Instead, mark the selected date and trust the user to explore.

@@ -4,11 +4,9 @@ import { MotiView } from "moti";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
@@ -17,7 +15,6 @@ import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ParentTesting() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop

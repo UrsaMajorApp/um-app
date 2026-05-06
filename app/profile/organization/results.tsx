@@ -2,11 +2,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import {
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
@@ -14,7 +12,6 @@ import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgResults() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop

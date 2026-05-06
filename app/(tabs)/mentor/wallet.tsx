@@ -1,29 +1,23 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React from "react";
 import {
     FlatList,
-    Platform,
     StyleSheet,
     Text,
     TouchableOpacity,
-    useWindowDimensions,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
     COLORS,
-    LAYOUT,
     SHADOWS
 } from "../../../constants/theme";
 import { useWalletData } from "../../../hooks/usePlatformData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorWalletScreen() {
-  const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 

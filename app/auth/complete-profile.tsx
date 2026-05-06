@@ -14,11 +14,9 @@ import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -77,7 +75,6 @@ const ROLES: {
 export default function CompleteProfile() {
   const router = useRouter();
   const { user, setUserRole, logout, isLoading } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop

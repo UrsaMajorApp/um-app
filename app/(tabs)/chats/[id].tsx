@@ -10,7 +10,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,7 +20,6 @@ import { useIsDesktop } from "../../../lib/useIsDesktop";
 export default function ChatScreen() {
   const router = useRouter();
   const { id, name } = useLocalSearchParams<{ id: string; name: string }>();
-  const { width } = useWindowDimensions();
   const IS_DESKTOP = useIsDesktop();
 
   const { messages, loading, sendMessage } = useChatMessages(id ?? null);

@@ -61,7 +61,7 @@ export function useDiagnosticEngine(opts: {
   isPro: boolean;
   onComplete: (diagnostic: Diagnostic) => Promise<void>;
 }) {
-  const { childId, userId, isPro, onComplete } = opts;
+  const { childId, isPro, onComplete } = opts;
 
   const [phase, setPhase] = useState<DiagnosticPhase>("intro");
   const [basicIndex, setBasicIndex] = useState(0);

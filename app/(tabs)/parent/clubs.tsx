@@ -9,11 +9,10 @@ import {
   ScrollView,
   Text,
   TextInput,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../constants/theme";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import {
   courseGradient,
@@ -36,7 +35,6 @@ const SKILL_FILTERS = [
 
 export default function ParentClubs() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const { childrenProfile, activeChildId } = useParentData();
   const [activeSkill, setActiveSkill] = useState("Все");
   const [search, setSearch] = useState("");

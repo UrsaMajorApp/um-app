@@ -12,11 +12,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
 import { useOrgProfile } from "../../../hooks/useOrgData";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
@@ -31,8 +29,6 @@ interface DocState {
 
 export default function OrgVerificationScreen() {
   const router = useRouter();
-  const { user } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const {

@@ -6,7 +6,6 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
-    useWindowDimensions,
     View,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -16,14 +15,13 @@ import { getGameById } from "../../../../components/games/gameCatalog";
 import MemoryGame from "../../../../components/games/MemoryGame";
 import Minesweeper from "../../../../components/games/Minesweeper";
 import Sudoku from "../../../../components/games/Sudoku";
-import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../../constants/theme";
 import { useYouthGameIq } from "../../../../hooks/useYouthGameIq";
 import { useIsDesktop } from "../../../../lib/useIsDesktop";
 
 export default function YouthGamePage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const { width } = useWindowDimensions();
   const { recordGameResult } = useYouthGameIq();
   const [earnedPoints, setEarnedPoints] = useState<number | null>(null);
 

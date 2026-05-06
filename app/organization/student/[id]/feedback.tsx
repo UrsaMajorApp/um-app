@@ -9,7 +9,6 @@ import {
    Text,
    TextInput,
    TouchableOpacity,
-   useWindowDimensions,
    View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -40,7 +39,6 @@ const FEEDBACK_TAGS = [
 export default function FeedbackFormScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop

@@ -10,13 +10,11 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   COLORS,
-  LAYOUT,
   SHADOWS
 } from "../../../constants/theme";
 import {
@@ -27,11 +25,10 @@ import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsD
 
 export default function MentorStudentsScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 
-  const { students, loading } = useMentorStudents();
+  const { students } = useMentorStudents();
   const { summary } = useMentorStudentAttendanceSummary();
   const [searchQuery, setSearchQuery] = useState("");
 

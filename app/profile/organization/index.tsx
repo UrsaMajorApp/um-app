@@ -10,7 +10,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,8 +25,7 @@ import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgProfile() {
-  const { user, logout } = useAuth();
-  const { width } = useWindowDimensions();
+  const { logout } = useAuth();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop

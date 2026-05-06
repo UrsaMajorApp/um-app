@@ -891,7 +891,7 @@ export default function CustomTabBar({ role }: Props) {
             </MotiView>
           )}
 
-          {tabs.map((item, index) => {
+          {tabs.map((item) => {
             const active = isActive(item.route);
             return (
               <Pressable

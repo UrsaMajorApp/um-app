@@ -11,11 +11,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
+import { COLORS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
@@ -36,7 +35,6 @@ interface TrialRequest {
 }
 
 export default function MentorSessionsScreen() {
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
   const { user } = useAuth();

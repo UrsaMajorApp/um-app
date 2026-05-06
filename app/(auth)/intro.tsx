@@ -8,10 +8,9 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, RADIUS, SHADOWS } from "../../constants/theme";
 
-const { width, height } = Dimensions.get("window");
-
 export default function IntroScreen() {
   const router = useRouter();
+  const { height } = Dimensions.get("window");
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.primary }}>

@@ -9,7 +9,6 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    useWindowDimensions,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -43,7 +42,6 @@ function formatChatTime(isoString: string): string {
 
 export default function ChatsScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const IS_DESKTOP = useIsDesktop();
   const horizontalPadding = IS_DESKTOP
     ? LAYOUT.dashboardHorizontalPaddingDesktop

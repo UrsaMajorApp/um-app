@@ -9,13 +9,11 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    useWindowDimensions,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
     COLORS,
-    LAYOUT,
     SHADOWS
 } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -23,7 +21,6 @@ import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsD
 
 export default function TeacherProfile() {
   const { logout, user } = useAuth();
-  const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop);
 

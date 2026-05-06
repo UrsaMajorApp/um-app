@@ -13,7 +13,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   COLORS,
-  LAYOUT,
   RADIUS,
   SHADOWS,
   TYPOGRAPHY,
