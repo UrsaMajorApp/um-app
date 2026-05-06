@@ -17,15 +17,15 @@ import {
     COLORS,
     LAYOUT,
     SHADOWS
-} from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
+} from "@/constants/theme";
+import { useAuth } from "@/contexts/AuthContext";
 import {
     useMentorOwnProfile,
     useMentorRequests,
     useMentorStudents,
-} from "../../hooks/useMentorData";
-import { useWalletData } from "../../hooks/usePlatformData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../lib/useIsDesktop";
+} from "@/hooks/useMentorData";
+import { useWalletData } from "@/hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
 
 export default function MentorHome() {
   const router = useRouter();

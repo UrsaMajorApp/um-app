@@ -21,67 +21,14 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
 import { useIsDesktop } from "../../../lib/useIsDesktop";
-
-const ROLE_COLOR = "#EF4444";
-const ROLE_GRADIENT: [string, string] = ["#EF4444", "#F87171"];
-
-const STEPS = [
-  {
-    id: 1,
-    title: "Личная визитка",
-    sub: "Это то, что родитель увидит в первую очередь",
-  },
-  {
-    id: 2,
-    title: "Профессиональный фильтр",
-    sub: "Данные для системы и администратора",
-  },
-  {
-    id: 3,
-    title: "Маркетинг и продажи",
-    sub: "Дополнительная информация для профиля",
-  },
-];
-
-const CITIES = [
-  "Астана",
-  "Алматы",
-  "Шымкент",
-  "Караганда",
-  "Актобе",
-  "Тараз",
-  "Павлодар",
-  "Усть-Каменогорск",
-  "Семей",
-  "Атырау",
-  "Костанай",
-  "Кызылорда",
-  "Уральск",
-  "Петропавловск",
-  "Актау",
-];
-
-const SPECIALIZATIONS = [
-  "Психолог",
-  "Профориентолог",
-  "Тьютор по Hard Skills",
-  "Тренер по Soft Skills",
-  "Другая специализация",
-];
-
-const PREDEFINED_SKILLS = [
-  "#Лидерство",
-  "#ЭмоциональныйИнтеллект",
-  "#IT",
-  "#КритическоеМышление",
-  "#Креативность",
-  "#Коммуникация",
-  "#Тайм-менеджмент",
-  "#Командная работа",
-  "#Программирование",
-  "#Дизайн",
-  "#Публичные выступления",
-];
+import {
+  CITIES,
+  PREDEFINED_SKILLS,
+  ROLE_COLOR,
+  ROLE_GRADIENT,
+  SPECIALIZATIONS,
+  STEPS,
+} from "./createProfileOptions";
 
 export default function MentorCreateProfile() {
   const router = useRouter();

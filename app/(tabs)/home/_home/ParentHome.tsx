@@ -1,10 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
-  Image,
   Platform,
   Pressable,
   ScrollView,
@@ -13,121 +11,23 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NotificationsModal } from "../../app/(tabs)/layout-container";
+import { NotificationsModal } from "../../layout-container";
 import {
   COLORS,
   LAYOUT,
   RADIUS,
   SHADOWS,
   TYPOGRAPHY,
-} from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
-import { useParentData } from "../../contexts/ParentDataContext";
+} from "@/constants/theme";
+import { useAuth } from "@/contexts/AuthContext";
+import { useParentData } from "@/contexts/ParentDataContext";
 import {
   courseGradient,
   SCORE_TO_SKILLS,
   usePublicCourses,
-} from "../../hooks/usePublicData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../lib/useIsDesktop";
-
-const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
-  const [visible, setVisible] = useState(false);
-  const [config, setConfig] = useState(() => ({
-    top: Math.random() * (height || 800),
-    left: Math.random() * (width || 400),
-    size: 20 + Math.random() * 70,
-    rotation: `${Math.floor(Math.random() * 80) - 40}deg`,
-    duration: 2500 + Math.random() * 2000,
-  }));
-
-  useEffect(() => {
-    let isMounted = true;
-    let timeoutId: any;
-
-    const runCycle = () => {
-      if (!isMounted) return;
-
-      // 1. Показываем
-      setVisible(true);
-
-      // 2. Ждем пока покажется + небольшая пауза в видимом состоянии
-      timeoutId = setTimeout(() => {
-        if (!isMounted) return;
-
-        // 3. Скрываем
-        setVisible(false);
-
-        // 4. Ждем пока полностью скроется
-        timeoutId = setTimeout(() => {
-          if (!isMounted) return;
-
-          // 5. Меняем координаты только когда полностью невидимы
-          setConfig({
-            top: Math.random() * (height || 800),
-            left: Math.random() * (width || 400),
-            size: 20 + Math.random() * 70,
-            rotation: `${Math.floor(Math.random() * 80) - 40}deg`,
-            duration: 2500 + Math.random() * 2000,
-          });
-
-          // 6. Небольшая пауза перед следующим появлением
-          timeoutId = setTimeout(runCycle, 1000);
-        }, config.duration + 500);
-      }, config.duration + 2000);
-    };
-
-    // Начальная задержка
-    timeoutId = setTimeout(runCycle, Math.random() * 5000);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
-    };
-  }, [width, height]);
-
-  return (
-    <MotiView
-      animate={{
-        opacity: visible ? (dark ? 0.06 : 0.15) : 0,
-        scale: visible ? 1.1 : 0.6,
-        rotate: config.rotation,
-      }}
-      transition={{
-        type: "timing",
-        duration: config.duration,
-      }}
-      style={{
-        position: "absolute",
-        top: config.top,
-        left: config.left,
-        zIndex: 0,
-        pointerEvents: "none",
-      }}
-    >
-      <Image
-        source={require("../../assets/logo/Frame 4.svg")}
-        style={{
-          width: config.size,
-          height: config.size,
-          tintColor: dark ? "#555555" : undefined,
-        }}
-        resizeMode="contain"
-      />
-    </MotiView>
-  );
-});
-
-const FloatingBranding = React.memo(
-  ({ count = 15, dark = false, width, height }: any) => {
-    return (
-      <>
-        {Array.from({ length: count }).map((_, i) => (
-          <AutonomousLogo key={i} width={width} height={height} dark={dark} />
-        ))}
-      </>
-    );
-  },
-);
+} from "@/hooks/usePublicData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
+import { FloatingBranding } from "@/components/home/parent/FloatingBranding";
 
 export default function ParentHome() {
   const router = useRouter();
@@ -189,7 +89,6 @@ export default function ParentHome() {
           dark={true}
           width={width}
           height={height}
-          seed="body"
         />
       </View>
 

@@ -3,12 +3,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
-import AdminHome from "@/components/home/AdminHome";
-import MentorHome from "@/components/home/MentorHome";
-import OrgHome from "@/components/home/OrgHome";
-import ParentHome from "@/components/home/ParentHome";
-import TeacherHome from "@/components/home/TeacherHome";
-import YouthHome from "@/components/home/YouthHome";
+import AdminHome from "./_home/AdminHome";
+import MentorHome from "./_home/MentorHome";
+import OrgHome from "./_home/OrgHome";
+import ParentHome from "./_home/ParentHome";
+import TeacherHome from "./_home/TeacherHome";
+import YouthHome from "./_home/YouthHome";
 
 type Role =
   | "parent"
