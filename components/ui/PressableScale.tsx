@@ -2,6 +2,7 @@ import type React from 'react';
 import { useRef } from 'react';
 import {
   Animated,
+  Platform,
   Pressable,
   type PressableProps,
   type StyleProp,
@@ -56,11 +57,12 @@ export function PressableScale({
 }: PressableScaleProps) {
   const scale = useRef(new Animated.Value(1)).current;
   const { outer, inner } = splitStyle(style);
+  const useNativeDriver = Platform.OS !== 'web';
 
   const handlePressIn = (e: PressableEvent) => {
     Animated.spring(scale, {
       toValue: disabled ? 1 : scaleTo,
-      useNativeDriver: true,
+      useNativeDriver,
       speed: 60,
       bounciness: 0,
     }).start();
@@ -70,7 +72,7 @@ export function PressableScale({
   const handlePressOut = (e: PressableEvent) => {
     Animated.spring(scale, {
       toValue: 1,
-      useNativeDriver: true,
+      useNativeDriver,
       speed: 40,
       bounciness: 5,
     }).start();
