@@ -1,5 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
@@ -8,14 +9,35 @@ import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 
 export default function AdminIntroScreen() {
-  const { setUserRole } = useAuth();
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
+    if (isLoading) return;
+
+    if (!user) {
+      router.replace("/intro");
+      return;
+    }
+
+    if (user.role !== "admin") {
+      router.replace("/(tabs)/home");
+      return;
+    }
+
     const timer = setTimeout(() => {
-      setUserRole("admin");
+      router.replace("/(tabs)/home");
     }, 2000);
     return () => clearTimeout(timer);
-  }, [setUserRole]);
+  }, [isLoading, router, user]);
+
+  if (isLoading || !user || user.role !== "admin") {
+    return (
+      <View style={{ flex: 1, backgroundColor: COLORS.background, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
