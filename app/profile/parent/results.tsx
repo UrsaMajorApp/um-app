@@ -16,11 +16,12 @@ import {
   SHADOWS
 } from "../../../constants/theme";
 import { useParentData } from "../../../contexts/ParentDataContext";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ParentResults() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

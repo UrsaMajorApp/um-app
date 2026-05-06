@@ -15,11 +15,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LAYOUT } from "../../../constants/theme";
 import { formatPhone } from "../../../lib/formatPhone";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function CreateProfileYoungAdult() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

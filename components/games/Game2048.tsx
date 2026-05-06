@@ -18,6 +18,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { COLORS, RADIUS } from "../../constants/theme";
+import { isWebMinWidth } from "../../lib/useIsDesktop";
 
 const GRID_SIZE = 4;
 const CELL_MARGIN = 10;
@@ -237,7 +238,7 @@ export default function Game2048({
 
   const boardSize = Math.min(width - 48, MAX_BOARD_SIZE);
   const cellSize = (boardSize - CELL_MARGIN * (GRID_SIZE + 2)) / GRID_SIZE;
-  const isDesktopWeb = Platform.OS === "web" && width >= 768;
+  const isDesktopWeb = isWebMinWidth(width, 768);
   const hintText = isDesktopWeb
     ? "Используйте стрелки или мышь, чтобы перемещать плитки"
     : "Свайпайте, чтобы перемещать плитки";

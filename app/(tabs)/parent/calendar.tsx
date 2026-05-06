@@ -16,6 +16,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { isUuid } from "../../../lib/idUtils";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 const MONTHS = [
   "Январь",
@@ -87,10 +88,8 @@ export default function ParentCalendar() {
   const [selectedDay, setSelectedDay] = useState(now.getDate());
   const [enrollments, setEnrollments] = useState<CalendarEnrollment[]>([]);
   const [loading, setLoading] = useState(true);
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const activeChild =
     childrenProfile.find((child) => child.id === activeChildId) ||
     childrenProfile[0];

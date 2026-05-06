@@ -20,6 +20,7 @@ import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import { useDevSettings } from "../../contexts/DevSettingsContext";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 const ROLES: {
   title: string;
@@ -95,7 +96,7 @@ export default function RegisterScreen() {
   const [confirmationEmail, setConfirmationEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

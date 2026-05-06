@@ -22,12 +22,13 @@ import {
   TYPOGRAPHY,
 } from "../../../constants/theme";
 import { useOrgApplications, useOrgGroupById } from "../../../hooks/useOrgData";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function GroupDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;

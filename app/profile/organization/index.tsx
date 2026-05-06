@@ -23,11 +23,12 @@ import {
 import { useAuth } from "../../../contexts/AuthContext";
 import { useOrgProfile } from "../../../hooks/useOrgData";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgProfile() {
   const { user, logout } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

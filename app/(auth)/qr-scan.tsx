@@ -19,13 +19,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export default function QRScanScreen() {
   const router = useRouter();
   const { loginWithQR } = useAuth();
   const { width } = useWindowDimensions();
 
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

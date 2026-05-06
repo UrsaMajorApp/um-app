@@ -15,12 +15,13 @@ import {
 } from "react-native";
 import { COLORS, SHADOWS } from "../../constants/theme";
 import { useChatMessages } from "../../hooks/useChats";
+import { isWebMinWidth } from "../../lib/useIsDesktop";
 
 export default function ChatModal() {
   const router = useRouter();
   const { id, name } = useLocalSearchParams<{ id: string; name: string }>();
   const { width } = useWindowDimensions();
-  const IS_DESKTOP = Platform.OS === "web" && width >= 900;
+  const IS_DESKTOP = isWebMinWidth(width, 900);
 
   const { messages, loading, sendMessage } = useChatMessages(id ?? null);
   const [input, setInput] = useState("");

@@ -17,6 +17,7 @@ import EditChildModal from "../../../../components/parent/EditChildModal";
 import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
 import { useParentData } from "../../../../contexts/ParentDataContext";
 import { Child } from "../../../../models/types";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../../lib/useIsDesktop";
 
 export default function ParentChildDetails() {
   const router = useRouter();
@@ -30,10 +31,8 @@ export default function ParentChildDetails() {
   } = useParentData();
   const { width } = useWindowDimensions();
   const [editingChild, setEditingChild] = React.useState<Child | null>(null);
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const child = childrenProfile.find((c) => c.id === id) || childrenProfile[0];
 

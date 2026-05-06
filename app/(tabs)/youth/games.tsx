@@ -18,6 +18,7 @@ import {
 } from "../../../components/games/gameCatalog";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useYouthGameIq } from "../../../hooks/useYouthGameIq";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function GamesLobby() {
   const router = useRouter();
@@ -26,8 +27,8 @@ export default function GamesLobby() {
     getDailyChallenge(),
   );
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : 24;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
   const lobbyContentWidth = isDesktop
     ? Math.min(
         width - LAYOUT.sideNavWidth - paddingX * 2,

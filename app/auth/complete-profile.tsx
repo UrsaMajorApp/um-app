@@ -1,3 +1,4 @@
+import { useIsDesktop } from "../../lib/useIsDesktop";
 /**
  * /auth/complete-profile
  *
@@ -77,7 +78,7 @@ export default function CompleteProfile() {
   const router = useRouter();
   const { user, setUserRole, logout, isLoading } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

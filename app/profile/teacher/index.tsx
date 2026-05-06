@@ -19,12 +19,13 @@ import {
     SHADOWS
 } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function TeacherProfile() {
   const { logout, user } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 24;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
 
   const handleLogout = async () => {
     if (Platform.OS === "web") {

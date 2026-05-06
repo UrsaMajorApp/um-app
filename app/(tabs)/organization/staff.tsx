@@ -22,13 +22,14 @@ import {
 } from "../../../constants/theme";
 import type { OrgStaffMember } from "../../../hooks/useOrgData";
 import { useOrgStaff } from "../../../hooks/useOrgData";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 type Teacher = OrgStaffMember;
 
 export default function OrgStaffScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;

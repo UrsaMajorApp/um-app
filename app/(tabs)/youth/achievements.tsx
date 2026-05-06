@@ -13,14 +13,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT } from "../../../constants/theme";
 import { useYouthAchievements } from "../../../hooks/useStudentData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function YouthAchievements() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { achievements, loading } = useYouthAchievements();
   const unlockedCount = achievements.filter((a) => a.unlocked).length;

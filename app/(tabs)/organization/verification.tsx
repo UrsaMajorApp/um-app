@@ -19,6 +19,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useOrgProfile } from "../../../hooks/useOrgData";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 type DocKey = "bin_doc" | "registration_doc" | "license_doc";
 
@@ -32,10 +33,8 @@ export default function OrgVerificationScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const {
     id: orgId,
     status: orgStatus,

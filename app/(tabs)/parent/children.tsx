@@ -16,6 +16,7 @@ import EditChildModal from "../../../components/parent/EditChildModal";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { Child } from "../../../models/types";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ParentChildren() {
   const router = useRouter();
@@ -26,10 +27,8 @@ export default function ParentChildren() {
     updateChild,
   } = useParentData();
   const [editingChild, setEditingChild] = useState<Child | null>(null);
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const confirmRemove = (child: Child) => {
     if (Platform.OS === "web") {

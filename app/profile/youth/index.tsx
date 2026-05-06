@@ -15,15 +15,14 @@ import ScreenHeader from "../../../components/ui/ScreenHeader";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function YouthProfile() {
   const router = useRouter();
   const { logout, user } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : LAYOUT.dashboardHorizontalPaddingMobile;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop);
   const { parentProfile, childrenProfile, activeChildId } = useParentData();
   const activeChild =
     childrenProfile.find((child) => child.id === activeChildId) ||

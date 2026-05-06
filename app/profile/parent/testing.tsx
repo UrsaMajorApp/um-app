@@ -13,11 +13,12 @@ import {
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
 import { useOnboardingQuestions } from "../../../hooks/usePlatformData";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ParentTesting() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

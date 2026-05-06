@@ -2,13 +2,12 @@ import { Tabs, useRouter, useSegments } from "expo-router";
 import { useEffect, useMemo } from "react";
 import {
   ActivityIndicator,
-  Platform,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { COLORS, LAYOUT } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
 import CustomTabBar, { SideNav, TabIcon } from "./layout-container";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 const YOUTH_ROLES = new Set<UserRole>(["youth", "child", "young-adult"]);
 
@@ -28,7 +27,6 @@ export default function TabsLayout() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const segments = useSegments();
-  const { width } = useWindowDimensions();
 
   const role = useMemo(() => user?.role || "parent", [user?.role]);
   const hideForMentor = role === "mentor" || role === "org";
@@ -38,7 +36,7 @@ export default function TabsLayout() {
     isTabsRoute && user && !canRenderTabSection(user.role, section),
   );
 
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (shouldRedirect) {

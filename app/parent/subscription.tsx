@@ -16,12 +16,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LAYOUT, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSubscriptionPlans } from "../../hooks/usePlatformData";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export default function SubscriptionPaywall() {
   const router = useRouter();
   const { user } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const { plans } = useSubscriptionPlans("parent");
   const plan = plans.find((item) => item.popular) ?? plans[0] ?? null;
 

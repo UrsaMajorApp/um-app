@@ -1,3 +1,4 @@
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 /**
  * results.tsx — Diagnostic results screen.
  *
@@ -50,7 +51,7 @@ export default function YouthResults() {
   };
   const { width } = useWindowDimensions();
   const { childrenProfile, activeChildId } = useParentData();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

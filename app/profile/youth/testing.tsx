@@ -1,3 +1,4 @@
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 /**
  * testing.tsx — Age-based router for diagnostic modules.
  *
@@ -50,7 +51,7 @@ export default function YouthTesting() {
   const router = useRouter();
   const { childId } = useLocalSearchParams<{ childId?: string | string[] }>();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

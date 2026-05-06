@@ -23,11 +23,12 @@ import {
   TYPOGRAPHY,
 } from "../../../constants/theme";
 import { useMentorGroups } from "../../../hooks/useMentorData";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorGroups() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;

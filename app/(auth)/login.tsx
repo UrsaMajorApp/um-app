@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 type AuthMethod = "phone" | "email";
 
@@ -35,7 +36,7 @@ export default function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

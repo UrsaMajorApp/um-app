@@ -25,12 +25,13 @@ import {
   useMentorOwnProfile,
   useMentorProfileStats,
 } from "../../../hooks/useMentorData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorProfile() {
   const { logout, user } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 24;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
 
   const { stats } = useMentorProfileStats();
   const { profile: mentorProfile, updateProfile } = useMentorOwnProfile();

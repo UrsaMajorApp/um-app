@@ -14,12 +14,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useOrgApplications } from "../../../hooks/useOrgData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function OrgStudents() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
   const [search, setSearch] = useState("");
   const [activeClub, setActiveClub] = useState("Все");
 

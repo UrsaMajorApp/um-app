@@ -19,11 +19,12 @@ import {
   TYPOGRAPHY,
 } from "../../../constants/theme";
 import { useStudentGoals } from "../../../hooks/useMentorData";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorAwards() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;

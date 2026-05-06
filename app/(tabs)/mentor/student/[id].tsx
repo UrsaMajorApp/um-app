@@ -20,13 +20,14 @@ import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useMentorStudents } from "../../../../hooks/useMentorData";
 import { isSupabaseConfigured, supabase } from "../../../../lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../../lib/useIsDesktop";
 
 export default function MentorStudentDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 20;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
   const { user } = useAuth();
 
   const { students, loading } = useMentorStudents();

@@ -26,6 +26,7 @@ import {
   useOrgApplications,
   useOrgGroupById,
 } from "../../../../hooks/useOrgData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../../lib/useIsDesktop";
 
 type AttendanceStatus = "present" | "absent" | "sick" | null;
 
@@ -40,10 +41,8 @@ export default function AttendanceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const date = new Date().toLocaleDateString("ru-RU", {
     day: "numeric",

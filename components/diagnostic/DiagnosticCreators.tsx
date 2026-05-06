@@ -1,3 +1,4 @@
+import { useIsDesktop } from "../../lib/useIsDesktop";
 /**
  * DiagnosticCreators.tsx
  *
@@ -47,7 +48,7 @@ export default function DiagnosticCreators({ childId }: Props) {
     parentProfile,
   } = useParentData();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const hPad = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

@@ -20,6 +20,7 @@ import {
     SHADOWS
 } from "../../../../../constants/theme";
 import { useTeacherGroup } from "../../../../../hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../../../lib/useIsDesktop";
 
 function formatDateKey(date: Date) {
   const year = date.getFullYear();
@@ -42,8 +43,8 @@ export default function TeacherGroupDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 20;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());

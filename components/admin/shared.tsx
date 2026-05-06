@@ -19,6 +19,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export type AdminRouteKey =
   | "overview"
@@ -68,7 +69,7 @@ export const ROLE_COLORS: Record<string, { bg: string; color: string }> = {
 
 export function useAdminLayout() {
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   return {
     isTablet: width >= 768,
     isDesktop,

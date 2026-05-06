@@ -24,6 +24,7 @@ import {
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useOrgApplications } from "../../../../hooks/useOrgData";
 import { isSupabaseConfigured, supabase } from "../../../../lib/supabase";
+import { useIsDesktop } from "../../../../lib/useIsDesktop";
 
 const FEEDBACK_TAGS = [
   "Внимательно слушал",
@@ -40,7 +41,7 @@ export default function FeedbackFormScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;

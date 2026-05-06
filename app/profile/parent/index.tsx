@@ -23,6 +23,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { formatPhone } from "../../../lib/formatPhone";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 function generateQRPin(): string {
   // Generate a 6-digit PIN (100000-999999)
@@ -33,10 +34,8 @@ export default function ParentProfile() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : LAYOUT.dashboardHorizontalPaddingMobile;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop);
 
   const {
     parentProfile,

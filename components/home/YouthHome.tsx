@@ -23,6 +23,7 @@ import {
   TYPOGRAPHY,
 } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../lib/useIsDesktop";
 
 import { useDevSettings } from "../../contexts/DevSettingsContext";
 import { useParentData } from "../../contexts/ParentDataContext";
@@ -39,10 +40,8 @@ export default function YouthHome() {
   const { childrenProfile, activeChildId, parentProfile } = useParentData();
   const { width } = useWindowDimensions();
   const { courses } = usePublicCourses();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   // Find active child data (relevant for all roles: parent, youth, etc.)
   const activeChild =

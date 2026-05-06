@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export type Role =
   | "parent"
@@ -784,7 +785,7 @@ export default function CustomTabBar({ role }: Props) {
   const { width } = useWindowDimensions();
   const segments = useSegments() as string[];
 
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
 
   const isClubDetail =
     segments.includes("club") &&

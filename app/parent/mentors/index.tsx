@@ -21,11 +21,12 @@ import {
   TYPOGRAPHY,
 } from "../../../constants/theme";
 import { usePublicMentors } from "../../../hooks/usePublicMentors";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ParentMentorsScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;

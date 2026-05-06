@@ -19,12 +19,13 @@ import {
     SHADOWS
 } from "../../../constants/theme";
 import { useTeacherGroups } from "../../../hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function TeacherGroupsScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 24;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
 
   const { groups, studentCounts } = useTeacherGroups();
 

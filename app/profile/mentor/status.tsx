@@ -17,11 +17,12 @@ import {
    SHADOWS,
    TYPOGRAPHY,
 } from "../../../constants/theme";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorStatusPage() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

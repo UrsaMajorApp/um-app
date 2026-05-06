@@ -5,7 +5,6 @@ import { MotiView } from "moti";
 import React from "react";
 import {
     Dimensions,
-    Platform,
     ScrollView,
     StyleSheet,
     Text,
@@ -13,11 +12,12 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
+import { isDesktopWidth } from "../../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
-const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+const isDesktop = isDesktopWidth(width);
 
 export default function DoneScreen() {
     const router = useRouter();

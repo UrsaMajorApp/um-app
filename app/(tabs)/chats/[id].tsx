@@ -16,12 +16,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT } from "../../../constants/theme";
 import { useChatMessages } from "../../../hooks/useChats";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ChatScreen() {
   const router = useRouter();
   const { id, name } = useLocalSearchParams<{ id: string; name: string }>();
   const { width } = useWindowDimensions();
-  const IS_DESKTOP = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const IS_DESKTOP = useIsDesktop();
 
   const { messages, loading, sendMessage } = useChatMessages(id ?? null);
   const [input, setInput] = useState("");

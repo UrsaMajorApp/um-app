@@ -19,6 +19,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { formatPhone } from "../../../lib/formatPhone";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 const ROLE_COLOR = "#6C5CE7";
 const ROLE_GRADIENT: [string, string] = ["#6C5CE7", "#8B7FE8"];
@@ -57,7 +58,7 @@ export default function CreateProfileParent() {
   const { user, finalizeRegistration } = useAuth();
   const { saveParentProfile } = useParentData();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

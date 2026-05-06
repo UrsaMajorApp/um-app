@@ -1,3 +1,4 @@
+import { useIsDesktop } from "../../lib/useIsDesktop";
 /**
  * DiagnosticArchitects.tsx
  * Main orchestrator for 15-17 Architects diagnostic.
@@ -39,7 +40,7 @@ export default function DiagnosticArchitects({ childId }: Props) {
     parentProfile,
   } = useParentData();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const hPad = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

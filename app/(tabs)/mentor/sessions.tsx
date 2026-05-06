@@ -18,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 type TabType = "requests" | "archive";
 
@@ -36,8 +37,8 @@ interface TrialRequest {
 
 export default function MentorSessionsScreen() {
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 20;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
   const { user } = useAuth();
 
   const [activeTab, setActiveTab] = useState<TabType>("requests");

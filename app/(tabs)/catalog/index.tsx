@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -20,9 +19,10 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "../../../hooks/usePublicData";
+import { isWebMinWidth } from "../../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
-const IS_DESKTOP = Platform.OS === "web" && width >= 900;
+const IS_DESKTOP = isWebMinWidth(width, 900);
 
 const SKILL_FILTERS = [
   "⭐ Рекомендовано AI",

@@ -17,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS, TYPOGRAPHY } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTeacherGroups } from "../../hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../lib/useIsDesktop";
 
 function scheduleTimeLabel(schedule: string | null) {
   const match = schedule?.match(/\b([01]?\d|2[0-3]):[0-5]\d\b/);
@@ -28,8 +29,8 @@ export default function TeacherHome() {
   const router = useRouter();
   const { user } = useAuth();
   const { groups, studentCounts, loading } = useTeacherGroups();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 24;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
   const activeGroups = groups.filter((group) => group.active);
   const nextGroup = activeGroups[0] ?? null;
   const teacherName =

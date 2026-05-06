@@ -2,7 +2,6 @@ import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   Modal,
-  Platform,
   Pressable,
   Text,
   TextInput,
@@ -11,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { COLORS, RADIUS, SHADOWS, SPACING } from "../../constants/theme";
+import { isWebMinWidth } from "../../lib/useIsDesktop";
 import { Child } from "../../models/types";
 
 export default function EditChildModal({
@@ -25,7 +25,7 @@ export default function EditChildModal({
   const [name, setName] = useState(child.name);
   const [age, setAge] = useState(String(child.age ?? ""));
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= 768;
+  const isDesktop = isWebMinWidth(width, 768);
 
   const handleSave = () => {
     const parsed = parseInt(age, 10);

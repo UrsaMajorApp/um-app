@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   ActivityIndicator,
   Dimensions,
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -13,9 +12,10 @@ import {
 import { LEVEL_LABELS } from "../../constants/courseOptions";
 import { COLORS, SHADOWS } from "../../constants/theme";
 import { courseGradient, usePublicCourseById } from "../../hooks/usePublicData";
+import { isWebMinWidth } from "../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
-const IS_DESKTOP = Platform.OS === "web" && width >= 900;
+const IS_DESKTOP = isWebMinWidth(width, 900);
 
 export default function CourseModal() {
   const router = useRouter();

@@ -21,6 +21,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { formatPhone } from "../../../lib/formatPhone";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 // Org brand colour — matches the ROLES entry in register.tsx
 const ORG_COLOR = "#10B981";
@@ -30,7 +31,7 @@ export default function CreateProfileOrganization() {
   const router = useRouter();
   const { user, finalizeRegistration } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

@@ -21,6 +21,7 @@ import { PressableScale } from "../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
 import { useAuth } from "../../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../../lib/supabase";
+import { useIsDesktop } from "../../lib/useIsDesktop";
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function ResetPasswordScreen() {
   const [done, setDone] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

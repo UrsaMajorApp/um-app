@@ -12,13 +12,14 @@ import {
   View,
 } from "react-native";
 import { LAYOUT } from "../../../constants/theme";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 const HANDLE_SIZE = 60;
 
 export default function UmoIntro() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

@@ -20,6 +20,7 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "../../../hooks/usePublicData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 // Skill-based filter chips shown in the catalog
 const SKILL_FILTERS = [
@@ -39,10 +40,8 @@ export default function ParentClubs() {
   const { childrenProfile, activeChildId } = useParentData();
   const [activeSkill, setActiveSkill] = useState("Все");
   const [search, setSearch] = useState("");
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { courses, loading } = usePublicCourses();
 

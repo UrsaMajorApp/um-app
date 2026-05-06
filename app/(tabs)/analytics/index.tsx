@@ -1,7 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
 import {
-    Platform,
     ScrollView,
     Text,
     useWindowDimensions,
@@ -11,6 +10,7 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useOrgSchedule } from "../../../hooks/useOrgData";
+import { isWebMinWidth } from "../../../lib/useIsDesktop";
 
 /* ---------- русская локаль для календаря ---------- */
 LocaleConfig.locales["ru"] = {
@@ -82,7 +82,7 @@ function formatDate(dateStr: string) {
 
 export default function AnalyticsScreen() {
   const { width } = useWindowDimensions();
-  const IS_DESKTOP = Platform.OS === "web" && width >= 900;
+  const IS_DESKTOP = isWebMinWidth(width, 900);
   const today = new Date();
   const initialDate = today.toISOString().slice(0, 10);
   const [selectedDate, setSelectedDate] = useState(initialDate);

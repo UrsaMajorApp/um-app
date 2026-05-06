@@ -23,12 +23,13 @@ import {
   useMentorStudentAttendanceSummary,
   useMentorStudents,
 } from "../../../hooks/useMentorData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorStudentsScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 20;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { students, loading } = useMentorStudents();
   const { summary } = useMentorStudentAttendanceSummary();

@@ -21,6 +21,7 @@ import {
     TYPOGRAPHY,
 } from "../../../constants/theme";
 import { useChats } from "../../../hooks/useChats";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 const DEFAULT_TABS = ["все", "непрочитанные", "архив"];
 
@@ -43,7 +44,7 @@ function formatChatTime(isoString: string): string {
 export default function ChatsScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const IS_DESKTOP = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const IS_DESKTOP = useIsDesktop();
   const horizontalPadding = IS_DESKTOP
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : 20;

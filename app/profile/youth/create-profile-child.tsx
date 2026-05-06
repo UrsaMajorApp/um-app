@@ -21,6 +21,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useParentData } from "../../../contexts/ParentDataContext";
 import { formatPhone } from "../../../lib/formatPhone";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 // Age options from 6 to 20
 const AGE_OPTIONS = Array.from({ length: 15 }, (_, i) => i + 6);
@@ -39,7 +40,7 @@ export default function CreateProfileChild() {
   const { addChild } = useParentData();
   const { user } = useAuth();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;

@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useStudentTasks } from "../../../hooks/useStudentData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 // Color palette cycling for tasks
 const TASK_COLORS = [
@@ -28,10 +29,8 @@ export default function YouthTasks() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const { tasks: rawTasks, toggleTask, loading } = useStudentTasks();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const tasks = rawTasks.map((t, i) => ({
     ...t,

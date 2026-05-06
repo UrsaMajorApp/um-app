@@ -14,16 +14,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
 import { useParentData } from "../../../contexts/ParentDataContext";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function ParentChildDetails() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { childrenProfile, parentProfile, setActiveChildId } = useParentData();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const child = childrenProfile.find((c) => c.id === id) || childrenProfile[0];
 

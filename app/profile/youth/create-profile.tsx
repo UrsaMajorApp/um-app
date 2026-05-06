@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 const ROLE_COLOR = "#3B82F6";
 const ROLE_GRADIENT: [string, string] = ["#3B82F6", "#60A5FA"];
@@ -23,7 +24,7 @@ const ROLE_GRADIENT: [string, string] = ["#3B82F6", "#60A5FA"];
 export default function CreateProfileTeen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;

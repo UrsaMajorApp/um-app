@@ -19,12 +19,13 @@ import {
     SHADOWS
 } from "../../../constants/theme";
 import { useWalletData } from "../../../hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function MentorWalletScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const paddingX = isDesktop ? 40 : 20;
+  const isDesktop = useIsDesktop();
+  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { transactions, summary } = useWalletData("mentor");
 

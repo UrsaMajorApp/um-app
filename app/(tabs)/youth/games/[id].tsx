@@ -18,6 +18,7 @@ import Minesweeper from "../../../../components/games/Minesweeper";
 import Sudoku from "../../../../components/games/Sudoku";
 import { COLORS, LAYOUT, SHADOWS } from "../../../../constants/theme";
 import { useYouthGameIq } from "../../../../hooks/useYouthGameIq";
+import { useIsDesktop } from "../../../../lib/useIsDesktop";
 
 export default function YouthGamePage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function YouthGamePage() {
   const [earnedPoints, setEarnedPoints] = useState<number | null>(null);
 
   const game = useMemo(() => getGameById(id), [id]);
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const gameShellMaxWidth =
     game?.id === "minesweeper"
       ? 720

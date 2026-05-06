@@ -26,6 +26,7 @@ import {
   useOrgStats,
 } from "../../hooks/useOrgData";
 import { useWalletData } from "../../hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../lib/useIsDesktop";
 
 const QUICK_ACTIONS = [
   {
@@ -57,10 +58,8 @@ const QUICK_ACTIONS = [
 export default function OrgHome() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const isDesktop = useIsDesktop();
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const { status: orgStatus, name: orgName } = useOrgProfile();
   const isVerified = orgStatus === "verified";
   const { stats } = useOrgStats();

@@ -10,6 +10,7 @@ import { useDevSettings } from '../contexts/DevSettingsContext';
 import { useParentData } from '../contexts/ParentDataContext';
 import { emitDevDataChanged } from '../lib/devDataEvents';
 import { clearAllDevData, clearDevData, getDevDataSeeded, seedDevData } from '../lib/devSeedData';
+import { isWebMinWidth } from '../lib/useIsDesktop';
 import { COLORS, RADIUS, SHADOWS } from '../constants/theme';
 import { Feather } from '@expo/vector-icons';
 
@@ -32,7 +33,7 @@ export function DevRoleSwitcher() {
   const { mentorApproved, setMentorApproved, orgVerified, setOrgVerified, useRealOtp, setUseRealOtp } = useDevSettings();
   const { width } = useWindowDimensions();
   const router = useRouter();
-  const isDesktop = Platform.OS === 'web' && width >= 768;
+  const isDesktop = isWebMinWidth(width, 768);
   const isDevSessionUser = Boolean(
     user &&
     (user.email.endsWith('@dev.local') || (user.email.endsWith('@example.com') && user.phone === '79991234567'))

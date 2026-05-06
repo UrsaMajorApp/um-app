@@ -7,16 +7,16 @@ import React, { useEffect, useState } from "react";
 import {
     Dimensions,
     Image,
-    Platform,
     ScrollView,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
 import { useSubscriptionPlans } from "../../../hooks/usePlatformData";
+import { isWebMinWidth } from "../../../lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
-const IS_DESKTOP = Platform.OS === "web" && width >= 900;
+const IS_DESKTOP = isWebMinWidth(width, 900);
 
 type Role = "parent" | "youth" | "child" | "young-adult" | "org" | "mentor";
 

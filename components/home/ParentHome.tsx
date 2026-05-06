@@ -28,6 +28,7 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "../../hooks/usePublicData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "../../lib/useIsDesktop";
 
 const AutonomousLogo = React.memo(({ width, height, dark }: any) => {
   const [visible, setVisible] = useState(false);
@@ -132,7 +133,7 @@ export default function ParentHome() {
   const router = useRouter();
   const { user } = useAuth();
   const { width, height } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const [notificationsVisible, setNotificationsVisible] = useState(false);
   const {
     parentProfile,
@@ -141,9 +142,7 @@ export default function ParentHome() {
     setActiveChildId,
   } = useParentData();
 
-  const horizontalPadding = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const activeChild =
     children.find((child) => child.id === activeChildId) || children[0] || null;

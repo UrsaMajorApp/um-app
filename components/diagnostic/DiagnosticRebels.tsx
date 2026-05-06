@@ -1,3 +1,4 @@
+import { useIsDesktop } from "../../lib/useIsDesktop";
 /**
  * DiagnosticRebels.tsx
  * Main orchestrator for 12-14 Rebels diagnostic.
@@ -39,7 +40,7 @@ export default function DiagnosticRebels({ childId }: Props) {
     parentProfile,
   } = useParentData();
   const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const hPad = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
