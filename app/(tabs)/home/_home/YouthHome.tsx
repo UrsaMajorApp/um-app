@@ -174,9 +174,9 @@ export default function YouthHome() {
         showsVerticalScrollIndicator={false}
       >
         <View className="flex-row gap-3 mb-8">
-          {quickActions.map((action, idx) => (
+          {quickActions.map((action) => (
             <Pressable
-              key={idx}
+              key={action.route}
               onPress={() =>
                 action.route === '#qr' ? setPassVisible(true) : router.push(appHref(action.route))
               }

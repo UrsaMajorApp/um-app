@@ -65,6 +65,7 @@ export function useDiagnosticEngine911(opts: {
   const wyrChoices = useRef<WYRRecord[]>([]);
   const stealthEvents = useRef<StealthEvent911[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
+  const finishDiagnosticRef = useRef<() => Promise<void> | void>(() => {});
 
   // ── Progress ────────────────────────────────────────────────────────────────
 
@@ -93,7 +94,7 @@ export function useDiagnosticEngine911(opts: {
       setProIndex(0);
       taskEnteredAt.current = Date.now();
     } else {
-      await finishDiagnostic();
+      await finishDiagnosticRef.current();
     }
   }, [isPro]);
 
@@ -148,7 +149,7 @@ export function useDiagnosticEngine911(opts: {
         setProIndex(nextIndex);
         taskEnteredAt.current = Date.now();
       } else {
-        await finishDiagnostic();
+        await finishDiagnosticRef.current();
       }
     },
     [proIndex],
@@ -327,6 +328,7 @@ Generate RAW JSON only (no markdown). ${isPro ? 'Include ALL fields' : 'Include 
     setIsProcessing(false);
     setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
+  finishDiagnosticRef.current = finishDiagnostic;
 
   // ── Public API ────────────────────────────────────────────────────────────────
 

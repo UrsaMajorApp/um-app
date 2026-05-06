@@ -37,34 +37,42 @@ export function useParentCalendar(
   userId: string | undefined,
   activeChild: ParentCalendarChild | undefined,
 ) {
+  const activeChildId = activeChild?.id;
+  const activeChildName = activeChild?.name;
   const [enrollments, setEnrollments] = useState<ParentCalendarEnrollment[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured || !userId || !activeChild?.name) {
+    if (!supabase || !isSupabaseConfigured || !userId || !activeChildId || !activeChildName) {
       setEnrollments([]);
       setLoading(false);
       return;
     }
 
     setLoading(true);
-    const rows = await fetchParentCalendarEnrollments(userId, activeChild);
+    const rows = await fetchParentCalendarEnrollments(userId, {
+      id: activeChildId,
+      name: activeChildName,
+    });
     setEnrollments(rows);
     setLoading(false);
-  }, [activeChild?.id, activeChild?.name, userId]);
+  }, [activeChildId, activeChildName, userId]);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
-      if (!supabase || !isSupabaseConfigured || !userId || !activeChild?.name) {
+      if (!supabase || !isSupabaseConfigured || !userId || !activeChildId || !activeChildName) {
         setEnrollments([]);
         setLoading(false);
         return;
       }
 
       setLoading(true);
-      const rows = await fetchParentCalendarEnrollments(userId, activeChild);
+      const rows = await fetchParentCalendarEnrollments(userId, {
+        id: activeChildId,
+        name: activeChildName,
+      });
       if (cancelled) return;
 
       setEnrollments(rows);
@@ -76,7 +84,7 @@ export function useParentCalendar(
     return () => {
       cancelled = true;
     };
-  }, [activeChild?.id, activeChild?.name, userId]);
+  }, [activeChildId, activeChildName, userId]);
 
   return { enrollments, loading, refresh };
 }

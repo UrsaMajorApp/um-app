@@ -39,6 +39,7 @@ export function useDiagnosticEngine1517(opts: {
   >([]);
   const stealthEvents = useRef<StealthEvent1517[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
+  const finishDiagnosticRef = useRef<() => Promise<void> | void>(() => {});
 
   // ── Progress ──
   const totalSteps = CAREER_CARDS.length + (isPro ? PRO_TASKS_1517.length : 0);
@@ -65,7 +66,7 @@ export function useDiagnosticEngine1517(opts: {
       setProIndex(0);
       taskEnteredAt.current = Date.now();
     } else {
-      await finishDiagnostic();
+      await finishDiagnosticRef.current();
     }
   }, [isPro]);
 
@@ -116,7 +117,7 @@ export function useDiagnosticEngine1517(opts: {
         setProIndex(nextIndex);
         taskEnteredAt.current = Date.now();
       } else {
-        await finishDiagnostic();
+        await finishDiagnosticRef.current();
       }
     },
     [proIndex],
@@ -286,6 +287,7 @@ Generate RAW JSON only. ${isPro ? 'Include ALL fields. Write pragmatically for 1
     setIsProcessing(false);
     setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
+  finishDiagnosticRef.current = finishDiagnostic;
 
   return {
     phase,

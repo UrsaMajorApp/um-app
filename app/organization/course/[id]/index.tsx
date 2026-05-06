@@ -303,9 +303,9 @@ export default function CourseDetailScreen() {
               Развиваемые навыки
             </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              {course.skills.map((skill, i) => (
+              {course.skills.map((skill) => (
                 <View
-                  key={i}
+                  key={skill}
                   style={{
                     backgroundColor: 'rgba(108, 92, 231, 0.07)',
                     paddingHorizontal: 14,

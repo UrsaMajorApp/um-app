@@ -34,11 +34,12 @@ export function useStudentTasks() {
       .order('created_at', { ascending: true });
     setTasks(rowsOrEmpty<StudentTask>(res));
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   const toggleTask = async (id: string) => {
     if (!supabase) return;
@@ -128,11 +129,12 @@ export function useYouthGoals() {
       })),
     );
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { goals, loading, refresh };
 }
@@ -195,11 +197,12 @@ export function useYouthAchievements() {
       })),
     );
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { achievements, loading, refresh };
 }

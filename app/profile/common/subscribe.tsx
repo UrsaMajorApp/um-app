@@ -115,16 +115,16 @@ export default function SubscribeScreen() {
             </View>
           )}
 
-          {plans.map((plan, i) => {
+          {plans.map((plan, index) => {
             const isSelected = selected === plan.title;
             const isPopular = plan.popular === true;
 
             return (
               <MotiView
-                key={`${plan.title}_${i}`}
+                key={plan.id}
                 from={{ opacity: 0, translateY: 20 }}
                 animate={{ opacity: 1, translateY: 0 }}
-                transition={{ duration: 350, delay: i * 120 }}
+                transition={{ duration: 350, delay: index * 120 }}
                 style={{
                   backgroundColor: 'white',
                   borderRadius: 26,
@@ -195,9 +195,9 @@ export default function SubscribeScreen() {
                   {formatPrice(plan.price_kzt, plan.billing_period)}
                 </Text>
 
-                {plan.features.map((f, idx) => (
+                {plan.features.map((f) => (
                   <View
-                    key={idx}
+                    key={f}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',

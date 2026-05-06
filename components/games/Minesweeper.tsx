@@ -195,23 +195,25 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
 
       <View style={styles.board}>
         <View style={styles.boardInner}>
-          {grid.map((row, r) => (
-            <View key={r} style={styles.row}>
-              {row.map((cell, c) => (
+          {grid.map((row) => (
+            <View key={`row-${row[0]?.r ?? 'empty'}`} style={styles.row}>
+              {row.map((cell) => (
                 <TouchableOpacity
-                  key={c}
+                  key={`cell-${cell.r}-${cell.c}`}
                   activeOpacity={0.7}
-                  onPress={() => revealCell(r, c)}
-                  onLongPress={() => toggleFlag(r, c)}
+                  onPress={() => revealCell(cell.r, cell.c)}
+                  onLongPress={() => toggleFlag(cell.r, cell.c)}
                   style={[
                     styles.cell,
                     { width: cellSize, height: cellSize },
                     cell.isRevealed && styles.cellRevealed,
                     cell.isRevealed && cell.hasMine && styles.cellMine,
-                    r === 0 && c === 0 && styles.cellTopLeft,
-                    r === 0 && c === GRID_SIZE - 1 && styles.cellTopRight,
-                    r === GRID_SIZE - 1 && c === 0 && styles.cellBottomLeft,
-                    r === GRID_SIZE - 1 && c === GRID_SIZE - 1 && styles.cellBottomRight,
+                    cell.r === 0 && cell.c === 0 && styles.cellTopLeft,
+                    cell.r === 0 && cell.c === GRID_SIZE - 1 && styles.cellTopRight,
+                    cell.r === GRID_SIZE - 1 && cell.c === 0 && styles.cellBottomLeft,
+                    cell.r === GRID_SIZE - 1 &&
+                      cell.c === GRID_SIZE - 1 &&
+                      styles.cellBottomRight,
                   ]}
                 >
                   {cell.isRevealed ? (

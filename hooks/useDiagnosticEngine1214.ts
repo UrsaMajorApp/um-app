@@ -37,6 +37,7 @@ export function useDiagnosticEngine1214(opts: {
   const vibes = useRef<{ cardId: string; type: RiasecType; liked: boolean }[]>([]);
   const stealthEvents = useRef<StealthEvent1214[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
+  const finishDiagnosticRef = useRef<() => Promise<void> | void>(() => {});
 
   // ── Progress ──
   const totalSteps = VIBE_CARDS.length + (isPro ? PRO_TASKS_1214.length : 0);
@@ -62,7 +63,7 @@ export function useDiagnosticEngine1214(opts: {
       setProIndex(0);
       taskEnteredAt.current = Date.now();
     } else {
-      await finishDiagnostic();
+      await finishDiagnosticRef.current();
     }
   }, [isPro]);
 
@@ -106,7 +107,7 @@ export function useDiagnosticEngine1214(opts: {
         setProIndex(nextIndex);
         taskEnteredAt.current = Date.now();
       } else {
-        await finishDiagnostic();
+        await finishDiagnosticRef.current();
       }
     },
     [proIndex],
@@ -261,6 +262,7 @@ Generate RAW JSON only. ${isPro ? 'Include ALL fields' : 'Include only base fiel
     setIsProcessing(false);
     setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
+  finishDiagnosticRef.current = finishDiagnostic;
 
   return {
     phase,

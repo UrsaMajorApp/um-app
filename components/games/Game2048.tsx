@@ -23,6 +23,14 @@ import { isWebMinWidth } from '$lib/useIsDesktop';
 const GRID_SIZE = 4;
 const CELL_MARGIN = 10;
 const MAX_BOARD_SIZE = 520;
+const GRID_COORDINATES = Array.from({ length: GRID_SIZE }, (_, row) => ({
+  row,
+  key: `row-${row}`,
+  cells: Array.from({ length: GRID_SIZE }, (__, col) => ({
+    col,
+    key: `cell-${row}-${col}`,
+  })),
+}));
 
 const TILE_COLORS: Record<number, string> = {
   2: '#EEE4DA',
@@ -164,7 +172,7 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
       duration: 100,
       easing: Easing.out(Easing.quad),
     });
-  }, [targetLeft, targetTop]);
+  }, [leftVal, targetLeft, targetTop, topVal]);
 
   useEffect(() => {
     if (tile.isMerged) {
@@ -173,7 +181,7 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
         withTiming(1, { duration: 120 }),
       );
     }
-  }, [tile.isMerged, tile.value]);
+  }, [scale, tile.isMerged]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     left: leftVal.value,
@@ -344,10 +352,10 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
 
       <GestureDetector gesture={swipeGesture}>
         <View style={[styles.board, { width: boardSize, height: boardSize }]}>
-          {Array.from({ length: GRID_SIZE }).map((_, r) => (
-            <View key={r} style={styles.row}>
-              {Array.from({ length: GRID_SIZE }).map((__, c) => (
-                <View key={c} style={[styles.cell, { width: cellSize, height: cellSize }]} />
+          {GRID_COORDINATES.map((row) => (
+            <View key={row.key} style={styles.row}>
+              {row.cells.map((cell) => (
+                <View key={cell.key} style={[styles.cell, { width: cellSize, height: cellSize }]} />
               ))}
             </View>
           ))}

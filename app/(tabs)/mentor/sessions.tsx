@@ -71,12 +71,12 @@ export default function MentorSessionsScreen() {
         {/* Time slots selection */}
         <Text style={styles.slotsLabel}>Выберите удобное время:</Text>
         <View style={styles.slotsContainer}>
-          {item.requested_slots.map((slot, idx) => {
+          {item.requested_slots.map((slot) => {
             const slotKey = `${slot.day}-${slot.time}`;
             const isSelected = selectedSlot === slotKey;
             return (
               <Pressable
-                key={idx}
+                key={slotKey}
                 onPress={() => trialRequests.selectSlot(item.id, slotKey)}
                 style={[styles.slotChip, isSelected && styles.slotChipSelected]}
               >

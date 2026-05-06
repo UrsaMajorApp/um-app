@@ -202,7 +202,7 @@ export default function DiagnosticTest() {
 
             {QUESTIONS[currentQ].answers.map((optText, idx) => (
               <Pressable
-                key={idx}
+                key={optText}
                 onPress={() => handleSelectOption(idx)}
                 style={({ pressed }) => ({
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',

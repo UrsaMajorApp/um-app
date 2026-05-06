@@ -139,7 +139,7 @@ export default function OrgTesting() {
               const active = answers[step] === i;
               return (
                 <TouchableOpacity
-                  key={i}
+                  key={text}
                   onPress={() => selectAnswer(i)}
                   style={{
                     backgroundColor: active ? '#6C5CE7' : '#EFEFFE',

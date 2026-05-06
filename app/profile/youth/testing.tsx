@@ -423,7 +423,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
               const active = answers[step] === i;
               return (
                 <TouchableOpacity
-                  key={i}
+                  key={text}
                   onPress={() => selectAnswer(i)}
                   style={{
                     backgroundColor: active ? `${COLORS.primary}15` : COLORS.muted,

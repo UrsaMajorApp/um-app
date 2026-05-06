@@ -1,5 +1,5 @@
 import { MotiView } from 'moti';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Image } from 'react-native';
 
 type AutonomousLogoProps = {
@@ -8,15 +8,24 @@ type AutonomousLogoProps = {
   dark?: boolean;
 };
 
-export const AutonomousLogo = React.memo(({ width, height, dark }: AutonomousLogoProps) => {
-  const [visible, setVisible] = useState(false);
-  const [config, setConfig] = useState(() => ({
+function createLogoConfig(width: number, height: number) {
+  return {
     top: Math.random() * (height || 800),
     left: Math.random() * (width || 400),
     size: 20 + Math.random() * 70,
     rotation: `${Math.floor(Math.random() * 80) - 40}deg`,
     duration: 2500 + Math.random() * 2000,
-  }));
+  };
+}
+
+export const AutonomousLogo = React.memo(({ width, height, dark }: AutonomousLogoProps) => {
+  const [visible, setVisible] = useState(false);
+  const [config, setConfig] = useState(() => createLogoConfig(width, height));
+  const configRef = useRef(config);
+
+  useEffect(() => {
+    configRef.current = config;
+  }, [config]);
 
   useEffect(() => {
     let isMounted = true;
@@ -35,17 +44,11 @@ export const AutonomousLogo = React.memo(({ width, height, dark }: AutonomousLog
         timeoutId = setTimeout(() => {
           if (!isMounted) return;
 
-          setConfig({
-            top: Math.random() * (height || 800),
-            left: Math.random() * (width || 400),
-            size: 20 + Math.random() * 70,
-            rotation: `${Math.floor(Math.random() * 80) - 40}deg`,
-            duration: 2500 + Math.random() * 2000,
-          });
+          setConfig(createLogoConfig(width, height));
 
           timeoutId = setTimeout(runCycle, 1000);
-        }, config.duration + 500);
-      }, config.duration + 2000);
+        }, configRef.current.duration + 500);
+      }, configRef.current.duration + 2000);
     };
 
     timeoutId = setTimeout(runCycle, Math.random() * 5000);

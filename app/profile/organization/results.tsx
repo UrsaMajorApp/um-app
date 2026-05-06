@@ -5,6 +5,13 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { LAYOUT } from '$constants/theme';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
+const ORG_RESULT_BARS = [
+  { id: 'training', height: 80 },
+  { id: 'marketing', height: 60 },
+  { id: 'methodology', height: 95 },
+  { id: 'management', height: 50 },
+] as const;
+
 export default function OrgResults() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
@@ -122,12 +129,12 @@ export default function OrgResults() {
                 height: 140,
               }}
             >
-              {[80, 60, 95, 50].map((h, i) => (
+              {ORG_RESULT_BARS.map(({ id, height }) => (
                 <View
-                  key={i}
+                  key={id}
                   style={{
                     width: 18,
-                    height: h,
+                    height,
                     backgroundColor: '#009999',
                     borderRadius: 8,
                   }}

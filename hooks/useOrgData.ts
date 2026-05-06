@@ -96,11 +96,12 @@ export function useOrgStaff() {
       .order('created_at', { ascending: true });
     setStaff(rowsOrEmpty<OrgStaffMember>(res));
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { staff, loading, refresh };
 }
@@ -132,11 +133,12 @@ export function useOrgGroups() {
       .order('created_at', { ascending: true });
     setGroups(rowsOrEmpty<OrgGroup>(res));
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { groups, loading, refresh };
 }
@@ -168,11 +170,12 @@ export function useOrgApplications() {
       .order('created_at', { ascending: false });
     setApps(rowsOrEmpty<OrgApplication>(res));
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   const approve = async (id: string) => {
     if (!supabase) return;
@@ -216,11 +219,12 @@ export function useOrgTasks() {
       .order('created_at', { ascending: false });
     setTasks(rowsOrEmpty<OrgTask>(res));
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { tasks, loading, refresh };
 }
@@ -272,11 +276,12 @@ export function useOrgProfile() {
       });
     }
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { ...profile, loading, refresh };
 }
@@ -337,11 +342,12 @@ export function useOrgStats() {
       staffCount: staff.count ?? 0,
     });
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { stats, loading, refresh };
 }
@@ -353,6 +359,7 @@ export function useOrgGroupById(id: string | undefined) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    void devDataVersion;
     if (!supabase || !isSupabaseConfigured || !id) {
       setLoading(false);
       return;
@@ -378,6 +385,7 @@ export function useOrgStaffById(id: string | undefined) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    void devDataVersion;
     if (!supabase || !isSupabaseConfigured || !id) {
       setLoading(false);
       return;
@@ -446,11 +454,12 @@ export function useOrgCourses() {
       .order('created_at', { ascending: true });
     setCourses(rowsOrEmpty<OrgCourse>(res));
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   const createCourse = useCallback(
     async (data: CourseInput): Promise<{ data: OrgCourse | null; error: string | null }> => {
@@ -525,11 +534,12 @@ export function useOrgCourseById(id: string | undefined) {
         setCourse(res.data ?? null);
         setLoading(false);
       });
-  }, [id, devDataVersion]);
+  }, [id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { course, loading, refresh };
 }
@@ -563,11 +573,12 @@ export function useOrgSchedule(dayOfWeek?: number) {
     const res = await q;
     setItems(rowsOrEmpty<OrgScheduleItem>(res));
     setLoading(false);
-  }, [user?.id, dayOfWeek, devDataVersion]);
+  }, [user?.id, dayOfWeek]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { items, loading, refresh };
 }

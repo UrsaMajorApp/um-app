@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -23,14 +23,18 @@ export default function ParentReports() {
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { childrenProfile, setActiveChildId } = useParentData();
-  const children = childrenProfile.map((c) => c.name).filter(Boolean);
+  const children = useMemo(() => childrenProfile.map((c) => c.name).filter(Boolean), [
+    childrenProfile,
+  ]);
   const [selectedChild, setSelectedChild] = useState<string>('');
+  const firstChild = children[0] ?? '';
+  const selectedChildExists = selectedChild ? children.includes(selectedChild) : false;
 
   useEffect(() => {
-    if (children.length > 0 && !children.includes(selectedChild)) {
-      setSelectedChild(children[0]);
+    if (firstChild && !selectedChildExists) {
+      setSelectedChild(firstChild);
     }
-  }, [children.join(',')]);
+  }, [firstChild, selectedChildExists]);
 
   const selectedChildProfile = childrenProfile.find((c) => c.name === selectedChild);
   const hasChildren = childrenProfile.length > 0;

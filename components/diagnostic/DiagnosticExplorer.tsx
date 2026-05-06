@@ -55,21 +55,30 @@ export default function DiagnosticExplorer({ childId }: Props) {
       }
     },
   });
+  const currentCardId = engine.currentCard?.id;
+  const currentCardAudioQuestion = engine.currentCard?.audioQuestion;
+  const currentTaskId = engine.currentTask?.id;
+  const currentTaskAudioQuestion = engine.currentTask?.audioQuestion;
+  const handleSwipe = engine.handleSwipe;
+  const engineHandleProAnswer = engine.handleProAnswer;
+  const markTaskEntry = engine.markTaskEntry;
 
   // ── Auto-speak question when card/task changes ──────────────────────
 
   useEffect(() => {
-    if (engine.phase === 'basic' && engine.currentCard) {
-      speak(engine.currentCard.audioQuestion);
+    if (engine.phase === 'basic' && currentCardAudioQuestion) {
+      void currentCardId;
+      speak(currentCardAudioQuestion);
     }
-  }, [engine.phase, engine.currentCard?.id]);
+  }, [engine.phase, currentCardAudioQuestion, currentCardId, speak]);
 
   useEffect(() => {
-    if (engine.phase === 'pro' && engine.currentTask) {
-      speak(engine.currentTask.audioQuestion);
-      engine.markTaskEntry();
+    if (engine.phase === 'pro' && currentTaskAudioQuestion) {
+      void currentTaskId;
+      speak(currentTaskAudioQuestion);
+      markTaskEntry();
     }
-  }, [engine.phase, engine.currentTask?.id]);
+  }, [engine.phase, currentTaskAudioQuestion, currentTaskId, markTaskEntry, speak]);
 
   // Navigate to results when done
   useEffect(() => {
@@ -82,7 +91,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
   }, [engine.phase, router, targetChildId]);
 
   // Cleanup speech on unmount
-  useEffect(() => () => stopSpeech(), []);
+  useEffect(() => () => stopSpeech(), [stopSpeech]);
 
   // ── Handlers ─────────────────────────────────────────────────────────
 
@@ -93,20 +102,20 @@ export default function DiagnosticExplorer({ childId }: Props) {
 
   const handleLike = useCallback(() => {
     stopSpeech();
-    engine.handleSwipe(true);
-  }, [engine.handleSwipe]);
+    handleSwipe(true);
+  }, [handleSwipe, stopSpeech]);
 
   const handleDislike = useCallback(() => {
     stopSpeech();
-    engine.handleSwipe(false);
-  }, [engine.handleSwipe]);
+    handleSwipe(false);
+  }, [handleSwipe, stopSpeech]);
 
   const handleProAnswer = useCallback(
     (optionId: number) => {
       stopSpeech();
-      engine.handleProAnswer(optionId);
+      engineHandleProAnswer(optionId);
     },
-    [engine.handleProAnswer],
+    [engineHandleProAnswer, stopSpeech],
   );
 
   // ── Render: Processing ───────────────────────────────────────────────

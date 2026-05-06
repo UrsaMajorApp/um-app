@@ -283,8 +283,8 @@ export default function YouthResults() {
           >
             <Text style={s.cardTitle}>Карта талантов</Text>
             <View style={{ gap: 16 }}>
-              {chartScores.map((score, idx) => (
-                <View key={idx}>
+              {chartScores.map((score, index) => (
+                <View key={score.label}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -301,7 +301,7 @@ export default function YouthResults() {
                       animate={{ width: `${score.value}%` }}
                       transition={{
                         duration: 1000,
-                        delay: 500 + idx * 100,
+                        delay: 500 + index * 100,
                       }}
                       style={[s.barFill, { backgroundColor: score.color }]}
                     />
@@ -345,8 +345,8 @@ export default function YouthResults() {
                           marginTop: 8,
                         }}
                       >
-                        {diagnostic.topStrengths.map((s2, i) => (
-                          <View key={i} style={s.strengthChip}>
+                        {diagnostic.topStrengths.map((s2) => (
+                          <View key={s2} style={s.strengthChip}>
                             <Text style={s.strengthChipText}>✦ {s2}</Text>
                           </View>
                         ))}
@@ -365,8 +365,8 @@ export default function YouthResults() {
                           marginTop: 8,
                         }}
                       >
-                        {diagnostic.developmentAreas.map((d, i) => (
-                          <View key={i} style={s.devAreaChip}>
+                        {diagnostic.developmentAreas.map((d) => (
+                          <View key={d} style={s.devAreaChip}>
                             <Text style={s.devAreaChipText}>↗ {d}</Text>
                           </View>
                         ))}
@@ -445,8 +445,8 @@ export default function YouthResults() {
                     <Text style={s.cardTitle}>Ранняя профориентация</Text>
                   </View>
                   <View style={{ gap: 10 }}>
-                    {diagnostic.careerArchetypes.map((career, i) => (
-                      <View key={i} style={s.careerRow}>
+                    {diagnostic.careerArchetypes.map((career) => (
+                      <View key={career} style={s.careerRow}>
                         <View style={s.careerDot} />
                         <Text style={s.careerText}>{career}</Text>
                       </View>

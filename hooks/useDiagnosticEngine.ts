@@ -74,6 +74,7 @@ export function useDiagnosticEngine(opts: {
   const stealthEvents = useRef<StealthEvent[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
   const taskAttempts = useRef<number>(0);
+  const finishDiagnosticRef = useRef<() => Promise<void> | void>(() => {});
 
   // ── Progress ─────────────────────────────────────────────────────────
 
@@ -103,7 +104,7 @@ export function useDiagnosticEngine(opts: {
       taskEnteredAt.current = Date.now();
       taskAttempts.current = 0;
     } else {
-      finishDiagnostic();
+      finishDiagnosticRef.current();
     }
   }, [isPro]);
 
@@ -161,7 +162,7 @@ export function useDiagnosticEngine(opts: {
         taskEnteredAt.current = Date.now();
         taskAttempts.current = 0;
       } else {
-        finishDiagnostic();
+        finishDiagnosticRef.current();
       }
     },
     [proIndex],
@@ -344,6 +345,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? 'Include ALL fields' :
     setIsProcessing(false);
     setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
+  finishDiagnosticRef.current = finishDiagnostic;
 
   // ── Public API ───────────────────────────────────────────────────────
 

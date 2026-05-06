@@ -213,10 +213,10 @@ export default function MentorStudentDetailScreen() {
                     </Text>
                   </View>
                   <View style={styles.ratingRow}>
-                    {[...Array(5)].map((_, i) => (
+                    {[1, 2, 3, 4, 5].map((star) => (
                       <MaterialCommunityIcons
-                        key={i}
-                        name={i < session.rating ? 'star' : 'star-outline'}
+                        key={`rating-star-${star}`}
+                        name={star <= session.rating ? 'star' : 'star-outline'}
                         size={16}
                         color="#FFD700"
                       />

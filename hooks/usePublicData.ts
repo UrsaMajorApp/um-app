@@ -87,11 +87,12 @@ export function usePublicCourses() {
     }
     setCourses((res.data as PublicCourseRow[]).map(mapRow));
     setLoading(false);
-  }, [devDataVersion]);
+  }, []);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { courses, loading, refresh };
 }
@@ -107,6 +108,7 @@ export function usePublicCourseById(id: string | undefined) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    void devDataVersion;
     if (!supabase || !isSupabaseConfigured || !id) {
       setLoading(false);
       return;

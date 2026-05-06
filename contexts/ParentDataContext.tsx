@@ -93,6 +93,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
   const [hasRealSession, setHasRealSession] = useState(false);
 
   useEffect(() => {
+    void devDataVersion;
     const loadParentData = async () => {
       if (!user) {
         setParentProfile(null);

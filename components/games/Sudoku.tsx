@@ -20,6 +20,8 @@ const BOARD_PADDING = 24;
 const MAX_BOARD_SIZE = 560;
 
 type Cell = {
+  r: number;
+  c: number;
   value: number;
   original: boolean;
   error: boolean;
@@ -67,8 +69,10 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
     setSolution(board.map((row) => [...row]));
 
     // Mask cells for difficulty
-    const maskedGrid: Cell[][] = board.map((row) =>
-      row.map((val) => ({
+    const maskedGrid: Cell[][] = board.map((row, r) =>
+      row.map((val, c) => ({
+        r,
+        c,
         value: Math.random() > 0.4 ? val : 0,
         original: true,
         error: false,
@@ -165,24 +169,33 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
 
       <View style={styles.board}>
         <View style={styles.boardInner}>
-          {grid.map((row, r) => (
-            <View key={r} style={[styles.row, r % 3 === 2 && r !== 8 && styles.rowBorder]}>
-              {row.map((cell, c) => (
+          {grid.map((row) => {
+            const rowNumber = row[0]?.r ?? 0;
+            return (
+              <View
+                key={`row-${rowNumber}`}
+                style={[styles.row, rowNumber % 3 === 2 && rowNumber !== 8 && styles.rowBorder]}
+              >
+                {row.map((cell) => (
                 <TouchableOpacity
-                  key={c}
+                  key={`cell-${cell.r}-${cell.c}`}
                   activeOpacity={1}
-                  onPress={() => setSelectedCell({ r, c })}
+                  onPress={() => setSelectedCell({ r: cell.r, c: cell.c })}
                   style={[
                     styles.cell,
                     { width: cellSize, height: cellSize },
-                    c % 3 === 2 && c !== 8 && styles.cellBorder,
-                    selectedCell?.r === r && selectedCell?.c === c && styles.cellActive,
-                    !grid[r][c].original && isRelated(r, c) && styles.cellRelated,
+                    cell.c % 3 === 2 && cell.c !== 8 && styles.cellBorder,
+                    selectedCell?.r === cell.r &&
+                      selectedCell?.c === cell.c &&
+                      styles.cellActive,
+                    !cell.original && isRelated(cell.r, cell.c) && styles.cellRelated,
                     cell.error && styles.cellError,
-                    r === 0 && c === 0 && styles.cellTopLeft,
-                    r === 0 && c === GRID_SIZE - 1 && styles.cellTopRight,
-                    r === GRID_SIZE - 1 && c === 0 && styles.cellBottomLeft,
-                    r === GRID_SIZE - 1 && c === GRID_SIZE - 1 && styles.cellBottomRight,
+                    cell.r === 0 && cell.c === 0 && styles.cellTopLeft,
+                    cell.r === 0 && cell.c === GRID_SIZE - 1 && styles.cellTopRight,
+                    cell.r === GRID_SIZE - 1 && cell.c === 0 && styles.cellBottomLeft,
+                    cell.r === GRID_SIZE - 1 &&
+                      cell.c === GRID_SIZE - 1 &&
+                      styles.cellBottomRight,
                   ]}
                 >
                   {cell.value !== 0 && (
@@ -198,9 +211,10 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                     </Text>
                   )}
                 </TouchableOpacity>
-              ))}
-            </View>
-          ))}
+                ))}
+              </View>
+            );
+          })}
         </View>
       </View>
 

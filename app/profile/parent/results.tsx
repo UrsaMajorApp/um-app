@@ -240,8 +240,8 @@ export default function ParentResults() {
               Карта талантов
             </Text>
             <View style={{ gap: 16 }}>
-              {scores.map((score, idx) => (
-                <View key={idx}>
+              {scores.map((score, index) => (
+                <View key={score.label}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -279,7 +279,7 @@ export default function ParentResults() {
                     <MotiView
                       from={{ width: 0 }}
                       animate={{ width: `${score.value}%` }}
-                      transition={{ duration: 1000, delay: 500 + idx * 100 }}
+                      transition={{ duration: 1000, delay: 500 + index * 100 }}
                       style={{
                         height: '100%',
                         backgroundColor: score.color,

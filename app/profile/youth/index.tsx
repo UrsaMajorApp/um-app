@@ -258,8 +258,8 @@ export default function YouthProfile() {
                       Результаты появятся после диагностики.
                     </Text>
                   )}
-                  {skillRows.map((s, i) => (
-                    <View key={i}>
+                  {skillRows.map((s) => (
+                    <View key={s.label}>
                       <View
                         style={{
                           flexDirection: 'row',

@@ -45,11 +45,12 @@ export function useSubscriptionPlans(role: UserRole | null | undefined) {
       .order('display_order', { ascending: true });
     setPlans(rowsOrEmpty<SubscriptionPlan>(res));
     setLoading(false);
-  }, [planRole, devDataVersion]);
+  }, [planRole]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { plans, loading, refresh };
 }
@@ -118,11 +119,12 @@ export function useWalletData(ownerType: 'mentor' | 'org') {
     const res = await query;
     setTransactions(rowsOrEmpty<WalletTransaction>(res));
     setLoading(false);
-  }, [ownerType, user?.id, devDataVersion]);
+  }, [ownerType, user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   const summary = useMemo<WalletSummary>(() => {
     const now = new Date();
@@ -254,11 +256,12 @@ export function useTeacherGroups() {
     setGroups(rows);
     setStudentCounts(counts);
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   return { groups, studentCounts, loading, refresh };
 }
@@ -528,6 +531,7 @@ export function useOnboardingQuestions(audience: OnboardingAudience) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    void devDataVersion;
     if (!supabase || !isSupabaseConfigured) {
       setQuestions(QUESTION_FALLBACKS[audience]);
       setLoading(false);

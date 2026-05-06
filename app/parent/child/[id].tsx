@@ -208,8 +208,8 @@ export default function ParentChildDetails() {
                 Результаты появятся после диагностики.
               </Text>
             )}
-            {currentSkills.map((skill, idx) => (
-              <View key={idx}>
+            {currentSkills.map((skill) => (
+              <View key={skill.label}>
                 <View className="flex-row justify-between mb-2">
                   <Text className="text-sm font-bold text-gray-700">{skill.label}</Text>
                   <Text className="text-sm font-black text-gray-900">{skill.value}%</Text>

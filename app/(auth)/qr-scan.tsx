@@ -3,7 +3,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MotiView } from 'moti';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -19,6 +19,37 @@ import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, LAYOUT, RADIUS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useIsDesktop } from '$lib/useIsDesktop';
+
+const CORNER_GUIDES = [
+  {
+    id: 'top-left',
+    top: 20,
+    left: 20,
+    borderTopWidth: 3,
+    borderLeftWidth: 3,
+  },
+  {
+    id: 'top-right',
+    top: 20,
+    right: 20,
+    borderTopWidth: 3,
+    borderRightWidth: 3,
+  },
+  {
+    id: 'bottom-left',
+    bottom: 20,
+    left: 20,
+    borderBottomWidth: 3,
+    borderLeftWidth: 3,
+  },
+  {
+    id: 'bottom-right',
+    bottom: 20,
+    right: 20,
+    borderBottomWidth: 3,
+    borderRightWidth: 3,
+  },
+] as const;
 
 export default function QRScanScreen() {
   const router = useRouter();
@@ -44,14 +75,7 @@ export default function QRScanScreen() {
   const [webCameraActive, setWebCameraActive] = useState(false);
   const [webCameraError, setWebCameraError] = useState('');
 
-  const handleQRData = async (data: string) => {
-    if (scanned || isSubmitting) return;
-    setScanned(true);
-    setError('');
-    await processCode(data);
-  };
-
-  const processCode = async (raw: string) => {
+  const processCode = useCallback(async (raw: string) => {
     setIsSubmitting(true);
     const token = raw.trim();
 
@@ -70,7 +94,17 @@ export default function QRScanScreen() {
       setScanned(false);
     }
     setIsSubmitting(false);
-  };
+  }, [loginWithQR, router]);
+
+  const handleQRData = useCallback(
+    async (data: string) => {
+      if (scanned || isSubmitting) return;
+      setScanned(true);
+      setError('');
+      await processCode(data);
+    },
+    [isSubmitting, processCode, scanned],
+  );
 
   // Web camera QR scanning
   useEffect(() => {
@@ -138,7 +172,7 @@ export default function QRScanScreen() {
         });
       }
     };
-  }, [webCameraActive, useManual, scanned]);
+  }, [webCameraActive, useManual, scanned, handleQRData]);
 
   const startWebScanning = () => {
     setWebCameraActive(true);
@@ -356,39 +390,12 @@ export default function QRScanScreen() {
                       />
                       <canvas ref={canvasRef} style={{ display: 'none' }} />
                       {/* Corner guides */}
-                      {(
-                        [
+                    {CORNER_GUIDES.map(({ id, ...style }) => (
+                      <View
+                        key={id}
+                        style={[
                           {
-                            top: 20,
-                            left: 20,
-                            borderTopWidth: 3,
-                            borderLeftWidth: 3,
-                          },
-                          {
-                            top: 20,
-                            right: 20,
-                            borderTopWidth: 3,
-                            borderRightWidth: 3,
-                          },
-                          {
-                            bottom: 20,
-                            left: 20,
-                            borderBottomWidth: 3,
-                            borderLeftWidth: 3,
-                          },
-                          {
-                            bottom: 20,
-                            right: 20,
-                            borderBottomWidth: 3,
-                            borderRightWidth: 3,
-                          },
-                        ] as const
-                      ).map((style, i) => (
-                        <View
-                          key={i}
-                          style={[
-                            {
-                              position: 'absolute',
+                            position: 'absolute',
                               width: 28,
                               height: 28,
                               borderColor: 'white',
@@ -488,37 +495,10 @@ export default function QRScanScreen() {
                         onBarcodeScanned={({ data }) => handleQRData(data)}
                       />
                       {/* Corner guides */}
-                      {(
-                        [
-                          {
-                            top: 20,
-                            left: 20,
-                            borderTopWidth: 3,
-                            borderLeftWidth: 3,
-                          },
-                          {
-                            top: 20,
-                            right: 20,
-                            borderTopWidth: 3,
-                            borderRightWidth: 3,
-                          },
-                          {
-                            bottom: 20,
-                            left: 20,
-                            borderBottomWidth: 3,
-                            borderLeftWidth: 3,
-                          },
-                          {
-                            bottom: 20,
-                            right: 20,
-                            borderBottomWidth: 3,
-                            borderRightWidth: 3,
-                          },
-                        ] as const
-                      ).map((style, i) => (
-                        <View
-                          key={i}
-                          style={[
+                    {CORNER_GUIDES.map(({ id, ...style }) => (
+                      <View
+                        key={id}
+                        style={[
                             {
                               position: 'absolute',
                               width: 28,

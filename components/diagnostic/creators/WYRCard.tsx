@@ -23,15 +23,19 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
   const [timeLeft, setTimeLeft] = useState(timerSeconds);
   const [chosen, setChosen] = useState<'A' | 'B' | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const optionASkill = card.optionA.skill;
+  const optionBSkill = card.optionB.skill;
 
   // Reset on card change
   useEffect(() => {
+    void card.id;
     setTimeLeft(timerSeconds);
     setChosen(null);
   }, [card.id, timerSeconds]);
 
   // Countdown
   useEffect(() => {
+    void card.id;
     if (chosen) return;
     timerRef.current = setInterval(() => {
       setTimeLeft((t) => {
@@ -40,7 +44,7 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
           // Auto-choose randomly on timeout for natural flow
           const auto = Math.random() < 0.5 ? 'A' : 'B';
           setChosen(auto);
-          setTimeout(() => onChoice(auto === 'A' ? card.optionA.skill : card.optionB.skill), 300);
+          setTimeout(() => onChoice(auto === 'A' ? optionASkill : optionBSkill), 300);
           return 0;
         }
         return t - 1;
@@ -50,13 +54,13 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [card.id, chosen]);
+  }, [card.id, chosen, onChoice, optionASkill, optionBSkill]);
 
   const handleChoice = (which: 'A' | 'B') => {
     if (chosen) return;
     if (timerRef.current) clearInterval(timerRef.current);
     setChosen(which);
-    setTimeout(() => onChoice(which === 'A' ? card.optionA.skill : card.optionB.skill), 350);
+    setTimeout(() => onChoice(which === 'A' ? optionASkill : optionBSkill), 350);
   };
 
   const timerColor =

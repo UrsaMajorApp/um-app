@@ -20,7 +20,7 @@
 import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Platform, Text, View } from 'react-native';
 import { COLORS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -34,9 +34,36 @@ WebBrowser.maybeCompleteAuthSession();
 export default function AuthCallback() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
+  const userId = user?.id;
   const handled = useRef(false);
   const sessionReady = useRef(false);
   const [status, setStatus] = useState('Выполняется вход...');
+
+  const checkProfile = useCallback(async () => {
+    if (!userId) {
+      router.replace('/login');
+      return;
+    }
+
+    if (!supabase || !isSupabaseConfigured) {
+      router.replace('/home');
+      return;
+    }
+
+    setStatus('Загрузка профиля...');
+
+    const { data } = await supabase
+      .from('um_user_profiles')
+      .select('id, role')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (data?.role) {
+      router.replace('/home');
+    } else {
+      router.replace('/auth/complete-profile');
+    }
+  }, [router, userId]);
 
   // ── Web only: bail out immediately if the URL contains an OAuth error ──
   // This happens when the user navigates back to the Google OAuth page after
@@ -49,7 +76,7 @@ export default function AuthCallback() {
     if (errorCode) {
       router.replace('/login');
     }
-  }, []);
+  }, [router]);
 
   // ── Native only: parse tokens from the deep-link URL ──────────────────
   // On Android/iOS the OAuth tokens arrive as URL hash fragments on the
@@ -100,7 +127,7 @@ export default function AuthCallback() {
     // foreground via the deep link (e.g. user opened browser manually)
     const sub = Linking.addEventListener('url', ({ url }) => parseAndSetSession(url));
     return () => sub.remove();
-  }, []);
+  }, [router]);
 
   // ── Route once we have a user (web or native) ─────────────────────────
   useEffect(() => {
@@ -108,39 +135,17 @@ export default function AuthCallback() {
     if (handled.current) return;
 
     // On native, give the session-parse effect a moment to fire first
-    if (Platform.OS !== 'web' && !sessionReady.current && !user) return;
+    if (Platform.OS !== 'web' && !sessionReady.current && !userId) return;
 
     handled.current = true;
 
-    if (!user) {
+    if (!userId) {
       router.replace('/login');
       return;
     }
 
     checkProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isLoading]);
-
-  const checkProfile = async () => {
-    if (!supabase || !isSupabaseConfigured) {
-      router.replace('/home');
-      return;
-    }
-
-    setStatus('Загрузка профиля...');
-
-    const { data } = await supabase
-      .from('um_user_profiles')
-      .select('id, role')
-      .eq('id', user!.id)
-      .maybeSingle();
-
-    if (data?.role) {
-      router.replace('/home');
-    } else {
-      router.replace('/auth/complete-profile');
-    }
-  };
+  }, [checkProfile, isLoading, router, userId]);
 
   return (
     <View

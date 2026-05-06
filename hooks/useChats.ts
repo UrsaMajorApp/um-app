@@ -72,11 +72,12 @@ export function useChats() {
       })),
     );
     setLoading(false);
-  }, [user?.id, devDataVersion]);
+  }, [user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   const archiveChat = async (id: string) => {
     if (!supabase) return;
@@ -139,11 +140,12 @@ export function useChatMessages(conversationId: string | null) {
       })),
     );
     setLoading(false);
-  }, [conversationId, user?.id, devDataVersion]);
+  }, [conversationId, user?.id]);
 
   useEffect(() => {
+    void devDataVersion;
     refresh();
-  }, [refresh]);
+  }, [refresh, devDataVersion]);
 
   const sendMessage = async (text: string) => {
     if (!supabase || !conversationId || !text.trim()) return;

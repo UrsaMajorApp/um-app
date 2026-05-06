@@ -35,13 +35,22 @@ const DAY_ALIASES: Record<number, string[]> = {
   6: ['сб', 'суб'],
 };
 
-function getCalendarDays(year: number, month: number) {
+type CalendarDay = {
+  key: string;
+  value: number | null;
+};
+
+function getCalendarDays(year: number, month: number): CalendarDay[] {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const offset = firstDay === 0 ? 6 : firstDay - 1;
-  const days: (number | null)[] = [];
-  for (let i = 0; i < offset; i++) days.push(null);
-  for (let i = 1; i <= daysInMonth; i++) days.push(i);
+  const days: CalendarDay[] = [];
+  for (let i = 0; i < offset; i++) {
+    days.push({ key: `empty-${year}-${month}-${i}`, value: null });
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push({ key: `day-${year}-${month}-${i}`, value: i });
+  }
   return days;
 }
 
@@ -186,60 +195,64 @@ export default function ParentCalendar() {
           </View>
           {/* Day cells — fixed 40px height avoids giant cells on wide web */}
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            {days.map((day, idx) => (
-              <View
-                key={idx}
-                style={{
-                  width: '14.2857%',
-                  height: 44,
-                  padding: 2,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {day && (
-                  <Pressable
-                    onPress={() => setSelectedDay(day)}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: 12,
-                      backgroundColor: day === selectedDay ? '#7C3AED' : 'transparent',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text
+            {days.map((day) => {
+              const dayValue = day.value;
+
+              return (
+                <View
+                  key={day.key}
+                  style={{
+                    width: '14.2857%',
+                    height: 44,
+                    padding: 2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {dayValue && (
+                    <Pressable
+                      onPress={() => setSelectedDay(dayValue)}
                       style={{
-                        fontWeight: '700',
-                        fontSize: 14,
-                        color: day === selectedDay ? 'white' : '#111827',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 12,
+                        backgroundColor: dayValue === selectedDay ? '#7C3AED' : 'transparent',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      {day}
-                    </Text>
-                    {enrollments.some((item) =>
-                      scheduleMatchesDate(
-                        item.group_schedule,
-                        new Date(currentDate.year, currentDate.month, day),
-                      ),
-                    ) &&
-                      day !== selectedDay && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            bottom: 4,
-                            width: 4,
-                            height: 4,
-                            borderRadius: 2,
-                            backgroundColor: '#7C3AED',
-                          }}
-                        />
-                      )}
-                  </Pressable>
-                )}
-              </View>
-            ))}
+                      <Text
+                        style={{
+                          fontWeight: '700',
+                          fontSize: 14,
+                          color: dayValue === selectedDay ? 'white' : '#111827',
+                        }}
+                      >
+                        {dayValue}
+                      </Text>
+                      {enrollments.some((item) =>
+                        scheduleMatchesDate(
+                          item.group_schedule,
+                          new Date(currentDate.year, currentDate.month, dayValue),
+                        ),
+                      ) &&
+                        dayValue !== selectedDay && (
+                          <View
+                            style={{
+                              position: 'absolute',
+                              bottom: 4,
+                              width: 4,
+                              height: 4,
+                              borderRadius: 2,
+                              backgroundColor: '#7C3AED',
+                            }}
+                          />
+                        )}
+                    </Pressable>
+                  )}
+                </View>
+              );
+            })}
           </View>
         </View>
 

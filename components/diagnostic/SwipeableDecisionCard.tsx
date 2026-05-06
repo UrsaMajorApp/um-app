@@ -41,6 +41,7 @@ export default function SwipeableDecisionCard({
   const [isLeaving, setIsLeaving] = React.useState(false);
 
   React.useEffect(() => {
+    void cardKey;
     translateX.value = 0;
     translateY.value = 0;
     hasSwiped.value = false;
