@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface PublicMentor {
   id: string;
@@ -13,11 +14,6 @@ export interface PublicMentor {
   education: string | null;
   status: string;
   created_at: string;
-}
-
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
 }
 
 export function usePublicMentors() {
@@ -36,7 +32,7 @@ export function usePublicMentors() {
       .select("*")
       .eq("status", "approved")
       .order("created_at", { ascending: false });
-    setMentors(ok<PublicMentor>(res));
+    setMentors(rowsOrEmpty<PublicMentor>(res));
     setLoading(false);
   }, []);
 

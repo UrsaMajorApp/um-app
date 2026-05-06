@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { resolveOwnedOrgId, rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface OrgStaffMember {
   id: string;
@@ -68,22 +69,6 @@ export interface OrgTask {
   created_at: string;
 }
 
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
-}
-
-async function resolveOrgId(userId: string): Promise<string | null> {
-  if (!supabase) return null;
-  const res = await supabase
-    .from("organizations")
-    .select("id")
-    .eq("owner_user_id", userId)
-    .limit(1)
-    .single();
-  return res.data?.id ?? null;
-}
-
 // ─── useOrgStaff ──────────────────────────────────────────────
 export function useOrgStaff() {
   const { user } = useAuth();
@@ -98,7 +83,7 @@ export function useOrgStaff() {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setStaff([]);
       setLoading(false);
@@ -109,7 +94,7 @@ export function useOrgStaff() {
       .select("*")
       .eq("org_id", orgId)
       .order("created_at", { ascending: true });
-    setStaff(ok<OrgStaffMember>(res));
+    setStaff(rowsOrEmpty<OrgStaffMember>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
 
@@ -134,7 +119,7 @@ export function useOrgGroups() {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setGroups([]);
       setLoading(false);
@@ -145,7 +130,7 @@ export function useOrgGroups() {
       .select("*")
       .eq("org_id", orgId)
       .order("created_at", { ascending: true });
-    setGroups(ok<OrgGroup>(res));
+    setGroups(rowsOrEmpty<OrgGroup>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
 
@@ -170,7 +155,7 @@ export function useOrgApplications() {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setApps([]);
       setLoading(false);
@@ -181,7 +166,7 @@ export function useOrgApplications() {
       .select("*")
       .eq("org_id", orgId)
       .order("created_at", { ascending: false });
-    setApps(ok<OrgApplication>(res));
+    setApps(rowsOrEmpty<OrgApplication>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
 
@@ -224,7 +209,7 @@ export function useOrgTasks() {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setTasks([]);
       setLoading(false);
@@ -235,7 +220,7 @@ export function useOrgTasks() {
       .select("*")
       .eq("org_id", orgId)
       .order("created_at", { ascending: false });
-    setTasks(ok<OrgTask>(res));
+    setTasks(rowsOrEmpty<OrgTask>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
 
@@ -332,7 +317,7 @@ export function useOrgStats() {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setLoading(false);
       return;
@@ -353,7 +338,7 @@ export function useOrgStats() {
         .eq("org_id", orgId)
         .eq("status", "active"),
     ]);
-    const allApps = ok<any>(apps);
+    const allApps = rowsOrEmpty<any>(apps);
     setStats({
       groupCount: groups.count ?? 0,
       studentCount: allApps.filter((a: any) =>
@@ -460,7 +445,7 @@ export function useOrgCourses() {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setCourses([]);
       setLoading(false);
@@ -471,7 +456,7 @@ export function useOrgCourses() {
       .select("*")
       .eq("org_id", orgId)
       .order("created_at", { ascending: true });
-    setCourses(ok<OrgCourse>(res));
+    setCourses(rowsOrEmpty<OrgCourse>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
 
@@ -485,7 +470,7 @@ export function useOrgCourses() {
     ): Promise<{ data: OrgCourse | null; error: string | null }> => {
       if (!supabase || !isSupabaseConfigured || !user?.id)
         return { data: null, error: "Not configured" };
-      const orgId = await resolveOrgId(user.id);
+      const orgId = await resolveOwnedOrgId(user.id);
       if (!orgId) return { data: null, error: "Organisation not found" };
       const res = await supabase
         .from("org_courses")
@@ -580,7 +565,7 @@ export function useOrgSchedule(dayOfWeek?: number) {
       return;
     }
     setLoading(true);
-    const orgId = await resolveOrgId(user.id);
+    const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setItems([]);
       setLoading(false);
@@ -593,7 +578,7 @@ export function useOrgSchedule(dayOfWeek?: number) {
       .order("time_label", { ascending: true });
     if (dayOfWeek !== undefined) q = q.eq("day_of_week", dayOfWeek);
     const res = await q;
-    setItems(ok<OrgScheduleItem>(res));
+    setItems(rowsOrEmpty<OrgScheduleItem>(res));
     setLoading(false);
   }, [user?.id, dayOfWeek, devDataVersion]);
 

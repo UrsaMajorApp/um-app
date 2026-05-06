@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface AdminFamily {
   id: string;
@@ -83,11 +84,6 @@ export interface AdminStats {
   totalSubscribers: number;
 }
 
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
-}
-
 export function useFamilies() {
   const [data, setData] = useState<AdminFamily[]>([]);
   const [loading, setLoading] = useState(true);
@@ -107,17 +103,17 @@ export function useFamilies() {
       supabase.from("child_profiles").select("parent_user_id"),
     ]);
     const tariffMap = new Map<string, string>(
-      ok<any>(tariffs).map((t) => [t.user_id, t.tariff]),
+      rowsOrEmpty<any>(tariffs).map((t) => [t.user_id, t.tariff]),
     );
     const childCount = new Map<string, number>();
-    for (const c of ok<any>(children)) {
+    for (const c of rowsOrEmpty<any>(children)) {
       childCount.set(
         c.parent_user_id,
         (childCount.get(c.parent_user_id) ?? 0) + 1,
       );
     }
     setData(
-      ok<any>(parents).map((p) => ({
+      rowsOrEmpty<any>(parents).map((p) => ({
         id: p.id,
         parentName: `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || "—",
         children: childCount.get(p.id) ?? 0,
@@ -148,7 +144,7 @@ export function useMentorApps() {
       .from("mentor_applications")
       .select("*")
       .order("created_at", { ascending: false });
-    setData(ok<MentorApp>(res));
+    setData(rowsOrEmpty<MentorApp>(res));
     setLoading(false);
   }, []);
 
@@ -194,7 +190,7 @@ export function useOrganizations() {
       .from("organizations")
       .select("*, owner_user_id")
       .order("created_at", { ascending: false });
-    setData(ok<Organization>(res));
+    setData(rowsOrEmpty<Organization>(res));
     setLoading(false);
   }, []);
 
@@ -250,16 +246,16 @@ export function useTransactions() {
       supabase.from("organizations").select("id, name"),
     ]);
     const parentMap = new Map<string, string>(
-      ok<any>(parentsRes).map((p) => [
+      rowsOrEmpty<any>(parentsRes).map((p) => [
         p.id,
         `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || "—",
       ]),
     );
     const orgMap = new Map<string, string>(
-      ok<any>(orgsRes).map((o) => [o.id, o.name]),
+      rowsOrEmpty<any>(orgsRes).map((o) => [o.id, o.name]),
     );
     setData(
-      ok<any>(txRes).map((t) => ({
+      rowsOrEmpty<any>(txRes).map((t) => ({
         id: t.id,
         external_ref: t.external_ref,
         parent_name: parentMap.get(t.parent_user_id) ?? "—",
@@ -298,13 +294,13 @@ export function useTickets() {
       supabase.from("um_user_profiles").select("id, first_name, last_name"),
     ]);
     const userMap = new Map<string, string>(
-      ok<any>(usersRes).map((u) => [
+      rowsOrEmpty<any>(usersRes).map((u) => [
         u.id,
         `${u.first_name ?? ""} ${u.last_name ?? ""}`.trim() || "—",
       ]),
     );
     setData(
-      ok<any>(ticketRes).map((t) => ({
+      rowsOrEmpty<any>(ticketRes).map((t) => ({
         id: t.id,
         kind: t.kind,
         reporter_name: userMap.get(t.reporter_user_id) ?? "Аноним",
@@ -352,7 +348,7 @@ export function useTags() {
     }
     setLoading(true);
     const res = await supabase.from("tags").select("*").order("name");
-    setData(ok<Tag>(res));
+    setData(rowsOrEmpty<Tag>(res));
     setLoading(false);
   }, []);
 
@@ -389,7 +385,7 @@ export function useAIRules() {
     }
     setLoading(true);
     const res = await supabase.from("ai_rules").select("*").order("created_at");
-    setData(ok<AIRule>(res));
+    setData(rowsOrEmpty<AIRule>(res));
     setLoading(false);
   }, []);
 
@@ -452,10 +448,10 @@ export function useAdminEnrollments() {
       supabase.from("organizations").select("id, name"),
     ]);
     const orgMap = new Map<string, string>(
-      ok<any>(orgsRes).map((o) => [o.id, o.name]),
+      rowsOrEmpty<any>(orgsRes).map((o) => [o.id, o.name]),
     );
     setData(
-      ok<any>(appRes).map((a) => ({
+      rowsOrEmpty<any>(appRes).map((a) => ({
         id: a.id,
         org_id: a.org_id,
         org_name: orgMap.get(a.org_id) ?? "—",
@@ -599,10 +595,10 @@ export function useAdminCourses() {
       supabase.from("organizations").select("id, name"),
     ]);
     const orgMap = new Map<string, string>(
-      ok<any>(orgsRes).map((o) => [o.id, o.name]),
+      rowsOrEmpty<any>(orgsRes).map((o) => [o.id, o.name]),
     );
     setData(
-      ok<any>(coursesRes).map((c) => ({
+      rowsOrEmpty<any>(coursesRes).map((c) => ({
         id: c.id,
         org_id: c.org_id,
         org_name: orgMap.get(c.org_id) ?? "—",
@@ -658,7 +654,7 @@ export function useAllUsers() {
       .from("um_user_profiles")
       .select("id, first_name, last_name, role, phone, updated_at")
       .order("updated_at", { ascending: false });
-    setData(ok<AdminUser>(res));
+    setData(rowsOrEmpty<AdminUser>(res));
     setLoading(false);
   }, []);
 

@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
-
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
-}
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface ChildSkillSnapshot {
   skill_label: string;
@@ -64,8 +60,8 @@ export function useChildReports(childName: string | null) {
         .order("month_order", { ascending: true }),
     ]);
 
-    const skills = ok<ChildSkillSnapshot>(skillsRes);
-    const attendance = ok<ChildAttendanceMonth>(attRes);
+    const skills = rowsOrEmpty<ChildSkillSnapshot>(skillsRes);
+    const attendance = rowsOrEmpty<ChildAttendanceMonth>(attRes);
     const avgAttendance = attendance.length
       ? Math.round(
           attendance.reduce((s, a) => s + a.attendance_pct, 0) /

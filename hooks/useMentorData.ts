@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface MentorGroup {
   id: string;
@@ -66,11 +67,6 @@ export interface MentorFeedback {
   created_at: string;
 }
 
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
-}
-
 // ─── useMentorGroups ──────────────────────────────────────────
 export function useMentorGroups() {
   const { user } = useAuth();
@@ -89,7 +85,7 @@ export function useMentorGroups() {
       .select("*")
       .eq("mentor_user_id", user.id)
       .order("created_at", { ascending: true });
-    const raw = ok<any>(res);
+    const raw = rowsOrEmpty<any>(res);
 
     // Fetch member counts for each group
     const ids = raw.map((g: any) => g.id);
@@ -100,7 +96,7 @@ export function useMentorGroups() {
           .in("group_id", ids)
       : { data: [], error: null };
     const countMap = new Map<string, number>();
-    for (const row of ok<any>(countRes)) {
+    for (const row of rowsOrEmpty<any>(countRes)) {
       countMap.set(row.group_id, (countMap.get(row.group_id) ?? 0) + 1);
     }
 
@@ -137,7 +133,7 @@ export function useGroupMembers(groupId: string | null) {
       .select("*")
       .eq("group_id", groupId)
       .order("enrolled_at", { ascending: true });
-    setMembers(ok<GroupMember>(res));
+    setMembers(rowsOrEmpty<GroupMember>(res));
     setLoading(false);
   }, [groupId]);
 
@@ -166,7 +162,7 @@ export function useMentorStudents() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = ok<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
     if (!groupIds.length) {
       setStudents([]);
       setLoading(false);
@@ -177,7 +173,7 @@ export function useMentorStudents() {
       .select("*")
       .in("group_id", groupIds)
       .order("enrolled_at", { ascending: true });
-    setStudents(ok<GroupMember>(memberRes));
+    setStudents(rowsOrEmpty<GroupMember>(memberRes));
     setLoading(false);
   }, [user?.id]);
 
@@ -206,7 +202,7 @@ export function useMentorFeedback() {
       .select("*")
       .eq("mentor_user_id", user.id)
       .order("created_at", { ascending: false });
-    setFeedback(ok<MentorFeedback>(res));
+    setFeedback(rowsOrEmpty<MentorFeedback>(res));
     setLoading(false);
   }, [user?.id]);
 
@@ -235,7 +231,7 @@ export function useStudentGoals() {
       .select("*")
       .eq("mentor_user_id", user.id)
       .order("created_at", { ascending: true });
-    setGoals(ok<StudentGoal>(res));
+    setGoals(rowsOrEmpty<StudentGoal>(res));
     setLoading(false);
   }, [user?.id]);
 
@@ -270,7 +266,7 @@ export function useLearningMaterials() {
       .select("*")
       .eq("mentor_user_id", user.id)
       .order("created_at", { ascending: true });
-    setMaterials(ok<LearningMaterial>(res));
+    setMaterials(rowsOrEmpty<LearningMaterial>(res));
     setLoading(false);
   }, [user?.id]);
 
@@ -299,7 +295,7 @@ export function useMentorAttendance() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = ok<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
     if (!groupIds.length) {
       setRecords([]);
       setLoading(false);
@@ -312,7 +308,7 @@ export function useMentorAttendance() {
       .select("id, session_date, group_id")
       .in("group_id", groupIds)
       .order("session_date", { ascending: false });
-    const sessions = ok<any>(sessionRes);
+    const sessions = rowsOrEmpty<any>(sessionRes);
     if (!sessions.length) {
       setRecords([]);
       setLoading(false);
@@ -329,7 +325,7 @@ export function useMentorAttendance() {
       .from("attendance_records")
       .select("id, session_id, member_id, present")
       .in("session_id", sessionIds);
-    const recRows = ok<any>(recRes);
+    const recRows = rowsOrEmpty<any>(recRes);
 
     const memberIds = [...new Set(recRows.map((r: any) => r.member_id))];
     const memberRes = memberIds.length
@@ -339,7 +335,7 @@ export function useMentorAttendance() {
           .in("id", memberIds)
       : { data: [], error: null };
     const memberMap = new Map<string, string>(
-      ok<any>(memberRes).map((m: any) => [m.id, m.student_name]),
+      rowsOrEmpty<any>(memberRes).map((m: any) => [m.id, m.student_name]),
     );
 
     const flat: AttendanceRecord[] = recRows.map((r: any) => ({
@@ -390,7 +386,7 @@ export function useMentorStudentAttendanceSummary() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = ok<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
     if (!groupIds.length) {
       setSummary({});
       setLoading(false);
@@ -402,7 +398,7 @@ export function useMentorStudentAttendanceSummary() {
       .select("id, session_date")
       .in("group_id", groupIds)
       .order("session_date", { ascending: false });
-    const sessions = ok<any>(sessionRes);
+    const sessions = rowsOrEmpty<any>(sessionRes);
     const sessionIds = sessions.map((s: any) => s.id);
     if (!sessionIds.length) {
       setSummary({});
@@ -420,7 +416,7 @@ export function useMentorStudentAttendanceSummary() {
       .in("session_id", sessionIds);
 
     const next: Record<string, MentorStudentAttendanceSummary> = {};
-    const records = ok<any>(recordsRes).sort(
+    const records = rowsOrEmpty<any>(recordsRes).sort(
       (a: any, b: any) =>
         (sessionOrder.get(a.session_id) ?? Number.MAX_SAFE_INTEGER) -
         (sessionOrder.get(b.session_id) ?? Number.MAX_SAFE_INTEGER),
@@ -480,7 +476,7 @@ export function useLearningPath(studentName?: string) {
       .order("phase_order", { ascending: true });
     if (studentName) q = q.eq("student_name", studentName);
     const res = await q;
-    setSteps(ok<LearningPathStep>(res));
+    setSteps(rowsOrEmpty<LearningPathStep>(res));
     setLoading(false);
   }, [user?.id, studentName]);
 
@@ -546,7 +542,7 @@ export function useMentorProfileStats() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = ok<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
     let studentCount = 0;
     if (groupIds.length) {
       const countRes = await supabase
@@ -652,7 +648,7 @@ export function useMentorRequests() {
       .select("*")
       .eq("mentor_user_id", user.id)
       .order("created_at", { ascending: false });
-    setRequests(ok<MentorRequest>(res));
+    setRequests(rowsOrEmpty<MentorRequest>(res));
     setLoading(false);
   }, [user?.id]);
 

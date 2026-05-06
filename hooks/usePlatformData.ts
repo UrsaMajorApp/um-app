@@ -2,22 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth, type UserRole } from "../contexts/AuthContext";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
-
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
-}
-
-async function resolveOrgId(userId: string): Promise<string | null> {
-  if (!supabase) return null;
-  const res = await supabase
-    .from("organizations")
-    .select("id")
-    .eq("owner_user_id", userId)
-    .limit(1)
-    .maybeSingle();
-  return res.data?.id ?? null;
-}
+import { resolveOwnedOrgId, rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export type SubscriptionPlanRole = "parent" | "youth" | "org";
 
@@ -63,7 +48,7 @@ export function useSubscriptionPlans(role: UserRole | null | undefined) {
       .eq("role", planRole)
       .eq("active", true)
       .order("display_order", { ascending: true });
-    setPlans(ok<SubscriptionPlan>(res));
+    setPlans(rowsOrEmpty<SubscriptionPlan>(res));
     setLoading(false);
   }, [planRole, devDataVersion]);
 
@@ -125,7 +110,7 @@ export function useWalletData(ownerType: "mentor" | "org") {
       query = query.eq("owner_user_id", user.id);
       setOrgId(null);
     } else {
-      const resolvedOrgId = await resolveOrgId(user.id);
+      const resolvedOrgId = await resolveOwnedOrgId(user.id);
       setOrgId(resolvedOrgId);
       if (!resolvedOrgId) {
         setTransactions([]);
@@ -136,7 +121,7 @@ export function useWalletData(ownerType: "mentor" | "org") {
     }
 
     const res = await query;
-    setTransactions(ok<WalletTransaction>(res));
+    setTransactions(rowsOrEmpty<WalletTransaction>(res));
     setLoading(false);
   }, [ownerType, user?.id, devDataVersion]);
 
@@ -262,7 +247,7 @@ export function useTeacherGroups() {
       .select("id, name, course_title, schedule, capacity, active")
       .eq("teacher_user_id", user.id)
       .order("created_at", { ascending: true });
-    const rows = ok<TeacherGroup>(groupRes);
+    const rows = rowsOrEmpty<TeacherGroup>(groupRes);
     const ids = rows.map((g) => g.id);
 
     const counts: Record<string, number> = {};
@@ -271,7 +256,7 @@ export function useTeacherGroups() {
         .from("teacher_group_students")
         .select("group_id")
         .in("group_id", ids);
-      for (const student of ok<any>(studentsRes)) {
+      for (const student of rowsOrEmpty<any>(studentsRes)) {
         counts[student.group_id] = (counts[student.group_id] ?? 0) + 1;
       }
     }
@@ -329,8 +314,8 @@ export function useTeacherGroup(
     ]);
 
     setGroup(groupRes.data ?? null);
-    setStudents(ok<TeacherGroupStudent>(studentsRes));
-    setAttendance(ok<TeacherAttendanceEntry>(attendanceRes));
+    setStudents(rowsOrEmpty<TeacherGroupStudent>(studentsRes));
+    setAttendance(rowsOrEmpty<TeacherAttendanceEntry>(attendanceRes));
     setLoading(false);
   }, [classDate, groupId]);
 

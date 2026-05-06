@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface Chat {
   id: string;
@@ -11,11 +12,6 @@ export interface Chat {
   last_message_at: string;
   unread_count: number;
   archived: boolean;
-}
-
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
 }
 
 export function useChats() {
@@ -36,7 +32,7 @@ export function useChats() {
       .from("conversation_participants")
       .select("conversation_id, unread_count")
       .eq("user_id", user.id);
-    const participantRows = ok<any>(partRes);
+    const participantRows = rowsOrEmpty<any>(partRes);
     const conversationIds = participantRows
       .map((row) => row.conversation_id)
       .filter(Boolean);
@@ -57,7 +53,7 @@ export function useChats() {
       .select("id, name, icon_name, last_message, last_message_at, archived")
       .in("id", conversationIds)
       .order("last_message_at", { ascending: false });
-    const convRows = ok<any>(convRes);
+    const convRows = rowsOrEmpty<any>(convRes);
 
     setChats(
       convRows.map((c: any) => ({
@@ -127,7 +123,7 @@ export function useChatMessages(conversationId: string | null) {
       .select("*")
       .eq("conversation_id", conversationId)
       .order("created_at", { ascending: true });
-    const rows = ok<any>(res);
+    const rows = rowsOrEmpty<any>(res);
     setMessages(
       rows.map((m: any) => ({
         id: m.id,

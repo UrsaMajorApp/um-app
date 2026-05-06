@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useDevDataVersion } from "../lib/devDataEvents";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import { rowsOrEmpty } from "../lib/supabaseHelpers";
 
 export interface StudentTask {
   id: string;
@@ -11,11 +12,6 @@ export interface StudentTask {
   xp_reward: number;
   done: boolean;
   created_at: string;
-}
-
-function ok<T = any>(res: { data: any; error: any }): T[] {
-  if (res.error || !res.data) return [];
-  return res.data as T[];
 }
 
 export function useStudentTasks() {
@@ -36,7 +32,7 @@ export function useStudentTasks() {
       .select("*")
       .eq("student_user_id", user.id)
       .order("created_at", { ascending: true });
-    setTasks(ok<StudentTask>(res));
+    setTasks(rowsOrEmpty<StudentTask>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
 
@@ -92,7 +88,7 @@ export function useYouthGoals() {
       .select("*")
       .eq("student_user_id", user.id)
       .order("created_at", { ascending: true });
-    const rawGoals = ok<any>(goalRes);
+    const rawGoals = rowsOrEmpty<any>(goalRes);
     const ids = rawGoals.map((g: any) => g.id);
 
     let stepsMap = new Map<string, YouthGoalStep[]>();
@@ -102,7 +98,7 @@ export function useYouthGoals() {
         .select("*")
         .in("goal_id", ids)
         .order("step_order", { ascending: true });
-      for (const s of ok<any>(stepsRes)) {
+      for (const s of rowsOrEmpty<any>(stepsRes)) {
         const arr = stepsMap.get(s.goal_id) ?? [];
         arr.push({
           id: s.id,
@@ -160,7 +156,7 @@ export function useYouthAchievements() {
       .from("achievements_catalog")
       .select("*")
       .order("name", { ascending: true });
-    const catalog = ok<any>(catalogRes);
+    const catalog = rowsOrEmpty<any>(catalogRes);
 
     // Load user's unlocked achievements
     const unlockedSet = new Set<string>();
@@ -170,7 +166,9 @@ export function useYouthAchievements() {
         .select("achievement_id")
         .eq("user_id", user.id)
         .eq("unlocked", true);
-      for (const r of ok<any>(userRes)) unlockedSet.add(r.achievement_id);
+      for (const r of rowsOrEmpty<any>(userRes)) {
+        unlockedSet.add(r.achievement_id);
+      }
     }
 
     setAchievements(
