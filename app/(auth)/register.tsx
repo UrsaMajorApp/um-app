@@ -24,6 +24,7 @@ import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import { blurActiveWebElement } from '$lib/webFocus';
 import type { AuthMethod } from '$types/auth';
 import type { FeatherIconName } from '$types/icons';
 import type { WebTextStyle } from '$types/styles';
@@ -75,6 +76,7 @@ export default function RegisterScreen() {
   };
 
   const handleAction = async () => {
+    blurActiveWebElement();
     setError('');
 
     if (step === 0) {
@@ -154,6 +156,7 @@ export default function RegisterScreen() {
   };
 
   const handleBack = () => {
+    blurActiveWebElement();
     setError('');
     if (step === 0) {
       if (router.canGoBack()) {
@@ -167,6 +170,11 @@ export default function RegisterScreen() {
 
     if (step === 3 && isEmail) setStep(1);
     else setStep(step - 1);
+  };
+
+  const navigateToLogin = () => {
+    blurActiveWebElement();
+    router.push('/login');
   };
 
   const isButtonEnabled = () => {
@@ -725,7 +733,7 @@ export default function RegisterScreen() {
 
               <View style={styles.accountSwitchRow}>
                 <Text style={styles.accountSwitchText}>Уже есть аккаунт? </Text>
-                <PressableScale onPress={() => router.push('/login')} scaleTo={0.93}>
+                <PressableScale onPress={navigateToLogin} scaleTo={0.93}>
                   <Text
                     style={[
                       styles.accountSwitchLink,

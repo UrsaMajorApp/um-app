@@ -21,6 +21,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { formatPhone } from '$lib/formatPhone';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import { blurActiveWebElement } from '$lib/webFocus';
 import type { AuthMethod } from '$types/auth';
 
 export default function LoginScreen() {
@@ -59,7 +60,23 @@ export default function LoginScreen() {
     setError('');
   };
 
+  const navigateToForgotPassword = () => {
+    blurActiveWebElement();
+    router.push('/forgot-password');
+  };
+
+  const navigateToRegister = () => {
+    blurActiveWebElement();
+    router.push('/register');
+  };
+
+  const navigateToQrScan = () => {
+    blurActiveWebElement();
+    router.push('/(auth)/qr-scan');
+  };
+
   const handleGoogleLogin = async () => {
+    blurActiveWebElement();
     setError('');
     setIsGoogleLoading(true);
     try {
@@ -71,6 +88,7 @@ export default function LoginScreen() {
       // On web the browser navigates to Google before this runs — don't push a
       // route with no authenticated user or the root guard bounces to /intro.
       if (Platform.OS !== 'web') {
+        blurActiveWebElement();
         router.replace('/(tabs)/home');
       }
     } catch (e: unknown) {
@@ -91,10 +109,13 @@ export default function LoginScreen() {
       setError(result.error || 'Не удалось войти');
       return;
     }
+    blurActiveWebElement();
     router.replace('/(tabs)/home');
   };
 
   const handleBack = () => {
+    blurActiveWebElement();
+
     if (router.canGoBack()) {
       router.back();
       return;
@@ -280,7 +301,7 @@ export default function LoginScreen() {
                 </View>
 
                 <PressableScale
-                  onPress={() => router.push('/forgot-password')}
+                  onPress={navigateToForgotPassword}
                   style={{ alignSelf: 'flex-end', marginBottom: 24 }}
                   scaleTo={0.93}
                 >
@@ -332,7 +353,7 @@ export default function LoginScreen() {
 
               <View style={styles.accountSwitchRow}>
                 <Text style={styles.accountSwitchText}>Нет аккаунта? </Text>
-                <PressableScale onPress={() => router.push('/register')} scaleTo={0.93}>
+                <PressableScale onPress={navigateToRegister} scaleTo={0.93}>
                   <Text style={styles.accountSwitchLink}>Зарегистрироваться</Text>
                 </PressableScale>
               </View>
@@ -362,7 +383,7 @@ export default function LoginScreen() {
 
                   {/* QR */}
                   <PressableScale
-                    onPress={() => router.push('/(auth)/qr-scan')}
+                    onPress={navigateToQrScan}
                     style={styles.socialChip}
                   >
                     <Feather name="grid" size={20} color={COLORS.primary} />
