@@ -8,7 +8,7 @@ import { useOrgSchedule } from '$hooks/useOrgData';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
 /* ---------- русская локаль для календаря ---------- */
-LocaleConfig.locales['ru'] = {
+LocaleConfig.locales.ru = {
   monthNames: [
     'Январь',
     'Февраль',

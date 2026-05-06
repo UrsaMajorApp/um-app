@@ -60,6 +60,7 @@
             "maxAllowedComplexity": 30
           }
         },
+        "noImportantStyles": "off",
         "noForEach": "off"
       },
       "correctness": {

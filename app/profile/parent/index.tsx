@@ -255,7 +255,7 @@ export default function ParentProfile() {
           </View>
 
           {/* QR Section - Only show if child profile exists */}
-          {profileController.selectedChild && profileController.selectedChild.name && (
+          {profileController.selectedChild?.name && (
             <View style={styles.qrRow}>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={styles.smallAvatar}>

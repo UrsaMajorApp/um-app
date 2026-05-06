@@ -118,7 +118,7 @@ export default function MentorCreateProfile() {
           skills: JSON.stringify(formData.skills),
           pitch: formData.pitch,
           bio: formData.bio,
-          price: parseInt(formData.sessionPrice) || 0,
+          price: parseInt(formData.sessionPrice, 10) || 0,
           status: 'pending',
         });
 
