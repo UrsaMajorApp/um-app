@@ -10,7 +10,6 @@ export default function ProfileLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="parent/create-profile" />
-      <Stack.Screen name="parent/umo-intro" />
       <Stack.Screen name="parent/testing" />
       <Stack.Screen name="parent/results" />
       <Stack.Screen name="youth/create-profile" />
@@ -19,7 +18,6 @@ export default function ProfileLayout() {
       <Stack.Screen name="youth/testing" />
       <Stack.Screen name="youth/results" />
       <Stack.Screen name="organization/create-profile" />
-      <Stack.Screen name="organization/umo-intro" />
       <Stack.Screen name="organization/testing" />
       <Stack.Screen name="organization/results" />
       <Stack.Screen name="mentor/create-profile" />
