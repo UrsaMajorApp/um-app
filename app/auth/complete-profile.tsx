@@ -1,4 +1,3 @@
-import { useIsDesktop } from "$lib/useIsDesktop";
 /**
  * /auth/complete-profile
  *
@@ -21,56 +20,11 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PressableScale } from "$components/ui/PressableScale";
+import { AUTH_ROLE_OPTIONS } from "$constants/authRoleOptions";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
 import type { UserRole } from "$contexts/AuthContext";
 import { useAuth } from "$contexts/AuthContext";
-
-const ROLES: {
-  title: string;
-  description: string;
-  icon: React.ComponentProps<typeof Feather>["name"];
-  role: UserRole;
-  route: string;
-  color: string;
-  gradient: [string, string];
-}[] = [
-  {
-    title: "Родитель",
-    description: "Управление профилями детей и кружками",
-    icon: "users",
-    role: "parent",
-    route: "/profile/parent/create-profile",
-    color: "#6C5CE7",
-    gradient: ["#6C5CE7", "#8B7FE8"],
-  },
-  {
-    title: "Ученик",
-    description: "Цели, достижения и поиск интересов",
-    icon: "zap",
-    role: "youth",
-    route: "/profile/youth/create-profile",
-    color: "#3B82F6",
-    gradient: ["#3B82F6", "#60A5FA"],
-  },
-  {
-    title: "Организация",
-    description: "Управление клубами и сотрудниками",
-    icon: "briefcase",
-    role: "org",
-    route: "/profile/organization/create-profile",
-    color: "#10B981",
-    gradient: ["#10B981", "#34D399"],
-  },
-  {
-    title: "Ментор",
-    description: "Планы развития и сопровождение",
-    icon: "user-check",
-    role: "mentor",
-    route: "/profile/mentor/create-profile",
-    color: "#EF4444",
-    gradient: ["#EF4444", "#F87171"],
-  },
-];
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function CompleteProfile() {
   const router = useRouter();
@@ -99,7 +53,9 @@ export default function CompleteProfile() {
       </View>
     );
 
-  const currentRoleInfo = ROLES.find((r) => r.role === selectedRole)!;
+  const currentRoleInfo = AUTH_ROLE_OPTIONS.find(
+    (r) => r.role === selectedRole,
+  )!;
 
   const handleContinue = async () => {
     setIsSubmitting(true);
@@ -162,7 +118,7 @@ export default function CompleteProfile() {
 
             {/* Role cards */}
             <View style={{ gap: 12, marginBottom: 32 }}>
-              {ROLES.map((item, idx) => {
+              {AUTH_ROLE_OPTIONS.map((item, idx) => {
                 const isSelected = selectedRole === item.role;
                 return (
                   <MotiView

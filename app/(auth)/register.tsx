@@ -20,58 +20,12 @@ import {
   type AuthMethod,
 } from "$components/auth/AuthMethodSwitcher";
 import { PressableScale } from "$components/ui/PressableScale";
+import { AUTH_ROLE_OPTIONS } from "$constants/authRoleOptions";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
 import { useAuth, type UserRole } from "$contexts/AuthContext";
 import { useDevSettings } from "$contexts/DevSettingsContext";
 import { formatPhone } from "$lib/formatPhone";
 import { useIsDesktop } from "$lib/useIsDesktop";
-
-const ROLES: {
-  title: string;
-  description: string;
-  icon: React.ComponentProps<typeof Feather>["name"];
-  role: UserRole;
-  route: string;
-  color: string;
-  gradient: [string, string];
-}[] = [
-  {
-    title: "Родитель",
-    description: "Управление профилями детей и кружками",
-    icon: "users",
-    role: "parent",
-    route: "/profile/parent/create-profile",
-    color: "#6C5CE7",
-    gradient: ["#6C5CE7", "#8B7FE8"],
-  },
-  {
-    title: "Ученик",
-    description: "Цели, достижения и поиск интересов",
-    icon: "zap",
-    role: "youth",
-    route: "/profile/youth/create-profile",
-    color: "#3B82F6",
-    gradient: ["#3B82F6", "#60A5FA"],
-  },
-  {
-    title: "Организация",
-    description: "Управление клубами и сотрудниками",
-    icon: "briefcase",
-    role: "org",
-    route: "/profile/organization/create-profile",
-    color: "#10B981",
-    gradient: ["#10B981", "#34D399"],
-  },
-  {
-    title: "Ментор",
-    description: "Планы развития и сопровождение",
-    icon: "user-check",
-    role: "mentor",
-    route: "/profile/mentor/create-profile",
-    color: "#EF4444",
-    gradient: ["#EF4444", "#F87171"],
-  },
-];
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -234,7 +188,7 @@ export default function RegisterScreen() {
     return "Создать аккаунт";
   };
 
-  const currentRoleInfo = ROLES.find((r) => r.role === selectedRole);
+  const currentRoleInfo = AUTH_ROLE_OPTIONS.find((r) => r.role === selectedRole);
 
   return (
     <KeyboardAvoidingView
@@ -392,7 +346,7 @@ export default function RegisterScreen() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ type: "timing", duration: 200, delay: 100 }}
                 >
-                  {ROLES.map((item) => {
+                  {AUTH_ROLE_OPTIONS.map((item) => {
                     const isSelected = selectedRole === item.role;
                     return (
                       <PressableScale
