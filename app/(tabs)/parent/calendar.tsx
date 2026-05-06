@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -13,8 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useAuth } from "$contexts/AuthContext";
 import { useParentData } from "$contexts/ParentDataContext";
-import { isUuid } from "$lib/idUtils";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useParentCalendar } from "$hooks/useParentCalendar";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 const MONTHS = [
@@ -32,13 +31,6 @@ const MONTHS = [
   "Декабрь",
 ];
 const WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-
-type CalendarEnrollment = {
-  id: string;
-  club: string | null;
-  group_name: string | null;
-  group_schedule: string | null;
-};
 
 const DAY_ALIASES: Record<number, string[]> = {
   0: ["вс", "воск"],
@@ -84,13 +76,12 @@ export default function ParentCalendar() {
     month: now.getMonth(),
   });
   const [selectedDay, setSelectedDay] = useState(now.getDate());
-  const [enrollments, setEnrollments] = useState<CalendarEnrollment[]>([]);
-  const [loading, setLoading] = useState(true);
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const activeChild =
     childrenProfile.find((child) => child.id === activeChildId) ||
     childrenProfile[0];
+  const { enrollments, loading } = useParentCalendar(user?.id, activeChild);
 
   const days = getCalendarDays(currentDate.year, currentDate.month);
   const selectedDate = useMemo(
@@ -104,47 +95,6 @@ export default function ParentCalendar() {
       ),
     [enrollments, selectedDate],
   );
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadCalendar = async () => {
-      if (
-        !supabase ||
-        !isSupabaseConfigured ||
-        !user?.id ||
-        !activeChild?.name
-      ) {
-        setEnrollments([]);
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      let query = supabase
-        .from("org_applications")
-        .select("id, club, group_name, group_schedule")
-        .eq("parent_user_id", user.id)
-        .in("status", ["activated", "completed"])
-        .order("created_at", { ascending: false });
-
-      if (isUuid(activeChild.id)) {
-        query = query.eq("child_profile_id", activeChild.id);
-      }
-
-      const { data, error } = await query;
-
-      if (cancelled) return;
-      setEnrollments(error || !data ? [] : (data as CalendarEnrollment[]));
-      setLoading(false);
-    };
-
-    loadCalendar();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [activeChild?.id, activeChild?.name, user?.id]);
 
   const shiftMonth = (delta: number) => {
     setCurrentDate((prev) => {

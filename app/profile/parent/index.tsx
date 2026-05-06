@@ -1,33 +1,26 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Modal,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 import { useAuth } from "$contexts/AuthContext";
 import { useParentData } from "$contexts/ParentDataContext";
-import { formatPhone } from "$lib/formatPhone";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useParentProfileController } from "$hooks/useParentProfileController";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-
-function generateQRPin(): string {
-  // Generate a 6-digit PIN (100000-999999)
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
 
 export default function ParentProfile() {
   const router = useRouter();
@@ -43,92 +36,13 @@ export default function ParentProfile() {
     setParentTariff,
     isLoading,
   } = useParentData();
-  const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
-  const [showQRModal, setShowQRModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [enrollments, setEnrollments] = useState<any[]>([]);
-  const [loadingEnrollments, setLoadingEnrollments] = useState(false);
-  const [editForm, setEditForm] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
+  const profileController = useParentProfileController({
+    user,
+    parentProfile,
+    children,
+    updateParentProfile,
+    updateChild,
   });
-
-  const selectedChild =
-    children.find((c) => c.id === selectedChildId) || children[0];
-
-  useEffect(() => {
-    if (parentProfile) {
-      setEditForm({
-        firstName: parentProfile.firstName || "",
-        lastName: parentProfile.lastName || "",
-        phone: parentProfile.phone || user?.phone || "",
-      });
-    }
-  }, [parentProfile]);
-
-  useEffect(() => {
-    if (children.length > 0 && !selectedChildId) {
-      setSelectedChildId(children[0].id);
-    }
-  }, [children]);
-
-  useEffect(() => {
-    if (selectedChild) {
-      fetchEnrollments();
-    }
-  }, [selectedChild?.id, user?.id]);
-
-  const fetchEnrollments = async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) return;
-    setLoadingEnrollments(true);
-    try {
-      const { data, error } = await supabase
-        .from("student_enrollment_requests")
-        .select(
-          `
-          id,
-          course_title,
-          org_name,
-          status,
-          created_at
-        `,
-        )
-        .eq("parent_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (!error && data) {
-        setEnrollments(data);
-      } else if (error) {
-        console.error("Error fetching enrollments:", error.message);
-        setEnrollments([]);
-      }
-    } catch (e) {
-      console.error("Error fetching enrollments:", e);
-      setEnrollments([]);
-    } finally {
-      setLoadingEnrollments(false);
-    }
-  };
-
-  const handleUpdateProfile = async () => {
-    await updateParentProfile(editForm);
-    setShowEditModal(false);
-    Alert.alert("Успех", "Профиль обновлен");
-  };
-
-  const handleGeneratePin = async () => {
-    if (!selectedChild) return;
-
-    const newPin = generateQRPin();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
-
-    await updateChild(selectedChild.id, {
-      qrPin: newPin,
-      qrPinExpiresAt: expiresAt.toISOString(),
-      qrPinOneTimeUse: false,
-    });
-  };
 
   const handleToggleTariff = () => {
     if (parentProfile?.tariff === "pro") {
@@ -240,7 +154,7 @@ export default function ParentProfile() {
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() => setShowEditModal(true)}
+                onPress={() => profileController.setShowEditModal(true)}
                 style={styles.editBtnSmall}
               >
                 <Feather
@@ -302,11 +216,14 @@ export default function ParentProfile() {
                 }}
               >
                 {children.map((child) => {
-                  const isSelected = selectedChildId === child.id;
+                  const isSelected =
+                    profileController.selectedChildId === child.id;
                   return (
                     <TouchableOpacity
                       key={child.id}
-                      onPress={() => setSelectedChildId(child.id)}
+                      onPress={() =>
+                        profileController.setSelectedChildId(child.id)
+                      }
                       activeOpacity={0.8}
                       style={[
                         styles.childSelector,
@@ -383,23 +300,28 @@ export default function ParentProfile() {
           </View>
 
           {/* QR Section - Only show if child profile exists */}
-          {selectedChild && selectedChild.name && (
+          {profileController.selectedChild &&
+            profileController.selectedChild.name && (
             <View style={styles.qrRow}>
               <View
                 style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
               >
                 <View style={styles.smallAvatar}>
                   <Text style={{ fontSize: 20 }}>
-                    {selectedChild?.ageCategory === "child" ? "👦" : "🧑"}
+                    {profileController.selectedChild?.ageCategory === "child"
+                      ? "👦"
+                      : "🧑"}
                   </Text>
                 </View>
                 <View style={{ marginLeft: 12 }}>
-                  <Text style={styles.qrTitle}>{selectedChild?.name}</Text>
+                  <Text style={styles.qrTitle}>
+                    {profileController.selectedChild?.name}
+                  </Text>
                   <Text style={styles.qrSubtitle}>QR-код для отметки</Text>
                 </View>
               </View>
               <TouchableOpacity
-                onPress={() => setShowQRModal(true)}
+                onPress={() => profileController.setShowQRModal(true)}
                 style={styles.qrBtn}
               >
                 <Feather name="maximize" size={20} color="white" />
@@ -408,15 +330,15 @@ export default function ParentProfile() {
           )}
 
           {/* Assessment & Reports Section */}
-          {selectedChild && (
+          {profileController.selectedChild && (
             <View style={{ marginTop: 32 }}>
               <Text style={styles.sectionTitle}>
-                Отчеты и аналитика ({selectedChild?.name})
+                Отчеты и аналитика ({profileController.selectedChild?.name})
               </Text>
               <TouchableOpacity
                 onPress={() =>
                   router.push(
-                    `/(tabs)/parent/child/${selectedChild?.id}` as any,
+                    `/(tabs)/parent/child/${profileController.selectedChild?.id}` as any,
                   )
                 }
                 style={styles.reportCard}
@@ -442,10 +364,10 @@ export default function ParentProfile() {
           {/* Clubs List */}
           <View style={{ marginTop: 32 }}>
             <Text style={styles.sectionTitle}>Кружки и секции</Text>
-            {loadingEnrollments ? (
+            {profileController.loadingEnrollments ? (
               <ActivityIndicator size="small" color={COLORS.primary} />
-            ) : enrollments.length > 0 ? (
-              enrollments.map((enr) => (
+            ) : profileController.enrollments.length > 0 ? (
+              profileController.enrollments.map((enr) => (
                 <View key={enr.id} style={styles.clubCard}>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.clubName}>
@@ -500,17 +422,17 @@ export default function ParentProfile() {
 
       {/* Edit Profile Modal */}
       <Modal
-        visible={showEditModal}
+        visible={profileController.showEditModal}
         transparent
         animationType={isDesktop ? "fade" : "slide"}
-        onRequestClose={() => setShowEditModal(false)}
+        onRequestClose={() => profileController.setShowEditModal(false)}
       >
         <Pressable
           style={[
             styles.editModalOverlay,
             !isDesktop && styles.editModalOverlayMobile,
           ]}
-          onPress={() => setShowEditModal(false)}
+          onPress={() => profileController.setShowEditModal(false)}
         >
           <Pressable
             style={[
@@ -521,7 +443,9 @@ export default function ParentProfile() {
           >
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Редактировать профиль</Text>
-              <TouchableOpacity onPress={() => setShowEditModal(false)}>
+              <TouchableOpacity
+                onPress={() => profileController.setShowEditModal(false)}
+              >
                 <Feather name="x" size={24} color={COLORS.foreground} />
               </TouchableOpacity>
             </View>
@@ -531,9 +455,9 @@ export default function ParentProfile() {
                 <Text style={styles.inputLabel}>ИМЯ</Text>
                 <TextInput
                   style={styles.modalInput}
-                  value={editForm.firstName}
+                  value={profileController.editForm.firstName}
                   onChangeText={(v) =>
-                    setEditForm({ ...editForm, firstName: v })
+                    profileController.updateEditFormField("firstName", v)
                   }
                   placeholder="Напр. Иван"
                 />
@@ -542,9 +466,9 @@ export default function ParentProfile() {
                 <Text style={styles.inputLabel}>ФАМИЛИЯ</Text>
                 <TextInput
                   style={styles.modalInput}
-                  value={editForm.lastName}
+                  value={profileController.editForm.lastName}
                   onChangeText={(v) =>
-                    setEditForm({ ...editForm, lastName: v })
+                    profileController.updateEditFormField("lastName", v)
                   }
                   placeholder="Напр. Иванов"
                 />
@@ -553,9 +477,9 @@ export default function ParentProfile() {
                 <Text style={styles.inputLabel}>НОМЕР ТЕЛЕФОНА</Text>
                 <TextInput
                   style={styles.modalInput}
-                  value={editForm.phone}
+                  value={profileController.editForm.phone}
                   onChangeText={(v) =>
-                    setEditForm({ ...editForm, phone: formatPhone(v) })
+                    profileController.updateEditFormField("phone", v)
                   }
                   keyboardType="phone-pad"
                   placeholder="+7 777 777 7777"
@@ -564,7 +488,7 @@ export default function ParentProfile() {
               </View>
 
               <TouchableOpacity
-                onPress={handleUpdateProfile}
+                onPress={profileController.handleUpdateProfile}
                 style={styles.saveProfileBtn}
               >
                 <Text
@@ -579,7 +503,11 @@ export default function ParentProfile() {
       </Modal>
 
       {/* QR Modal */}
-      <Modal visible={showQRModal} transparent animationType="fade">
+      <Modal
+        visible={profileController.showQRModal}
+        transparent
+        animationType="fade"
+      >
         <View style={styles.modalOverlay}>
           <View
             style={[
@@ -589,19 +517,23 @@ export default function ParentProfile() {
           >
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Код для входа</Text>
-              <TouchableOpacity onPress={() => setShowQRModal(false)}>
+              <TouchableOpacity
+                onPress={() => profileController.setShowQRModal(false)}
+              >
                 <Feather name="x" size={24} color="#999" />
               </TouchableOpacity>
             </View>
 
             <View style={{ alignItems: "center", width: "100%" }}>
-              <Text style={styles.qrModalChildName}>{selectedChild?.name}</Text>
+              <Text style={styles.qrModalChildName}>
+                {profileController.selectedChild?.name}
+              </Text>
 
-              {selectedChild?.qrPin ? (
+              {profileController.selectedChild?.qrPin ? (
                 <>
                   <View style={styles.qrOuterWrapper}>
                     <QRCode
-                      value={selectedChild.qrPin}
+                      value={profileController.selectedChild.qrPin}
                       size={isDesktop ? 160 : 200}
                       color="#1A1A1A"
                     />
@@ -609,7 +541,9 @@ export default function ParentProfile() {
 
                   <View style={styles.pinDisplay}>
                     <Text style={styles.pinLabel}>Или введите код:</Text>
-                    <Text style={styles.pinNumber}>{selectedChild.qrPin}</Text>
+                    <Text style={styles.pinNumber}>
+                      {profileController.selectedChild.qrPin}
+                    </Text>
                   </View>
 
                   <Text style={styles.qrModalHint}>
@@ -617,7 +551,7 @@ export default function ParentProfile() {
                   </Text>
 
                   <TouchableOpacity
-                    onPress={handleGeneratePin}
+                    onPress={profileController.handleGeneratePin}
                     style={styles.regenerateBtn}
                   >
                     <Feather name="refresh-cw" size={16} color="#6C5CE7" />
@@ -639,7 +573,7 @@ export default function ParentProfile() {
                   </View>
 
                   <TouchableOpacity
-                    onPress={handleGeneratePin}
+                    onPress={profileController.handleGeneratePin}
                     style={styles.generatePinBtn}
                   >
                     <Feather name="grid" size={18} color="white" />

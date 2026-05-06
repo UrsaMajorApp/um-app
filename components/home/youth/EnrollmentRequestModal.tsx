@@ -1,85 +1,33 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
 import {
-  Alert,
   Modal,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { COLORS, SHADOWS } from "$constants/theme";
-import { courseGradient } from "$hooks/usePublicData";
+import { courseGradient, type PublicCourse } from "$hooks/usePublicData";
 import { formatKZT } from "$lib/formatCurrency";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
 
 type EnrollmentRequestModalProps = {
   visible: boolean;
-  selectedCourse: any;
+  selectedCourse: PublicCourse | null;
   enrollmentRequested: string[];
-  activeChild: any;
-  user: any;
   onClose: () => void;
-  onEnrollmentRequested: (courseId: string) => void;
+  onRequestEnrollment: () => void;
 };
 
 export function EnrollmentRequestModal({
   visible,
   selectedCourse,
   enrollmentRequested,
-  activeChild,
-  user,
   onClose,
-  onEnrollmentRequested,
+  onRequestEnrollment,
 }: EnrollmentRequestModalProps) {
   const isRequested = selectedCourse
     ? enrollmentRequested.includes(selectedCourse.id)
     : false;
-
-  const handleRequest = async () => {
-    if (!selectedCourse) return;
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
-      Alert.alert("Ошибка", "Не удалось отправить запрос");
-      return;
-    }
-
-    try {
-      const parentId =
-        activeChild?.parentId && activeChild.parentId !== "pending"
-          ? activeChild.parentId
-          : null;
-
-      const { error } = await supabase
-        .from("student_enrollment_requests")
-        .insert({
-          student_id: user.id,
-          student_name:
-            user.firstName + (user.lastName ? ` ${user.lastName}` : ""),
-          parent_id: parentId,
-          course_id: selectedCourse.id,
-          course_title: selectedCourse.title,
-          org_id: selectedCourse.org_id,
-          org_name: selectedCourse.org_name,
-          status: "pending",
-          notification_sent: false,
-        });
-
-      if (error) {
-        Alert.alert("Ошибка", error.message);
-        return;
-      }
-
-      onEnrollmentRequested(selectedCourse.id);
-      onClose();
-      Alert.alert(
-        "Запрос отправлен!",
-        "Родитель получит уведомление и сможет подтвердить запись",
-        [{ text: "OK" }],
-      );
-    } catch (error: any) {
-      Alert.alert("Ошибка", error?.message || "Не удалось отправить запрос");
-    }
-  };
 
   return (
     <Modal
@@ -274,7 +222,7 @@ export function EnrollmentRequestModal({
               </View>
 
               <TouchableOpacity
-                onPress={handleRequest}
+                onPress={onRequestEnrollment}
                 disabled={isRequested}
                 style={{
                   backgroundColor: isRequested ? "#E5E7EB" : COLORS.primary,

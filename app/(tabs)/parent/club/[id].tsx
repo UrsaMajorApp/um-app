@@ -1,10 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Platform,
   ScrollView,
   Text,
@@ -16,13 +14,8 @@ import { LEVEL_LABELS } from "$constants/courseOptions";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useAuth } from "$contexts/AuthContext";
 import { useParentData } from "$contexts/ParentDataContext";
-import {
-  applyToCourse,
-  applyToTrialLesson,
-  checkEnrollment,
-  courseGradient,
-  usePublicCourseById,
-} from "$hooks/usePublicData";
+import { courseGradient, usePublicCourseById } from "$hooks/usePublicData";
+import { useParentCourseEnrollment } from "$hooks/useParentCourseEnrollment";
 import { formatKZT } from "$lib/formatCurrency";
 import { EnrollmentChoiceModal } from "$components/parent/club/EnrollmentChoiceModal";
 import { FullCourseBookingModal } from "$components/parent/club/FullCourseBookingModal";
@@ -37,124 +30,16 @@ export default function ParentClubDetails() {
 
   const { course, groups, reviews, trialSlots, loading } =
     usePublicCourseById(id);
-  const [gradient] = useState<[string, string]>(courseGradient(0));
+  const gradient = courseGradient(0);
+  const enrollment = useParentCourseEnrollment({
+    course,
+    groups,
+    trialSlots,
+    activeChild,
+    user,
+  });
 
-  const [enrolled, setEnrolled] = useState(false);
-  const [checkingEnrollment, setCheckingEnrollment] = useState(true);
-  const [showEnrollmentChoice, setShowEnrollmentChoice] = useState(false);
-  const [enrollmentType, setEnrollmentType] = useState<"trial" | "full" | null>(
-    null,
-  );
-  const [showBookingModal, setShowBookingModal] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
-  const [applying, setApplying] = useState(false);
-
-  // Check if already enrolled when course and child are loaded
-  React.useEffect(() => {
-    async function checkStatus() {
-      if (!course || !activeChild) {
-        setCheckingEnrollment(false);
-        return;
-      }
-      const result = await checkEnrollment({
-        childProfileId: activeChild.id,
-        childName: activeChild.name,
-        courseTitle: course.title,
-        parentUserId: user?.id,
-      });
-      setEnrolled(result.enrolled);
-      setCheckingEnrollment(false);
-    }
-    checkStatus();
-  }, [course?.title, activeChild?.id, activeChild?.name, user?.id]);
-
-  const handleConfirmBooking = async () => {
-    if (!course || !activeChild) return;
-    const selectedGroup = groups.find((group) => group.id === selectedGroupId);
-    setApplying(true);
-    const result = await applyToCourse({
-      orgId: course.org_id,
-      courseTitle: course.title,
-      childProfileId: activeChild.id,
-      childName: activeChild.name,
-      childAge: activeChild.age ?? null,
-      parentUserId: user?.id,
-      parentName: user
-        ? `${user.firstName} ${user.lastName}`.trim()
-        : undefined,
-      groupId: selectedGroup?.id ?? null,
-      groupName: selectedGroup?.name ?? null,
-      groupSchedule: selectedGroup?.schedule ?? null,
-    });
-    setApplying(false);
-    if (result.error) {
-      Alert.alert("Ошибка", result.error);
-      return;
-    }
-    setEnrolled(true);
-    setShowBookingModal(false);
-  };
-
-  const handleCloseEnrollmentChoice = () => {
-    setShowEnrollmentChoice(false);
-    setEnrollmentType(null);
-    setSelectedTimeSlot(null);
-  };
-
-  const handleSelectFullCourse = () => {
-    setEnrollmentType("full");
-    setShowEnrollmentChoice(false);
-    setShowBookingModal(true);
-  };
-
-  const handleCloseBookingModal = () => {
-    setShowBookingModal(false);
-    setEnrollmentType(null);
-  };
-
-  const handleConfirmTrialLesson = async () => {
-    if (!course || !activeChild || !selectedTimeSlot) return;
-    setApplying(true);
-
-    const selectedSlot = trialSlots.find((slot) => slot.id === selectedTimeSlot);
-    if (!selectedSlot) {
-      setApplying(false);
-      return;
-    }
-
-    const day = selectedSlot.day_label;
-    const time = selectedSlot.time_label;
-
-    const result = await applyToTrialLesson({
-      childId: activeChild.id,
-      childName: activeChild.name,
-      childAge: activeChild.age ?? null,
-      parentId: user?.id,
-      parentName: user ? `${user.firstName} ${user.lastName}`.trim() : undefined,
-      orgId: course.org_id,
-      courseId: course.id,
-      courseTitle: course.title,
-      requestedSlots: trialSlots.map((slot) => ({
-        day: slot.day_label,
-        time: slot.time_label,
-      })),
-      selectedSlot: { day, time },
-    });
-
-    setApplying(false);
-    if (result.error) {
-      Alert.alert("Ошибка", result.error);
-      return;
-    }
-    setEnrolled(true);
-    setShowEnrollmentChoice(false);
-    setEnrollmentType(null);
-    setSelectedTimeSlot(null);
-    Alert.alert("Успешно!", `Пробный урок забронирован на ${day} в ${time}`);
-  };
-
-  if (loading || checkingEnrollment) {
+  if (loading || enrollment.checkingEnrollment) {
     return (
       <View
         style={{
@@ -590,7 +475,7 @@ export default function ParentClubDetails() {
             {formatKZT(course.price)}/мес
           </Text>
         </View>
-        {enrolled ? (
+        {enrollment.enrolled ? (
           <View
             style={{
               backgroundColor: "#22C55E",
@@ -609,7 +494,7 @@ export default function ParentClubDetails() {
           </View>
         ) : (
           <TouchableOpacity
-            onPress={() => setShowEnrollmentChoice(true)}
+            onPress={enrollment.openEnrollmentChoice}
             style={{
               backgroundColor: COLORS.primary,
               paddingHorizontal: 28,
@@ -625,33 +510,30 @@ export default function ParentClubDetails() {
       </View>
 
       <EnrollmentChoiceModal
-        visible={showEnrollmentChoice}
+        visible={enrollment.showEnrollmentChoice}
         course={course}
         activeChild={activeChild}
         trialSlots={trialSlots}
-        enrollmentType={enrollmentType}
-        selectedTimeSlot={selectedTimeSlot}
-        applying={applying}
-        onClose={handleCloseEnrollmentChoice}
-        onSelectTrial={() => setEnrollmentType("trial")}
-        onSelectFullCourse={handleSelectFullCourse}
-        onBackFromTrial={() => {
-          setEnrollmentType(null);
-          setSelectedTimeSlot(null);
-        }}
-        onSelectTimeSlot={setSelectedTimeSlot}
-        onConfirmTrial={handleConfirmTrialLesson}
+        enrollmentType={enrollment.enrollmentType}
+        selectedTimeSlot={enrollment.selectedTimeSlot}
+        applying={enrollment.applying}
+        onClose={enrollment.closeEnrollmentChoice}
+        onSelectTrial={enrollment.selectTrial}
+        onSelectFullCourse={enrollment.selectFullCourse}
+        onBackFromTrial={enrollment.backFromTrial}
+        onSelectTimeSlot={enrollment.setSelectedTimeSlot}
+        onConfirmTrial={enrollment.confirmTrialLesson}
       />
 
       <FullCourseBookingModal
-        visible={showBookingModal}
+        visible={enrollment.showBookingModal}
         activeChild={activeChild}
         groups={groups}
-        selectedGroupId={selectedGroupId}
-        applying={applying}
-        onClose={handleCloseBookingModal}
-        onSelectGroup={setSelectedGroupId}
-        onConfirm={handleConfirmBooking}
+        selectedGroupId={enrollment.selectedGroupId}
+        applying={enrollment.applying}
+        onClose={enrollment.closeBookingModal}
+        onSelectGroup={enrollment.setSelectedGroupId}
+        onConfirm={enrollment.confirmBooking}
       />
     </View>
   );

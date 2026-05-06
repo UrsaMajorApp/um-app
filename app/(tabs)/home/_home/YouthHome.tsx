@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Platform,
   Pressable,
@@ -29,7 +29,7 @@ import {
   useStudentTasks,
   useYouthAchievements,
 } from "$hooks/useStudentData";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useYouthEnrollmentRequests } from "$hooks/useYouthEnrollmentRequests";
 
 export default function YouthHome() {
   const router = useRouter();
@@ -78,36 +78,7 @@ export default function YouthHome() {
   const isIndependent = devYouthAge >= 14; // "Подросток сам принимает решения"
   const isPro = parentProfile?.tariff === "pro"; // PRO тариф
   const [passVisible, setPassVisible] = useState(false);
-  const [showEnrollModal, setShowEnrollModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
-  const [enrollmentRequested, setEnrollmentRequested] = useState<string[]>([]);
-
-  // Load existing enrollment requests
-  React.useEffect(() => {
-    if (user?.id) {
-      loadEnrollmentRequests();
-    }
-  }, [user?.id]);
-
-  const loadEnrollmentRequests = async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from("student_enrollment_requests")
-        .select("course_id")
-        .eq("student_id", user.id)
-        .eq("status", "pending");
-
-      if (!error && data) {
-        setEnrollmentRequested(data.map((r) => r.course_id));
-      }
-    } catch (error) {
-      console.error("Error loading enrollment requests:", error);
-    }
-  };
+  const enrollmentRequests = useYouthEnrollmentRequests({ user, activeChild });
 
   // QR payload: stable string per user
   const qrValue = `um:pass:${user?.id ?? "guest"}:${user?.firstName ?? ""}`;
@@ -772,15 +743,15 @@ export default function YouthHome() {
               style={{ marginHorizontal: -4 }}
             >
               {courses.slice(0, 4).map((course, idx) => {
-                const isRequested = enrollmentRequested.includes(course.id);
+                const isRequested =
+                  enrollmentRequests.enrollmentRequested.includes(course.id);
                 const gradient = courseGradient(idx);
                 return (
                   <TouchableOpacity
                     key={course.id}
-                    onPress={() => {
-                      setSelectedCourse(course);
-                      setShowEnrollModal(true);
-                    }}
+                    onPress={() =>
+                      enrollmentRequests.openEnrollmentModal(course)
+                    }
                     style={{
                       width: 180,
                       marginRight: 14,
@@ -877,15 +848,11 @@ export default function YouthHome() {
       />
 
       <EnrollmentRequestModal
-        visible={showEnrollModal}
-        selectedCourse={selectedCourse}
-        enrollmentRequested={enrollmentRequested}
-        activeChild={activeChild}
-        user={user}
-        onClose={() => setShowEnrollModal(false)}
-        onEnrollmentRequested={(courseId) =>
-          setEnrollmentRequested((prev) => [...prev, courseId])
-        }
+        visible={enrollmentRequests.showEnrollModal}
+        selectedCourse={enrollmentRequests.selectedCourse}
+        enrollmentRequested={enrollmentRequests.enrollmentRequested}
+        onClose={enrollmentRequests.closeEnrollmentModal}
+        onRequestEnrollment={enrollmentRequests.requestSelectedCourse}
       />
     </View>
   );

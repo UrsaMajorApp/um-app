@@ -1,30 +1,22 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-    COLORS,
-    SHADOWS
-} from "$constants/theme";
+import { COLORS, SHADOWS } from "$constants/theme";
 import { useTeacherGroup } from "$hooks/usePlatformData";
+import { useTeacherAttendanceEditor } from "$hooks/useTeacherAttendanceEditor";
+import { formatDateKey } from "$lib/date";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-
-function formatDateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 const SCHEDULE_TOKENS = [
   ["Вс", "Воскресенье"],
@@ -52,22 +44,10 @@ export default function TeacherGroupDetail() {
     loading,
     saveAttendance,
   } = useTeacherGroup(id as string, selectedDateKey);
-  const [attendance, setAttendance] = useState<
-    Record<string, "present" | "absent" | null>
-  >({});
-  const [comments, setComments] = useState<Record<string, string>>({});
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    const nextAttendance: Record<string, "present" | "absent" | null> = {};
-    const nextComments: Record<string, string> = {};
-    for (const entry of savedAttendance) {
-      nextAttendance[entry.student_id] = entry.status;
-      if (entry.comment) nextComments[entry.student_id] = entry.comment;
-    }
-    setAttendance(nextAttendance);
-    setComments(nextComments);
-  }, [savedAttendance]);
+  const attendanceEditor = useTeacherAttendanceEditor(
+    savedAttendance,
+    saveAttendance,
+  );
 
   const daysInMonth = (date: Date) =>
     new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -90,26 +70,10 @@ export default function TeacherGroupDetail() {
     );
   };
 
-  const toggleStatus = (studentId: string, status: "present" | "absent") => {
-    setAttendance((prev) => ({
-      ...prev,
-      [studentId]: prev[studentId] === status ? null : status,
-    }));
-  };
-
   const saveReport = async () => {
-    setSaving(true);
-    const entries = Object.entries(attendance)
-      .filter(
-        (entry): entry is [string, "present" | "absent"] => entry[1] !== null,
-      )
-      .map(([studentId, status]) => ({
-        studentId,
-        status,
-        comment: comments[studentId] ?? null,
-      }));
-    const result = await saveAttendance(entries);
-    setSaving(false);
+    const result = await attendanceEditor.submitAttendance({
+      includeComments: true,
+    });
     if (result.error) {
       Alert.alert("Ошибка", result.error);
       return;
@@ -249,14 +213,14 @@ export default function TeacherGroupDetail() {
                   })}
                 </Text>
               </View>
-              {Object.keys(attendance).length > 0 && (
+              {attendanceEditor.hasAttendanceSelection && (
                 <TouchableOpacity
                   onPress={saveReport}
-                  disabled={saving}
+                  disabled={attendanceEditor.saving}
                   style={styles.saveActionBtn}
                 >
                   <Text style={styles.saveActionText}>
-                    {saving ? "..." : "Сохранить"}
+                    {attendanceEditor.saving ? "..." : "Сохранить"}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -299,10 +263,12 @@ export default function TeacherGroupDetail() {
 
                   <View style={styles.actionRow}>
                     <TouchableOpacity
-                      onPress={() => toggleStatus(student.id, "present")}
+                      onPress={() =>
+                        attendanceEditor.toggleStatus(student.id, "present")
+                      }
                       style={[
                         styles.statusBtn,
-                        attendance[student.id] === "present" &&
+                        attendanceEditor.attendance[student.id] === "present" &&
                           styles.statusBtnPresent,
                       ]}
                     >
@@ -310,7 +276,7 @@ export default function TeacherGroupDetail() {
                         name="check"
                         size={16}
                         color={
-                          attendance[student.id] === "present"
+                          attendanceEditor.attendance[student.id] === "present"
                             ? "white"
                             : "#16A34A"
                         }
@@ -318,7 +284,8 @@ export default function TeacherGroupDetail() {
                       <Text
                         style={[
                           styles.statusBtnText,
-                          attendance[student.id] === "present" &&
+                          attendanceEditor.attendance[student.id] ===
+                            "present" &&
                             styles.statusBtnTextActive,
                         ]}
                       >
@@ -327,10 +294,12 @@ export default function TeacherGroupDetail() {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                      onPress={() => toggleStatus(student.id, "absent")}
+                      onPress={() =>
+                        attendanceEditor.toggleStatus(student.id, "absent")
+                      }
                       style={[
                         styles.statusBtn,
-                        attendance[student.id] === "absent" &&
+                        attendanceEditor.attendance[student.id] === "absent" &&
                           styles.statusBtnAbsent,
                       ]}
                     >
@@ -338,7 +307,7 @@ export default function TeacherGroupDetail() {
                         name="x"
                         size={16}
                         color={
-                          attendance[student.id] === "absent"
+                          attendanceEditor.attendance[student.id] === "absent"
                             ? "white"
                             : "#EF4444"
                         }
@@ -346,7 +315,8 @@ export default function TeacherGroupDetail() {
                       <Text
                         style={[
                           styles.statusBtnText,
-                          attendance[student.id] === "absent" &&
+                          attendanceEditor.attendance[student.id] ===
+                            "absent" &&
                             styles.statusBtnTextActive,
                         ]}
                       >
@@ -360,9 +330,9 @@ export default function TeacherGroupDetail() {
                     placeholder="Комментарий к занятию..."
                     multiline
                     numberOfLines={2}
-                    value={comments[student.id]}
+                    value={attendanceEditor.comments[student.id]}
                     onChangeText={(v) =>
-                      setComments({ ...comments, [student.id]: v })
+                      attendanceEditor.setStudentComment(student.id, v)
                     }
                   />
                 </View>
@@ -374,7 +344,7 @@ export default function TeacherGroupDetail() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={saveReport}
-            disabled={saving}
+            disabled={attendanceEditor.saving}
             style={styles.mainSaveBtn}
           >
             <LinearGradient
@@ -383,7 +353,7 @@ export default function TeacherGroupDetail() {
               end={{ x: 1, y: 0 }}
               style={styles.mainSaveBtnGradient}
             >
-              {saving ? (
+              {attendanceEditor.saving ? (
                 <Text style={styles.mainSaveBtnText}>Сохранение...</Text>
               ) : (
                 <>

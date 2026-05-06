@@ -1,10 +1,8 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
-import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Platform,
   Pressable,
@@ -16,172 +14,26 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import {
+  type MentorTrialRequest,
+  useMentorTrialRequests,
+} from "$hooks/useMentorTrialRequests";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-
-type TabType = "requests" | "archive";
-
-interface TrialRequest {
-  id: string;
-  child_name: string;
-  child_age?: number;
-  parent_name?: string;
-  course_title: string;
-  requested_slots: Array<{ day: string; time: string }>;
-  confirmed_slot?: { day: string; time: string };
-  status: string;
-  outcome?: string;
-  created_at: string;
-}
 
 export default function MentorSessionsScreen() {
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
   const { user } = useAuth();
-
-  const [activeTab, setActiveTab] = useState<TabType>("requests");
-  const [requests, setRequests] = useState<TrialRequest[]>([]);
-  const [archivedRequests, setArchivedRequests] = useState<TrialRequest[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>(
-    {},
-  );
-
-  // Fetch trial lesson requests from Supabase
-  useEffect(() => {
-    fetchRequests();
-  }, [user?.id]);
-
-  const fetchRequests = async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // Fetch pending requests
-      const { data: pendingData, error: pendingError } = await supabase
-        .from("trial_lesson_requests")
-        .select("*")
-        .eq("mentor_id", user.id)
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
-
-      if (!pendingError && pendingData) {
-        setRequests(pendingData as TrialRequest[]);
-      }
-
-      // Fetch archived (completed/declined) requests
-      const { data: archivedData, error: archivedError } = await supabase
-        .from("trial_lesson_requests")
-        .select("*")
-        .eq("mentor_id", user.id)
-        .in("status", ["confirmed", "completed", "declined"])
-        .order("created_at", { ascending: false })
-        .limit(20);
-
-      if (!archivedError && archivedData) {
-        setArchivedRequests(archivedData as TrialRequest[]);
-      }
-    } catch (error) {
-      console.error("Error fetching trial requests:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSelectSlot = (requestId: string, slotKey: string) => {
-    setSelectedSlots((prev) => ({
-      ...prev,
-      [requestId]: prev[requestId] === slotKey ? "" : slotKey,
-    }));
-  };
-
-  const handleConfirm = async (requestId: string) => {
-    const slot = selectedSlots[requestId];
-    if (!slot) {
-      Alert.alert(
-        "Выберите время",
-        "Пожалуйста, выберите удобное время для пробного урока",
-      );
-      return;
-    }
-
-    const [day, time] = slot.split("-");
-
-    Alert.alert("Подтвердить пробный урок?", `Время: ${day} в ${time}`, [
-      { text: "Отмена", style: "cancel" },
-      {
-        text: "Подтвердить",
-        onPress: async () => {
-          if (!supabase || !isSupabaseConfigured) return;
-
-          const { error } = await supabase
-            .from("trial_lesson_requests")
-            .update({
-              status: "confirmed",
-              confirmed_slot: { day, time },
-              confirmed_at: new Date().toISOString(),
-            })
-            .eq("id", requestId);
-
-          if (error) {
-            Alert.alert("Ошибка", error.message);
-            return;
-          }
-
-          // TODO: Send push notification to parent
-
-          setRequests((prev) => prev.filter((r) => r.id !== requestId));
-          Alert.alert(
-            "Успешно!",
-            "Пробный урок подтверждён. Родитель получит уведомление.",
-          );
-          fetchRequests(); // Refresh lists
-        },
-      },
-    ]);
-  };
-
-  const handleDecline = async (requestId: string) => {
-    Alert.alert("Отклонить заявку?", "Родитель получит уведомление об отказе", [
-      { text: "Отмена", style: "cancel" },
-      {
-        text: "Отклонить",
-        style: "destructive",
-        onPress: async () => {
-          if (!supabase || !isSupabaseConfigured) return;
-
-          const { error } = await supabase
-            .from("trial_lesson_requests")
-            .update({
-              status: "declined",
-            })
-            .eq("id", requestId);
-
-          if (error) {
-            Alert.alert("Ошибка", error.message);
-            return;
-          }
-
-          // TODO: Send push notification to parent
-
-          setRequests((prev) => prev.filter((r) => r.id !== requestId));
-          fetchRequests(); // Refresh lists
-        },
-      },
-    ]);
-  };
+  const trialRequests = useMentorTrialRequests(user?.id);
 
   const renderRequest = ({
     item,
     index,
   }: {
-    item: TrialRequest;
+    item: MentorTrialRequest;
     index: number;
   }) => {
-    const selectedSlot = selectedSlots[item.id] || "";
+    const selectedSlot = trialRequests.selectedSlots[item.id] || "";
     return (
       <MotiView
         from={{ opacity: 0, translateY: 20 }}
@@ -233,7 +85,7 @@ export default function MentorSessionsScreen() {
             return (
               <Pressable
                 key={idx}
-                onPress={() => handleSelectSlot(item.id, slotKey)}
+                onPress={() => trialRequests.selectSlot(item.id, slotKey)}
                 style={[styles.slotChip, isSelected && styles.slotChipSelected]}
               >
                 <Text
@@ -261,7 +113,7 @@ export default function MentorSessionsScreen() {
         <View style={styles.actionsRow}>
           <TouchableOpacity
             style={styles.declineBtn}
-            onPress={() => handleDecline(item.id)}
+            onPress={() => trialRequests.declineRequest(item.id)}
           >
             <Feather name="x" size={18} color="#EF4444" />
             <Text style={styles.declineBtnText}>Отклонить</Text>
@@ -271,7 +123,7 @@ export default function MentorSessionsScreen() {
               styles.confirmBtn,
               !selectedSlot && styles.confirmBtnDisabled,
             ]}
-            onPress={() => handleConfirm(item.id)}
+            onPress={() => trialRequests.confirmRequest(item.id)}
             disabled={!selectedSlot}
           >
             <Feather name="check" size={18} color="white" />
@@ -286,7 +138,7 @@ export default function MentorSessionsScreen() {
     item,
     index,
   }: {
-    item: TrialRequest;
+    item: MentorTrialRequest;
     index: number;
   }) => {
     const outcomeConfig = {
@@ -394,31 +246,39 @@ export default function MentorSessionsScreen() {
         {/* Tabs */}
         <View style={styles.tabsContainer}>
           <Pressable
-            onPress={() => setActiveTab("requests")}
-            style={[styles.tab, activeTab === "requests" && styles.tabActive]}
+            onPress={() => trialRequests.setActiveTab("requests")}
+            style={[
+              styles.tab,
+              trialRequests.activeTab === "requests" && styles.tabActive,
+            ]}
           >
             <Text
               style={[
                 styles.tabText,
-                activeTab === "requests" && styles.tabTextActive,
+                trialRequests.activeTab === "requests" && styles.tabTextActive,
               ]}
             >
               Заявки
             </Text>
-            {requests.length > 0 && (
+            {trialRequests.requests.length > 0 && (
               <View style={styles.tabBadge}>
-                <Text style={styles.tabBadgeText}>{requests.length}</Text>
+                <Text style={styles.tabBadgeText}>
+                  {trialRequests.requests.length}
+                </Text>
               </View>
             )}
           </Pressable>
           <Pressable
-            onPress={() => setActiveTab("archive")}
-            style={[styles.tab, activeTab === "archive" && styles.tabActive]}
+            onPress={() => trialRequests.setActiveTab("archive")}
+            style={[
+              styles.tab,
+              trialRequests.activeTab === "archive" && styles.tabActive,
+            ]}
           >
             <Text
               style={[
                 styles.tabText,
-                activeTab === "archive" && styles.tabTextActive,
+                trialRequests.activeTab === "archive" && styles.tabTextActive,
               ]}
             >
               Архив
@@ -427,13 +287,13 @@ export default function MentorSessionsScreen() {
         </View>
       </View>
 
-      {loading ? (
+      {trialRequests.loading ? (
         <View style={{ paddingVertical: 60, alignItems: "center" }}>
           <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
-      ) : activeTab === "requests" ? (
+      ) : trialRequests.activeTab === "requests" ? (
         <FlatList
-          data={requests}
+          data={trialRequests.requests}
           renderItem={renderRequest}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{
@@ -458,7 +318,7 @@ export default function MentorSessionsScreen() {
         />
       ) : (
         <FlatList
-          data={archivedRequests}
+          data={trialRequests.archivedRequests}
           renderItem={renderArchived}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{

@@ -2,7 +2,6 @@ import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MotiView } from "moti";
-import React, { useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -16,16 +15,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
 import { useOrgProfile } from "$hooks/useOrgData";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import {
+  type OrgVerificationDocKey,
+  useOrgVerification,
+} from "$hooks/useOrgVerification";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-
-type DocKey = "bin_doc" | "registration_doc" | "license_doc";
-
-interface DocState {
-  bin_doc: boolean;
-  registration_doc: boolean;
-  license_doc: boolean;
-}
 
 export default function OrgVerificationScreen() {
   const router = useRouter();
@@ -36,25 +30,13 @@ export default function OrgVerificationScreen() {
     status: orgStatus,
     refresh: refreshOrgProfile,
   } = useOrgProfile();
-
-  const [bin, setBin] = useState("");
-  const [docs, setDocs] = useState<DocState>({
-    bin_doc: false,
-    registration_doc: false,
-    license_doc: false,
+  const verification = useOrgVerification({
+    orgId,
+    refreshOrgProfile,
   });
-  const [offerAccepted, setOfferAccepted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-
-  const binValid = /^\d{12}$/.test(bin);
-  const allDocsUploaded =
-    docs.bin_doc && docs.registration_doc && docs.license_doc;
-  const canSubmit = binValid && allDocsUploaded && offerAccepted;
 
   // Already submitted
-  if (orgStatus === "ready_for_review" || submitted) {
+  if (orgStatus === "ready_for_review" || verification.submitted) {
     return (
       <View style={{ flex: 1, backgroundColor: COLORS.background }}>
         <SafeAreaView edges={["top"]}>
@@ -139,59 +121,8 @@ export default function OrgVerificationScreen() {
     );
   }
 
-  const handleDocToggle = (key: DocKey) => {
-    // In production: launch a document picker here
-    setDocs((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const handleSubmit = async () => {
-    setError(null);
-    if (!binValid) {
-      setError("БИН должен содержать ровно 12 цифр.");
-      return;
-    }
-    if (!allDocsUploaded) {
-      setError("Загрузите все три документа.");
-      return;
-    }
-    if (!offerAccepted) {
-      setError("Примите условия публичной оферты.");
-      return;
-    }
-    if (!orgId) {
-      setError("Профиль организации не найден.");
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      if (supabase && isSupabaseConfigured) {
-        const { error: updateErr } = await supabase
-          .from("organizations")
-          .update({
-            bin,
-            // In production these would be real storage URLs:
-            bin_doc_url: "uploaded_bin.pdf",
-            registration_url: "uploaded_registration.pdf",
-            license_url: "uploaded_license.pdf",
-            offer_accepted: true,
-            status: "ready_for_review",
-          })
-          .eq("id", orgId);
-        if (updateErr) {
-          setError(updateErr.message);
-          return;
-        }
-      }
-      await refreshOrgProfile();
-      setSubmitted(true);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const DOC_SLOTS: {
-    key: DocKey;
+    key: OrgVerificationDocKey;
     label: string;
     hint: string;
     icon: string;
@@ -326,8 +257,8 @@ export default function OrgVerificationScreen() {
           </Text>
           <View style={{ position: "relative" }}>
             <TextInput
-              value={bin}
-              onChangeText={(t) => setBin(t.replace(/\D/g, "").slice(0, 12))}
+              value={verification.bin}
+              onChangeText={verification.setFormattedBin}
               placeholder="000000000000"
               placeholderTextColor={COLORS.mutedForeground}
               keyboardType="number-pad"
@@ -337,8 +268,8 @@ export default function OrgVerificationScreen() {
                 borderRadius: 14,
                 borderWidth: 1.5,
                 borderColor:
-                  bin.length > 0
-                    ? binValid
+                  verification.bin.length > 0
+                    ? verification.binValid
                       ? "#10B981"
                       : "#EF4444"
                     : "#E5E7EB",
@@ -360,18 +291,18 @@ export default function OrgVerificationScreen() {
                 justifyContent: "center",
               }}
             >
-              {bin.length > 0 && (
+              {verification.bin.length > 0 && (
                 <Feather
-                  name={binValid ? "check-circle" : "x-circle"}
+                  name={verification.binValid ? "check-circle" : "x-circle"}
                   size={20}
-                  color={binValid ? "#10B981" : "#EF4444"}
+                  color={verification.binValid ? "#10B981" : "#EF4444"}
                 />
               )}
             </View>
           </View>
-          {bin.length > 0 && !binValid && (
+          {verification.bin.length > 0 && !verification.binValid && (
             <Text style={{ fontSize: 11, color: "#EF4444", marginTop: 6 }}>
-              БИН должен содержать ровно 12 цифр ({bin.length}/12)
+              БИН должен содержать ровно 12 цифр ({verification.bin.length}/12)
             </Text>
           )}
         </View>
@@ -398,11 +329,11 @@ export default function OrgVerificationScreen() {
           </Text>
           <View style={{ gap: 12 }}>
             {DOC_SLOTS.map((slot) => {
-              const uploaded = docs[slot.key];
+              const uploaded = verification.docs[slot.key];
               return (
                 <TouchableOpacity
                   key={slot.key}
-                  onPress={() => handleDocToggle(slot.key)}
+                  onPress={() => verification.toggleDoc(slot.key)}
                   activeOpacity={0.8}
                   style={{
                     borderWidth: 2,
@@ -472,7 +403,7 @@ export default function OrgVerificationScreen() {
           }}
         >
           <TouchableOpacity
-            onPress={() => setOfferAccepted(!offerAccepted)}
+            onPress={verification.toggleOfferAccepted}
             activeOpacity={0.8}
             style={{ flexDirection: "row", alignItems: "flex-start", gap: 14 }}
           >
@@ -482,14 +413,18 @@ export default function OrgVerificationScreen() {
                 height: 24,
                 borderRadius: 6,
                 borderWidth: 2,
-                borderColor: offerAccepted ? "#6C5CE7" : "#D1D5DB",
-                backgroundColor: offerAccepted ? "#6C5CE7" : "white",
+                borderColor: verification.offerAccepted
+                  ? "#6C5CE7"
+                  : "#D1D5DB",
+                backgroundColor: verification.offerAccepted
+                  ? "#6C5CE7"
+                  : "white",
                 alignItems: "center",
                 justifyContent: "center",
                 marginTop: 1,
               }}
             >
-              {offerAccepted && (
+              {verification.offerAccepted && (
                 <Feather name="check" size={14} color="white" />
               )}
             </View>
@@ -516,7 +451,7 @@ export default function OrgVerificationScreen() {
           </TouchableOpacity>
         </View>
 
-        {error && (
+        {verification.error && (
           <MotiView
             from={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -537,16 +472,16 @@ export default function OrgVerificationScreen() {
                 textAlign: "center",
               }}
             >
-              {error}
+              {verification.error}
             </Text>
           </MotiView>
         )}
 
         <TouchableOpacity
-          onPress={handleSubmit}
-          disabled={submitting || !canSubmit}
+          onPress={verification.submit}
+          disabled={verification.submitting || !verification.canSubmit}
           style={{
-            opacity: !canSubmit ? 0.5 : 1,
+            opacity: !verification.canSubmit ? 0.5 : 1,
             borderRadius: RADIUS.xl,
             overflow: "hidden",
             ...SHADOWS.md,
@@ -563,7 +498,7 @@ export default function OrgVerificationScreen() {
               gap: 8,
             }}
           >
-            {submitting ? (
+            {verification.submitting ? (
               <ActivityIndicator color="white" size="small" />
             ) : (
               <>

@@ -2,9 +2,7 @@ import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
-import React, { useEffect, useState } from "react";
 import {
-  Alert,
   Modal,
   ScrollView,
   StyleSheet,
@@ -17,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useAuth } from "$contexts/AuthContext";
 import { useMentorStudents } from "$hooks/useMentorData";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useMentorStudentProfile } from "$hooks/useMentorStudentProfile";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorStudentDetailScreen() {
@@ -30,49 +28,24 @@ export default function MentorStudentDetailScreen() {
   const { students } = useMentorStudents();
   const student = students.find((s) => s.id === (id as string)) || students[0];
 
-  // State for editable notes
-  const [notes, setNotes] = useState("");
-  const [isEditingNotes, setIsEditingNotes] = useState(false);
-  const [tempNotes, setTempNotes] = useState(notes);
-
-  // State for monthly report modal
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [reportMonth] = useState(
-    new Date().toLocaleDateString("ru-RU", { month: "long", year: "numeric" }),
-  );
-
-  // Load notes from Supabase
-  useEffect(() => {
-    if (student?.id && user?.id) {
-      loadNotes();
-    }
-  }, [student?.id, user?.id]);
-
-  const loadNotes = async () => {
-    if (!supabase || !isSupabaseConfigured || !student?.id || !user?.id) {
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from("mentor_student_notes")
-        .select("notes")
-        .eq("mentor_id", user.id)
-        .eq("student_id", student.id)
-        .maybeSingle();
-
-      if (!error && data) {
-        setNotes(data.notes || "");
-        setTempNotes(data.notes || "");
-      } else if (!data) {
-        // No notes yet, use default
-        setNotes("");
-        setTempNotes("");
-      }
-    } catch (error) {
-      console.error("Error loading notes:", error);
-    }
+  const skillMap = student?.skills ?? {
+    com: 0,
+    lead: 0,
+    cre: 0,
+    log: 0,
+    dis: 0,
   };
+  const studentSkills = [
+    { label: "Креативность", value: skillMap.cre ?? 0, color: "#6C5CE7" },
+    { label: "Коммуникация", value: skillMap.com ?? 0, color: "#A78BFA" },
+    { label: "Лидерство", value: skillMap.lead ?? 0, color: "#3B82F6" },
+    { label: "Логика", value: skillMap.log ?? 0, color: "#10B981" },
+  ];
+  const studentProfile = useMentorStudentProfile({
+    user,
+    student,
+    reportSkills: studentSkills,
+  });
 
   if (!student) {
     return (
@@ -82,95 +55,6 @@ export default function MentorStudentDetailScreen() {
     );
   }
 
-  const handleSaveNotes = async () => {
-    if (!supabase || !isSupabaseConfigured || !student?.id || !user?.id) {
-      Alert.alert("Ошибка", "Не удалось сохранить заметки");
-      return;
-    }
-
-    try {
-      const { error } = await supabase.from("mentor_student_notes").upsert(
-        {
-          mentor_id: user.id,
-          student_id: student.id,
-          notes: tempNotes,
-          updated_at: new Date().toISOString(),
-        },
-        {
-          onConflict: "mentor_id,student_id",
-        },
-      );
-
-      if (error) {
-        Alert.alert("Ошибка", error.message);
-        return;
-      }
-
-      setNotes(tempNotes);
-      setIsEditingNotes(false);
-      Alert.alert("Сохранено", "Заметки успешно обновлены");
-    } catch (error: any) {
-      Alert.alert("Ошибка", error?.message || "Не удалось сохранить заметки");
-    }
-  };
-
-  const handleGenerateReport = async () => {
-    if (!supabase || !isSupabaseConfigured || !student?.id || !user?.id) {
-      Alert.alert("Ошибка", "Не удалось создать отчёт");
-      return;
-    }
-
-    try {
-      // Get current month in YYYY-MM format
-      const now = new Date();
-      const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-
-      const reportData = {
-        sessions_count: 0,
-        progress_percentage: student.progress,
-        average_rating: null,
-        skills: studentDetails.skills.map((s) => ({
-          label: s.label,
-          value: s.value,
-        })),
-        highlights: notes,
-        areas_for_improvement: "",
-      };
-
-      const { error } = await supabase.from("mentor_monthly_reports").insert({
-        mentor_id: user.id,
-        student_id: student.id,
-        parent_id: null, // TODO: Get parent_id from student profile
-        report_month: monthKey,
-        report_data: reportData,
-        sent_to_parent: true,
-        sent_at: new Date().toISOString(),
-      });
-
-      if (error) {
-        Alert.alert("Ошибка", error.message);
-        return;
-      }
-
-      // TODO: Send push notification to parent
-
-      Alert.alert(
-        "Отчёт создан",
-        `Месячный отчёт за ${reportMonth} отправлен родителю`,
-        [{ text: "OK", onPress: () => setShowReportModal(false) }],
-      );
-    } catch (error: any) {
-      Alert.alert("Ошибка", error?.message || "Не удалось создать отчёт");
-    }
-  };
-
-  const skillMap = student.skills ?? {
-    com: 0,
-    lead: 0,
-    cre: 0,
-    log: 0,
-    dis: 0,
-  };
   const studentDetails = {
     parentName: null,
     parentPhone: null,
@@ -181,12 +65,7 @@ export default function MentorStudentDetailScreen() {
       : "Возраст не указан",
     subjects: [] as string[],
     goals: null,
-    skills: [
-      { label: "Креативность", value: skillMap.cre ?? 0, color: "#6C5CE7" },
-      { label: "Коммуникация", value: skillMap.com ?? 0, color: "#A78BFA" },
-      { label: "Лидерство", value: skillMap.lead ?? 0, color: "#3B82F6" },
-      { label: "Логика", value: skillMap.log ?? 0, color: "#10B981" },
-    ],
+    skills: studentSkills,
     history: [] as Array<{
       id: string;
       date: string;
@@ -386,12 +265,9 @@ export default function MentorStudentDetailScreen() {
               }}
             >
               <Text style={styles.sectionTitle}>Заметки ментора</Text>
-              {!isEditingNotes && (
+              {!studentProfile.isEditingNotes && (
                 <TouchableOpacity
-                  onPress={() => {
-                    setTempNotes(notes);
-                    setIsEditingNotes(true);
-                  }}
+                  onPress={studentProfile.startEditingNotes}
                   style={styles.editNotesBtn}
                 >
                   <Feather name="edit-2" size={14} color="#6C5CE7" />
@@ -399,11 +275,11 @@ export default function MentorStudentDetailScreen() {
                 </TouchableOpacity>
               )}
             </View>
-            {isEditingNotes ? (
+            {studentProfile.isEditingNotes ? (
               <View style={styles.notesEditCard}>
                 <TextInput
-                  value={tempNotes}
-                  onChangeText={setTempNotes}
+                  value={studentProfile.tempNotes}
+                  onChangeText={studentProfile.setTempNotes}
                   multiline
                   style={styles.notesInput}
                   placeholder="Добавьте заметки о ученике..."
@@ -411,13 +287,13 @@ export default function MentorStudentDetailScreen() {
                 />
                 <View style={styles.notesEditActions}>
                   <TouchableOpacity
-                    onPress={() => setIsEditingNotes(false)}
+                    onPress={studentProfile.cancelEditingNotes}
                     style={styles.notesCancelBtn}
                   >
                     <Text style={styles.notesCancelText}>Отмена</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={handleSaveNotes}
+                    onPress={studentProfile.saveNotes}
                     style={styles.notesSaveBtn}
                   >
                     <Feather name="check" size={16} color="white" />
@@ -427,7 +303,7 @@ export default function MentorStudentDetailScreen() {
               </View>
             ) : (
               <View style={styles.notesCard}>
-                <Text style={styles.notesText}>{notes}</Text>
+                <Text style={styles.notesText}>{studentProfile.notes}</Text>
               </View>
             )}
           </View>
@@ -437,7 +313,7 @@ export default function MentorStudentDetailScreen() {
             <Text style={styles.sectionTitle}>Отчётность</Text>
             <TouchableOpacity
               style={styles.reportBtn}
-              onPress={() => setShowReportModal(true)}
+              onPress={() => studentProfile.setShowReportModal(true)}
             >
               <View style={styles.reportBtnIcon}>
                 <Feather name="file-text" size={22} color="#6C5CE7" />
@@ -459,12 +335,18 @@ export default function MentorStudentDetailScreen() {
       </ScrollView>
 
       {/* Monthly Report Modal */}
-      <Modal visible={showReportModal} transparent animationType="slide">
+      <Modal
+        visible={studentProfile.showReportModal}
+        transparent
+        animationType="slide"
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Месячный отчёт</Text>
-              <TouchableOpacity onPress={() => setShowReportModal(false)}>
+              <TouchableOpacity
+                onPress={() => studentProfile.setShowReportModal(false)}
+              >
                 <Feather name="x" size={24} color={COLORS.mutedForeground} />
               </TouchableOpacity>
             </View>
@@ -475,7 +357,9 @@ export default function MentorStudentDetailScreen() {
                 <Text style={styles.reportPreviewTitle}>
                   Отчёт: {student.student_name}
                 </Text>
-                <Text style={styles.reportPreviewMonth}>{reportMonth}</Text>
+                <Text style={styles.reportPreviewMonth}>
+                  {studentProfile.reportMonth}
+                </Text>
               </View>
 
               <View style={styles.reportStats}>
@@ -517,7 +401,7 @@ export default function MentorStudentDetailScreen() {
 
             <TouchableOpacity
               style={styles.generateBtn}
-              onPress={handleGenerateReport}
+              onPress={studentProfile.generateReport}
             >
               <LinearGradient
                 colors={["#6C5CE7", "#A78BFA"]}

@@ -12,17 +12,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useTeacherGroup } from "$hooks/usePlatformData";
+import { useTeacherAttendanceEditor } from "$hooks/useTeacherAttendanceEditor";
+import { formatDateKey } from "$lib/date";
 import {
   getDashboardHorizontalPadding,
   useIsDesktop,
 } from "$lib/useIsDesktop";
-
-function formatDateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 export default function TeacherGroupJournal() {
   const { id } = useLocalSearchParams();
@@ -38,33 +33,13 @@ export default function TeacherGroupJournal() {
     attendance: savedAttendance,
     saveAttendance,
   } = useTeacherGroup(id as string, selectedDateKey);
-  const [attendance, setAttendance] = useState<
-    Record<string, "present" | "absent" | null>
-  >({});
-
-  React.useEffect(() => {
-    const next: Record<string, "present" | "absent" | null> = {};
-    for (const entry of savedAttendance) next[entry.student_id] = entry.status;
-    setAttendance(next);
-  }, [savedAttendance]);
-
-  const toggleAttendance = (
-    studentId: string,
-    status: "present" | "absent",
-  ) => {
-    setAttendance((prev) => ({
-      ...prev,
-      [studentId]: prev[studentId] === status ? null : status,
-    }));
-  };
+  const attendanceEditor = useTeacherAttendanceEditor(
+    savedAttendance,
+    saveAttendance,
+  );
 
   const submitAttendance = async () => {
-    const entries = Object.entries(attendance)
-      .filter(
-        (entry): entry is [string, "present" | "absent"] => entry[1] !== null,
-      )
-      .map(([studentId, status]) => ({ studentId, status }));
-    await saveAttendance(entries);
+    await attendanceEditor.submitAttendance();
   };
 
   return (
@@ -147,8 +122,10 @@ export default function TeacherGroupJournal() {
               </Text>
             )}
             {students.map((student, idx) => {
-              const isPresent = attendance[student.id] === "present";
-              const isAbsent = attendance[student.id] === "absent";
+              const isPresent =
+                attendanceEditor.attendance[student.id] === "present";
+              const isAbsent =
+                attendanceEditor.attendance[student.id] === "absent";
 
               return (
                 <MotiView
@@ -181,7 +158,9 @@ export default function TeacherGroupJournal() {
 
                   <View style={styles.actionsRow}>
                     <TouchableOpacity
-                      onPress={() => toggleAttendance(student.id, "present")}
+                      onPress={() =>
+                        attendanceEditor.toggleStatus(student.id, "present")
+                      }
                       style={[styles.actionBtn, isPresent && styles.btnPresent]}
                     >
                       <Feather
@@ -191,7 +170,9 @@ export default function TeacherGroupJournal() {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => toggleAttendance(student.id, "absent")}
+                      onPress={() =>
+                        attendanceEditor.toggleStatus(student.id, "absent")
+                      }
                       style={[styles.actionBtn, isAbsent && styles.btnAbsent]}
                     >
                       <Feather
