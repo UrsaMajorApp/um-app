@@ -3,9 +3,10 @@
  */
 import { MotiView } from "moti";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
 import type { VibeCard } from "../../../data/diagnosticData1214";
+import SwipeableDecisionCard from "../SwipeableDecisionCard";
 
 interface Props {
   card: VibeCard;
@@ -15,6 +16,21 @@ interface Props {
 }
 
 export default function VibeSwipeCard({ card, index, total, onSwipe }: Props) {
+  const [imageLoadState, setImageLoadState] = React.useState({
+    uri: card.imageUrl,
+    loading: Boolean(card.imageUrl),
+  });
+  const imageSource = React.useMemo(
+    () => (card.imageUrl ? { uri: card.imageUrl } : undefined),
+    [card.imageUrl],
+  );
+  const isImageLoading = Boolean(card.imageUrl) && (
+    imageLoadState.uri !== card.imageUrl || imageLoadState.loading
+  );
+  const handleImageSettled = React.useCallback(() => {
+    setImageLoadState({ uri: card.imageUrl, loading: false });
+  }, [card.imageUrl]);
+
   return (
     <MotiView
       key={card.id}
@@ -24,34 +40,66 @@ export default function VibeSwipeCard({ card, index, total, onSwipe }: Props) {
       transition={{ type: "timing", duration: 300 }}
       style={styles.wrapper}
     >
-      <View style={styles.card}>
-        <View style={styles.header}>
-          <Text style={styles.stepText}>Vibe Check {index + 1}/{total}</Text>
-        </View>
+      <SwipeableDecisionCard
+        cardKey={card.id}
+        dislikeLabel="SKIP"
+        likeLabel="VIBE"
+        onSwipe={onSwipe}
+      >
+        {({ isLeaving, swipe }) => (
+          <>
+            <View style={styles.card}>
+              <View style={styles.header}>
+                <Text style={styles.stepText}>Vibe Check {index + 1}/{total}</Text>
+              </View>
 
-        {/* Image or Pseudo moodboard representation */}
-        {card.imageUrl ? (
-          <Image source={{ uri: card.imageUrl }} style={styles.cardImage} resizeMode="cover" />
-        ) : (
-          <View style={styles.moodboardPlaceholder}>
-            <Text style={styles.moodboardEmoji}>📸</Text>
-            <Text style={styles.moodboardDesc}>{card.moodboardDesc}</Text>
-          </View>
+              {/* Image or Pseudo moodboard representation */}
+              {card.imageUrl ? (
+                <View style={styles.imageFrame}>
+                  <Image
+                    source={imageSource}
+                    style={styles.cardImage}
+                    resizeMode="cover"
+                    onLoadEnd={handleImageSettled}
+                    onError={handleImageSettled}
+                  />
+                  {isImageLoading && (
+                    <View style={styles.imageLoader}>
+                      <ActivityIndicator size="small" color={COLORS.primary} />
+                    </View>
+                  )}
+                </View>
+              ) : (
+                <View style={styles.moodboardPlaceholder}>
+                  <Text style={styles.moodboardEmoji}>📸</Text>
+                  <Text style={styles.moodboardDesc}>{card.moodboardDesc}</Text>
+                </View>
+              )}
+
+              <Text style={styles.cardText}>{card.text}</Text>
+
+              <View style={styles.actions}>
+                <TouchableOpacity
+                  disabled={isLeaving}
+                  onPress={() => swipe(false)}
+                  style={[styles.btn, styles.btnDislike]}
+                >
+                  <Text style={styles.btnEmoji}>🗑️</Text>
+                  <Text style={styles.btnLabelDislike}>Skip</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  disabled={isLeaving}
+                  onPress={() => swipe(true)}
+                  style={[styles.btn, styles.btnLike]}
+                >
+                  <Text style={styles.btnEmoji}>🔥</Text>
+                  <Text style={styles.btnLabelLike}>Vibe</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
         )}
-
-        <Text style={styles.cardText}>{card.text}</Text>
-
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={() => onSwipe(false)} style={[styles.btn, styles.btnDislike]}>
-            <Text style={styles.btnEmoji}>🗑️</Text>
-            <Text style={styles.btnLabelDislike}>Skip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => onSwipe(true)} style={[styles.btn, styles.btnLike]}>
-            <Text style={styles.btnEmoji}>🔥</Text>
-            <Text style={styles.btnLabelLike}>Vibe</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </SwipeableDecisionCard>
     </MotiView>
   );
 }
@@ -71,9 +119,18 @@ const styles = StyleSheet.create({
   },
   moodboardEmoji: { fontSize: 40, marginBottom: 12 },
   moodboardDesc: { fontSize: 14, color: COLORS.mutedForeground, textAlign: "center", fontStyle: "italic" },
-  cardImage: {
+  imageFrame: {
     width: "100%", height: 240, borderRadius: RADIUS.lg,
-    marginBottom: 24, backgroundColor: COLORS.muted
+    marginBottom: 24, backgroundColor: COLORS.muted, overflow: "hidden"
+  },
+  cardImage: {
+    width: "100%", height: "100%"
+  },
+  imageLoader: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.55)"
   },
   cardText: { fontSize: 22, fontWeight: "900", textAlign: "center", marginBottom: 32 },
   actions: { flexDirection: "row", gap: 16, width: "100%" },
