@@ -1,17 +1,18 @@
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
-  Platform,
   ScrollView,
   Text,
-  TextInput,
-  useWindowDimensions,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  FormCard,
+  LabeledTextInput,
+  PrimaryActionButton,
+} from "../../../components/ui/FormControls";
+import { GradientScreenHeader } from "../../../components/ui/GradientScreenHeader";
 import { PressableScale } from "../../../components/ui/PressableScale";
 import {
   COLORS,
@@ -22,10 +23,11 @@ import {
   TYPOGRAPHY,
 } from "../../../constants/theme";
 import { formatPhone } from "../../../lib/formatPhone";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function StaffAddScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
+  const isDesktop = useIsDesktop();
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -35,7 +37,6 @@ export default function StaffAddScreen() {
   const [loading, setLoading] = useState(false);
   const [showCredentials, setShowCredentials] = useState(false);
   const [credentials, setCredentials] = useState({ login: "", password: "" });
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;
@@ -55,54 +56,11 @@ export default function StaffAddScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View
-        style={{
-          backgroundColor: COLORS.primary,
-          borderBottomLeftRadius: RADIUS.xxl,
-          borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
-        }}
-      >
-        <LinearGradient
-          colors={COLORS.gradients.header as any}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <PressableScale
-                  onPress={() => router.back()}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: SPACING.md,
-                  }}
-                  scaleTo={0.88}
-                >
-                  <Feather name="arrow-left" size={20} color="white" />
-                </PressableScale>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xl,
-                    fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
-                  }}
-                >
-                  Добавить учителя
-                </Text>
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Добавить учителя"
+        paddingX={paddingX}
+        onBack={() => router.back()}
+      />
 
       <ScrollView
         contentContainerStyle={{
@@ -168,148 +126,43 @@ export default function StaffAddScreen() {
             </View>
           </View>
 
-          <View
-            style={{
-              ...SHADOWS.strict,
-              backgroundColor: COLORS.white,
-              borderRadius: RADIUS.xxl,
-              padding: SPACING.xl,
-              gap: SPACING.xl,
-              borderWidth: 1,
-              borderColor: COLORS.border,
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.mutedForeground,
-                  fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
-                  letterSpacing: 1,
-                  marginBottom: 8,
-                  marginLeft: 4,
-                }}
-              >
-                ФИО УЧИТЕЛЯ
-              </Text>
-              <TextInput
-                style={{
-                  height: 56,
-                  backgroundColor: COLORS.background,
-                  borderRadius: RADIUS.lg,
-                  paddingHorizontal: 16,
-                  fontSize: 16,
-                  fontWeight: TYPOGRAPHY.weight.medium,
-                  color: COLORS.foreground,
-                  borderWidth: 1,
-                  borderColor: COLORS.border,
-                }}
-                placeholder="Имя Фамилия"
-                placeholderTextColor={COLORS.mutedForeground}
-                value={formData.fullName}
-                onChangeText={(v) => setFormData({ ...formData, fullName: v })}
-              />
-            </View>
+          <FormCard style={{ gap: SPACING.xl }}>
+            <LabeledTextInput
+              label="ФИО УЧИТЕЛЯ"
+              placeholder="Имя Фамилия"
+              value={formData.fullName}
+              onChangeText={(v) => setFormData({ ...formData, fullName: v })}
+            />
 
-            <View>
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.mutedForeground,
-                  fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
-                  letterSpacing: 1,
-                  marginBottom: 8,
-                  marginLeft: 4,
-                }}
-              >
-                НОМЕР ТЕЛЕФОНА
-              </Text>
-              <TextInput
-                style={{
-                  height: 56,
-                  backgroundColor: COLORS.background,
-                  borderRadius: RADIUS.lg,
-                  paddingHorizontal: 16,
-                  fontSize: 16,
-                  fontWeight: TYPOGRAPHY.weight.medium,
-                  color: COLORS.foreground,
-                  borderWidth: 1,
-                  borderColor: COLORS.border,
-                }}
-                placeholder="+7 777 777 7777"
-                placeholderTextColor={COLORS.mutedForeground}
-                keyboardType="phone-pad"
-                value={formData.phone}
-                onChangeText={(v) =>
-                  setFormData({ ...formData, phone: formatPhone(v) })
-                }
-              />
-            </View>
+            <LabeledTextInput
+              label="НОМЕР ТЕЛЕФОНА"
+              placeholder="+7 777 777 7777"
+              keyboardType="phone-pad"
+              value={formData.phone}
+              onChangeText={(v) =>
+                setFormData({ ...formData, phone: formatPhone(v) })
+              }
+            />
 
-            <View>
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.mutedForeground,
-                  fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
-                  letterSpacing: 1,
-                  marginBottom: 8,
-                  marginLeft: 4,
-                }}
-              >
-                Специализация
-              </Text>
-              <TextInput
-                style={{
-                  height: 56,
-                  backgroundColor: COLORS.background,
-                  borderRadius: RADIUS.lg,
-                  paddingHorizontal: 16,
-                  fontSize: 16,
-                  fontWeight: TYPOGRAPHY.weight.medium,
-                  color: COLORS.foreground,
-                  borderWidth: 1,
-                  borderColor: COLORS.border,
-                }}
-                placeholder="Напр. Робототехника"
-                placeholderTextColor={COLORS.mutedForeground}
-                value={formData.specialization}
-                onChangeText={(v) =>
-                  setFormData({ ...formData, specialization: v })
-                }
-              />
-            </View>
-          </View>
+            <LabeledTextInput
+              label="Специализация"
+              placeholder="Напр. Робототехника"
+              value={formData.specialization}
+              onChangeText={(v) =>
+                setFormData({ ...formData, specialization: v })
+              }
+            />
+          </FormCard>
 
-          <PressableScale
+          <PrimaryActionButton
             onPress={handleSubmit}
             disabled={loading || !formData.fullName || !formData.phone}
             style={{
-              ...SHADOWS.md,
-              height: 60,
-              borderRadius: RADIUS.xl,
-              alignItems: "center",
-              justifyContent: "center",
               marginTop: SPACING.xxxl,
-              backgroundColor:
-                loading || !formData.fullName || !formData.phone
-                  ? COLORS.border
-                  : COLORS.primary,
             }}
           >
-            <Text
-              style={{
-                color: "white",
-                fontWeight: TYPOGRAPHY.weight.bold,
-                fontSize: 16,
-              }}
-            >
-              {loading ? "ОТПРАВКА..." : "ПРИГЛАСИТЬ УЧИТЕЛЯ"}
-            </Text>
-          </PressableScale>
+            {loading ? "ОТПРАВКА..." : "ПРИГЛАСИТЬ УЧИТЕЛЯ"}
+          </PrimaryActionButton>
         </MotiView>
       </ScrollView>
 

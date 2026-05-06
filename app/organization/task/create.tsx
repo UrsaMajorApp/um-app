@@ -1,31 +1,31 @@
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
-  Platform,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  FormCard,
+  LabeledTextInput,
+  PrimaryActionButton,
+} from "../../../components/ui/FormControls";
+import { GradientScreenHeader } from "../../../components/ui/GradientScreenHeader";
 import {
   COLORS,
   LAYOUT,
   RADIUS,
-  SHADOWS,
   SPACING,
   TYPOGRAPHY,
 } from "../../../constants/theme";
+import { useIsDesktop } from "../../../lib/useIsDesktop";
 
 export default function TaskCreateScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;
@@ -51,52 +51,11 @@ export default function TaskCreateScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header - Unified Brand Style */}
-      <View
-        style={{
-          backgroundColor: COLORS.primary,
-          borderBottomLeftRadius: RADIUS.xxl,
-          borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
-        }}
-      >
-        <LinearGradient
-          colors={COLORS.gradients.header as any}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: SPACING.md,
-                  }}
-                >
-                  <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xl,
-                    fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
-                  }}
-                >
-                  Новое задание
-                </Text>
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Новое задание"
+        paddingX={paddingX}
+        onBack={() => router.back()}
+      />
 
       <ScrollView
         contentContainerStyle={{
@@ -110,124 +69,41 @@ export default function TaskCreateScreen() {
           from={{ opacity: 0, translateY: 20 }}
           animate={{ opacity: 1, translateY: 0 }}
         >
-          <View
-            style={{
-              ...SHADOWS.strict,
-              backgroundColor: COLORS.white,
-              borderRadius: RADIUS.xxl,
-              padding: SPACING.xl,
-              borderWidth: 1,
-              borderColor: COLORS.border,
-            }}
-          >
+          <FormCard>
             <View style={{ gap: SPACING.xl }}>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    fontWeight: TYPOGRAPHY.weight.bold,
-                    color: COLORS.mutedForeground,
-                    textTransform: "uppercase",
-                    letterSpacing: 1,
-                    marginBottom: 8,
-                    marginLeft: 4,
-                  }}
-                >
-                  Название задания *
-                </Text>
-                <TextInput
-                  style={{
-                    height: 56,
-                    backgroundColor: COLORS.background,
-                    borderRadius: RADIUS.lg,
-                    paddingHorizontal: 16,
-                    fontSize: 16,
-                    fontWeight: TYPOGRAPHY.weight.medium,
-                    color: COLORS.foreground,
-                    borderWidth: 1,
-                    borderColor: COLORS.border,
-                  }}
-                  placeholder="Например: Домашняя работа №1"
-                  placeholderTextColor={COLORS.mutedForeground}
-                  value={formData.title}
-                  onChangeText={(val) =>
-                    setFormData({ ...formData, title: val })
-                  }
-                />
-              </View>
+              <LabeledTextInput
+                label="Название задания *"
+                placeholder="Например: Домашняя работа №1"
+                value={formData.title}
+                onChangeText={(val) =>
+                  setFormData({ ...formData, title: val })
+                }
+              />
 
-              <View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    fontWeight: TYPOGRAPHY.weight.bold,
-                    color: COLORS.mutedForeground,
-                    textTransform: "uppercase",
-                    letterSpacing: 1,
-                    marginBottom: 8,
-                    marginLeft: 4,
-                  }}
-                >
-                  Инструкции
-                </Text>
-                <TextInput
-                  style={{
-                    backgroundColor: COLORS.background,
-                    borderRadius: RADIUS.lg,
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
-                    fontSize: 16,
-                    fontWeight: TYPOGRAPHY.weight.medium,
-                    color: COLORS.foreground,
-                    borderWidth: 1,
-                    borderColor: COLORS.border,
-                    minHeight: 120,
-                  }}
-                  placeholder="Что нужно сделать?"
-                  placeholderTextColor={COLORS.mutedForeground}
-                  multiline
-                  numberOfLines={4}
-                  textAlignVertical="top"
-                  value={formData.description}
-                  onChangeText={(val) =>
-                    setFormData({ ...formData, description: val })
-                  }
-                />
-              </View>
+              <LabeledTextInput
+                label="Инструкции"
+                placeholder="Что нужно сделать?"
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                value={formData.description}
+                onChangeText={(val) =>
+                  setFormData({ ...formData, description: val })
+                }
+                inputStyle={{
+                  height: undefined,
+                  minHeight: 120,
+                  paddingVertical: 12,
+                }}
+              />
 
-              <View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    fontWeight: TYPOGRAPHY.weight.bold,
-                    color: COLORS.mutedForeground,
-                    textTransform: "uppercase",
-                    letterSpacing: 1,
-                    marginBottom: 8,
-                    marginLeft: 4,
-                  }}
-                >
-                  XP за выполнение
-                </Text>
-                <TextInput
-                  style={{
-                    height: 56,
-                    backgroundColor: COLORS.background,
-                    borderRadius: RADIUS.lg,
-                    paddingHorizontal: 16,
-                    fontSize: 16,
-                    fontWeight: TYPOGRAPHY.weight.medium,
-                    color: COLORS.foreground,
-                    borderWidth: 1,
-                    borderColor: COLORS.border,
-                  }}
-                  placeholder="50"
-                  placeholderTextColor={COLORS.mutedForeground}
-                  keyboardType="numeric"
-                  value={formData.xp}
-                  onChangeText={(val) => setFormData({ ...formData, xp: val })}
-                />
-              </View>
+              <LabeledTextInput
+                label="XP за выполнение"
+                placeholder="50"
+                keyboardType="numeric"
+                value={formData.xp}
+                onChangeText={(val) => setFormData({ ...formData, xp: val })}
+              />
 
               <View>
                 <Text
@@ -271,32 +147,14 @@ export default function TaskCreateScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </FormCard>
 
-          <TouchableOpacity
+          <PrimaryActionButton
             onPress={handleSubmit}
             disabled={loading || !formData.title}
-            style={{
-              height: 60,
-              borderRadius: RADIUS.xl,
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: SPACING.xxl,
-              backgroundColor:
-                loading || !formData.title ? COLORS.border : COLORS.primary,
-              ...SHADOWS.md,
-            }}
           >
-            <Text
-              style={{
-                color: "white",
-                fontWeight: TYPOGRAPHY.weight.bold,
-                fontSize: 16,
-              }}
-            >
-              {loading ? "СОЗДАНИЕ..." : "ОПУБЛИКОВАТЬ ЗАДАНИЕ"}
-            </Text>
-          </TouchableOpacity>
+            {loading ? "СОЗДАНИЕ..." : "ОПУБЛИКОВАТЬ ЗАДАНИЕ"}
+          </PrimaryActionButton>
         </MotiView>
       </ScrollView>
     </View>

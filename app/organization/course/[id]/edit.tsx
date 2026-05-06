@@ -1,5 +1,4 @@
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { MotiView } from "moti";
 import React, { useEffect, useState } from "react";
@@ -10,12 +9,15 @@ import {
   Platform,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  FormCard,
+  LabeledTextInput,
+  PrimaryActionButton,
+} from "../../../../components/ui/FormControls";
+import { GradientScreenHeader } from "../../../../components/ui/GradientScreenHeader";
 import {
   ICON_OPTIONS,
   LEVEL_OPTIONS,
@@ -28,17 +30,16 @@ import {
   COLORS,
   LAYOUT,
   RADIUS,
-  SHADOWS,
   SPACING,
   TYPOGRAPHY,
 } from "../../../../constants/theme";
 import { useOrgCourseById, useOrgCourses } from "../../../../hooks/useOrgData";
+import { useIsDesktop } from "../../../../lib/useIsDesktop";
 
 export default function CourseEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isDesktop = Platform.OS === "web" && width >= LAYOUT.desktopBreakpoint;
+  const isDesktop = useIsDesktop();
   const paddingX = isDesktop
     ? LAYOUT.dashboardHorizontalPaddingDesktop
     : SPACING.xl;
@@ -133,52 +134,11 @@ export default function CourseEditScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header */}
-      <View
-        style={{
-          backgroundColor: COLORS.primary,
-          borderBottomLeftRadius: RADIUS.xxl,
-          borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
-        }}
-      >
-        <LinearGradient
-          colors={COLORS.gradients.header as any}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: SPACING.md,
-                  }}
-                >
-                  <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xl,
-                    fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
-                  }}
-                >
-                  Редактировать курс
-                </Text>
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Редактировать курс"
+        paddingX={paddingX}
+        onBack={() => router.back()}
+      />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -198,71 +158,40 @@ export default function CourseEditScreen() {
             animate={{ opacity: 1, translateY: 0 }}
           >
             {/* Main fields */}
-            <View
-              style={{
-                ...SHADOWS.strict,
-                backgroundColor: COLORS.white,
-                borderRadius: RADIUS.xxl,
-                padding: SPACING.xl,
-                borderWidth: 1,
-                borderColor: COLORS.border,
-                gap: SPACING.xl,
-              }}
-            >
-              <View>
-                <Text style={labelStyle}>Название курса *</Text>
-                <TextInput
-                  style={inputStyle}
-                  placeholder="Например: Английский язык"
-                  placeholderTextColor={COLORS.mutedForeground}
-                  value={title}
-                  onChangeText={setTitle}
-                />
-              </View>
+            <FormCard style={{ gap: SPACING.xl }}>
+              <LabeledTextInput
+                label="Название курса *"
+                placeholder="Например: Английский язык"
+                value={title}
+                onChangeText={setTitle}
+              />
 
-              <View>
-                <Text style={labelStyle}>Описание</Text>
-                <TextInput
-                  style={[
-                    inputStyle,
-                    { height: undefined, minHeight: 120, paddingVertical: 12 },
-                  ]}
-                  placeholder="О чём этот курс?"
-                  placeholderTextColor={COLORS.mutedForeground}
-                  multiline
-                  numberOfLines={4}
-                  textAlignVertical="top"
-                  value={description}
-                  onChangeText={setDescription}
-                />
-              </View>
+              <LabeledTextInput
+                label="Описание"
+                placeholder="О чём этот курс?"
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                value={description}
+                onChangeText={setDescription}
+                inputStyle={{
+                  height: undefined,
+                  minHeight: 120,
+                  paddingVertical: 12,
+                }}
+              />
 
-              <View>
-                <Text style={labelStyle}>Цена (₸/мес) *</Text>
-                <TextInput
-                  style={inputStyle}
-                  placeholder="0"
-                  placeholderTextColor={COLORS.mutedForeground}
-                  keyboardType="numeric"
-                  value={price}
-                  onChangeText={setPrice}
-                />
-              </View>
-            </View>
+              <LabeledTextInput
+                label="Цена (₸/мес) *"
+                placeholder="0"
+                keyboardType="numeric"
+                value={price}
+                onChangeText={setPrice}
+              />
+            </FormCard>
 
             {/* Level + Status */}
-            <View
-              style={{
-                ...SHADOWS.strict,
-                backgroundColor: COLORS.white,
-                borderRadius: RADIUS.xxl,
-                padding: SPACING.xl,
-                marginTop: SPACING.xl,
-                borderWidth: 1,
-                borderColor: COLORS.border,
-                gap: SPACING.xl,
-              }}
-            >
+            <FormCard style={{ marginTop: SPACING.xl, gap: SPACING.xl }}>
               <View>
                 <Text style={labelStyle}>Уровень</Text>
                 <View
@@ -350,20 +279,10 @@ export default function CourseEditScreen() {
                   ))}
                 </View>
               </View>
-            </View>
+            </FormCard>
 
             {/* Icon picker */}
-            <View
-              style={{
-                ...SHADOWS.strict,
-                backgroundColor: COLORS.white,
-                borderRadius: RADIUS.xxl,
-                padding: SPACING.xl,
-                marginTop: SPACING.xl,
-                borderWidth: 1,
-                borderColor: COLORS.border,
-              }}
-            >
+            <FormCard style={{ marginTop: SPACING.xl }}>
               <Text style={labelStyle}>Иконка курса</Text>
               <View
                 style={{
@@ -401,20 +320,10 @@ export default function CourseEditScreen() {
                   </TouchableOpacity>
                 ))}
               </View>
-            </View>
+            </FormCard>
 
             {/* Skills */}
-            <View
-              style={{
-                ...SHADOWS.strict,
-                backgroundColor: COLORS.white,
-                borderRadius: RADIUS.xxl,
-                padding: SPACING.xl,
-                marginTop: SPACING.xl,
-                borderWidth: 1,
-                borderColor: COLORS.border,
-              }}
-            >
+            <FormCard style={{ marginTop: SPACING.xl }}>
               <Text style={labelStyle}>Развиваемые навыки</Text>
               <View
                 style={{
@@ -454,33 +363,15 @@ export default function CourseEditScreen() {
                   );
                 })}
               </View>
-            </View>
+            </FormCard>
 
             {/* Save */}
-            <TouchableOpacity
+            <PrimaryActionButton
               onPress={handleSave}
               disabled={saving || !title.trim()}
-              style={{
-                height: 60,
-                borderRadius: RADIUS.xl,
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: SPACING.xxl,
-                backgroundColor:
-                  saving || !title.trim() ? COLORS.border : COLORS.primary,
-                ...SHADOWS.md,
-              }}
             >
-              <Text
-                style={{
-                  color: "white",
-                  fontWeight: TYPOGRAPHY.weight.bold,
-                  fontSize: 16,
-                }}
-              >
-                {saving ? "СОХРАНЕНИЕ..." : "СОХРАНИТЬ ИЗМЕНЕНИЯ"}
-              </Text>
-            </TouchableOpacity>
+              {saving ? "СОХРАНЕНИЕ..." : "СОХРАНИТЬ ИЗМЕНЕНИЯ"}
+            </PrimaryActionButton>
 
             {/* Delete */}
             <TouchableOpacity
@@ -518,16 +409,4 @@ const labelStyle = {
   letterSpacing: 1,
   marginBottom: 8,
   marginLeft: 4,
-};
-
-const inputStyle = {
-  height: 56,
-  backgroundColor: COLORS.background,
-  borderRadius: RADIUS.lg,
-  paddingHorizontal: 16,
-  fontSize: 16,
-  fontWeight: TYPOGRAPHY.weight.medium,
-  color: COLORS.foreground,
-  borderWidth: 1,
-  borderColor: COLORS.border,
 };
