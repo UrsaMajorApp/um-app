@@ -16,6 +16,7 @@ import {
   type VibeCard,
   type ProTask1214,
 } from "../data/diagnosticData1214";
+import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
 import type { Diagnostic } from "../models/types";
 
 export type Phase1214 = "intro" | "basic" | "pro" | "processing" | "done";
@@ -158,9 +159,6 @@ export function useDiagnosticEngine1214(opts: {
   }, []);
 
   const processWithAI = useCallback(async (computed: ReturnType<typeof computeResults>) => {
-    const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-    if (!apiKey) throw new Error("Gemini missing");
-
     const topSkillsStr = computed.top2Riasec.map(t => RIASEC_MAP[t[0]]).join(", ");
     const weakSkillStr = RIASEC_MAP[computed.weakestRiasec[0]];
 
@@ -170,7 +168,7 @@ ${isPro ? `PRO (Hackathon simulation): Scores: ${JSON.stringify(computed.proScor
 
 Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fields"}:
 {
-  "summary": "2-3 encouraging sentences in Russian about the teen's potential based on top skills",
+  "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Creative 2-word talent title in Russian (e.g. 'Креативный Предприниматель')"
   ${isPro ? `,
   "topStrengths": ["Top 3 skills in Russian (Hard or Soft)"],
@@ -181,16 +179,7 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
   "parentAdvice": "Advice for parents in Russian"` : ""}
 }`;
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7 } }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || "AI error");
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-    return JSON.parse(text.replace(/\`\`\`json/g, "").replace(/\`\`\`/g, "").trim());
+    return generateGeminiDiagnosticJson(prompt);
   }, [isPro]);
 
   const finishDiagnostic = useCallback(async () => {
@@ -203,7 +192,7 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
       aiData = await processWithAI(computed);
     } catch (e) {
       aiData = {
-        summary: "Подросток обладает отличными аналитическими и креативными навыками.",
+        summary: "Сильная сторона подростка — аналитика и креативный подход.",
         recommendedConstellation: "Творческий аналитик",
         ...(isPro ? {
           topStrengths: ["Аналитическое мышление", "Креативность", "Лидерство"],

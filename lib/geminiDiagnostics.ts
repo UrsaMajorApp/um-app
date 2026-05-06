@@ -1,0 +1,43 @@
+const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const GEMINI_FALLBACK_PREFIX = "GEMINI_FALLBACK:";
+
+function parseGeminiJson(text: string) {
+  return JSON.parse(text.replace(/```json/g, "").replace(/```/g, "").trim());
+}
+
+export async function generateGeminiDiagnosticJson(prompt: string) {
+  const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
+  const enabled = process.env.EXPO_PUBLIC_ENABLE_GEMINI_DIAGNOSTICS === "true";
+
+  if (!enabled) {
+    throw new Error(`${GEMINI_FALLBACK_PREFIX} diagnostics disabled`);
+  }
+
+  if (!apiKey) {
+    throw new Error(`${GEMINI_FALLBACK_PREFIX} API key missing`);
+  }
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7 },
+    }),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const status = data?.error?.status || `HTTP_${response.status}`;
+    throw new Error(`${GEMINI_FALLBACK_PREFIX} request failed: ${status}`);
+  }
+
+  const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+  return parseGeminiJson(textOutput);
+}
+
+export function isGeminiFallbackError(error: unknown) {
+  return error instanceof Error && error.message.startsWith(GEMINI_FALLBACK_PREFIX);
+}

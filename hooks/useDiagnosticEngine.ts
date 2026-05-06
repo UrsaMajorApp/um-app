@@ -26,6 +26,7 @@ import {
   type SkillCategory,
   type StealthEvent,
 } from "../data/diagnosticData";
+import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
 import { Diagnostic } from "../models/types";
 
 // ─── Types ──────────────────────────────────────────────────────────────
@@ -241,11 +242,6 @@ export function useDiagnosticEngine(opts: {
 
   const processWithAI = useCallback(
     async (computed: ReturnType<typeof computeResults>) => {
-      const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("Gemini API Key is missing");
-      }
-
       const topCatsStr = computed.topCategories
         .slice(0, 3)
         .map((c) => {
@@ -262,7 +258,7 @@ Stealth personality profile: ${computed.stealthProfile}.` : ""}
 
 Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" : "Include only base fields"}:
 {
-  "summary": "2-3 encouraging sentences in Russian describing the child's potential",
+  "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Creative 1-2 word title for talent type in Russian (e.g. 'Техно-энтузиаст')"
   ${isPro ? `,
   "intellectType": "Type of intelligence in Russian (e.g. 'Логико-пространственный')",
@@ -273,30 +269,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
   "developmentAreas": ["1-2 areas for development in Russian"]` : ""}
 }`;
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.7 },
-          }),
-        },
-      );
-
-      const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error?.message || "Gemini API error");
-
-      const textOutput =
-        data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-      const cleanedJson = textOutput
-        .replace(/```json/g, "")
-        .replace(/```/g, "")
-        .trim();
-
-      return JSON.parse(cleanedJson);
+      return generateGeminiDiagnosticJson(prompt);
     },
     [isPro],
   );
@@ -316,8 +289,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
       console.error("AI report error:", e);
       // Fallback
       aiData = {
-        summary:
-          "У вашего ребёнка отличный потенциал! Мы видим сильную творческую и исследовательскую жилку.",
+        summary: "Сильная сторона ребёнка — любопытство и творческий подход.",
         recommendedConstellation: "Творческий исследователь",
         ...(isPro
           ? {
