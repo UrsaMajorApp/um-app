@@ -1,13 +1,7 @@
 import { AdminHeader } from "$components/admin/AdminHeader";
 import { SegmentTabs } from "$components/admin/SegmentTabs";
 import { useAdminLayout } from "$components/admin/adminUtils";
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "$constants/theme";
 import {
   useAdminOnboardingQuestions,
   useAIRules,

@@ -97,21 +97,25 @@ export default function AdminOrganizationsScreen() {
             Загрузка...
           </Text>
         ) : null}
+
         {tab === "orgs" && !orgs.loading && orgs.data.length === 0 ? (
           <EmptyState title="Организаций пока нет" />
         ) : null}
+
         {tab === "orgs" &&
           orgs.data.map((org) => {
             const activeCourses = courses.data.filter(
               (course) =>
                 course.org_id === org.id && course.status === "active",
             ).length;
+
             const statusColor =
               org.status === "verified"
                 ? COLORS.success
                 : org.status === "rejected"
                   ? COLORS.destructive
                   : COLORS.primary;
+
             const statusLabel =
               org.status === "verified"
                 ? "Активна"
@@ -120,6 +124,7 @@ export default function AdminOrganizationsScreen() {
                   : org.status === "new"
                     ? "Новая"
                     : "На проверке";
+
             return (
               <View
                 key={org.id}
@@ -248,14 +253,17 @@ export default function AdminOrganizationsScreen() {
               </View>
             );
           })}
+
         {tab === "courses" && courses.loading ? (
           <Text style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}>
             Загрузка...
           </Text>
         ) : null}
+
         {tab === "courses" && !courses.loading && courses.data.length === 0 ? (
           <EmptyState title="Нет курсов на модерации" icon="check-circle" />
         ) : null}
+
         {tab === "courses" &&
           courses.data.map((course) => {
             const isPending = course.status === "draft";
