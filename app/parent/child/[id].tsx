@@ -209,7 +209,10 @@ export default function ParentChildDetails() {
                   (навыки, архетип).
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push("/profile/youth/testing" as any)}
+                  onPress={() => {
+                    setActiveChildId(child.id);
+                    router.push("/profile/youth/testing" as any);
+                  }}
                   className="bg-blue-50 py-3 px-5 rounded-2xl self-start"
                 >
                   <Text className="text-blue-600 font-black text-xs uppercase tracking-wide">
@@ -336,12 +339,10 @@ export default function ParentChildDetails() {
               талантов.
             </Text>
             <Pressable
-              onPress={() =>
-                router.push({
-                  pathname: "/parent/testing",
-                  params: { childId: child.id },
-                } as any)
-              }
+              onPress={() => {
+                setActiveChildId(child.id);
+                router.push("/profile/youth/testing" as any);
+              }}
               className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
             >
               <Text className="text-gray-900 font-black text-sm uppercase">

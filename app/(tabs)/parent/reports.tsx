@@ -347,7 +347,7 @@ export default function ParentReports() {
               onPress={() => {
                 if (selectedChildProfile) {
                   setActiveChildId(selectedChildProfile.id);
-                  router.push("/profile/youth/umo-intro");
+                  router.push("/profile/youth/testing" as any);
                 }
               }}
               className="bg-white h-14 rounded-2xl items-center justify-center"

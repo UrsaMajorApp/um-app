@@ -271,7 +271,7 @@ export default function ParentHome() {
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 24 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Мои дети</Text>
-            <Pressable onPress={() => router.push("/parent/children" as any)}>
+            <Pressable onPress={() => router.push("/(tabs)/parent/children" as any)}>
               <Text className="text-purple-600 font-bold text-sm">Все</Text>
             </Pressable>
           </View>
@@ -382,7 +382,11 @@ export default function ParentHome() {
                   Пройдите диагностику талантов для {activeChild.name}, чтобы получить персональные рекомендации по развитию.
                 </Text>
                 <Pressable
-                  onPress={() => router.push("/profile/youth/umo-intro" as any)}
+                  onPress={() => {
+                    if (!activeChild) return;
+                    setActiveChildId(activeChild.id);
+                    router.push("/profile/youth/testing" as any);
+                  }}
                   className="mt-3 bg-white self-start px-3 py-1.5 rounded-full border border-blue-200"
                 >
                   <Text className="text-blue-600 font-black text-[10px] uppercase tracking-widest">
