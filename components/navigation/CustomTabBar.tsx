@@ -3,10 +3,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSegments } from "expo-router";
 import { MotiView } from "moti";
 import { Platform, Pressable, Text, useWindowDimensions, View } from "react-native";
-import { COLORS, LAYOUT, SHADOWS } from "@/constants/theme";
-import { useIsDesktop } from "@/lib/useIsDesktop";
-import { useTabNav } from "./useTabNav";
-import type { Role } from "@/constants/navigation/tabItems";
+import { COLORS, LAYOUT, SHADOWS } from "$constants/theme";
+import { useIsDesktop } from "$lib/useIsDesktop";
+import { useTabNav } from "$components/navigation/useTabNav";
+import type { Role } from "$constants/navigation/tabItems";
 
 type Props = { role: Role | string | null };
 

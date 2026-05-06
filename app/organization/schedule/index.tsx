@@ -10,9 +10,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useOrgSchedule } from "../../../hooks/useOrgData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { useOrgSchedule } from "$hooks/useOrgData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 const DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 

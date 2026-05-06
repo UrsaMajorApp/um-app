@@ -1,4 +1,4 @@
-import { useIsDesktop } from "../../lib/useIsDesktop";
+import { useIsDesktop } from "$lib/useIsDesktop";
 /**
  * DiagnosticExplorer.tsx
  *
@@ -19,13 +19,13 @@ import {
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, SHADOWS } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
-import { useParentData } from "../../contexts/ParentDataContext";
-import { useDiagnosticEngine } from "../../hooks/useDiagnosticEngine";
-import { useSpeech } from "../../hooks/useSpeech";
-import BasicSwipeCard from "./BasicSwipeCard";
-import ProQuestTask from "./ProQuestTask";
+import { COLORS, LAYOUT, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
+import { useDiagnosticEngine } from "$hooks/useDiagnosticEngine";
+import { useSpeech } from "$hooks/useSpeech";
+import BasicSwipeCard from "$components/diagnostic/BasicSwipeCard";
+import ProQuestTask from "$components/diagnostic/ProQuestTask";
 
 interface Props {
   childId?: string | null;

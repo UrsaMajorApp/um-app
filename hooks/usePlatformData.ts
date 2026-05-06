@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAuth, type UserRole } from "../contexts/AuthContext";
-import { useDevDataVersion } from "../lib/devDataEvents";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import { resolveOwnedOrgId, rowsOrEmpty } from "../lib/supabaseHelpers";
+import { useAuth, type UserRole } from "$contexts/AuthContext";
+import { useDevDataVersion } from "$lib/devDataEvents";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { resolveOwnedOrgId, rowsOrEmpty } from "$lib/supabaseHelpers";
 
 export type SubscriptionPlanRole = "parent" | "youth" | "org";
 

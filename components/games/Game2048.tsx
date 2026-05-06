@@ -17,8 +17,8 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { COLORS, RADIUS } from "../../constants/theme";
-import { isWebMinWidth } from "../../lib/useIsDesktop";
+import { COLORS, RADIUS } from "$constants/theme";
+import { isWebMinWidth } from "$lib/useIsDesktop";
 
 const GRID_SIZE = 4;
 const CELL_MARGIN = 10;

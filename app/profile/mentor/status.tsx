@@ -14,8 +14,8 @@ import {
    RADIUS,
    SHADOWS,
    TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorStatusPage() {
   const router = useRouter();

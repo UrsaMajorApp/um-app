@@ -1,6 +1,6 @@
 import { Redirect, useLocalSearchParams } from "expo-router";
-import { PROFILE_SETUP_ROUTES } from "../constants/profileRoutes";
-import { useAuth } from "../contexts/AuthContext";
+import { PROFILE_SETUP_ROUTES } from "$constants/profileRoutes";
+import { useAuth } from "$contexts/AuthContext";
 
 export default function Index() {
   const { user, isLoading } = useAuth();

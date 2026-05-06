@@ -19,9 +19,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useMentorGroups } from "../../../hooks/useMentorData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useMentorGroups } from "$hooks/useMentorData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorGroups() {
   const router = useRouter();

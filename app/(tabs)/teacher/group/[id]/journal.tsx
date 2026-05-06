@@ -10,12 +10,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "../../../../../constants/theme";
-import { useTeacherGroup } from "../../../../../hooks/usePlatformData";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useTeacherGroup } from "$hooks/usePlatformData";
 import {
   getDashboardHorizontalPadding,
   useIsDesktop,
-} from "../../../../../lib/useIsDesktop";
+} from "$lib/useIsDesktop";
 
 function formatDateKey(date: Date) {
   const year = date.getFullYear();

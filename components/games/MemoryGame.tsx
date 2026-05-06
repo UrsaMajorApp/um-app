@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "../../constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 
 const GRID_SIZE = 4;
 const GRID_GAP = 12;

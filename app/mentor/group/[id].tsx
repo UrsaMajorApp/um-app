@@ -17,13 +17,13 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
+} from "$constants/theme";
 import {
   useGroupMembers,
   useMentorGroups,
   useMentorStudentAttendanceSummary,
-} from "../../../hooks/useMentorData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$hooks/useMentorData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorGroupDetail() {
   const { id } = useLocalSearchParams();

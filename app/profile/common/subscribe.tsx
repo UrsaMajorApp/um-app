@@ -12,9 +12,9 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { useSubscriptionPlans } from "../../../hooks/usePlatformData";
-import { formatKZT } from "../../../lib/formatCurrency";
-import { isWebMinWidth } from "../../../lib/useIsDesktop";
+import { useSubscriptionPlans } from "$hooks/usePlatformData";
+import { formatKZT } from "$lib/formatCurrency";
+import { isWebMinWidth } from "$lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
 const IS_DESKTOP = isWebMinWidth(width, 900);

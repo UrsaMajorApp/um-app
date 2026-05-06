@@ -12,15 +12,15 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "../../../constants/theme";
-import { useParentData } from "../../../contexts/ParentDataContext";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useParentData } from "$contexts/ParentDataContext";
 import {
   courseGradient,
   SCORE_TO_SKILLS,
   usePublicCourses,
-} from "../../../hooks/usePublicData";
-import { formatKZT } from "../../../lib/formatCurrency";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$hooks/usePublicData";
+import { formatKZT } from "$lib/formatCurrency";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 // Skill-based filter chips shown in the catalog
 const SKILL_FILTERS = [

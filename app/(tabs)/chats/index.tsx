@@ -18,9 +18,9 @@ import {
     RADIUS,
     SHADOWS,
     TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useChats } from "../../../hooks/useChats";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useChats } from "$hooks/useChats";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 const DEFAULT_TABS = ["все", "непрочитанные", "архив"];
 

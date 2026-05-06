@@ -17,9 +17,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { usePublicMentors } from "../../../hooks/usePublicMentors";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { usePublicMentors } from "$hooks/usePublicMentors";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentMentorsScreen() {
   const router = useRouter();

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { COLORS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
+import { COLORS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 
-import MentorProfile from "../../profile/mentor/index";
-import OrgProfile from "../../profile/organization/index";
-import ParentProfile from "../../profile/parent/index";
-import TeacherProfile from "../../profile/teacher/index";
-import YouthProfile from "../../profile/youth/index";
+import MentorProfile from "$app/profile/mentor/index";
+import OrgProfile from "$app/profile/organization/index";
+import ParentProfile from "$app/profile/parent/index";
+import TeacherProfile from "$app/profile/teacher/index";
+import YouthProfile from "$app/profile/youth/index";
 
 type Role = "parent" | "youth" | "child" | "mentor" | "org" | "teacher";
 

@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { LEVEL_LABELS } from "../../constants/courseOptions";
-import { COLORS, SHADOWS } from "../../constants/theme";
-import { courseGradient, usePublicCourseById } from "../../hooks/usePublicData";
-import { formatKZT } from "../../lib/formatCurrency";
-import { isWebMinWidth } from "../../lib/useIsDesktop";
+import { LEVEL_LABELS } from "$constants/courseOptions";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { courseGradient, usePublicCourseById } from "$hooks/usePublicData";
+import { formatKZT } from "$lib/formatCurrency";
+import { isWebMinWidth } from "$lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
 const IS_DESKTOP = isWebMinWidth(width, 900);

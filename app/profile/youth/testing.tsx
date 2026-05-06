@@ -1,4 +1,4 @@
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { useIsDesktop } from "$lib/useIsDesktop";
 /**
  * testing.tsx — Age-based router for diagnostic modules.
  *
@@ -23,23 +23,23 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DiagnosticArchitects from "../../../components/diagnostic/DiagnosticArchitects";
-import DiagnosticCreators from "../../../components/diagnostic/DiagnosticCreators";
-import DiagnosticExplorer from "../../../components/diagnostic/DiagnosticExplorer";
-import DiagnosticRebels from "../../../components/diagnostic/DiagnosticRebels";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useDevSettings } from "../../../contexts/DevSettingsContext";
-import { useParentData } from "../../../contexts/ParentDataContext";
+import DiagnosticArchitects from "$components/diagnostic/DiagnosticArchitects";
+import DiagnosticCreators from "$components/diagnostic/DiagnosticCreators";
+import DiagnosticExplorer from "$components/diagnostic/DiagnosticExplorer";
+import DiagnosticRebels from "$components/diagnostic/DiagnosticRebels";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useDevSettings } from "$contexts/DevSettingsContext";
+import { useParentData } from "$contexts/ParentDataContext";
 import {
   useOnboardingQuestions,
   type OnboardingQuestion,
-} from "../../../hooks/usePlatformData";
+} from "$hooks/usePlatformData";
 import {
   generateGeminiDiagnosticJson,
   isGeminiFallbackError,
-} from "../../../lib/geminiDiagnostics";
-import { Diagnostic } from "../../../models/types";
+} from "$lib/geminiDiagnostics";
+import { Diagnostic } from "$models/types";
 
 /* ─────────────────────────────────────────────────────────────
    Main component

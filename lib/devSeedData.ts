@@ -1,4 +1,4 @@
-import { isSupabaseConfigured, supabase } from "./supabase";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
 
 function requireSupabase() {
   if (!supabase || !isSupabaseConfigured) {

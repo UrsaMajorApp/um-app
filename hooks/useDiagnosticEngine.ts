@@ -24,9 +24,9 @@ import {
   type ProTask,
   type SkillCategory,
   type StealthEvent
-} from "../data/diagnosticData";
-import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
-import { Diagnostic } from "../models/types";
+} from "$data/diagnosticData";
+import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
+import { Diagnostic } from "$models/types";
 
 // ─── Types ──────────────────────────────────────────────────────────────
 

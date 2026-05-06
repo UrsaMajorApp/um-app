@@ -12,9 +12,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LAYOUT } from "../../../constants/theme";
-import { formatPhone } from "../../../lib/formatPhone";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { LAYOUT } from "$constants/theme";
+import { formatPhone } from "$lib/formatPhone";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function CreateProfileYoungAdult() {
   const router = useRouter();

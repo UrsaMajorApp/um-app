@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useOrgSchedule } from "../../../hooks/useOrgData";
-import { isWebMinWidth } from "../../../lib/useIsDesktop";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { useOrgSchedule } from "$hooks/useOrgData";
+import { isWebMinWidth } from "$lib/useIsDesktop";
 
 /* ---------- русская локаль для календаря ---------- */
 LocaleConfig.locales["ru"] = {

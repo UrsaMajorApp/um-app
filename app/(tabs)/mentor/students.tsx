@@ -16,12 +16,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   COLORS,
   SHADOWS
-} from "../../../constants/theme";
+} from "$constants/theme";
 import {
   useMentorStudentAttendanceSummary,
   useMentorStudents,
-} from "../../../hooks/useMentorData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$hooks/useMentorData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorStudentsScreen() {
   const router = useRouter();

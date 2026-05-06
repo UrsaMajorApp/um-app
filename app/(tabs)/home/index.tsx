@@ -1,14 +1,14 @@
-import { COLORS } from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
+import { COLORS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
-import AdminHome from "./_home/AdminHome";
-import MentorHome from "./_home/MentorHome";
-import OrgHome from "./_home/OrgHome";
-import ParentHome from "./_home/ParentHome";
-import TeacherHome from "./_home/TeacherHome";
-import YouthHome from "./_home/YouthHome";
+import AdminHome from "$app/(tabs)/home/_home/AdminHome";
+import MentorHome from "$app/(tabs)/home/_home/MentorHome";
+import OrgHome from "$app/(tabs)/home/_home/OrgHome";
+import ParentHome from "$app/(tabs)/home/_home/ParentHome";
+import TeacherHome from "$app/(tabs)/home/_home/TeacherHome";
+import YouthHome from "$app/(tabs)/home/_home/YouthHome";
 
 type Role =
   | "parent"

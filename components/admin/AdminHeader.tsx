@@ -1,9 +1,9 @@
-import { COLORS, SPACING, TYPOGRAPHY } from "@/constants/theme";
+import { COLORS, SPACING, TYPOGRAPHY } from "$constants/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Platform, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAdminLayout } from "./adminUtils";
+import { useAdminLayout } from "$components/admin/adminUtils";
 
 export function AdminHeader({
   title,

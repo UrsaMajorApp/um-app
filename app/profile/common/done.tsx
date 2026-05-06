@@ -11,8 +11,8 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 
 export default function DoneScreen() {
     const router = useRouter();

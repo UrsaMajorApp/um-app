@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import { rowsOrEmpty } from "../lib/supabaseHelpers";
+import { useAuth } from "$contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { rowsOrEmpty } from "$lib/supabaseHelpers";
 
 export interface ChildSkillSnapshot {
   skill_label: string;

@@ -17,9 +17,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useOrgGroups } from "../../../hooks/useOrgData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useOrgGroups } from "$hooks/useOrgData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function OrgGroupsScreen() {
   const router = useRouter();

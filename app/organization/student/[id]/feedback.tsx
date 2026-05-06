@@ -19,11 +19,11 @@ import {
    SHADOWS,
    SPACING,
    TYPOGRAPHY,
-} from "../../../../constants/theme";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useOrgApplications } from "../../../../hooks/useOrgData";
-import { isSupabaseConfigured, supabase } from "../../../../lib/supabase";
-import { useIsDesktop } from "../../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useOrgApplications } from "$hooks/useOrgData";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 const FEEDBACK_TAGS = [
   "Внимательно слушал",

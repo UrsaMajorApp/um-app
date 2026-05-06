@@ -1,17 +1,17 @@
-import { AdminHeader } from "@/components/admin/AdminHeader";
-import { EmptyState } from "@/components/admin/EmptyState";
-import { SegmentTabs } from "@/components/admin/SegmentTabs";
-import { ensureConversation } from "@/components/admin/adminUtils";
-import { LEVEL_LABELS } from "@/constants/courseOptions";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
+import { AdminHeader } from "$components/admin/AdminHeader";
+import { EmptyState } from "$components/admin/EmptyState";
+import { SegmentTabs } from "$components/admin/SegmentTabs";
+import { ensureConversation } from "$components/admin/adminUtils";
+import { LEVEL_LABELS } from "$constants/courseOptions";
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 import {
   AdminCourse,
   useAdminCourses,
   useAdminEnrollments,
   useOrganizations,
-} from "@/hooks/useAdminData";
-import { formatKZT } from "@/lib/formatCurrency";
+} from "$hooks/useAdminData";
+import { formatKZT } from "$lib/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";

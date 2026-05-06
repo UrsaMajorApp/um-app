@@ -1,6 +1,6 @@
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useAdminLayout } from "./adminUtils";
+import { useAdminLayout } from "$components/admin/adminUtils";
 
 export function SegmentTabs<T extends string>({
   value,

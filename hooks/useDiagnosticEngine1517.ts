@@ -13,9 +13,9 @@ import {
   PRO_TASKS_1517,
   type AnchorType,
   type StealthEvent1517
-} from "../data/diagnosticData1517";
-import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
-import type { Diagnostic } from "../models/types";
+} from "$data/diagnosticData1517";
+import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
+import type { Diagnostic } from "$models/types";
 
 export type Phase1517 = "intro" | "basic" | "pro" | "processing" | "done";
 

@@ -1,4 +1,4 @@
-import { useIsDesktop } from "../../lib/useIsDesktop";
+import { useIsDesktop } from "$lib/useIsDesktop";
 /**
  * /auth/complete-profile
  *
@@ -20,10 +20,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { PressableScale } from "../../components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
-import type { UserRole } from "../../contexts/AuthContext";
-import { useAuth } from "../../contexts/AuthContext";
+import { PressableScale } from "$components/ui/PressableScale";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import type { UserRole } from "$contexts/AuthContext";
+import { useAuth } from "$contexts/AuthContext";
 
 const ROLES: {
   title: string;

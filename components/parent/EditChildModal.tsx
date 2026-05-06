@@ -9,9 +9,9 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { COLORS, RADIUS, SHADOWS, SPACING } from "../../constants/theme";
-import { isWebMinWidth } from "../../lib/useIsDesktop";
-import { Child } from "../../models/types";
+import { COLORS, RADIUS, SHADOWS, SPACING } from "$constants/theme";
+import { isWebMinWidth } from "$lib/useIsDesktop";
+import { Child } from "$models/types";
 
 export default function EditChildModal({
   child,

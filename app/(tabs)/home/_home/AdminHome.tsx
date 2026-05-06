@@ -1,16 +1,16 @@
-import { AdminCard } from "@/components/admin/AdminCard";
-import { AdminHeader } from "@/components/admin/AdminHeader";
+import { AdminCard } from "$components/admin/AdminCard";
+import { AdminHeader } from "$components/admin/AdminHeader";
 import {
   useAdminLayout,
   useAdminNavigation,
-} from "@/components/admin/adminUtils";
+} from "$components/admin/adminUtils";
 import {
   COLORS,
   RADIUS,
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "@/constants/theme";
+} from "$constants/theme";
 import {
   useAdminCourses,
   useAdminEnrollments,
@@ -21,8 +21,8 @@ import {
   useOrganizations,
   useTickets,
   useTransactions,
-} from "@/hooks/useAdminData";
-import { formatKZT } from "@/lib/formatCurrency";
+} from "$hooks/useAdminData";
+import { formatKZT } from "$lib/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";

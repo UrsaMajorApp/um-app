@@ -18,9 +18,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useOrgGroups, useOrgStaffById } from "../../../hooks/useOrgData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useOrgGroups, useOrgStaffById } from "$hooks/useOrgData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function StaffDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

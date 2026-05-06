@@ -13,9 +13,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT } from "../../../constants/theme";
-import { useChatMessages } from "../../../hooks/useChats";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS, LAYOUT } from "$constants/theme";
+import { useChatMessages } from "$hooks/useChats";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ChatScreen() {
   const router = useRouter();

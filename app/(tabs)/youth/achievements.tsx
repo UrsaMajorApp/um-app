@@ -10,9 +10,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../../../constants/theme";
-import { useYouthAchievements } from "../../../hooks/useStudentData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS } from "$constants/theme";
+import { useYouthAchievements } from "$hooks/useStudentData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function YouthAchievements() {
   const router = useRouter();

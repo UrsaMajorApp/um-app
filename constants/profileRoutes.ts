@@ -1,4 +1,4 @@
-import type { UserRole } from "@/contexts/AuthContext";
+import type { UserRole } from "$contexts/AuthContext";
 
 export const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, string>> = {
   parent: "/profile/parent/create-profile",

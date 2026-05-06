@@ -16,11 +16,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { PressableScale } from "../../components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../../lib/supabase";
-import { useIsDesktop } from "../../lib/useIsDesktop";
+import { PressableScale } from "$components/ui/PressableScale";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ResetPasswordScreen() {
   const router = useRouter();

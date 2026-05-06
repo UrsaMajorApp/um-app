@@ -1,18 +1,18 @@
-import { AdminHeader } from "@/components/admin/AdminHeader";
-import { SegmentTabs } from "@/components/admin/SegmentTabs";
-import { useAdminLayout } from "@/components/admin/adminUtils";
+import { AdminHeader } from "$components/admin/AdminHeader";
+import { SegmentTabs } from "$components/admin/SegmentTabs";
+import { useAdminLayout } from "$components/admin/adminUtils";
 import {
   COLORS,
   RADIUS,
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "@/constants/theme";
+} from "$constants/theme";
 import {
   useAdminOnboardingQuestions,
   useAIRules,
   useTags,
-} from "@/hooks/useAdminData";
+} from "$hooks/useAdminData";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {

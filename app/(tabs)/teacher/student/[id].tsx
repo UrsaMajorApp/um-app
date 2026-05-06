@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, TYPOGRAPHY } from "../../../../constants/theme";
+import { COLORS, RADIUS, TYPOGRAPHY } from "$constants/theme";
 
 export default function TeacherStudentDetail() {
   const { id } = useLocalSearchParams();

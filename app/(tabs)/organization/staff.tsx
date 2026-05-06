@@ -18,10 +18,10 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import type { OrgStaffMember } from "../../../hooks/useOrgData";
-import { useOrgStaff } from "../../../hooks/useOrgData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import type { OrgStaffMember } from "$hooks/useOrgData";
+import { useOrgStaff } from "$hooks/useOrgData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 type Teacher = OrgStaffMember;
 

@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS } from "../../constants/theme";
+import { COLORS, RADIUS } from "$constants/theme";
 
 interface ScreenHeaderProps {
   title: string;

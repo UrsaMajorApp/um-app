@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
 import React from "react";
 import { Text, View } from "react-native";
 

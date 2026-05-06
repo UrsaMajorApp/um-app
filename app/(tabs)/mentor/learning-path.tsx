@@ -21,9 +21,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useLearningPath } from "../../../hooks/useMentorData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useLearningPath } from "$hooks/useMentorData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorLearningPath() {
   const router = useRouter();

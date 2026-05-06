@@ -5,8 +5,8 @@ import { MotiView } from "moti";
 import React, { useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
+import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 
 export default function AdminIntroScreen() {
   const router = useRouter();

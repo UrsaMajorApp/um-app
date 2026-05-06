@@ -18,13 +18,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AuthMethodSwitcher,
   type AuthMethod,
-} from "../../components/auth/AuthMethodSwitcher";
-import { PressableScale } from "../../components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
-import { useAuth, type UserRole } from "../../contexts/AuthContext";
-import { useDevSettings } from "../../contexts/DevSettingsContext";
-import { formatPhone } from "../../lib/formatPhone";
-import { useIsDesktop } from "../../lib/useIsDesktop";
+} from "$components/auth/AuthMethodSwitcher";
+import { PressableScale } from "$components/ui/PressableScale";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth, type UserRole } from "$contexts/AuthContext";
+import { useDevSettings } from "$contexts/DevSettingsContext";
+import { formatPhone } from "$lib/formatPhone";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 const ROLES: {
   title: string;

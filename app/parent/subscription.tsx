@@ -1,4 +1,4 @@
-import { SideNav } from "@/components/navigation/SideNav";
+import { SideNav } from "$components/navigation/SideNav";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -11,11 +11,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SHADOWS } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
-import { useSubscriptionPlans } from "../../hooks/usePlatformData";
-import { formatKZT } from "../../lib/formatCurrency";
-import { useIsDesktop } from "../../lib/useIsDesktop";
+import { SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useSubscriptionPlans } from "$hooks/usePlatformData";
+import { formatKZT } from "$lib/formatCurrency";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function SubscriptionPaywall() {
   const router = useRouter();

@@ -15,9 +15,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useLearningMaterials } from "../../../hooks/useMentorData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useLearningMaterials } from "$hooks/useMentorData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorLibrary() {
   const router = useRouter();

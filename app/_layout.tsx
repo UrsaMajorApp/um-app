@@ -6,16 +6,16 @@ import {
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, useColorScheme, View } from "react-native";
-import { COLORS } from "../constants/theme";
-import { AuthProvider, useAuth } from "../contexts/AuthContext";
-import { DevSettingsProvider } from "../contexts/DevSettingsContext";
-import { ParentDataProvider } from "../contexts/ParentDataContext";
+import { COLORS } from "$constants/theme";
+import { AuthProvider, useAuth } from "$contexts/AuthContext";
+import { DevSettingsProvider } from "$contexts/DevSettingsContext";
+import { ParentDataProvider } from "$contexts/ParentDataContext";
 import "../global.css";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { DevRoleSwitcher } from "../components/DevRoleSwitcher";
-import type { AuthUser, UserRole } from "../contexts/AuthContext";
-import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from "../constants/profileRoutes";
+import { DevRoleSwitcher } from "$components/DevRoleSwitcher";
+import type { AuthUser, UserRole } from "$contexts/AuthContext";
+import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from "$constants/profileRoutes";
 
 function getProfileSetupRoute(role: UserRole) {
   return PROFILE_SETUP_ROUTES[role] ?? "/(tabs)/home";

@@ -15,9 +15,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
     COLORS,
     SHADOWS
-} from "../../../constants/theme";
-import { useTeacherGroups } from "../../../hooks/usePlatformData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useTeacherGroups } from "$hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function TeacherGroupsScreen() {
   const router = useRouter();

@@ -14,10 +14,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 type TabType = "requests" | "archive";
 

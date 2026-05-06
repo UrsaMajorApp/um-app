@@ -10,17 +10,17 @@ import {
   FormCard,
   LabeledTextInput,
   PrimaryActionButton,
-} from "../../../components/ui/FormControls";
-import { GradientScreenHeader } from "../../../components/ui/GradientScreenHeader";
+} from "$components/ui/FormControls";
+import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
 import {
   COLORS,
   LAYOUT,
   SPACING,
-} from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
-import { resolveOwnedOrgId } from "../../../lib/supabaseHelpers";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { resolveOwnedOrgId } from "$lib/supabaseHelpers";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function GroupCreateScreen() {
   const router = useRouter();

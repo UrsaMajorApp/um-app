@@ -7,7 +7,7 @@ import {
   TextInput,
   View
 } from "react-native";
-import { COLORS, SHADOWS } from "../../constants/theme";
+import { COLORS, SHADOWS } from "$constants/theme";
 
 interface QRScannerProps {
   onClose: () => void;

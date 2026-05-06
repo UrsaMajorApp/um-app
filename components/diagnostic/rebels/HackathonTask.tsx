@@ -4,8 +4,8 @@
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS } from "../../../constants/theme";
-import type { ProTask1214 } from "../../../data/diagnosticData1214";
+import { COLORS, RADIUS } from "$constants/theme";
+import type { ProTask1214 } from "$data/diagnosticData1214";
 
 const SPEAKERS = {
   system: { name: "СИСТЕМА", color: "#818CF8", bg: "#1E1B4B" },

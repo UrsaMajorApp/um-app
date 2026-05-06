@@ -16,20 +16,20 @@ import {
   RADIUS,
   SHADOWS,
   TYPOGRAPHY,
-} from "@/constants/theme";
-import { EnrollmentRequestModal } from "@/components/home/youth/EnrollmentRequestModal";
-import { YouthPassModal } from "@/components/home/youth/YouthPassModal";
-import { useAuth } from "@/contexts/AuthContext";
-import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
+} from "$constants/theme";
+import { EnrollmentRequestModal } from "$components/home/youth/EnrollmentRequestModal";
+import { YouthPassModal } from "$components/home/youth/YouthPassModal";
+import { useAuth } from "$contexts/AuthContext";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
-import { useDevSettings } from "@/contexts/DevSettingsContext";
-import { useParentData } from "@/contexts/ParentDataContext";
-import { courseGradient, usePublicCourses } from "@/hooks/usePublicData";
+import { useDevSettings } from "$contexts/DevSettingsContext";
+import { useParentData } from "$contexts/ParentDataContext";
+import { courseGradient, usePublicCourses } from "$hooks/usePublicData";
 import {
   useStudentTasks,
   useYouthAchievements,
-} from "@/hooks/useStudentData";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+} from "$hooks/useStudentData";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
 
 export default function YouthHome() {
   const router = useRouter();

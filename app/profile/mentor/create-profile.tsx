@@ -16,11 +16,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ApprovalPendingSuccessView } from "../../../components/profile/ApprovalPendingSuccessView";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { ApprovalPendingSuccessView } from "$components/profile/ApprovalPendingSuccessView";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useIsDesktop } from "$lib/useIsDesktop";
 import {
   CITIES,
   PREDEFINED_SKILLS,
@@ -28,7 +28,7 @@ import {
   ROLE_GRADIENT,
   SPECIALIZATIONS,
   STEPS,
-} from "../../../constants/profile/mentorCreateProfileOptions";
+} from "$constants/profile/mentorCreateProfileOptions";
 
 export default function MentorCreateProfile() {
   const router = useRouter();

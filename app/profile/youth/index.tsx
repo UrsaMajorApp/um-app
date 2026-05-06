@@ -10,11 +10,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ScreenHeader from "../../../components/ui/ScreenHeader";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useParentData } from "../../../contexts/ParentDataContext";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import ScreenHeader from "$components/ui/ScreenHeader";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function YouthProfile() {
   const router = useRouter();

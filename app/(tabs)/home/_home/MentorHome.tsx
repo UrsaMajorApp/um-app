@@ -15,16 +15,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
     COLORS,
     SHADOWS
-} from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
+} from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 import {
     useMentorOwnProfile,
     useMentorRequests,
     useMentorStudents,
-} from "@/hooks/useMentorData";
-import { useWalletData } from "@/hooks/usePlatformData";
-import { formatKZT } from "@/lib/formatCurrency";
-import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
+} from "$hooks/useMentorData";
+import { useWalletData } from "$hooks/usePlatformData";
+import { formatKZT } from "$lib/formatCurrency";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorHome() {
   const router = useRouter();

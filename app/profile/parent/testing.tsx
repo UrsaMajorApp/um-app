@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { LAYOUT } from "../../../constants/theme";
-import { useOnboardingQuestions } from "../../../hooks/usePlatformData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { LAYOUT } from "$constants/theme";
+import { useOnboardingQuestions } from "$hooks/usePlatformData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentTesting() {
   const router = useRouter();

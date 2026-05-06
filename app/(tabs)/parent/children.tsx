@@ -11,11 +11,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import EditChildModal from "../../../components/parent/EditChildModal";
-import { COLORS, SHADOWS } from "../../../constants/theme";
-import { useParentData } from "../../../contexts/ParentDataContext";
-import { Child } from "../../../models/types";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import EditChildModal from "$components/parent/EditChildModal";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useParentData } from "$contexts/ParentDataContext";
+import { Child } from "$models/types";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentChildren() {
   const router = useRouter();

@@ -11,9 +11,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import type { CareerCard } from "../../../data/diagnosticData1517";
-import SwipeableDecisionCard from "../SwipeableDecisionCard";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import type { CareerCard } from "$data/diagnosticData1517";
+import SwipeableDecisionCard from "$components/diagnostic/SwipeableDecisionCard";
 
 interface Props {
   card: CareerCard;

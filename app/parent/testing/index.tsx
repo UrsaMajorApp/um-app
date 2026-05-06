@@ -10,12 +10,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useParentData } from "../../../contexts/ParentDataContext";
-import { useOnboardingQuestions } from "../../../hooks/usePlatformData";
+import { useParentData } from "$contexts/ParentDataContext";
+import { useOnboardingQuestions } from "$hooks/usePlatformData";
 import {
   generateGeminiDiagnosticJson,
   isGeminiFallbackError,
-} from "../../../lib/geminiDiagnostics";
+} from "$lib/geminiDiagnostics";
 
 // Answer order matches the DB seed: creative, physical, logical, social, linguistic
 const ANSWER_VALUES = [

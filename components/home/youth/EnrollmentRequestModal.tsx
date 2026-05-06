@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS, SHADOWS } from "@/constants/theme";
-import { courseGradient } from "@/hooks/usePublicData";
-import { formatKZT } from "@/lib/formatCurrency";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { courseGradient } from "$hooks/usePublicData";
+import { formatKZT } from "$lib/formatCurrency";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
 
 type EnrollmentRequestModalProps = {
   visible: boolean;

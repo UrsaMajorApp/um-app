@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { useDevDataVersion } from "../lib/devDataEvents";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import { rowsOrEmpty } from "../lib/supabaseHelpers";
+import { useAuth } from "$contexts/AuthContext";
+import { useDevDataVersion } from "$lib/devDataEvents";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { rowsOrEmpty } from "$lib/supabaseHelpers";
 
 export interface Chat {
   id: string;

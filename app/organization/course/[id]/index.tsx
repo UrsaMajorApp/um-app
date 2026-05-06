@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LEVEL_LABELS } from "../../../../constants/courseOptions";
+import { LEVEL_LABELS } from "$constants/courseOptions";
 import {
   COLORS,
   LAYOUT,
@@ -19,10 +19,10 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../../constants/theme";
-import { useOrgCourseById, useOrgGroups } from "../../../../hooks/useOrgData";
-import { formatKZT } from "../../../../lib/formatCurrency";
-import { useIsDesktop } from "../../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useOrgCourseById, useOrgGroups } from "$hooks/useOrgData";
+import { formatKZT } from "$lib/formatCurrency";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

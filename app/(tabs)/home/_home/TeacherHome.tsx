@@ -13,10 +13,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS, TYPOGRAPHY } from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
-import { useTeacherGroups } from "@/hooks/usePlatformData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
+import { COLORS, SHADOWS, TYPOGRAPHY } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useTeacherGroups } from "$hooks/usePlatformData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 function scheduleTimeLabel(schedule: string | null) {
   const match = schedule?.match(/\b([01]?\d|2[0-3]):[0-5]\d\b/);

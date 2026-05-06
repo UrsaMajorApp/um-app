@@ -11,9 +11,9 @@ import {
   FormCard,
   LabeledTextInput,
   PrimaryActionButton,
-} from "../../../components/ui/FormControls";
-import { GradientScreenHeader } from "../../../components/ui/GradientScreenHeader";
-import { PressableScale } from "../../../components/ui/PressableScale";
+} from "$components/ui/FormControls";
+import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
+import { PressableScale } from "$components/ui/PressableScale";
 import {
   COLORS,
   LAYOUT,
@@ -21,9 +21,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { formatPhone } from "../../../lib/formatPhone";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { formatPhone } from "$lib/formatPhone";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function StaffAddScreen() {
   const router = useRouter();

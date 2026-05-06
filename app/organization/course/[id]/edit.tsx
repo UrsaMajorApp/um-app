@@ -16,8 +16,8 @@ import {
   FormCard,
   LabeledTextInput,
   PrimaryActionButton,
-} from "../../../../components/ui/FormControls";
-import { GradientScreenHeader } from "../../../../components/ui/GradientScreenHeader";
+} from "$components/ui/FormControls";
+import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
 import {
   ICON_OPTIONS,
   LEVEL_OPTIONS,
@@ -25,16 +25,16 @@ import {
   STATUS_OPTIONS,
   type CourseLevel as Level,
   type CourseStatus as Status,
-} from "../../../../constants/courseOptions";
+} from "$constants/courseOptions";
 import {
   COLORS,
   LAYOUT,
   RADIUS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../../constants/theme";
-import { useOrgCourseById, useOrgCourses } from "../../../../hooks/useOrgData";
-import { useIsDesktop } from "../../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useOrgCourseById, useOrgCourses } from "$hooks/useOrgData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function CourseEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

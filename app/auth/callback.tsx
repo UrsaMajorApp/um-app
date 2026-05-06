@@ -22,9 +22,9 @@ import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Platform, Text, View } from "react-native";
-import { COLORS } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "../../lib/supabase";
+import { COLORS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
 
 // ← This call is what closes the lingering Chrome Custom Tab on Android.
 //   It must run at module level (before the component mounts) so it fires

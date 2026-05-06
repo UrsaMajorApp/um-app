@@ -15,10 +15,10 @@ import {
     GameId,
     GAMES,
     getDailyChallenge,
-} from "../../../components/games/gameCatalog";
-import { COLORS, LAYOUT, SHADOWS } from "../../../constants/theme";
-import { useYouthGameIq } from "../../../hooks/useYouthGameIq";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$components/games/gameCatalog";
+import { COLORS, LAYOUT, SHADOWS } from "$constants/theme";
+import { useYouthGameIq } from "$hooks/useYouthGameIq";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function GamesLobby() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import React from "react";
-import { AutonomousLogo } from "./AutonomousLogo";
+import { AutonomousLogo } from "$components/home/parent/AutonomousLogo";
 
 type FloatingBrandingProps = {
   count?: number;

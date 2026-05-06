@@ -1,6 +1,6 @@
 import React from "react";
 import { View, type ViewStyle } from "react-native";
-import { COLORS, RADIUS, SHADOWS, SPACING } from "@/constants/theme";
+import { COLORS, RADIUS, SHADOWS, SPACING } from "$constants/theme";
 
 export function FormCard({
   children,

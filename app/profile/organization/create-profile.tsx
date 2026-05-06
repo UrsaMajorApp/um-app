@@ -15,13 +15,13 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ApprovalPendingSuccessView } from "../../../components/profile/ApprovalPendingSuccessView";
-import { PressableScale } from "../../../components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { formatPhone } from "../../../lib/formatPhone";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { ApprovalPendingSuccessView } from "$components/profile/ApprovalPendingSuccessView";
+import { PressableScale } from "$components/ui/PressableScale";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { formatPhone } from "$lib/formatPhone";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 // Org brand colour — matches the ROLES entry in register.tsx
 const ORG_COLOR = "#10B981";

@@ -1,10 +1,10 @@
-import { ADMIN_ROUTES, type AdminRouteKey } from "@/constants/admin";
-import { LAYOUT, SPACING } from "@/constants/theme";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
-import { rowsOrEmpty } from "@/lib/supabaseHelpers";
+import { ADMIN_ROUTES, type AdminRouteKey } from "$constants/admin";
+import { LAYOUT, SPACING } from "$constants/theme";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { rowsOrEmpty } from "$lib/supabaseHelpers";
 import { useRouter } from "expo-router";
 import { useWindowDimensions } from "react-native";
-import { useIsDesktop } from "../../lib/useIsDesktop";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export function useAdminLayout() {
   const { width } = useWindowDimensions();

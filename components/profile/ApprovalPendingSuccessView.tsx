@@ -5,7 +5,7 @@ import React from "react";
 import type { ReactNode } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "../../constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 
 type ApprovalStep = {
   label: string;

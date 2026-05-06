@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   type TouchableOpacityProps,
 } from "react-native";
-import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "@/constants/theme";
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "$constants/theme";
 
 export function PrimaryActionButton({
   children,

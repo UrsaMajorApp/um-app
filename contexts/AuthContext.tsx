@@ -12,8 +12,8 @@ import React, {
   type ReactNode,
 } from "react";
 import { Platform } from "react-native";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import { getUseRealOtpSetting } from "./DevSettingsContext";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { getUseRealOtpSetting } from "$contexts/DevSettingsContext";
 
 export type UserRole =
   | "parent"

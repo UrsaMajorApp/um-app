@@ -2,11 +2,11 @@ import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
-import { NotificationsModal } from "./NotificationsModal";
-import { useTabNav } from "./useTabNav";
-import type { Role } from "@/constants/navigation/tabItems";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { NotificationsModal } from "$components/navigation/NotificationsModal";
+import { useTabNav } from "$components/navigation/useTabNav";
+import type { Role } from "$constants/navigation/tabItems";
 
 type Props = { role: Role | string | null };
 

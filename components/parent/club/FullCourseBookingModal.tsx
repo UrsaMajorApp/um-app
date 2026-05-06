@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, SHADOWS } from "../../../constants/theme";
+import { COLORS, SHADOWS } from "$constants/theme";
 
 type FullCourseBookingModalProps = {
   visible: boolean;

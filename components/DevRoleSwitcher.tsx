@@ -5,13 +5,13 @@ import {
   ScrollView, Switch, Platform, useWindowDimensions, Pressable, ActivityIndicator, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useAuth, UserRole } from '../contexts/AuthContext';
-import { useDevSettings } from '../contexts/DevSettingsContext';
-import { useParentData } from '../contexts/ParentDataContext';
-import { emitDevDataChanged } from '../lib/devDataEvents';
-import { clearAllDevData, clearDevData, getDevDataSeeded, seedDevData } from '../lib/devSeedData';
-import { isWebMinWidth } from '../lib/useIsDesktop';
-import { COLORS, RADIUS, SHADOWS } from '../constants/theme';
+import { useAuth, UserRole } from '$contexts/AuthContext';
+import { useDevSettings } from '$contexts/DevSettingsContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { emitDevDataChanged } from '$lib/devDataEvents';
+import { clearAllDevData, clearDevData, getDevDataSeeded, seedDevData } from '$lib/devSeedData';
+import { isWebMinWidth } from '$lib/useIsDesktop';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { Feather } from '@expo/vector-icons';
 
 const DEV_TOOLS_KEY = 'um_dev_tools_enabled';

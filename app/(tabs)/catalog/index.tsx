@@ -12,15 +12,15 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useParentData } from "../../../contexts/ParentDataContext";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { useParentData } from "$contexts/ParentDataContext";
 import {
   courseGradient,
   SCORE_TO_SKILLS,
   usePublicCourses,
-} from "../../../hooks/usePublicData";
-import { formatKZT } from "../../../lib/formatCurrency";
-import { isWebMinWidth } from "../../../lib/useIsDesktop";
+} from "$hooks/usePublicData";
+import { formatKZT } from "$lib/formatCurrency";
+import { isWebMinWidth } from "$lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
 const IS_DESKTOP = isWebMinWidth(width, 900);

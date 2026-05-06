@@ -11,23 +11,23 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NotificationsModal } from "@/components/navigation/NotificationsModal";
+import { NotificationsModal } from "$components/navigation/NotificationsModal";
 import {
   COLORS,
   RADIUS,
   SHADOWS,
   TYPOGRAPHY,
-} from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
-import { useParentData } from "@/contexts/ParentDataContext";
+} from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
 import {
   courseGradient,
   SCORE_TO_SKILLS,
   usePublicCourses,
-} from "@/hooks/usePublicData";
-import { formatKZT } from "@/lib/formatCurrency";
-import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
-import { FloatingBranding } from "@/components/home/parent/FloatingBranding";
+} from "$hooks/usePublicData";
+import { formatKZT } from "$lib/formatCurrency";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import { FloatingBranding } from "$components/home/parent/FloatingBranding";
 
 export default function ParentHome() {
   const router = useRouter();

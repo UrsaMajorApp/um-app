@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import { COLORS, RADIUS } from "../../constants/theme";
-import { PressableScale } from "../ui/PressableScale";
+import { COLORS, RADIUS } from "$constants/theme";
+import { PressableScale } from "$components/ui/PressableScale";
 
 export type AuthMethod = "phone" | "email";
 

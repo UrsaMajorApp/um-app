@@ -17,13 +17,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   COLORS,
   SHADOWS
-} from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
+} from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 import {
   useMentorOwnProfile,
   useMentorProfileStats,
-} from "../../../hooks/useMentorData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$hooks/useMentorData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorProfile() {
   const { logout, user } = useAuth();

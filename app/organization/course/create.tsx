@@ -15,23 +15,23 @@ import {
   FormCard,
   LabeledTextInput,
   PrimaryActionButton,
-} from "../../../components/ui/FormControls";
-import { GradientScreenHeader } from "../../../components/ui/GradientScreenHeader";
+} from "$components/ui/FormControls";
+import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
 import {
   ICON_OPTIONS,
   LEVEL_OPTIONS,
   SKILL_OPTIONS,
   type CourseLevel as Level,
-} from "../../../constants/courseOptions";
+} from "$constants/courseOptions";
 import {
   COLORS,
   LAYOUT,
   RADIUS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useOrgCourses } from "../../../hooks/useOrgData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useOrgCourses } from "$hooks/useOrgData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function CreateCourseScreen() {
   const router = useRouter();

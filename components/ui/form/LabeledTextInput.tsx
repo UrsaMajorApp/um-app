@@ -4,7 +4,7 @@ import {
   type TextInputProps,
   View,
 } from "react-native";
-import { COLORS, RADIUS, TYPOGRAPHY } from "@/constants/theme";
+import { COLORS, RADIUS, TYPOGRAPHY } from "$constants/theme";
 
 export function LabeledTextInput({
   label,

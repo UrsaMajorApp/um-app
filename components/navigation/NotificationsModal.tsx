@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { Modal, Pressable, Text, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "@/constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 
 export function NotificationsModal({
   visible,

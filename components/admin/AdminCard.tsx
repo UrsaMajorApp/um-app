@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "@/constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 
 export function AdminCard({
   children,

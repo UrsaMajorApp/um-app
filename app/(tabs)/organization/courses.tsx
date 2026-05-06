@@ -20,10 +20,10 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useOrgCourses, useOrgGroups } from "../../../hooks/useOrgData";
-import { formatKZT } from "../../../lib/formatCurrency";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useOrgCourses, useOrgGroups } from "$hooks/useOrgData";
+import { formatKZT } from "$lib/formatCurrency";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function OrgCourses() {
   const router = useRouter();

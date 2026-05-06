@@ -19,9 +19,9 @@ import {
   type ProTask911,
   type StealthEvent911,
   type WYRCard
-} from "../data/diagnosticData911";
-import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
-import type { Diagnostic } from "../models/types";
+} from "$data/diagnosticData911";
+import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
+import type { Diagnostic } from "$models/types";
 
 // ─── Phase & state types ──────────────────────────────────────────────────────
 

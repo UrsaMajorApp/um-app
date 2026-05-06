@@ -5,8 +5,8 @@
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import type { ProTask1517 } from "../../../data/diagnosticData1517";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import type { ProTask1517 } from "$data/diagnosticData1517";
 
 interface Props {
   task: ProTask1517;

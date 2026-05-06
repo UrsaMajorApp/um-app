@@ -18,12 +18,12 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../../constants/theme";
+} from "$constants/theme";
 import {
   useOrgApplications,
   useOrgGroupById,
-} from "../../../../hooks/useOrgData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../../lib/useIsDesktop";
+} from "$hooks/useOrgData";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 type AttendanceStatus = "present" | "absent" | "sick" | null;
 

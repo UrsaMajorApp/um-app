@@ -12,16 +12,16 @@ import {
   FormCard,
   LabeledTextInput,
   PrimaryActionButton,
-} from "../../../components/ui/FormControls";
-import { GradientScreenHeader } from "../../../components/ui/GradientScreenHeader";
+} from "$components/ui/FormControls";
+import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
 import {
   COLORS,
   LAYOUT,
   RADIUS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function TaskCreateScreen() {
   const router = useRouter();

@@ -17,12 +17,12 @@ import {
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useParentData } from "../../../contexts/ParentDataContext";
-import { formatPhone } from "../../../lib/formatPhone";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
+import { formatPhone } from "$lib/formatPhone";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 function generateQRPin(): string {
   // Generate a 6-digit PIN (100000-999999)

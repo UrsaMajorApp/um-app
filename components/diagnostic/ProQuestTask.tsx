@@ -8,8 +8,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SHADOWS } from "../../constants/theme";
-import type { ProTask } from "../../data/diagnosticData";
+import { SHADOWS } from "$constants/theme";
+import type { ProTask } from "$data/diagnosticData";
 
 interface Props {
   task: ProTask;

@@ -13,9 +13,9 @@ import {
   VIBE_CARDS,
   type RiasecType,
   type StealthEvent1214
-} from "../data/diagnosticData1214";
-import { generateGeminiDiagnosticJson } from "../lib/geminiDiagnostics";
-import type { Diagnostic } from "../models/types";
+} from "$data/diagnosticData1214";
+import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
+import type { Diagnostic } from "$models/types";
 
 export type Phase1214 = "intro" | "basic" | "pro" | "processing" | "done";
 

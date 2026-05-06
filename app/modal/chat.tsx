@@ -13,9 +13,9 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { COLORS, SHADOWS } from "../../constants/theme";
-import { useChatMessages } from "../../hooks/useChats";
-import { isWebMinWidth } from "../../lib/useIsDesktop";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useChatMessages } from "$hooks/useChats";
+import { isWebMinWidth } from "$lib/useIsDesktop";
 
 export default function ChatModal() {
   const router = useRouter();

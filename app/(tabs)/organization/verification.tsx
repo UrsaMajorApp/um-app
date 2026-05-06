@@ -14,10 +14,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useOrgProfile } from "../../../hooks/useOrgData";
-import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
-import { getDashboardHorizontalPadding, useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useOrgProfile } from "$hooks/useOrgData";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 type DocKey = "bin_doc" | "registration_doc" | "license_doc";
 

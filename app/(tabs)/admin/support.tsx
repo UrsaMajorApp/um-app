@@ -1,12 +1,12 @@
-import { AdminHeader } from "@/components/admin/AdminHeader";
-import { EmptyState } from "@/components/admin/EmptyState";
-import { SegmentTabs } from "@/components/admin/SegmentTabs";
+import { AdminHeader } from "$components/admin/AdminHeader";
+import { EmptyState } from "$components/admin/EmptyState";
+import { SegmentTabs } from "$components/admin/SegmentTabs";
 import {
   formatAdminDate,
   useAdminLayout,
-} from "@/components/admin/adminUtils";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
-import { useTickets } from "@/hooks/useAdminData";
+} from "$components/admin/adminUtils";
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
+import { useTickets } from "$hooks/useAdminData";
 import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 

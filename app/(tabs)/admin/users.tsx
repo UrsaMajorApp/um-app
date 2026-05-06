@@ -1,21 +1,21 @@
-import { AdminHeader } from "@/components/admin/AdminHeader";
-import { EmptyState } from "@/components/admin/EmptyState";
-import { SegmentTabs } from "@/components/admin/SegmentTabs";
+import { AdminHeader } from "$components/admin/AdminHeader";
+import { EmptyState } from "$components/admin/EmptyState";
+import { SegmentTabs } from "$components/admin/SegmentTabs";
 import {
   ensureConversation,
   formatAdminDate,
   useAdminLayout,
-} from "@/components/admin/adminUtils";
-import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from "@/constants/admin";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/constants/theme";
-import { useAuth } from "@/contexts/AuthContext";
+} from "$components/admin/adminUtils";
+import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from "$constants/admin";
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
 import {
   MentorApp,
   useAdminStats,
   useAllUsers,
   useFamilies,
   useMentorApps,
-} from "@/hooks/useAdminData";
+} from "$hooks/useAdminData";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";

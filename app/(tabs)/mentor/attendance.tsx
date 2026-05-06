@@ -15,9 +15,9 @@ import {
   SHADOWS,
   SPACING,
   TYPOGRAPHY,
-} from "../../../constants/theme";
-import { useMentorAttendance } from "../../../hooks/useMentorData";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useMentorAttendance } from "$hooks/useMentorData";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorAttendance() {
   const router = useRouter();

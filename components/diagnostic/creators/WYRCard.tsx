@@ -7,11 +7,11 @@
 import { MotiView } from "moti";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "../../../constants/theme";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 import type {
   BasicSkill911,
   WYRCard as WYRCardType,
-} from "../../../data/diagnosticData911";
+} from "$data/diagnosticData911";
 
 interface Props {
   card: WYRCardType;

@@ -17,15 +17,15 @@ import {
   RADIUS,
   SHADOWS,
   TYPOGRAPHY
-} from "@/constants/theme";
+} from "$constants/theme";
 import {
   useOrgProfile,
   useOrgSchedule,
   useOrgStats,
-} from "@/hooks/useOrgData";
-import { useWalletData } from "@/hooks/usePlatformData";
-import { formatKZT } from "@/lib/formatCurrency";
-import { getDashboardHorizontalPadding, useIsDesktop } from "@/lib/useIsDesktop";
+} from "$hooks/useOrgData";
+import { useWalletData } from "$hooks/usePlatformData";
+import { formatKZT } from "$lib/formatCurrency";
+import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 const QUICK_ACTIONS = [
   {

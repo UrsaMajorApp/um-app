@@ -13,9 +13,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 const ROLE_COLOR = "#3B82F6";
 const ROLE_GRADIENT: [string, string] = ["#3B82F6", "#60A5FA"];

@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import { MotiView } from "moti";
 import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import { PressableScale } from "../../components/ui/PressableScale";
-import { COLORS, RADIUS, SHADOWS } from "../../constants/theme";
+import { PressableScale } from "$components/ui/PressableScale";
+import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 
 export default function IntroScreen() {
   const router = useRouter();

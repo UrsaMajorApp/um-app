@@ -12,20 +12,20 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LEVEL_LABELS } from "../../../../constants/courseOptions";
-import { COLORS, SHADOWS } from "../../../../constants/theme";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useParentData } from "../../../../contexts/ParentDataContext";
+import { LEVEL_LABELS } from "$constants/courseOptions";
+import { COLORS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
 import {
   applyToCourse,
   applyToTrialLesson,
   checkEnrollment,
   courseGradient,
   usePublicCourseById,
-} from "../../../../hooks/usePublicData";
-import { formatKZT } from "../../../../lib/formatCurrency";
-import { EnrollmentChoiceModal } from "../../../../components/parent/club/EnrollmentChoiceModal";
-import { FullCourseBookingModal } from "../../../../components/parent/club/FullCourseBookingModal";
+} from "$hooks/usePublicData";
+import { formatKZT } from "$lib/formatCurrency";
+import { EnrollmentChoiceModal } from "$components/parent/club/EnrollmentChoiceModal";
+import { FullCourseBookingModal } from "$components/parent/club/FullCourseBookingModal";
 
 export default function ParentClubDetails() {
   const router = useRouter();

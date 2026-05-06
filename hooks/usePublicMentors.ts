@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import { rowsOrEmpty } from "../lib/supabaseHelpers";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { rowsOrEmpty } from "$lib/supabaseHelpers";
 
 export interface PublicMentor {
   id: string;

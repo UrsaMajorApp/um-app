@@ -1,4 +1,4 @@
-import { useIsDesktop } from "../../lib/useIsDesktop";
+import { useIsDesktop } from "$lib/useIsDesktop";
 /**
  * DiagnosticArchitects.tsx
  * Main orchestrator for 15-17 Architects diagnostic.
@@ -17,12 +17,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../constants/theme";
-import { useAuth } from "../../contexts/AuthContext";
-import { useParentData } from "../../contexts/ParentDataContext";
-import { useDiagnosticEngine1517 } from "../../hooks/useDiagnosticEngine1517";
-import CareerSwipeCard from "./architects/CareerSwipeCard";
-import OsTask from "./architects/OsTask";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
+import { useDiagnosticEngine1517 } from "$hooks/useDiagnosticEngine1517";
+import CareerSwipeCard from "$components/diagnostic/architects/CareerSwipeCard";
+import OsTask from "$components/diagnostic/architects/OsTask";
 
 interface Props {
   childId?: string | null;

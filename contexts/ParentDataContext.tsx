@@ -6,11 +6,11 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
-import { useDevDataVersion } from "../lib/devDataEvents";
-import { createClientUuid, isUuid } from "../lib/idUtils";
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import { Child, Diagnostic } from "../models/types";
-import { useAuth } from "./AuthContext";
+import { useDevDataVersion } from "$lib/devDataEvents";
+import { createClientUuid, isUuid } from "$lib/idUtils";
+import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { Child, Diagnostic } from "$models/types";
+import { useAuth } from "$contexts/AuthContext";
 
 const devTariffKey = (userId: string) => `um_dev_tariff_${userId}`;
 type AgeGroup = "6-8" | "9-11" | "12-14" | "15-17";

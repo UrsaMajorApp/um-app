@@ -12,9 +12,9 @@ import {
   COLORS,
   LAYOUT,
   SHADOWS
-} from "../../../constants/theme";
-import { useParentData } from "../../../contexts/ParentDataContext";
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+} from "$constants/theme";
+import { useParentData } from "$contexts/ParentDataContext";
+import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentResults() {
   const router = useRouter();

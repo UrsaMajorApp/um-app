@@ -1,4 +1,4 @@
-import { useIsDesktop } from "../../../lib/useIsDesktop";
+import { useIsDesktop } from "$lib/useIsDesktop";
 /**
  * results.tsx — Diagnostic results screen.
  *
@@ -21,9 +21,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useParentData } from "../../../contexts/ParentDataContext";
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
+import { useAuth } from "$contexts/AuthContext";
+import { useParentData } from "$contexts/ParentDataContext";
 
 function compactSummary(summary?: string) {
   const normalized = (summary || "").replace(/\s+/g, " ").trim();

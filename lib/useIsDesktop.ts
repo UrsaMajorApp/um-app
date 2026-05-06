@@ -1,5 +1,5 @@
 import { Platform, useWindowDimensions } from "react-native";
-import { LAYOUT } from "../constants/theme";
+import { LAYOUT } from "$constants/theme";
 
 export function isDesktopWidth(width: number) {
   return isWebMinWidth(width, LAYOUT.desktopBreakpoint);

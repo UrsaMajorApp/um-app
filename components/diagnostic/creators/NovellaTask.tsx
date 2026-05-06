@@ -9,8 +9,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { RADIUS, SHADOWS } from "../../../constants/theme";
-import type { ProTask911 } from "../../../data/diagnosticData911";
+import { RADIUS, SHADOWS } from "$constants/theme";
+import type { ProTask911 } from "$data/diagnosticData911";
 
 const SPEAKER_CONFIG = {
   system: {
