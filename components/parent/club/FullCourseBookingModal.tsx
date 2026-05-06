@@ -1,12 +1,12 @@
-import { Feather } from "@expo/vector-icons";
-import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, SHADOWS } from "$constants/theme";
-import type { OrgGroup } from "$hooks/useOrgData";
-import type { Child } from "$types/child";
+import { Feather } from '@expo/vector-icons';
+import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, SHADOWS } from '$constants/theme';
+import type { OrgGroup } from '$hooks/useOrgData';
+import type { Child } from '$types/child';
 
 type FullCourseBookingModalProps = {
   visible: boolean;
-  activeChild: Pick<Child, "name"> | null;
+  activeChild: Pick<Child, 'name'> | null;
   groups: OrgGroup[];
   selectedGroupId: string | null;
   applying: boolean;
@@ -30,13 +30,13 @@ export function FullCourseBookingModal({
       <View
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          justifyContent: "flex-end",
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'flex-end',
         }}
       >
         <View
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
             padding: 24,
@@ -46,16 +46,16 @@ export function FullCourseBookingModal({
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: 20,
             }}
           >
             <Text
               style={{
                 fontSize: 22,
-                fontWeight: "900",
+                fontWeight: '900',
                 color: COLORS.foreground,
               }}
             >
@@ -66,8 +66,8 @@ export function FullCourseBookingModal({
               style={{
                 width: 36,
                 height: 36,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Feather name="x" size={22} color={COLORS.mutedForeground} />
@@ -77,11 +77,11 @@ export function FullCourseBookingModal({
           {activeChild && (
             <View
               style={{
-                backgroundColor: COLORS.primary + "10",
+                backgroundColor: `${COLORS.primary}10`,
                 padding: 14,
                 borderRadius: 18,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginBottom: 20,
               }}
             >
@@ -91,12 +91,12 @@ export function FullCourseBookingModal({
                   height: 44,
                   borderRadius: 22,
                   backgroundColor: COLORS.primary,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 14,
                 }}
               >
-                <Text style={{ color: "white", fontSize: 18, fontWeight: "900" }}>
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: '900' }}>
                   {activeChild.name.charAt(0).toUpperCase()}
                 </Text>
               </View>
@@ -105,8 +105,8 @@ export function FullCourseBookingModal({
                   style={{
                     fontSize: 11,
                     color: COLORS.mutedForeground,
-                    fontWeight: "700",
-                    textTransform: "uppercase",
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
                   }}
                 >
                   Ребёнок
@@ -114,7 +114,7 @@ export function FullCourseBookingModal({
                 <Text
                   style={{
                     fontSize: 17,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                   }}
                 >
@@ -127,12 +127,12 @@ export function FullCourseBookingModal({
           <Text
             style={{
               fontSize: 15,
-              fontWeight: "800",
+              fontWeight: '800',
               color: COLORS.foreground,
               marginBottom: 12,
             }}
           >
-            {groups.length > 0 ? "Выберите группу" : "Расписание уточняется"}
+            {groups.length > 0 ? 'Выберите группу' : 'Расписание уточняется'}
           </Text>
 
           {groups.length > 0 ? (
@@ -142,24 +142,22 @@ export function FullCourseBookingModal({
                   key={group.id}
                   onPress={() => onSelectGroup(group.id)}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                     padding: 14,
                     borderRadius: 18,
                     marginBottom: 10,
                     borderWidth: 2,
-                    borderColor:
-                      selectedGroupId === group.id ? COLORS.primary : "#F3F4F6",
-                    backgroundColor:
-                      selectedGroupId === group.id ? COLORS.primary + "05" : "white",
+                    borderColor: selectedGroupId === group.id ? COLORS.primary : '#F3F4F6',
+                    backgroundColor: selectedGroupId === group.id ? `${COLORS.primary}05` : 'white',
                   }}
                 >
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
                         fontSize: 14,
-                        fontWeight: "800",
+                        fontWeight: '800',
                         color: COLORS.foreground,
                       }}
                     >
@@ -183,10 +181,10 @@ export function FullCourseBookingModal({
                         marginTop: 2,
                       }}
                     >
-                      Мест:{" "}
+                      Мест:{' '}
                       {group.capacity - group.enrolled > 0
                         ? `${group.capacity - group.enrolled} свободно`
-                        : "Группа полная"}
+                        : 'Группа полная'}
                     </Text>
                   </View>
                   <View
@@ -195,10 +193,9 @@ export function FullCourseBookingModal({
                       height: 22,
                       borderRadius: 11,
                       borderWidth: 2,
-                      borderColor:
-                        selectedGroupId === group.id ? COLORS.primary : "#D1D5DB",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      borderColor: selectedGroupId === group.id ? COLORS.primary : '#D1D5DB',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     {selectedGroupId === group.id && (
@@ -218,7 +215,7 @@ export function FullCourseBookingModal({
           ) : (
             <View
               style={{
-                backgroundColor: "#F9FAFB",
+                backgroundColor: '#F9FAFB',
                 borderRadius: 16,
                 padding: 16,
                 marginBottom: 12,
@@ -228,7 +225,7 @@ export function FullCourseBookingModal({
                 style={{
                   color: COLORS.mutedForeground,
                   fontSize: 14,
-                  textAlign: "center",
+                  textAlign: 'center',
                 }}
               >
                 Организация скоро добавит группы с расписанием
@@ -241,26 +238,21 @@ export function FullCourseBookingModal({
             onPress={onConfirm}
             style={{
               backgroundColor:
-                applying || (groups.length > 0 && !selectedGroupId)
-                  ? "#E5E7EB"
-                  : COLORS.primary,
+                applying || (groups.length > 0 && !selectedGroupId) ? '#E5E7EB' : COLORS.primary,
               paddingVertical: 18,
               borderRadius: 22,
-              alignItems: "center",
+              alignItems: 'center',
               marginTop: 16,
             }}
           >
             <Text
               style={{
-                color:
-                  applying || (groups.length > 0 && !selectedGroupId)
-                    ? "#9CA3AF"
-                    : "white",
+                color: applying || (groups.length > 0 && !selectedGroupId) ? '#9CA3AF' : 'white',
                 fontSize: 16,
-                fontWeight: "900",
+                fontWeight: '900',
               }}
             >
-              {applying ? "Отправка..." : "Подтвердить заявку"}
+              {applying ? 'Отправка...' : 'Подтвердить заявку'}
             </Text>
           </TouchableOpacity>
         </View>

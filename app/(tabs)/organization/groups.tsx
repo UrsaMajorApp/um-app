@@ -1,41 +1,26 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgGroups } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgGroups } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgGroupsScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { groups: rawGroups, loading } = useOrgGroups();
   // Map to the shape the UI expects
   const groups = rawGroups.map((g) => ({
     id: g.id,
     group_name: g.name,
-    course_title: g.course ?? "",
-    status: g.active ? ("active" as const) : ("inactive" as const),
+    course_title: g.course ?? '',
+    status: g.active ? ('active' as const) : ('inactive' as const),
     current_students: g.enrolled,
     max_students: g.capacity,
     teacher_name: undefined as string | undefined,
@@ -50,7 +35,7 @@ export default function OrgGroupsScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
         <LinearGradient
@@ -59,12 +44,12 @@ export default function OrgGroupsScreen() {
           end={{ x: 1, y: 1 }}
           style={{ paddingBottom: SPACING.xl }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 paddingHorizontal: paddingX,
                 paddingTop: SPACING.md,
               }}
@@ -74,14 +59,14 @@ export default function OrgGroupsScreen() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xxl,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Группы
                 </Text>
                 <Text
                   style={{
-                    color: "rgba(255,255,255,0.7)",
+                    color: 'rgba(255,255,255,0.7)',
                     fontSize: TYPOGRAPHY.size.sm,
                     fontWeight: TYPOGRAPHY.weight.medium,
                     marginTop: 2,
@@ -91,14 +76,14 @@ export default function OrgGroupsScreen() {
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() => router.push("/organization/group/create")}
+                onPress={() => router.push('/organization/group/create')}
                 style={{
                   width: 52,
                   height: 52,
                   borderRadius: RADIUS.md,
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Feather name="plus" size={24} color="white" />
@@ -117,7 +102,7 @@ export default function OrgGroupsScreen() {
         showsVerticalScrollIndicator={false}
       >
         {loading ? (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Text style={{ color: COLORS.mutedForeground }}>Загрузка...</Text>
           </View>
         ) : groups.length === 0 ? (
@@ -126,8 +111,8 @@ export default function OrgGroupsScreen() {
               backgroundColor: COLORS.white,
               borderRadius: RADIUS.xxl,
               padding: 40,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               borderWidth: 1,
               borderColor: COLORS.border,
             }}
@@ -138,8 +123,8 @@ export default function OrgGroupsScreen() {
                 height: 80,
                 backgroundColor: COLORS.background,
                 borderRadius: RADIUS.full,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: SPACING.xl,
               }}
             >
@@ -159,7 +144,7 @@ export default function OrgGroupsScreen() {
               style={{
                 fontSize: TYPOGRAPHY.size.sm,
                 color: COLORS.mutedForeground,
-                textAlign: "center",
+                textAlign: 'center',
                 marginBottom: SPACING.xl,
                 lineHeight: 20,
               }}
@@ -167,20 +152,20 @@ export default function OrgGroupsScreen() {
               Создайте первую группу для начала работы
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/organization/group/create")}
+              onPress={() => router.push('/organization/group/create')}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 32,
                 height: 56,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 ...SHADOWS.md,
               }}
             >
               <Text
                 style={{
-                  color: "white",
+                  color: 'white',
                   fontWeight: TYPOGRAPHY.weight.bold,
                   fontSize: 16,
                 }}
@@ -199,9 +184,7 @@ export default function OrgGroupsScreen() {
                 transition={{ delay: idx * 100 }}
               >
                 <TouchableOpacity
-                  onPress={() =>
-                    router.push(appHref(`/organization/group/${group.id}`))
-                  }
+                  onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
                   style={{
                     ...SHADOWS.strict,
                     backgroundColor: COLORS.white,
@@ -213,9 +196,9 @@ export default function OrgGroupsScreen() {
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "flex-start",
-                      justifyContent: "space-between",
+                      flexDirection: 'row',
+                      alignItems: 'flex-start',
+                      justifyContent: 'space-between',
                       marginBottom: SPACING.xl,
                     }}
                   >
@@ -246,9 +229,7 @@ export default function OrgGroupsScreen() {
                         paddingVertical: 6,
                         borderRadius: RADIUS.lg,
                         backgroundColor:
-                          group.status === "active"
-                            ? "rgba(52, 199, 89, 0.1)"
-                            : COLORS.background,
+                          group.status === 'active' ? 'rgba(52, 199, 89, 0.1)' : COLORS.background,
                       }}
                     >
                       <Text
@@ -256,37 +237,31 @@ export default function OrgGroupsScreen() {
                           fontSize: 10,
                           fontWeight: TYPOGRAPHY.weight.bold,
                           color:
-                            group.status === "active"
-                              ? COLORS.success
-                              : COLORS.mutedForeground,
+                            group.status === 'active' ? COLORS.success : COLORS.mutedForeground,
                         }}
                       >
-                        {group.status === "active" ? "АКТИВНА" : "НЕАКТИВНА"}
+                        {group.status === 'active' ? 'АКТИВНА' : 'НЕАКТИВНА'}
                       </Text>
                     </View>
                   </View>
 
                   <View
                     style={{
-                      flexDirection: "row",
-                      flexWrap: "wrap",
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
                       rowGap: SPACING.sm,
                       marginBottom: SPACING.xl,
                     }}
                   >
                     <View
                       style={{
-                        width: "50%",
-                        flexDirection: "row",
-                        alignItems: "center",
+                        width: '50%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 10,
                       }}
                     >
-                      <Feather
-                        name="users"
-                        size={14}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="users" size={14} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.size.sm,
@@ -299,17 +274,13 @@ export default function OrgGroupsScreen() {
                     </View>
                     <View
                       style={{
-                        width: "50%",
-                        flexDirection: "row",
-                        alignItems: "center",
+                        width: '50%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 10,
                       }}
                     >
-                      <Feather
-                        name="award"
-                        size={14}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="award" size={14} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.size.sm,
@@ -317,23 +288,19 @@ export default function OrgGroupsScreen() {
                           fontWeight: TYPOGRAPHY.weight.medium,
                         }}
                       >
-                        {group.teacher_name || "Не назначен"}
+                        {group.teacher_name || 'Не назначен'}
                       </Text>
                     </View>
                     {group.schedule && (
                       <View
                         style={{
-                          width: "100%",
-                          flexDirection: "row",
-                          alignItems: "center",
+                          width: '100%',
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: 10,
                         }}
                       >
-                        <Feather
-                          name="clock"
-                          size={14}
-                          color={COLORS.mutedForeground}
-                        />
+                        <Feather name="clock" size={14} color={COLORS.mutedForeground} />
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.size.sm,
@@ -348,15 +315,13 @@ export default function OrgGroupsScreen() {
                   </View>
 
                   <TouchableOpacity
-                    onPress={() =>
-                      router.push(appHref(`/organization/group/${group.id}`))
-                    }
+                    onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
                     style={{
                       height: 48,
                       backgroundColor: COLORS.background,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text

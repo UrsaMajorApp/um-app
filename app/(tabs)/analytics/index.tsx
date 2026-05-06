@@ -1,60 +1,47 @@
-import { Feather } from "@expo/vector-icons";
-import { useMemo, useState } from "react";
-import {
-    ScrollView,
-    Text,
-    useWindowDimensions,
-    View,
-} from "react-native";
-import { Calendar, LocaleConfig } from "react-native-calendars";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
-import { useOrgSchedule } from "$hooks/useOrgData";
-import { isWebMinWidth } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useMemo, useState } from 'react';
+import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import { useOrgSchedule } from '$hooks/useOrgData';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 
 /* ---------- русская локаль для календаря ---------- */
-LocaleConfig.locales["ru"] = {
+LocaleConfig.locales['ru'] = {
   monthNames: [
-    "Январь",
-    "Февраль",
-    "Март",
-    "Апрель",
-    "Май",
-    "Июнь",
-    "Июль",
-    "Август",
-    "Сентябрь",
-    "Октябрь",
-    "Ноябрь",
-    "Декабрь",
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
   ],
   monthNamesShort: [
-    "Янв",
-    "Фев",
-    "Мар",
-    "Апр",
-    "Май",
-    "Июн",
-    "Июл",
-    "Авг",
-    "Сен",
-    "Окт",
-    "Ноя",
-    "Дек",
+    'Янв',
+    'Фев',
+    'Мар',
+    'Апр',
+    'Май',
+    'Июн',
+    'Июл',
+    'Авг',
+    'Сен',
+    'Окт',
+    'Ноя',
+    'Дек',
   ],
-  dayNames: [
-    "Воскресенье",
-    "Понедельник",
-    "Вторник",
-    "Среда",
-    "Четверг",
-    "Пятница",
-    "Суббота",
-  ],
-  dayNamesShort: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
-  today: "Сегодня",
+  dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+  dayNamesShort: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
+  today: 'Сегодня',
 };
-LocaleConfig.defaultLocale = "ru";
+LocaleConfig.defaultLocale = 'ru';
 
 /** JS getDay() returns 0=Sun…6=Sat. Convert to Mon=0…Sun=6 used in DB. */
 function jsDayToDow(jsDay: number): number {
@@ -62,20 +49,20 @@ function jsDayToDow(jsDay: number): number {
 }
 
 function formatDate(dateStr: string) {
-  const [y, m, d] = dateStr.split("-").map(Number);
+  const [y, m, d] = dateStr.split('-').map(Number);
   const months = [
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря",
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря',
   ];
   return `${d} ${months[(m || 1) - 1]} ${y}`;
 }
@@ -111,7 +98,7 @@ export default function AnalyticsScreen() {
     marked[selectedDate] = {
       selected: true,
       selectedColor: COLORS.primary,
-      selectedTextColor: "white",
+      selectedTextColor: 'white',
     };
     return marked;
   }, [selectedDate]);
@@ -120,7 +107,7 @@ export default function AnalyticsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+      <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={{
             paddingTop: 12,
@@ -131,15 +118,15 @@ export default function AnalyticsScreen() {
           <View
             style={{
               maxWidth: IS_DESKTOP ? 600 : undefined,
-              alignSelf: IS_DESKTOP ? "center" : undefined,
-              width: "100%",
+              alignSelf: IS_DESKTOP ? 'center' : undefined,
+              width: '100%',
             }}
           >
             {/* Header */}
             <Text
               style={{
                 fontSize: 24,
-                fontWeight: "700",
+                fontWeight: '700',
                 color: COLORS.foreground,
                 marginBottom: 16,
               }}
@@ -166,8 +153,8 @@ export default function AnalyticsScreen() {
                 firstDay={1}
                 enableSwipeMonths
                 theme={{
-                  backgroundColor: "transparent",
-                  calendarBackground: "transparent",
+                  backgroundColor: 'transparent',
+                  calendarBackground: 'transparent',
                   textSectionTitleColor: COLORS.mutedForeground,
                   monthTextColor: COLORS.foreground,
                   arrowColor: COLORS.primary,
@@ -175,7 +162,7 @@ export default function AnalyticsScreen() {
                   dayTextColor: COLORS.foreground,
                   textDayFontSize: 14,
                   textMonthFontSize: 18,
-                  textMonthFontWeight: "700",
+                  textMonthFontWeight: '700',
                   textDayHeaderFontSize: 12,
                 }}
                 style={{ borderRadius: 20 }}
@@ -196,27 +183,23 @@ export default function AnalyticsScreen() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   marginBottom: 12,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "700",
+                    fontWeight: '700',
                     color: COLORS.foreground,
                   }}
                 >
                   {formatDate(selectedDate)}
                 </Text>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Feather
-                    name="calendar"
-                    size={14}
-                    color={COLORS.mutedForeground}
-                  />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Feather name="calendar" size={14} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       marginLeft: 6,
@@ -225,10 +208,10 @@ export default function AnalyticsScreen() {
                     }}
                   >
                     {loading
-                      ? "..."
+                      ? '...'
                       : dayEvents.length
                         ? `${dayEvents.length} занятия`
-                        : "нет занятий"}
+                        : 'нет занятий'}
                   </Text>
                 </View>
               </View>
@@ -255,8 +238,8 @@ export default function AnalyticsScreen() {
                     paddingVertical: 10,
                     paddingHorizontal: 12,
                     marginBottom: 10,
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                   }}
                 >
                   <View
@@ -277,31 +260,25 @@ export default function AnalyticsScreen() {
                       }}
                     >
                       {e.time_label}
-                      {e.room ? ` · ${e.room}` : ""}
+                      {e.room ? ` · ${e.room}` : ''}
                     </Text>
                     <Text
                       style={{
                         fontSize: 15,
-                        fontWeight: "600",
+                        fontWeight: '600',
                         color: COLORS.foreground,
                       }}
                     >
                       {e.subject}
                     </Text>
                     {e.group_name ? (
-                      <Text
-                        style={{ fontSize: 12, color: COLORS.mutedForeground }}
-                      >
+                      <Text style={{ fontSize: 12, color: COLORS.mutedForeground }}>
                         {e.group_name}
-                        {e.teacher_name ? ` · ${e.teacher_name}` : ""}
+                        {e.teacher_name ? ` · ${e.teacher_name}` : ''}
                       </Text>
                     ) : null}
                   </View>
-                  <Feather
-                    name="chevron-right"
-                    size={18}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="chevron-right" size={18} color={COLORS.mutedForeground} />
                 </View>
               ))}
             </View>

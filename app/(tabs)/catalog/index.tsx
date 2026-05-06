@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import { useMemo, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -11,43 +11,38 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
-import { useParentData } from "$contexts/ParentDataContext";
-import {
-  courseGradient,
-  SCORE_TO_SKILLS,
-  usePublicCourses,
-} from "$hooks/usePublicData";
-import { formatKZT } from "$lib/formatCurrency";
-import { featherIconName } from "$lib/icons";
-import { isWebMinWidth } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import { useParentData } from '$contexts/ParentDataContext';
+import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
+import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const IS_DESKTOP = isWebMinWidth(width, 900);
 
 const SKILL_FILTERS = [
-  "⭐ Рекомендовано AI",
-  "Все",
-  "Код",
-  "Логика",
-  "Математика",
-  "Дизайн",
-  "Языки",
-  "Команда",
-  "Креативность",
+  '⭐ Рекомендовано AI',
+  'Все',
+  'Код',
+  'Логика',
+  'Математика',
+  'Дизайн',
+  'Языки',
+  'Команда',
+  'Креативность',
 ];
 
 export default function CatalogScreen() {
-  const [activeCategory, setActiveCategory] = useState("⭐ Рекомендовано AI");
-  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState('⭐ Рекомендовано AI');
+  const [search, setSearch] = useState('');
   const router = useRouter();
 
   const { courses, loading } = usePublicCourses();
   const { childrenProfile, activeChildId } = useParentData();
-  const activeChild =
-    childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
+  const activeChild = childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
 
   // Build recommended set from talent profile
   const recommendedIds = useMemo(() => {
@@ -57,13 +52,9 @@ export default function CatalogScreen() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 2)
       .map(([t]) => t);
-    const wantedSkills = new Set(
-      topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []),
-    );
+    const wantedSkills = new Set(topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []));
     return new Set(
-      courses
-        .filter((c) => c.skills.some((s) => wantedSkills.has(s)))
-        .map((c) => c.id),
+      courses.filter((c) => c.skills.some((s) => wantedSkills.has(s))).map((c) => c.id),
     );
   }, [activeChild, courses]);
 
@@ -71,25 +62,23 @@ export default function CatalogScreen() {
     return courses.filter((item) => {
       const bySearch = item.title.toLowerCase().includes(search.toLowerCase());
       if (!bySearch) return false;
-      if (activeCategory === "⭐ Рекомендовано AI")
+      if (activeCategory === '⭐ Рекомендовано AI')
         return recommendedIds.has(item.id) || recommendedIds.size === 0;
-      if (activeCategory === "Все") return true;
+      if (activeCategory === 'Все') return true;
       return item.skills.includes(activeCategory);
     });
   }, [activeCategory, search, courses, recommendedIds]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+      <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
           {/* Header */}
-          <View
-            style={{ paddingTop: 12, paddingHorizontal: 20, marginBottom: 16 }}
-          >
+          <View style={{ paddingTop: 12, paddingHorizontal: 20, marginBottom: 16 }}>
             <Text
               style={{
                 fontSize: 26,
-                fontWeight: "800",
+                fontWeight: '800',
                 color: COLORS.foreground,
                 marginBottom: 4,
               }}
@@ -97,22 +86,18 @@ export default function CatalogScreen() {
               Каталог
             </Text>
             <Text style={{ fontSize: 14, color: COLORS.mutedForeground }}>
-              {loading
-                ? "Загрузка..."
-                : `${courses.length} курсов от организаций`}
+              {loading ? 'Загрузка...' : `${courses.length} курсов от организаций`}
             </Text>
           </View>
 
-          <View
-            style={{ width: IS_DESKTOP ? "50%" : "100%", alignSelf: "center" }}
-          >
+          <View style={{ width: IS_DESKTOP ? '50%' : '100%', alignSelf: 'center' }}>
             {/* Search */}
             <View
               style={{
                 backgroundColor: COLORS.muted,
                 borderRadius: RADIUS.md,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 paddingHorizontal: 16,
                 height: 48,
                 marginHorizontal: 20,
@@ -133,7 +118,7 @@ export default function CatalogScreen() {
                 }}
               />
               {search.length > 0 && (
-                <TouchableOpacity onPress={() => setSearch("")}>
+                <TouchableOpacity onPress={() => setSearch('')}>
                   <Feather name="x" size={16} color={COLORS.mutedForeground} />
                 </TouchableOpacity>
               )}
@@ -161,8 +146,8 @@ export default function CatalogScreen() {
                   >
                     <Text
                       style={{
-                        color: active ? "white" : COLORS.foreground,
-                        fontWeight: "600",
+                        color: active ? 'white' : COLORS.foreground,
+                        fontWeight: '600',
                         fontSize: 13,
                       }}
                     >
@@ -176,18 +161,14 @@ export default function CatalogScreen() {
 
           {/* Loading */}
           {loading && (
-            <ActivityIndicator
-              size="small"
-              color={COLORS.primary}
-              style={{ marginVertical: 40 }}
-            />
+            <ActivityIndicator size="small" color={COLORS.primary} style={{ marginVertical: 40 }} />
           )}
 
           {/* Empty */}
           {!loading && courses.length === 0 && (
             <View
               style={{
-                alignItems: "center",
+                alignItems: 'center',
                 paddingVertical: 60,
                 paddingHorizontal: 40,
               }}
@@ -197,9 +178,9 @@ export default function CatalogScreen() {
                 style={{
                   marginTop: 16,
                   fontSize: 18,
-                  fontWeight: "800",
+                  fontWeight: '800',
                   color: COLORS.foreground,
-                  textAlign: "center",
+                  textAlign: 'center',
                 }}
               >
                 Курсов пока нет
@@ -208,11 +189,11 @@ export default function CatalogScreen() {
                 style={{
                   marginTop: 8,
                   color: COLORS.mutedForeground,
-                  textAlign: "center",
+                  textAlign: 'center',
                   lineHeight: 20,
                 }}
               >
-                Организации ещё не добавили курсы.{"\n"}Загляните позже.
+                Организации ещё не добавили курсы.{'\n'}Загляните позже.
               </Text>
             </View>
           )}
@@ -221,13 +202,13 @@ export default function CatalogScreen() {
           {!loading && (
             <View
               style={{
-                width: IS_DESKTOP ? "50%" : "100%",
-                alignSelf: "center",
+                width: IS_DESKTOP ? '50%' : '100%',
+                alignSelf: 'center',
                 padding: 20,
                 paddingTop: 0,
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
               }}
             >
               {filteredItems.map((item, index) => {
@@ -239,10 +220,10 @@ export default function CatalogScreen() {
                     animate={{ opacity: 1, translateY: 0 }}
                     transition={{ duration: 350, delay: index * 40 }}
                     style={{
-                      width: "48%",
+                      width: '48%',
                       marginBottom: 16,
                       borderRadius: RADIUS.lg,
-                      overflow: "hidden",
+                      overflow: 'hidden',
                       backgroundColor: COLORS.card,
                       borderWidth: 1,
                       borderColor: COLORS.border,
@@ -253,9 +234,9 @@ export default function CatalogScreen() {
                     <View
                       style={{
                         height: 100,
-                        backgroundColor: c1 + "12",
-                        justifyContent: "center",
-                        alignItems: "center",
+                        backgroundColor: `${c1}12`,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}
                     >
                       <View
@@ -263,13 +244,13 @@ export default function CatalogScreen() {
                           width: 44,
                           height: 44,
                           borderRadius: 14,
-                          backgroundColor: c1 + "20",
-                          alignItems: "center",
-                          justifyContent: "center",
+                          backgroundColor: `${c1}20`,
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
                         <Feather
-                          name={featherIconName(item.icon, "book-open")}
+                          name={featherIconName(item.icon, 'book-open')}
                           size={22}
                           color={c1}
                         />
@@ -277,7 +258,7 @@ export default function CatalogScreen() {
                       {item.org_name ? (
                         <View
                           style={{
-                            position: "absolute",
+                            position: 'absolute',
                             top: 8,
                             right: 8,
                             backgroundColor: COLORS.card,
@@ -290,7 +271,7 @@ export default function CatalogScreen() {
                             style={{
                               fontSize: 9,
                               color: COLORS.mutedForeground,
-                              fontWeight: "600",
+                              fontWeight: '600',
                             }}
                             numberOfLines={1}
                           >
@@ -306,7 +287,7 @@ export default function CatalogScreen() {
                         numberOfLines={2}
                         style={{
                           fontSize: 14,
-                          fontWeight: "700",
+                          fontWeight: '700',
                           color: COLORS.foreground,
                           marginBottom: 4,
                           lineHeight: 19,
@@ -324,22 +305,20 @@ export default function CatalogScreen() {
                         {formatKZT(item.price)}/мес
                       </Text>
                       <TouchableOpacity
-                        onPress={() =>
-                          router.push(appHref(`/parent/club/${item.id}`))
-                        }
+                        onPress={() => router.push(appHref(`/parent/club/${item.id}`))}
                         style={{
                           backgroundColor: COLORS.primary,
                           paddingVertical: 8,
                           paddingHorizontal: 14,
                           borderRadius: RADIUS.full,
-                          alignSelf: "flex-start",
+                          alignSelf: 'flex-start',
                         }}
                       >
                         <Text
                           style={{
-                            color: "white",
+                            color: 'white',
                             fontSize: 12,
-                            fontWeight: "600",
+                            fontWeight: '600',
                           }}
                         >
                           Подробнее
@@ -353,8 +332,8 @@ export default function CatalogScreen() {
               {!loading && courses.length > 0 && filteredItems.length === 0 && (
                 <View
                   style={{
-                    width: "100%",
-                    alignItems: "center",
+                    width: '100%',
+                    alignItems: 'center',
                     paddingVertical: 40,
                   }}
                 >
@@ -363,7 +342,7 @@ export default function CatalogScreen() {
                     style={{
                       marginTop: 12,
                       color: COLORS.mutedForeground,
-                      fontWeight: "700",
+                      fontWeight: '700',
                     }}
                   >
                     Ничего не найдено

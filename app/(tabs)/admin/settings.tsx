@@ -1,85 +1,65 @@
-import { AdminHeader } from "$components/admin/AdminHeader";
-import { SegmentTabs } from "$components/admin/SegmentTabs";
-import { useAdminLayout } from "$components/admin/adminUtils";
-import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import {
-  useAdminOnboardingQuestions,
-  useAIRules,
-  useTags,
-} from "$hooks/useAdminData";
-import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-  Alert,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { useAdminLayout } from '$components/admin/adminUtils';
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAdminOnboardingQuestions, useAIRules, useTags } from '$hooks/useAdminData';
+import { Feather } from '@expo/vector-icons';
+import { useState } from 'react';
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-type SettingsTab = "onboarding" | "tags" | "logic";
+type SettingsTab = 'onboarding' | 'tags' | 'logic';
 
 export default function AdminSettingsScreen() {
   const { paddingX } = useAdminLayout();
   const onboarding = useAdminOnboardingQuestions();
   const tags = useTags();
   const aiRules = useAIRules();
-  const [tab, setTab] = useState<SettingsTab>("onboarding");
-  const [newTagName, setNewTagName] = useState("");
+  const [tab, setTab] = useState<SettingsTab>('onboarding');
+  const [newTagName, setNewTagName] = useState('');
   const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
   const [editingRule, setEditingRule] = useState({
-    name: "",
-    condition: "",
-    recommendation_title: "",
-    recommendation_body: "",
+    name: '',
+    condition: '',
+    recommendation_title: '',
+    recommendation_body: '',
   });
   const audienceLabels: Record<string, string> = {
-    parent: "Родитель (онбординг)",
-    org: "Организация (онбординг)",
-    child: "Ребенок (диагностика)",
-    youth: "Молодежь (диагностика)",
-    parent_diagnostic: "Родитель (диагностика ребенка)",
+    parent: 'Родитель (онбординг)',
+    org: 'Организация (онбординг)',
+    child: 'Ребенок (диагностика)',
+    youth: 'Молодежь (диагностика)',
+    parent_diagnostic: 'Родитель (диагностика ребенка)',
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <AdminHeader
-        title="Настройки платформы"
-        subtitle="Онбординг, теги и правила рекомендаций"
-      />
+      <AdminHeader title="Настройки платформы" subtitle="Онбординг, теги и правила рекомендаций" />
       <SegmentTabs
         value={tab}
         onChange={setTab}
         tabs={[
-          { key: "onboarding", label: "Вопросы онбординга" },
-          { key: "tags", label: "Справочник тегов" },
-          { key: "logic", label: "AI логика" },
+          { key: 'onboarding', label: 'Вопросы онбординга' },
+          { key: 'tags', label: 'Справочник тегов' },
+          { key: 'logic', label: 'AI логика' },
         ]}
       />
       <ScrollView style={{ flex: 1, backgroundColor: COLORS.background }}>
-        {tab === "onboarding" ? (
-          <View
-            style={{ paddingHorizontal: paddingX, paddingBottom: SPACING.xl }}
-          >
+        {tab === 'onboarding' ? (
+          <View style={{ paddingHorizontal: paddingX, paddingBottom: SPACING.xl }}>
             {onboarding.loading ? (
               <Text style={{ color: COLORS.mutedForeground }}>Загрузка...</Text>
             ) : null}
-            {(
-              ["parent", "org", "child", "youth", "parent_diagnostic"] as const
-            ).map((audience) => {
-              const rows = onboarding.data.filter(
-                (q) => q.audience === audience,
-              );
+            {(['parent', 'org', 'child', 'youth', 'parent_diagnostic'] as const).map((audience) => {
+              const rows = onboarding.data.filter((q) => q.audience === audience);
               if (rows.length === 0) return null;
               return (
                 <View key={audience} style={{ marginBottom: SPACING.xl }}>
                   <Text
                     style={{
                       fontSize: TYPOGRAPHY.size.sm,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.mutedForeground,
-                      textTransform: "uppercase",
+                      textTransform: 'uppercase',
                       letterSpacing: 0.8,
                       marginBottom: SPACING.sm,
                     }}
@@ -95,12 +75,10 @@ export default function AdminSettingsScreen() {
                         backgroundColor: COLORS.surface,
                         marginBottom: SPACING.sm,
                         borderWidth: 1,
-                        borderColor: question.active
-                          ? COLORS.border
-                          : COLORS.border + "60",
+                        borderColor: question.active ? COLORS.border : `${COLORS.border}60`,
                         opacity: question.active ? 1 : 0.55,
-                        flexDirection: "row",
-                        alignItems: "flex-start",
+                        flexDirection: 'row',
+                        alignItems: 'flex-start',
                         gap: SPACING.sm,
                       }}
                     >
@@ -108,7 +86,7 @@ export default function AdminSettingsScreen() {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.size.md,
-                            fontWeight: "500",
+                            fontWeight: '500',
                             color: COLORS.foreground,
                             marginBottom: 4,
                           }}
@@ -121,43 +99,33 @@ export default function AdminSettingsScreen() {
                             color: COLORS.mutedForeground,
                           }}
                         >
-                          {question.answers.join(" · ")}
+                          {question.answers.join(' · ')}
                         </Text>
                       </View>
                       <TouchableOpacity
-                        onPress={() =>
-                          onboarding.toggleActive(question.id, !question.active)
-                        }
+                        onPress={() => onboarding.toggleActive(question.id, !question.active)}
                         style={{ padding: 4 }}
                       >
                         <Feather
-                          name={question.active ? "eye" : "eye-off"}
+                          name={question.active ? 'eye' : 'eye-off'}
                           size={16}
                           color={COLORS.mutedForeground}
                         />
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() =>
-                          Alert.alert(
-                            "Удалить вопрос?",
-                            question.question_text,
-                            [
-                              { text: "Отмена", style: "cancel" },
-                              {
-                                text: "Удалить",
-                                style: "destructive",
-                                onPress: () => onboarding.remove(question.id),
-                              },
-                            ],
-                          )
+                          Alert.alert('Удалить вопрос?', question.question_text, [
+                            { text: 'Отмена', style: 'cancel' },
+                            {
+                              text: 'Удалить',
+                              style: 'destructive',
+                              onPress: () => onboarding.remove(question.id),
+                            },
+                          ])
                         }
                         style={{ padding: 4 }}
                       >
-                        <Feather
-                          name="trash-2"
-                          size={16}
-                          color={COLORS.destructive}
-                        />
+                        <Feather name="trash-2" size={16} color={COLORS.destructive} />
                       </TouchableOpacity>
                     </View>
                   ))}
@@ -166,12 +134,12 @@ export default function AdminSettingsScreen() {
             })}
           </View>
         ) : null}
-        {tab === "tags" ? (
+        {tab === 'tags' ? (
           <View style={{ padding: paddingX }}>
             <View
               style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
+                flexDirection: 'row',
+                flexWrap: 'wrap',
                 gap: SPACING.md,
                 marginBottom: SPACING.lg,
               }}
@@ -184,22 +152,20 @@ export default function AdminSettingsScreen() {
                     paddingHorizontal: 16,
                     paddingVertical: 8,
                     borderRadius: RADIUS.full,
-                    backgroundColor: COLORS.primary + "15",
+                    backgroundColor: `${COLORS.primary}15`,
                     borderWidth: 1,
-                    borderColor: COLORS.primary + "30",
+                    borderColor: `${COLORS.primary}30`,
                   }}
                 >
-                  <Text style={{ color: COLORS.primary, fontWeight: "bold" }}>
-                    {tag.name}
-                  </Text>
+                  <Text style={{ color: COLORS.primary, fontWeight: 'bold' }}>{tag.name}</Text>
                 </TouchableOpacity>
               ))}
             </View>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 gap: SPACING.sm,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <TextInput
@@ -219,7 +185,7 @@ export default function AdminSettingsScreen() {
               <TouchableOpacity
                 onPress={async () => {
                   await tags.add(newTagName);
-                  setNewTagName("");
+                  setNewTagName('');
                 }}
                 style={{
                   paddingHorizontal: 16,
@@ -228,9 +194,7 @@ export default function AdminSettingsScreen() {
                   backgroundColor: COLORS.primary,
                 }}
               >
-                <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
-                  Добавить
-                </Text>
+                <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Добавить</Text>
               </TouchableOpacity>
             </View>
             <Text
@@ -244,10 +208,8 @@ export default function AdminSettingsScreen() {
             </Text>
           </View>
         ) : null}
-        {tab === "logic" ? (
-          <View
-            style={{ paddingHorizontal: paddingX, paddingBottom: SPACING.xl }}
-          >
+        {tab === 'logic' ? (
+          <View style={{ paddingHorizontal: paddingX, paddingBottom: SPACING.xl }}>
             {aiRules.data.map((rule) => {
               const isEditing = editingRuleId === rule.id;
               return (
@@ -257,17 +219,15 @@ export default function AdminSettingsScreen() {
                     backgroundColor: COLORS.surface,
                     borderRadius: RADIUS.lg,
                     borderWidth: 1,
-                    borderColor: isEditing
-                      ? COLORS.primary + "60"
-                      : COLORS.border,
+                    borderColor: isEditing ? `${COLORS.primary}60` : COLORS.border,
                     marginBottom: SPACING.md,
-                    overflow: "hidden",
+                    overflow: 'hidden',
                   }}
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       padding: SPACING.lg,
                       gap: SPACING.md,
                     }}
@@ -278,10 +238,8 @@ export default function AdminSettingsScreen() {
                         width: 44,
                         height: 24,
                         borderRadius: 12,
-                        backgroundColor: rule.enabled
-                          ? COLORS.success
-                          : COLORS.muted,
-                        justifyContent: "center",
+                        backgroundColor: rule.enabled ? COLORS.success : COLORS.muted,
+                        justifyContent: 'center',
                         paddingHorizontal: 2,
                       }}
                     >
@@ -291,7 +249,7 @@ export default function AdminSettingsScreen() {
                           height: 20,
                           borderRadius: 10,
                           backgroundColor: COLORS.white,
-                          alignSelf: rule.enabled ? "flex-end" : "flex-start",
+                          alignSelf: rule.enabled ? 'flex-end' : 'flex-start',
                           ...SHADOWS.sm,
                         }}
                       />
@@ -299,11 +257,9 @@ export default function AdminSettingsScreen() {
                     <View style={{ flex: 1 }}>
                       <Text
                         style={{
-                          fontWeight: "bold",
+                          fontWeight: 'bold',
                           fontSize: TYPOGRAPHY.size.md,
-                          color: rule.enabled
-                            ? COLORS.foreground
-                            : COLORS.mutedForeground,
+                          color: rule.enabled ? COLORS.foreground : COLORS.mutedForeground,
                         }}
                       >
                         {rule.name}
@@ -317,7 +273,7 @@ export default function AdminSettingsScreen() {
                           }}
                           numberOfLines={1}
                         >
-                          {rule.condition} {"->"} {rule.recommendation_title}
+                          {rule.condition} {'->'} {rule.recommendation_title}
                         </Text>
                       ) : null}
                     </View>
@@ -330,7 +286,7 @@ export default function AdminSettingsScreen() {
                             name: rule.name,
                             condition: rule.condition,
                             recommendation_title: rule.recommendation_title,
-                            recommendation_body: rule.recommendation_body ?? "",
+                            recommendation_body: rule.recommendation_body ?? '',
                           });
                         }
                       }}
@@ -338,19 +294,15 @@ export default function AdminSettingsScreen() {
                         width: 32,
                         height: 32,
                         borderRadius: RADIUS.md,
-                        backgroundColor: isEditing
-                          ? COLORS.primary + "15"
-                          : COLORS.muted,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        backgroundColor: isEditing ? `${COLORS.primary}15` : COLORS.muted,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       <Feather
-                        name={isEditing ? "x" : "edit-2"}
+                        name={isEditing ? 'x' : 'edit-2'}
                         size={14}
-                        color={
-                          isEditing ? COLORS.primary : COLORS.mutedForeground
-                        }
+                        color={isEditing ? COLORS.primary : COLORS.mutedForeground}
                       />
                     </TouchableOpacity>
                   </View>
@@ -364,20 +316,18 @@ export default function AdminSettingsScreen() {
                     >
                       {(
                         [
-                          "name",
-                          "condition",
-                          "recommendation_title",
-                          "recommendation_body",
+                          'name',
+                          'condition',
+                          'recommendation_title',
+                          'recommendation_body',
                         ] as const
                       ).map((field) => (
                         <TextInput
                           key={field}
                           value={editingRule[field]}
-                          onChangeText={(v) =>
-                            setEditingRule((prev) => ({ ...prev, [field]: v }))
-                          }
+                          onChangeText={(v) => setEditingRule((prev) => ({ ...prev, [field]: v }))}
                           placeholder={field}
-                          multiline={field === "recommendation_body"}
+                          multiline={field === 'recommendation_body'}
                           style={{
                             borderWidth: 1,
                             borderColor: COLORS.border,
@@ -386,8 +336,7 @@ export default function AdminSettingsScreen() {
                             fontSize: TYPOGRAPHY.size.sm,
                             color: COLORS.foreground,
                             backgroundColor: COLORS.background,
-                            minHeight:
-                              field === "recommendation_body" ? 60 : undefined,
+                            minHeight: field === 'recommendation_body' ? 60 : undefined,
                           }}
                         />
                       ))}
@@ -400,14 +349,14 @@ export default function AdminSettingsScreen() {
                           backgroundColor: COLORS.primary,
                           paddingVertical: SPACING.md,
                           borderRadius: RADIUS.md,
-                          alignItems: "center",
+                          alignItems: 'center',
                           marginTop: SPACING.sm,
                         }}
                       >
                         <Text
                           style={{
                             color: COLORS.white,
-                            fontWeight: "bold",
+                            fontWeight: 'bold',
                             fontSize: TYPOGRAPHY.size.sm,
                           }}
                         >

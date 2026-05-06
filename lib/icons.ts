@@ -1,5 +1,5 @@
-import { Feather } from "@expo/vector-icons";
-import type { FeatherIconName } from "$types/icons";
+import { Feather } from '@expo/vector-icons';
+import type { FeatherIconName } from '$types/icons';
 
 export function featherIconName(
   value: string | null | undefined,

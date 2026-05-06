@@ -1,9 +1,9 @@
-import { COLORS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { Platform, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useAdminLayout } from "$components/admin/adminUtils";
+import { COLORS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import type React from 'react';
+import { Platform, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAdminLayout } from '$components/admin/adminUtils';
 
 export function AdminHeader({
   title,
@@ -16,21 +16,21 @@ export function AdminHeader({
 }) {
   const { paddingX } = useAdminLayout();
   return (
-    <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+    <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
       <LinearGradient
         colors={COLORS.gradients.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+        style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
       >
-        <SafeAreaView edges={["top"]}>
+        <SafeAreaView edges={['top']}>
           <View
             style={{
               paddingHorizontal: paddingX,
               paddingTop: 12,
               paddingBottom: 28,
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: SPACING.md,
             }}
           >
@@ -38,7 +38,7 @@ export function AdminHeader({
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.xxl,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.white,
                 }}
               >
@@ -46,9 +46,9 @@ export function AdminHeader({
               </Text>
               <Text
                 style={{
-                  color: "rgba(255,255,255,0.72)",
+                  color: 'rgba(255,255,255,0.72)',
                   fontSize: TYPOGRAPHY.size.sm,
-                  fontWeight: "600",
+                  fontWeight: '600',
                   marginTop: 4,
                 }}
               >

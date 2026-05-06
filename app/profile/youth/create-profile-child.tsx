@@ -1,8 +1,9 @@
-import { SideNav } from "$components/navigation/SideNav";
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { SideNav } from '$components/navigation/SideNav';
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import type React from 'react';
+import { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -14,17 +15,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useParentData } from "$contexts/ParentDataContext";
-import { formatPhone } from "$lib/formatPhone";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { formatPhone } from '$lib/formatPhone';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 // Age options from 6 to 20
 const AGE_OPTIONS = Array.from({ length: 15 }, (_, i) => i + 6);
-const ROLE_COLOR = "#6C5CE7";
+const ROLE_COLOR = '#6C5CE7';
 
 function RequiredLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -43,36 +44,36 @@ export default function CreateProfileChild() {
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
   const [formData, setFormData] = useState({
-    firstName: "",
+    firstName: '',
     age: 0,
-    gender: "",
-    phone: "",
-    otherInterest: "",
-    goals: "",
+    gender: '',
+    phone: '',
+    otherInterest: '',
+    goals: '',
   });
   const [interests, setInterests] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAgePicker, setShowAgePicker] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+  const [submitError, setSubmitError] = useState('');
 
   const availableInterests = [
-    "Рисование",
-    "Музыка",
-    "Математика",
-    "Спорт",
-    "Чтение",
-    "Конструкторы",
-    "Игры",
-    "Языки",
+    'Рисование',
+    'Музыка',
+    'Математика',
+    'Спорт',
+    'Чтение',
+    'Конструкторы',
+    'Игры',
+    'Языки',
   ];
 
-  const phoneDigits = formData.phone.replace(/\D/g, "");
+  const phoneDigits = formData.phone.replace(/\D/g, '');
   const validation = {
     firstName: formData.firstName.trim().length > 0,
     phone: phoneDigits.length === 0 || phoneDigits.length === 11,
     age: formData.age >= 6 && formData.age <= 20,
-    gender: formData.gender === "boy" || formData.gender === "girl",
+    gender: formData.gender === 'boy' || formData.gender === 'girl',
     interests: interests.length > 0,
     goals: formData.goals.trim().length > 0,
   };
@@ -80,10 +81,10 @@ export default function CreateProfileChild() {
 
   const handleNext = async () => {
     setHasSubmitted(true);
-    setSubmitError("");
+    setSubmitError('');
 
     if (!isFormValid) {
-      setSubmitError("Заполните обязательные поля");
+      setSubmitError('Заполните обязательные поля');
       return;
     }
 
@@ -98,18 +99,18 @@ export default function CreateProfileChild() {
         age: ageNum,
         phone: formData.phone.trim() || undefined,
         interests: interests,
-        ageCategory: ageNum < 12 ? "child" : "teen",
-        parentId: "pending",
+        ageCategory: ageNum < 12 ? 'child' : 'teen',
+        parentId: 'pending',
         goals: formData.goals.trim() || undefined,
       });
 
       router.push({
-        pathname: "/profile/youth/testing",
+        pathname: '/profile/youth/testing',
         params: { childId },
-                    });
+      });
     } catch (error) {
-      console.error("Error adding child:", error);
-      setSubmitError("Произошла ошибка при сохранении профиля");
+      console.error('Error adding child:', error);
+      setSubmitError('Произошла ошибка при сохранении профиля');
     } finally {
       setIsSubmitting(false);
     }
@@ -124,9 +125,9 @@ export default function CreateProfileChild() {
   };
 
   const addOtherInterest = () => {
-    if (formData.otherInterest.trim() !== "") {
+    if (formData.otherInterest.trim() !== '') {
       setInterests([...interests, formData.otherInterest.trim()]);
-      setFormData({ ...formData, otherInterest: "" });
+      setFormData({ ...formData, otherInterest: '' });
     }
   };
 
@@ -136,7 +137,7 @@ export default function CreateProfileChild() {
       return;
     }
 
-    router.replace("/register");
+    router.replace('/register');
   };
 
   const pageContent = (
@@ -144,38 +145,28 @@ export default function CreateProfileChild() {
       <View
         style={{
           ...StyleSheet.absoluteFillObject,
-          overflow: "hidden",
-          pointerEvents: "none",
+          overflow: 'hidden',
+          pointerEvents: 'none',
         }}
       >
         <View style={styles.bgOrbTop} />
         <View style={styles.bgOrbBottom} />
       </View>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={[
-                styles.gradientHeader,
-                { paddingHorizontal: horizontalPadding },
-              ]}
-            >
-              <TouchableOpacity
-                onPress={handleBack}
-                style={styles.headerBackButton}
-              >
+          <SafeAreaView edges={['top']}>
+            <View style={[styles.gradientHeader, { paddingHorizontal: horizontalPadding }]}>
+              <TouchableOpacity onPress={handleBack} style={styles.headerBackButton}>
                 <Feather name="arrow-left" size={20} color={COLORS.white} />
                 <Text style={styles.headerBackText}>Назад</Text>
               </TouchableOpacity>
               <Text style={styles.headerTitle}>Профиль ребенка</Text>
-              <Text style={styles.headerSubtitle}>
-                Данные для кружков, целей и диагностики
-              </Text>
+              <Text style={styles.headerSubtitle}>Данные для кружков, целей и диагностики</Text>
             </View>
           </SafeAreaView>
         </LinearGradient>
@@ -187,14 +178,14 @@ export default function CreateProfileChild() {
           paddingHorizontal: horizontalPadding,
           paddingTop: 24,
           paddingBottom: 60,
-          alignItems: "center",
+          alignItems: 'center',
         }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         <View
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
           }}
         >
@@ -209,15 +200,10 @@ export default function CreateProfileChild() {
                 <RequiredLabel>Имя</RequiredLabel>
                 <TextInput
                   value={formData.firstName}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, firstName: text })
-                  }
+                  onChangeText={(text) => setFormData({ ...formData, firstName: text })}
                   placeholder="Как зовут ребенка?"
                   placeholderTextColor={COLORS.mutedForeground}
-                  style={[
-                    styles.input,
-                    hasSubmitted && !validation.firstName && styles.inputError,
-                  ]}
+                  style={[styles.input, hasSubmitted && !validation.firstName && styles.inputError]}
                 />
                 {hasSubmitted && !validation.firstName && (
                   <Text style={styles.errorText}>Введите имя ребенка</Text>
@@ -228,20 +214,14 @@ export default function CreateProfileChild() {
                 <Text style={styles.fieldLabel}>Телефон</Text>
                 <TextInput
                   value={formData.phone}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, phone: formatPhone(text) })
-                  }
+                  onChangeText={(text) => setFormData({ ...formData, phone: formatPhone(text) })}
                   placeholder="+7 777 777 7777"
                   placeholderTextColor={COLORS.mutedForeground}
                   keyboardType="phone-pad"
-                  style={[
-                    styles.input,
-                    hasSubmitted && !validation.phone && styles.inputError,
-                  ]}
+                  style={[styles.input, hasSubmitted && !validation.phone && styles.inputError]}
                 />
                 <Text style={styles.helpText}>
-                  Необязательно. Если номера нет, ребенок сможет войти по
-                  QR-коду.
+                  Необязательно. Если номера нет, ребенок сможет войти по QR-коду.
                 </Text>
                 {hasSubmitted && !validation.phone && (
                   <Text style={styles.errorText}>
@@ -254,24 +234,12 @@ export default function CreateProfileChild() {
                 <RequiredLabel>Возраст</RequiredLabel>
                 <TouchableOpacity
                   onPress={() => setShowAgePicker(true)}
-                  style={[
-                    styles.selectInput,
-                    hasSubmitted && !validation.age && styles.inputError,
-                  ]}
+                  style={[styles.selectInput, hasSubmitted && !validation.age && styles.inputError]}
                 >
-                  <Text
-                    style={[
-                      styles.selectText,
-                      !formData.age && styles.placeholderText,
-                    ]}
-                  >
-                    {formData.age ? `${formData.age} лет` : "Выберите возраст"}
+                  <Text style={[styles.selectText, !formData.age && styles.placeholderText]}>
+                    {formData.age ? `${formData.age} лет` : 'Выберите возраст'}
                   </Text>
-                  <Feather
-                    name="chevron-down"
-                    size={18}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="chevron-down" size={18} color={COLORS.mutedForeground} />
                 </TouchableOpacity>
                 {hasSubmitted && !validation.age && (
                   <Text style={styles.errorText}>Выберите возраст</Text>
@@ -282,34 +250,34 @@ export default function CreateProfileChild() {
                 <RequiredLabel>Пол</RequiredLabel>
                 <View style={styles.segmented}>
                   <TouchableOpacity
-                    onPress={() => setFormData({ ...formData, gender: "boy" })}
+                    onPress={() => setFormData({ ...formData, gender: 'boy' })}
                     style={[
                       styles.segment,
-                      formData.gender === "boy" && styles.segmentActive,
+                      formData.gender === 'boy' && styles.segmentActive,
                       hasSubmitted && !validation.gender && styles.inputError,
                     ]}
                   >
                     <Text
                       style={[
                         styles.segmentText,
-                        formData.gender === "boy" && styles.segmentTextActive,
+                        formData.gender === 'boy' && styles.segmentTextActive,
                       ]}
                     >
                       Мальчик
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => setFormData({ ...formData, gender: "girl" })}
+                    onPress={() => setFormData({ ...formData, gender: 'girl' })}
                     style={[
                       styles.segment,
-                      formData.gender === "girl" && styles.segmentActive,
+                      formData.gender === 'girl' && styles.segmentActive,
                       hasSubmitted && !validation.gender && styles.inputError,
                     ]}
                   >
                     <Text
                       style={[
                         styles.segmentText,
-                        formData.gender === "girl" && styles.segmentTextActive,
+                        formData.gender === 'girl' && styles.segmentTextActive,
                       ]}
                     >
                       Девочка
@@ -329,9 +297,7 @@ export default function CreateProfileChild() {
               <Text style={styles.cardTitle}>Интересы</Text>
               <Text style={styles.requiredMark}>*</Text>
             </View>
-            <Text style={styles.cardDescription}>
-              Что нравится ребенку сейчас?
-            </Text>
+            <Text style={styles.cardDescription}>Что нравится ребенку сейчас?</Text>
             <View style={styles.chipGrid}>
               {availableInterests.map((interest) => {
                 const isSelected = interests.includes(interest);
@@ -341,12 +307,7 @@ export default function CreateProfileChild() {
                     onPress={() => toggleInterest(interest)}
                     style={[styles.chip, isSelected && styles.chipActive]}
                   >
-                    <Text
-                      style={[
-                        styles.chipText,
-                        isSelected && styles.chipTextActive,
-                      ]}
-                    >
+                    <Text style={[styles.chipText, isSelected && styles.chipTextActive]}>
                       {interest}
                     </Text>
                   </TouchableOpacity>
@@ -354,28 +315,19 @@ export default function CreateProfileChild() {
               })}
             </View>
             {hasSubmitted && !validation.interests && (
-              <Text style={styles.errorText}>
-                Выберите хотя бы один интерес
-              </Text>
+              <Text style={styles.errorText}>Выберите хотя бы один интерес</Text>
             )}
 
-            <Text style={[styles.fieldLabel, { marginTop: 10 }]}>
-              Другой интерес
-            </Text>
+            <Text style={[styles.fieldLabel, { marginTop: 10 }]}>Другой интерес</Text>
             <View style={styles.inlineInputRow}>
               <TextInput
                 value={formData.otherInterest}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, otherInterest: text })
-                }
+                onChangeText={(text) => setFormData({ ...formData, otherInterest: text })}
                 placeholder="Введите интерес ребенка"
                 placeholderTextColor={COLORS.mutedForeground}
                 style={[styles.input, { flex: 1 }]}
               />
-              <TouchableOpacity
-                onPress={addOtherInterest}
-                style={styles.addButton}
-              >
+              <TouchableOpacity onPress={addOtherInterest} style={styles.addButton}>
                 <Feather name="plus" size={20} color="white" />
               </TouchableOpacity>
             </View>
@@ -387,9 +339,7 @@ export default function CreateProfileChild() {
               <Text style={styles.cardTitle}>Цель</Text>
               <Text style={styles.requiredMark}>*</Text>
             </View>
-            <Text style={styles.cardDescription}>
-              Чему ребенок хочет научиться?
-            </Text>
+            <Text style={styles.cardDescription}>Чему ребенок хочет научиться?</Text>
             <TextInput
               value={formData.goals}
               onChangeText={(text) => setFormData({ ...formData, goals: text })}
@@ -409,9 +359,7 @@ export default function CreateProfileChild() {
           </View>
 
           <View style={styles.footer}>
-            {submitError ? (
-              <Text style={styles.submitErrorText}>{submitError}</Text>
-            ) : null}
+            {submitError ? <Text style={styles.submitErrorText}>{submitError}</Text> : null}
             <TouchableOpacity
               onPress={handleNext}
               disabled={isSubmitting || !isFormValid}
@@ -422,22 +370,13 @@ export default function CreateProfileChild() {
               ]}
             >
               <LinearGradient
-                colors={
-                  isFormValid
-                    ? COLORS.gradients.header
-                    : [COLORS.muted, COLORS.muted]
-                }
+                colors={isFormValid ? COLORS.gradients.header : [COLORS.muted, COLORS.muted]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.submitGradient}
               >
-                <Text
-                  style={[
-                    styles.submitText,
-                    !isFormValid && styles.submitTextDisabled,
-                  ]}
-                >
-                  {isSubmitting ? "Сохранение..." : "Добавить ребенка"}
+                <Text style={[styles.submitText, !isFormValid && styles.submitTextDisabled]}>
+                  {isSubmitting ? 'Сохранение...' : 'Добавить ребенка'}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -445,16 +384,9 @@ export default function CreateProfileChild() {
         </View>
 
         {/* Age Picker Modal */}
-        <Modal
-          visible={showAgePicker}
-          transparent
-          animationType={isDesktop ? "fade" : "slide"}
-        >
+        <Modal visible={showAgePicker} transparent animationType={isDesktop ? 'fade' : 'slide'}>
           <Pressable
-            style={[
-              styles.agePickerOverlay,
-              isDesktop && styles.agePickerOverlayDesktop,
-            ]}
+            style={[styles.agePickerOverlay, isDesktop && styles.agePickerOverlayDesktop]}
             onPress={() => setShowAgePicker(false)}
           >
             <Pressable
@@ -463,16 +395,16 @@ export default function CreateProfileChild() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 16,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 18,
-                    fontWeight: "700",
+                    fontWeight: '700',
                     color: COLORS.foreground,
                   }}
                 >
@@ -494,27 +426,23 @@ export default function CreateProfileChild() {
                       paddingVertical: 16,
                       paddingHorizontal: 16,
                       borderRadius: 12,
-                      backgroundColor:
-                        formData.age === age ? "#F3F0FF" : "transparent",
+                      backgroundColor: formData.age === age ? '#F3F0FF' : 'transparent',
                       marginBottom: 4,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 16,
-                        fontWeight: formData.age === age ? "700" : "400",
-                        color:
-                          formData.age === age ? "#6C5CE7" : COLORS.foreground,
+                        fontWeight: formData.age === age ? '700' : '400',
+                        color: formData.age === age ? '#6C5CE7' : COLORS.foreground,
                       }}
                     >
                       {age} лет
                     </Text>
-                    {formData.age === age && (
-                      <Feather name="check" size={20} color="#6C5CE7" />
-                    )}
+                    {formData.age === age && <Feather name="check" size={20} color="#6C5CE7" />}
                   </TouchableOpacity>
                 ))}
               </ScrollView>
@@ -527,8 +455,8 @@ export default function CreateProfileChild() {
 
   if (isDesktop) {
     return (
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <SideNav role={user?.role || "parent"} />
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <SideNav role={user?.role || 'parent'} />
         <View style={{ flex: 1 }}>{pageContent}</View>
       </View>
     );
@@ -536,7 +464,7 @@ export default function CreateProfileChild() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       {pageContent}
@@ -550,7 +478,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   bgOrbTop: {
-    position: "absolute",
+    position: 'absolute',
     top: -70,
     right: -70,
     width: 220,
@@ -559,8 +487,8 @@ const styles = StyleSheet.create({
     backgroundColor: `${ROLE_COLOR}10`,
   },
   bgOrbBottom: {
-    position: "absolute",
-    bottom: "18%",
+    position: 'absolute',
+    bottom: '18%',
     left: -90,
     width: 260,
     height: 260,
@@ -570,30 +498,30 @@ const styles = StyleSheet.create({
   gradientHeader: {
     paddingTop: 12,
     paddingBottom: 32,
-    width: "100%",
+    width: '100%',
   },
   headerBackButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
     marginBottom: 18,
   },
   headerBackText: {
     color: COLORS.white,
     marginLeft: 8,
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   headerTitle: {
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: '800',
     color: COLORS.white,
     letterSpacing: -0.5,
   },
   headerSubtitle: {
-    color: "rgba(255,255,255,0.72)",
+    color: 'rgba(255,255,255,0.72)',
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: '500',
     marginTop: 4,
   },
   card: {
@@ -606,13 +534,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   cardTitle: {
     fontSize: 17,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginLeft: 10,
   },
@@ -625,40 +553,40 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   field: {
-    width: "100%",
+    width: '100%',
   },
   fieldLabel: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 8,
   },
   requiredMark: {
     color: COLORS.destructive,
-    fontWeight: "900",
+    fontWeight: '900',
     marginLeft: 4,
   },
   errorText: {
     color: COLORS.destructive,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 6,
   },
   input: {
-    width: "100%",
+    width: '100%',
     minHeight: 50,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.md,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: '#F9FAFB',
     color: COLORS.foreground,
     fontSize: 15,
   },
   inputError: {
     borderColor: COLORS.destructive,
-    backgroundColor: "#FFF7F7",
+    backgroundColor: '#FFF7F7',
   },
   helpText: {
     color: COLORS.mutedForeground,
@@ -672,22 +600,22 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: RADIUS.md,
     paddingHorizontal: 14,
-    backgroundColor: "#F9FAFB",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    backgroundColor: '#F9FAFB',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   selectText: {
     color: COLORS.foreground,
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   placeholderText: {
     color: COLORS.mutedForeground,
-    fontWeight: "400",
+    fontWeight: '400',
   },
   segmented: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
   },
   segment: {
@@ -696,9 +624,9 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.md,
     borderWidth: 1,
     borderColor: COLORS.border,
-    backgroundColor: "#F9FAFB",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F9FAFB',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   segmentActive: {
     borderColor: ROLE_COLOR,
@@ -706,14 +634,14 @@ const styles = StyleSheet.create({
   },
   segmentText: {
     color: COLORS.mutedForeground,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   segmentTextActive: {
     color: ROLE_COLOR,
   },
   chipGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 10,
   },
   chip: {
@@ -722,9 +650,9 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.full,
     borderWidth: 1,
     borderColor: COLORS.border,
-    backgroundColor: "#F9FAFB",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F9FAFB',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   chipActive: {
     borderColor: ROLE_COLOR,
@@ -732,28 +660,28 @@ const styles = StyleSheet.create({
   },
   chipText: {
     color: COLORS.mutedForeground,
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 13,
   },
   chipTextActive: {
     color: ROLE_COLOR,
   },
   inlineInputRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   addButton: {
     width: 50,
     height: 50,
     backgroundColor: ROLE_COLOR,
     borderRadius: RADIUS.md,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textArea: {
     minHeight: 96,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
     paddingTop: 14,
   },
   modalSheet: {
@@ -761,7 +689,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
-    maxHeight: "50%",
+    maxHeight: '50%',
   },
   modalSheetDesktop: {
     width: 360,
@@ -771,16 +699,16 @@ const styles = StyleSheet.create({
   },
   agePickerOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
   },
   agePickerOverlayDesktop: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   footer: {
-    width: "100%",
+    width: '100%',
     backgroundColor: COLORS.card,
     borderRadius: RADIUS.xl,
     borderWidth: 1,
@@ -791,12 +719,12 @@ const styles = StyleSheet.create({
   submitErrorText: {
     color: COLORS.destructive,
     fontSize: 13,
-    fontWeight: "800",
-    textAlign: "center",
+    fontWeight: '800',
+    textAlign: 'center',
     marginBottom: 10,
   },
   submitButton: {
-    overflow: "hidden",
+    overflow: 'hidden',
     borderRadius: RADIUS.lg,
   },
   submitButtonDisabled: {
@@ -804,15 +732,15 @@ const styles = StyleSheet.create({
   },
   submitGradient: {
     minHeight: 54,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   submitText: {
     color: COLORS.white,
-    fontWeight: "900",
+    fontWeight: '900',
     fontSize: 15,
     letterSpacing: 0.5,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   submitTextDisabled: {
     color: COLORS.mutedForeground,

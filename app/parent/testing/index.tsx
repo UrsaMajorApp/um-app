@@ -1,43 +1,25 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useParentData } from "$contexts/ParentDataContext";
-import { useOnboardingQuestions } from "$hooks/usePlatformData";
-import {
-  generateGeminiDiagnosticJson,
-  isGeminiFallbackError,
-} from "$lib/geminiDiagnostics";
-import type { DiagnosticAiResponse } from "$types/diagnostic";
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, Platform, Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useParentData } from '$contexts/ParentDataContext';
+import { useOnboardingQuestions } from '$hooks/usePlatformData';
+import { generateGeminiDiagnosticJson, isGeminiFallbackError } from '$lib/geminiDiagnostics';
+import type { DiagnosticAiResponse } from '$types/diagnostic';
 
 // Answer order matches the DB seed: creative, physical, logical, social, linguistic
-const ANSWER_VALUES = [
-  "creative",
-  "physical",
-  "logical",
-  "social",
-  "linguistic",
-] as const;
+const ANSWER_VALUES = ['creative', 'physical', 'logical', 'social', 'linguistic'] as const;
 
 export default function DiagnosticTest() {
   const router = useRouter();
   const { childId } = useLocalSearchParams();
-  const { childrenProfile, updateChildDiagnostic, activeChildId } =
-    useParentData();
+  const { childrenProfile, updateChildDiagnostic, activeChildId } = useParentData();
   const { questions: QUESTIONS, loading: questionsLoading } =
-    useOnboardingQuestions("parent_diagnostic");
+    useOnboardingQuestions('parent_diagnostic');
 
   const targetId = childId || activeChildId;
-  const child =
-    childrenProfile.find((c) => c.id === targetId) || childrenProfile[0];
+  const child = childrenProfile.find((c) => c.id === targetId) || childrenProfile[0];
 
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -48,12 +30,12 @@ export default function DiagnosticTest() {
       <View
         style={{
           flex: 1,
-          backgroundColor: "#6C5CE7",
-          justifyContent: "center",
-          alignItems: "center",
+          backgroundColor: '#6C5CE7',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <Text style={{ color: "white", fontSize: 18 }}>Ребенок не найден.</Text>
+        <Text style={{ color: 'white', fontSize: 18 }}>Ребенок не найден.</Text>
       </View>
     );
   }
@@ -74,9 +56,9 @@ export default function DiagnosticTest() {
     setIsAnalyzing(true);
     try {
       // Prepare data summary
-      const answersSummary = finalAnswers.join(", ");
+      const answersSummary = finalAnswers.join(', ');
       const prompt = `Analyze this child based on Howard Gardner's theory of multiple intelligences.
-      Child Name: ${child.name}, Age: ${child.age}, Interests: ${child.interests.join(", ")}.
+      Child Name: ${child.name}, Age: ${child.age}, Interests: ${child.interests.join(', ')}.
       Quiz trait tendencies selected by parent: ${answersSummary}.
       
       Respond STRICTLY in the following JSON format (no markdown, no quotes around JSON):
@@ -94,8 +76,7 @@ export default function DiagnosticTest() {
 
       let parsed: DiagnosticAiResponse;
       try {
-        parsed =
-          await generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
+        parsed = await generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
       } catch (error) {
         if (!isGeminiFallbackError(error)) {
           throw error;
@@ -109,9 +90,8 @@ export default function DiagnosticTest() {
             physical: 62,
             linguistic: 68,
           },
-          summary:
-            "Сильная сторона ребёнка — творческий и познавательный интерес.",
-          recommendedConstellation: "Юный исследователь",
+          summary: 'Сильная сторона ребёнка — творческий и познавательный интерес.',
+          recommendedConstellation: 'Юный исследователь',
         };
       }
 
@@ -124,22 +104,18 @@ export default function DiagnosticTest() {
           physical: 62,
           linguistic: 68,
         },
-        summary:
-          parsed.summary ??
-          "Сильная сторона ребёнка — творческий и познавательный интерес.",
-        recommendedConstellation:
-          parsed.recommendedConstellation ?? "Юный исследователь",
+        summary: parsed.summary ?? 'Сильная сторона ребёнка — творческий и познавательный интерес.',
+        recommendedConstellation: parsed.recommendedConstellation ?? 'Юный исследователь',
       });
 
       router.back();
     } catch (error: unknown) {
-      console.error("AI Diagnostic Error:", error);
-      const message =
-        error instanceof Error ? error.message : "Неизвестная ошибка";
-      if (Platform.OS === "web") {
-        window.alert("Ошибка тестирования ИИ: " + message);
+      console.error('AI Diagnostic Error:', error);
+      const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+      if (Platform.OS === 'web') {
+        window.alert(`Ошибка тестирования ИИ: ${message}`);
       } else {
-        Alert.alert("Ошибка тестирования ИИ", message);
+        Alert.alert('Ошибка тестирования ИИ', message);
       }
       setIsAnalyzing(false);
     }
@@ -147,10 +123,10 @@ export default function DiagnosticTest() {
 
   if (questionsLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#6C5CE7" }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#6C5CE7' }}>
         <LinearGradient
-          colors={["#6C5CE7", "#8B7FE8"]}
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          colors={['#6C5CE7', '#8B7FE8']}
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <ActivityIndicator size="large" color="#FFFFFF" />
         </LinearGradient>
@@ -159,53 +135,44 @@ export default function DiagnosticTest() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#6C5CE7" }}>
-      <LinearGradient
-        colors={["#6C5CE7", "#8B7FE8"]}
-        style={{ flex: 1, padding: 20 }}
-      >
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#6C5CE7' }}>
+      <LinearGradient colors={['#6C5CE7', '#8B7FE8']} style={{ flex: 1, padding: 20 }}>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             marginBottom: 30,
           }}
         >
           <Pressable onPress={() => router.back()} disabled={isAnalyzing}>
-            <Text style={{ color: "rgba(255,255,255,0.7)", fontWeight: "600" }}>
-              Отмена
-            </Text>
+            <Text style={{ color: 'rgba(255,255,255,0.7)', fontWeight: '600' }}>Отмена</Text>
           </Pressable>
-          <Text style={{ color: "white", fontWeight: "800" }}>
-            Анализ: {child.name}
-          </Text>
+          <Text style={{ color: 'white', fontWeight: '800' }}>Анализ: {child.name}</Text>
           <View style={{ width: 50 }} />
         </View>
 
         {isAnalyzing ? (
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="#FFFFFF" />
             <Text
               style={{
-                color: "white",
+                color: 'white',
                 fontSize: 18,
-                fontWeight: "700",
+                fontWeight: '700',
                 marginTop: 24,
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
               ИИ Gemini составляет карту талантов...
             </Text>
             <Text
               style={{
-                color: "rgba(255,255,255,0.8)",
+                color: 'rgba(255,255,255,0.8)',
                 fontSize: 14,
-                fontWeight: "500",
+                fontWeight: '500',
                 marginTop: 12,
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
               Это может занять пару секунд.
@@ -215,8 +182,8 @@ export default function DiagnosticTest() {
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                color: "rgba(255, 255, 255, 0.7)",
-                fontWeight: "800",
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontWeight: '800',
                 marginBottom: 12,
               }}
             >
@@ -224,9 +191,9 @@ export default function DiagnosticTest() {
             </Text>
             <Text
               style={{
-                color: "white",
+                color: 'white',
                 fontSize: 24,
-                fontWeight: "900",
+                fontWeight: '900',
                 marginBottom: 32,
               }}
             >
@@ -238,20 +205,16 @@ export default function DiagnosticTest() {
                 key={idx}
                 onPress={() => handleSelectOption(idx)}
                 style={({ pressed }) => ({
-                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   padding: 20,
                   borderRadius: 16,
                   marginBottom: 12,
                   borderWidth: 1,
-                  borderColor: "rgba(255, 255, 255, 0.1)",
+                  borderColor: 'rgba(255, 255, 255, 0.1)',
                   opacity: pressed ? 0.7 : 1,
                 })}
               >
-                <Text
-                  style={{ color: "white", fontSize: 16, fontWeight: "600" }}
-                >
-                  {optText}
-                </Text>
+                <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>{optText}</Text>
               </Pressable>
             ))}
           </View>

@@ -1,7 +1,7 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -10,22 +10,13 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import {
-  useOrgApplications,
-  useOrgGroupById,
-} from "$hooks/useOrgData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgApplications, useOrgGroupById } from '$hooks/useOrgData';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
-type AttendanceStatus = "present" | "absent" | "sick" | null;
+type AttendanceStatus = 'present' | 'absent' | 'sick' | null;
 
 interface StudentRow {
   id: string;
@@ -40,9 +31,9 @@ export default function AttendanceScreen() {
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
-  const date = new Date().toLocaleDateString("ru-RU", {
-    day: "numeric",
-    month: "long",
+  const date = new Date().toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'long',
   });
 
   const { group } = useOrgGroupById(id);
@@ -53,8 +44,7 @@ export default function AttendanceScreen() {
   useEffect(() => {
     const enrolled = apps.filter(
       (a) =>
-        ["paid", "activated"].includes(a.status) &&
-        (!group?.course || a.club === group.course),
+        ['paid', 'activated'].includes(a.status) && (!group?.course || a.club === group.course),
     );
     setStudents(
       enrolled.map((a) => ({
@@ -67,25 +57,19 @@ export default function AttendanceScreen() {
   }, [apps, group]);
 
   const toggleStatus = (studentId: string, status: AttendanceStatus) => {
-    setStudents((prev) =>
-      prev.map((s) => (s.id === studentId ? { ...s, status } : s)),
-    );
+    setStudents((prev) => prev.map((s) => (s.id === studentId ? { ...s, status } : s)));
   };
 
   const handleSave = () => {
     const unmarked = students.filter((s) => s.status === null).length;
     if (unmarked > 0) {
-      Alert.alert(
-        "Не все отмечены",
-        `${unmarked} ученика(ов) без статуса. Сохранить всё равно?`,
-        [
-          { text: "Отмена", style: "cancel" },
-          { text: "Сохранить", onPress: () => router.back() },
-        ],
-      );
+      Alert.alert('Не все отмечены', `${unmarked} ученика(ов) без статуса. Сохранить всё равно?`, [
+        { text: 'Отмена', style: 'cancel' },
+        { text: 'Сохранить', onPress: () => router.back() },
+      ]);
     } else {
-      Alert.alert("Готово", "Посещаемость сохранена!", [
-        { text: "OK", onPress: () => router.back() },
+      Alert.alert('Готово', 'Посещаемость сохранена!', [
+        { text: 'OK', onPress: () => router.back() },
       ]);
     }
   };
@@ -97,14 +81,11 @@ export default function AttendanceScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: horizontalPadding,
@@ -113,8 +94,8 @@ export default function AttendanceScreen() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -124,9 +105,9 @@ export default function AttendanceScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
@@ -137,7 +118,7 @@ export default function AttendanceScreen() {
                     marginLeft: SPACING.md,
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Отметка посещаемости
@@ -149,15 +130,15 @@ export default function AttendanceScreen() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xxxl,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    color: "white",
+                    color: 'white',
                     marginBottom: 4,
                   }}
                 >
-                  {group?.name ?? "Группа"}
+                  {group?.name ?? 'Группа'}
                 </Text>
                 <Text
                   style={{
-                    color: "rgba(255,255,255,0.8)",
+                    color: 'rgba(255,255,255,0.8)',
                     fontSize: TYPOGRAPHY.size.sm,
                     fontWeight: TYPOGRAPHY.weight.medium,
                   }}
@@ -182,7 +163,7 @@ export default function AttendanceScreen() {
           <Text
             style={{
               fontSize: 18,
-              fontWeight: "700",
+              fontWeight: '700',
               color: COLORS.foreground,
               marginBottom: 4,
             }}
@@ -195,22 +176,18 @@ export default function AttendanceScreen() {
         </View>
 
         {loading && (
-          <ActivityIndicator
-            size="small"
-            color={COLORS.primary}
-            style={{ marginVertical: 20 }}
-          />
+          <ActivityIndicator size="small" color={COLORS.primary} style={{ marginVertical: 20 }} />
         )}
 
         {!loading && students.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Feather name="users" size={36} color={COLORS.muted} />
             <Text
               style={{
                 marginTop: 12,
                 color: COLORS.mutedForeground,
-                fontWeight: "600",
-                textAlign: "center",
+                fontWeight: '600',
+                textAlign: 'center',
               }}
             >
               Нет зачисленных учеников в этой группе
@@ -233,8 +210,8 @@ export default function AttendanceScreen() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: SPACING.md,
                   marginBottom: SPACING.lg,
                 }}
@@ -245,17 +222,13 @@ export default function AttendanceScreen() {
                     height: 44,
                     backgroundColor: COLORS.background,
                     borderRadius: RADIUS.lg,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderWidth: 1,
                     borderColor: COLORS.border,
                   }}
                 >
-                  <Feather
-                    name="user"
-                    size={18}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="user" size={18} color={COLORS.mutedForeground} />
                 </View>
                 <View>
                   <Text
@@ -268,21 +241,19 @@ export default function AttendanceScreen() {
                     {student.name}
                   </Text>
                   {student.age && (
-                    <Text
-                      style={{ fontSize: 12, color: COLORS.mutedForeground }}
-                    >
+                    <Text style={{ fontSize: 12, color: COLORS.mutedForeground }}>
                       {student.age} лет
                     </Text>
                   )}
                 </View>
               </View>
 
-              <View style={{ flexDirection: "row", gap: 8 }}>
+              <View style={{ flexDirection: 'row', gap: 8 }}>
                 {(
                   [
-                    { key: "present", label: "Был", color: "#22C55E" },
-                    { key: "absent", label: "Не был", color: "#EF4444" },
-                    { key: "sick", label: "Болел", color: "#F59E0B" },
+                    { key: 'present', label: 'Был', color: '#22C55E' },
+                    { key: 'absent', label: 'Не был', color: '#EF4444' },
+                    { key: 'sick', label: 'Болел', color: '#F59E0B' },
                   ] as const
                 ).map(({ key, label, color }) => {
                   const active = student.status === key;
@@ -293,18 +264,18 @@ export default function AttendanceScreen() {
                       style={{
                         flex: 1,
                         paddingVertical: 12,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         borderRadius: RADIUS.lg,
                         borderWidth: 2,
-                        backgroundColor: active ? color : "transparent",
+                        backgroundColor: active ? color : 'transparent',
                         borderColor: active ? color : COLORS.border,
                       }}
                     >
                       <Text
                         style={{
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          color: active ? "white" : COLORS.mutedForeground,
+                          color: active ? 'white' : COLORS.mutedForeground,
                           fontSize: 13,
                         }}
                       >
@@ -322,7 +293,7 @@ export default function AttendanceScreen() {
       {/* Fixed Save Button */}
       <View
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
@@ -341,13 +312,13 @@ export default function AttendanceScreen() {
             backgroundColor: COLORS.primary,
             borderRadius: RADIUS.lg,
             paddingVertical: 16,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Text
             style={{
-              color: "white",
+              color: 'white',
               fontWeight: TYPOGRAPHY.weight.bold,
               fontSize: 16,
             }}

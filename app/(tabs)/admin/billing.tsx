@@ -1,29 +1,15 @@
-import { AdminHeader } from "$components/admin/AdminHeader";
-import { EmptyState } from "$components/admin/EmptyState";
-import { SegmentTabs } from "$components/admin/SegmentTabs";
-import {
-  formatAdminDate,
-  useAdminLayout,
-} from "$components/admin/adminUtils";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import {
-  useAdminStats,
-  useFamilies,
-  useOrganizations,
-  useTransactions,
-} from "$hooks/useAdminData";
-import { formatKZT } from "$lib/formatCurrency";
-import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { EmptyState } from '$components/admin/EmptyState';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAdminStats, useFamilies, useOrganizations, useTransactions } from '$hooks/useAdminData';
+import { formatKZT } from '$lib/formatCurrency';
+import { Feather } from '@expo/vector-icons';
+import { useState } from 'react';
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-type BillingTab = "transactions" | "fees";
+type BillingTab = 'transactions' | 'fees';
 
 export default function AdminBillingScreen() {
   const { isTablet, paddingX } = useAdminLayout();
@@ -31,15 +17,12 @@ export default function AdminBillingScreen() {
   const txs = useTransactions();
   const orgs = useOrganizations();
   const stats = useAdminStats([], txs.data, families.data);
-  const [tab, setTab] = useState<BillingTab>("transactions");
+  const [tab, setTab] = useState<BillingTab>('transactions');
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   return (
     <View style={{ flex: 1 }}>
-      <AdminHeader
-        title="Биллинг"
-        subtitle="Транзакции, комиссии и доход платформы"
-      />
+      <AdminHeader title="Биллинг" subtitle="Транзакции, комиссии и доход платформы" />
       <View
         style={{
           padding: paddingX,
@@ -50,24 +33,24 @@ export default function AdminBillingScreen() {
       >
         <View
           style={{
-            flexDirection: isTablet ? "row" : "column",
+            flexDirection: isTablet ? 'row' : 'column',
             gap: SPACING.md,
             paddingBottom: SPACING.lg,
           }}
         >
           {[
             {
-              label: "Общий оборот",
+              label: 'Общий оборот',
               value: formatKZT(stats.gmv),
               color: COLORS.primary,
             },
             {
-              label: "Доход платформы",
+              label: 'Доход платформы',
               value: formatKZT(stats.revenue),
               color: COLORS.success,
             },
             {
-              label: "Платные подписчики",
+              label: 'Платные подписчики',
               value: `${stats.proSubscribers} / ${stats.totalSubscribers}`,
               color: COLORS.foreground,
             },
@@ -78,9 +61,9 @@ export default function AdminBillingScreen() {
                 flex: 1,
                 padding: SPACING.lg,
                 borderRadius: RADIUS.lg,
-                backgroundColor: card.color + "10",
+                backgroundColor: `${card.color}10`,
                 borderWidth: 1,
-                borderColor: card.color + "30",
+                borderColor: `${card.color}30`,
               }}
             >
               <Text
@@ -94,7 +77,7 @@ export default function AdminBillingScreen() {
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.xxl,
-                  fontWeight: "bold",
+                  fontWeight: 'bold',
                   color: card.color,
                   marginTop: 8,
                 }}
@@ -109,20 +92,18 @@ export default function AdminBillingScreen() {
         value={tab}
         onChange={setTab}
         tabs={[
-          { key: "transactions", label: "Сплит-транзакции" },
-          { key: "fees", label: "Управление комиссией" },
+          { key: 'transactions', label: 'Сплит-транзакции' },
+          { key: 'fees', label: 'Управление комиссией' },
         ]}
       />
       <ScrollView style={{ flex: 1, backgroundColor: COLORS.background }}>
-        {tab === "transactions" && txs.loading ? (
-          <Text style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}>
-            Загрузка...
-          </Text>
+        {tab === 'transactions' && txs.loading ? (
+          <Text style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}>Загрузка...</Text>
         ) : null}
-        {tab === "transactions" && !txs.loading && txs.data.length === 0 ? (
+        {tab === 'transactions' && !txs.loading && txs.data.length === 0 ? (
           <EmptyState title="Транзакций нет" />
         ) : null}
-        {tab === "transactions" &&
+        {tab === 'transactions' &&
           txs.data.map((tx) => (
             <View
               key={tx.id}
@@ -131,8 +112,8 @@ export default function AdminBillingScreen() {
                 borderBottomWidth: 1,
                 borderColor: COLORS.border,
                 backgroundColor: COLORS.surface,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
               }}
             >
               <View
@@ -140,26 +121,22 @@ export default function AdminBillingScreen() {
                   width: 48,
                   height: 48,
                   borderRadius: RADIUS.full,
-                  backgroundColor: COLORS.success + "15",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: `${COLORS.success}15`,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <Feather
-                  name="arrow-up-right"
-                  size={24}
-                  color={COLORS.success}
-                />
+                <Feather name="arrow-up-right" size={24} color={COLORS.success} />
               </View>
               <View style={{ flex: 1, marginLeft: SPACING.md }}>
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.size.md,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                     color: COLORS.foreground,
                   }}
                 >
-                  {tx.parent_name} {"->"} {tx.org_name}
+                  {tx.parent_name} {'->'} {tx.org_name}
                 </Text>
                 <Text
                   style={{
@@ -168,15 +145,14 @@ export default function AdminBillingScreen() {
                     marginTop: 2,
                   }}
                 >
-                  {formatAdminDate(tx.created_at)}{" "}
-                  {tx.external_ref ? `• ${tx.external_ref}` : ""}
+                  {formatAdminDate(tx.created_at)} {tx.external_ref ? `• ${tx.external_ref}` : ''}
                 </Text>
               </View>
-              <View style={{ alignItems: "flex-end" }}>
+              <View style={{ alignItems: 'flex-end' }}>
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.size.md,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                     color: COLORS.foreground,
                   }}
                 >
@@ -189,13 +165,12 @@ export default function AdminBillingScreen() {
                     marginTop: 2,
                   }}
                 >
-                  +{formatKZT(tx.org_amount)} партнеру | +
-                  {formatKZT(tx.platform_amount)} платформе
+                  +{formatKZT(tx.org_amount)} партнеру | +{formatKZT(tx.platform_amount)} платформе
                 </Text>
               </View>
             </View>
           ))}
-        {tab === "fees" &&
+        {tab === 'fees' &&
           orgs.data.map((org) => (
             <View
               key={org.id}
@@ -204,8 +179,8 @@ export default function AdminBillingScreen() {
                 borderBottomWidth: 1,
                 borderColor: COLORS.border,
                 backgroundColor: COLORS.surface,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: SPACING.md,
               }}
             >
@@ -213,7 +188,7 @@ export default function AdminBillingScreen() {
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.size.md,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                     color: COLORS.foreground,
                   }}
                 >
@@ -226,39 +201,35 @@ export default function AdminBillingScreen() {
                     marginTop: 2,
                   }}
                 >
-                  Категория: {org.category ?? "—"}
+                  Категория: {org.category ?? '—'}
                 </Text>
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: SPACING.sm,
                 }}
               >
                 <TextInput
                   value={drafts[org.id] ?? String(org.commission_pct)}
                   keyboardType="numeric"
-                  onChangeText={(v) =>
-                    setDrafts((prev) => ({ ...prev, [org.id]: v }))
-                  }
+                  onChangeText={(v) => setDrafts((prev) => ({ ...prev, [org.id]: v }))}
                   style={{
                     width: 64,
-                    textAlign: "center",
+                    textAlign: 'center',
                     borderWidth: 1,
                     borderColor: COLORS.border,
                     borderRadius: RADIUS.md,
                     padding: SPACING.sm,
                     color: COLORS.primary,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                   }}
                 />
-                <Text style={{ fontWeight: "bold" }}>%</Text>
+                <Text style={{ fontWeight: 'bold' }}>%</Text>
                 <TouchableOpacity
                   onPress={() => {
-                    const val = parseFloat(
-                      drafts[org.id] ?? String(org.commission_pct),
-                    );
+                    const val = parseFloat(drafts[org.id] ?? String(org.commission_pct));
                     if (Number.isFinite(val)) orgs.setCommission(org.id, val);
                   }}
                   style={{
@@ -271,7 +242,7 @@ export default function AdminBillingScreen() {
                   <Text
                     style={{
                       color: COLORS.white,
-                      fontWeight: "bold",
+                      fontWeight: 'bold',
                       fontSize: TYPOGRAPHY.size.xs,
                     }}
                   >

@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import React, { useMemo, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -11,43 +11,38 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useParentData } from "$contexts/ParentDataContext";
-import {
-  courseGradient,
-  SCORE_TO_SKILLS,
-  usePublicCourses,
-} from "$hooks/usePublicData";
-import { formatKZT } from "$lib/formatCurrency";
-import { featherIconName } from "$lib/icons";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useParentData } from '$contexts/ParentDataContext';
+import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
+import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 // Skill-based filter chips shown in the catalog
 const SKILL_FILTERS = [
-  "Все",
-  "Код",
-  "Логика",
-  "Математика",
-  "Дизайн",
-  "Языки",
-  "Команда",
-  "Креативность",
+  'Все',
+  'Код',
+  'Логика',
+  'Математика',
+  'Дизайн',
+  'Языки',
+  'Команда',
+  'Креативность',
 ];
 
 export default function ParentClubs() {
   const router = useRouter();
   const { childrenProfile, activeChildId } = useParentData();
-  const [activeSkill, setActiveSkill] = useState("Все");
-  const [search, setSearch] = useState("");
+  const [activeSkill, setActiveSkill] = useState('Все');
+  const [search, setSearch] = useState('');
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const { courses, loading } = usePublicCourses();
 
-  const activeChild =
-    childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
+  const activeChild = childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
 
   // ── AI recommendations based on talent profile ──────────────────────────────
   const recommendedCourses = useMemo(() => {
@@ -58,24 +53,17 @@ export default function ParentClubs() {
       .slice(0, 2)
       .map(([trait]) => trait);
 
-    const wantedSkills = new Set(
-      topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []),
-    );
+    const wantedSkills = new Set(topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []));
 
-    return courses
-      .filter((c) => c.skills.some((s) => wantedSkills.has(s)))
-      .slice(0, 5);
+    return courses.filter((c) => c.skills.some((s) => wantedSkills.has(s))).slice(0, 5);
   }, [activeChild, courses]);
 
   // ── Filtered list ────────────────────────────────────────────────────────────
   const filtered = useMemo(
     () =>
       courses.filter((c) => {
-        const matchSkill =
-          activeSkill === "Все" || c.skills.includes(activeSkill);
-        const matchSearch = c.title
-          .toLowerCase()
-          .includes(search.toLowerCase());
+        const matchSkill = activeSkill === 'Все' || c.skills.includes(activeSkill);
+        const matchSearch = c.title.toLowerCase().includes(search.toLowerCase());
         return matchSkill && matchSearch;
       }),
     [courses, activeSkill, search],
@@ -83,14 +71,14 @@ export default function ParentClubs() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: horizontalPadding,
@@ -100,16 +88,16 @@ export default function ParentClubs() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 20,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 20,
-                    fontWeight: "800",
-                    color: "white",
+                    fontWeight: '800',
+                    color: 'white',
                     flex: 1,
                   }}
                 >
@@ -117,25 +105,25 @@ export default function ParentClubs() {
                 </Text>
                 <Text
                   style={{
-                    color: "rgba(255,255,255,0.6)",
+                    color: 'rgba(255,255,255,0.6)',
                     fontSize: 13,
-                    fontWeight: "600",
+                    fontWeight: '600',
                   }}
                 >
-                  {courses.length > 0 ? `${courses.length} курсов` : ""}
+                  {courses.length > 0 ? `${courses.length} курсов` : ''}
                 </Text>
               </View>
 
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "rgba(255,255,255,0.15)",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
                   borderRadius: 16,
                   paddingHorizontal: 16,
                   paddingVertical: 12,
                   borderWidth: 1,
-                  borderColor: "rgba(255,255,255,0.2)",
+                  borderColor: 'rgba(255,255,255,0.2)',
                 }}
               >
                 <Feather
@@ -149,10 +137,10 @@ export default function ParentClubs() {
                   onChangeText={setSearch}
                   placeholder="Найти кружок..."
                   placeholderTextColor="rgba(255,255,255,0.6)"
-                  style={{ flex: 1, color: "white", fontWeight: "500" }}
+                  style={{ flex: 1, color: 'white', fontWeight: '500' }}
                 />
                 {search.length > 0 && (
-                  <Pressable onPress={() => setSearch("")}>
+                  <Pressable onPress={() => setSearch('')}>
                     <Feather name="x" size={16} color="rgba(255,255,255,0.6)" />
                   </Pressable>
                 )}
@@ -186,15 +174,15 @@ export default function ParentClubs() {
                 paddingVertical: 9,
                 borderRadius: 999,
                 borderWidth: 1,
-                backgroundColor: activeSkill === skill ? "#6C5CE7" : "white",
-                borderColor: activeSkill === skill ? "#6C5CE7" : "#E5E7EB",
+                backgroundColor: activeSkill === skill ? '#6C5CE7' : 'white',
+                borderColor: activeSkill === skill ? '#6C5CE7' : '#E5E7EB',
               }}
             >
               <Text
                 style={{
-                  fontWeight: "700",
+                  fontWeight: '700',
                   fontSize: 13,
-                  color: activeSkill === skill ? "white" : "#6B7280",
+                  color: activeSkill === skill ? 'white' : '#6B7280',
                 }}
               >
                 {skill}
@@ -205,24 +193,20 @@ export default function ParentClubs() {
 
         {/* Loading */}
         {loading && (
-          <ActivityIndicator
-            size="large"
-            color="#6C5CE7"
-            style={{ marginVertical: 60 }}
-          />
+          <ActivityIndicator size="large" color="#6C5CE7" style={{ marginVertical: 60 }} />
         )}
 
         {/* Empty DB state */}
         {!loading && courses.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 60 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 60 }}>
             <Feather name="inbox" size={48} color="#E5E7EB" />
             <Text
               style={{
                 marginTop: 16,
                 fontSize: 18,
-                fontWeight: "800",
-                color: "#1F2937",
-                textAlign: "center",
+                fontWeight: '800',
+                color: '#1F2937',
+                textAlign: 'center',
               }}
             >
               Курсов пока нет
@@ -230,12 +214,12 @@ export default function ParentClubs() {
             <Text
               style={{
                 marginTop: 8,
-                color: "#6B7280",
-                textAlign: "center",
+                color: '#6B7280',
+                textAlign: 'center',
                 lineHeight: 20,
               }}
             >
-              Организации ещё не добавили курсы.{"\n"}Загляните позже.
+              Организации ещё не добавили курсы.{'\n'}Загляните позже.
             </Text>
           </View>
         )}
@@ -244,13 +228,13 @@ export default function ParentClubs() {
         {!loading &&
           activeChild?.talentProfile &&
           recommendedCourses.length > 0 &&
-          search === "" &&
-          activeSkill === "Все" && (
+          search === '' &&
+          activeSkill === 'Все' && (
             <View style={{ marginBottom: 32 }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: 10,
                   marginBottom: 16,
                   paddingHorizontal: 4,
@@ -260,10 +244,10 @@ export default function ParentClubs() {
                   style={{
                     width: 32,
                     height: 32,
-                    backgroundColor: "#EDE9FE",
+                    backgroundColor: '#EDE9FE',
                     borderRadius: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="zap" size={16} color="#6C5CE7" />
@@ -272,8 +256,8 @@ export default function ParentClubs() {
                   <Text
                     style={{
                       fontSize: 18,
-                      fontWeight: "900",
-                      color: "#111827",
+                      fontWeight: '900',
+                      color: '#111827',
                     }}
                   >
                     Идеально для {activeChild.name}
@@ -281,9 +265,9 @@ export default function ParentClubs() {
                   <Text
                     style={{
                       fontSize: 10,
-                      fontWeight: "800",
-                      color: "#6C5CE7",
-                      textTransform: "uppercase",
+                      fontWeight: '800',
+                      color: '#6C5CE7',
+                      textTransform: 'uppercase',
                       letterSpacing: 0.5,
                     }}
                   >
@@ -302,19 +286,17 @@ export default function ParentClubs() {
                   return (
                     <Pressable
                       key={club.id}
-                      onPress={() =>
-                        router.push(appHref(`/parent/club/${club.id}`))
-                      }
+                      onPress={() => router.push(appHref(`/parent/club/${club.id}`))}
                       style={[
                         SHADOWS.md,
                         {
                           marginRight: 16,
                           width: 220,
-                          backgroundColor: "white",
+                          backgroundColor: 'white',
                           borderRadius: 28,
                           padding: 4,
                           borderWidth: 1,
-                          borderColor: "#EDE9FE",
+                          borderColor: '#EDE9FE',
                         },
                       ]}
                     >
@@ -324,13 +306,13 @@ export default function ParentClubs() {
                           height: 110,
                           borderRadius: 24,
                           padding: 12,
-                          justifyContent: "space-between",
+                          justifyContent: 'space-between',
                         }}
                       >
                         <View
                           style={{
-                            backgroundColor: "rgba(255,255,255,0.25)",
-                            alignSelf: "flex-start",
+                            backgroundColor: 'rgba(255,255,255,0.25)',
+                            alignSelf: 'flex-start',
                             paddingHorizontal: 8,
                             paddingVertical: 3,
                             borderRadius: 8,
@@ -338,28 +320,28 @@ export default function ParentClubs() {
                         >
                           <Text
                             style={{
-                              color: "white",
+                              color: 'white',
                               fontSize: 9,
-                              fontWeight: "900",
-                              textTransform: "uppercase",
+                              fontWeight: '900',
+                              textTransform: 'uppercase',
                             }}
                           >
                             Мастхэв
                           </Text>
                         </View>
                         <Feather
-                          name={featherIconName(club.icon, "star")}
+                          name={featherIconName(club.icon, 'star')}
                           size={30}
                           color="rgba(255,255,255,0.8)"
-                          style={{ alignSelf: "flex-end" }}
+                          style={{ alignSelf: 'flex-end' }}
                         />
                       </LinearGradient>
                       <View style={{ padding: 12 }}>
                         <Text
                           style={{
-                            fontWeight: "800",
+                            fontWeight: '800',
                             fontSize: 14,
-                            color: "#111827",
+                            color: '#111827',
                             marginBottom: 2,
                           }}
                           numberOfLines={1}
@@ -370,8 +352,8 @@ export default function ParentClubs() {
                           <Text
                             style={{
                               fontSize: 11,
-                              color: "#9CA3AF",
-                              fontWeight: "600",
+                              color: '#9CA3AF',
+                              fontWeight: '600',
                               marginBottom: 8,
                             }}
                             numberOfLines={1}
@@ -381,15 +363,15 @@ export default function ParentClubs() {
                         ) : null}
                         <View
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                           }}
                         >
                           <Text
                             style={{
-                              color: "#6C5CE7",
-                              fontWeight: "900",
+                              color: '#6C5CE7',
+                              fontWeight: '900',
                               fontSize: 13,
                             }}
                           >
@@ -397,16 +379,12 @@ export default function ParentClubs() {
                           </Text>
                           <View
                             style={{
-                              backgroundColor: "#F9FAFB",
+                              backgroundColor: '#F9FAFB',
                               padding: 6,
                               borderRadius: 999,
                             }}
                           >
-                            <Feather
-                              name="arrow-right"
-                              size={13}
-                              color="#6B7280"
-                            />
+                            <Feather name="arrow-right" size={13} color="#6B7280" />
                           </View>
                         </View>
                       </View>
@@ -423,16 +401,16 @@ export default function ParentClubs() {
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: "900",
-                color: "#111827",
+                fontWeight: '900',
+                color: '#111827',
                 marginBottom: 16,
                 paddingHorizontal: 4,
               }}
             >
               {search
-                ? "Результаты поиска"
-                : activeSkill === "Все"
-                  ? "Все кружки"
+                ? 'Результаты поиска'
+                : activeSkill === 'Все'
+                  ? 'Все кружки'
                   : `Навык: ${activeSkill}`}
             </Text>
 
@@ -442,19 +420,17 @@ export default function ParentClubs() {
                 return (
                   <Pressable
                     key={club.id}
-                    onPress={() =>
-                      router.push(appHref(`/parent/club/${club.id}`))
-                    }
+                    onPress={() => router.push(appHref(`/parent/club/${club.id}`))}
                     style={[
                       SHADOWS.sm,
                       {
-                        flexDirection: "row",
-                        alignItems: "center",
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         padding: 16,
-                        backgroundColor: "white",
+                        backgroundColor: 'white',
                         borderRadius: 24,
                         borderWidth: 1,
-                        borderColor: "#F9FAFB",
+                        borderColor: '#F9FAFB',
                       },
                     ]}
                   >
@@ -463,14 +439,14 @@ export default function ParentClubs() {
                         width: 60,
                         height: 60,
                         borderRadius: 18,
-                        backgroundColor: color + "15",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        backgroundColor: `${color}15`,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         marginRight: 14,
                       }}
                     >
                       <Feather
-                        name={featherIconName(club.icon, "book-open")}
+                        name={featherIconName(club.icon, 'book-open')}
                         size={24}
                         color={color}
                       />
@@ -479,9 +455,9 @@ export default function ParentClubs() {
                     <View style={{ flex: 1 }}>
                       <Text
                         style={{
-                          fontWeight: "800",
+                          fontWeight: '800',
                           fontSize: 15,
-                          color: "#111827",
+                          color: '#111827',
                         }}
                         numberOfLines={1}
                       >
@@ -491,8 +467,8 @@ export default function ParentClubs() {
                         <Text
                           style={{
                             fontSize: 12,
-                            color: "#9CA3AF",
-                            fontWeight: "600",
+                            color: '#9CA3AF',
+                            fontWeight: '600',
                             marginTop: 1,
                           }}
                           numberOfLines={1}
@@ -503,17 +479,17 @@ export default function ParentClubs() {
                       {club.skills.length > 0 && (
                         <View
                           style={{
-                            flexDirection: "row",
+                            flexDirection: 'row',
                             gap: 4,
                             marginTop: 5,
-                            flexWrap: "wrap",
+                            flexWrap: 'wrap',
                           }}
                         >
                           {club.skills.slice(0, 3).map((s) => (
                             <View
                               key={s}
                               style={{
-                                backgroundColor: color + "15",
+                                backgroundColor: `${color}15`,
                                 paddingHorizontal: 7,
                                 paddingVertical: 2,
                                 borderRadius: 6,
@@ -522,9 +498,9 @@ export default function ParentClubs() {
                               <Text
                                 style={{
                                   fontSize: 9,
-                                  fontWeight: "800",
+                                  fontWeight: '800',
                                   color,
-                                  textTransform: "uppercase",
+                                  textTransform: 'uppercase',
                                 }}
                               >
                                 {s}
@@ -535,11 +511,11 @@ export default function ParentClubs() {
                       )}
                     </View>
 
-                    <View style={{ alignItems: "flex-end", marginLeft: 8 }}>
+                    <View style={{ alignItems: 'flex-end', marginLeft: 8 }}>
                       <Text
                         style={{
-                          color: "#6C5CE7",
-                          fontWeight: "900",
+                          color: '#6C5CE7',
+                          fontWeight: '900',
                           fontSize: 13,
                         }}
                         numberOfLines={1}
@@ -550,12 +526,12 @@ export default function ParentClubs() {
                         <Text
                           style={{
                             fontSize: 10,
-                            color: "#9CA3AF",
-                            fontWeight: "700",
+                            color: '#9CA3AF',
+                            fontWeight: '700',
                             marginTop: 2,
                           }}
                         >
-                          {club.age_min ?? ""}–{club.age_max ?? ""} лет
+                          {club.age_min ?? ''}–{club.age_max ?? ''} лет
                         </Text>
                       ) : null}
                     </View>
@@ -565,14 +541,14 @@ export default function ParentClubs() {
             </View>
 
             {filtered.length === 0 && (
-              <View style={{ alignItems: "center", paddingVertical: 40 }}>
+              <View style={{ alignItems: 'center', paddingVertical: 40 }}>
                 <Feather name="search" size={40} color="#E5E7EB" />
                 <Text
                   style={{
                     marginTop: 12,
-                    color: "#9CA3AF",
-                    fontWeight: "700",
-                    textAlign: "center",
+                    color: '#9CA3AF',
+                    fontWeight: '700',
+                    textAlign: 'center',
                   }}
                 >
                   Ничего не найдено

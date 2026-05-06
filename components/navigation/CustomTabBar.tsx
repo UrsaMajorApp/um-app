@@ -1,12 +1,12 @@
-import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
-import { useSegments } from "expo-router";
-import { MotiView } from "moti";
-import { Platform, Pressable, Text, useWindowDimensions, View } from "react-native";
-import { COLORS, LAYOUT, SHADOWS } from "$constants/theme";
-import { useIsDesktop } from "$lib/useIsDesktop";
-import { useTabNav } from "$components/navigation/useTabNav";
-import type { Role } from "$constants/navigation/tabItems";
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSegments } from 'expo-router';
+import { MotiView } from 'moti';
+import { Platform, Pressable, Text, useWindowDimensions, View } from 'react-native';
+import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
+import { useIsDesktop } from '$lib/useIsDesktop';
+import { useTabNav } from '$components/navigation/useTabNav';
+import type { Role } from '$constants/navigation/tabItems';
 
 type Props = { role: Role | string | null };
 
@@ -18,18 +18,15 @@ export default function CustomTabBar({ role }: Props) {
   const isDesktop = useIsDesktop();
 
   const isClubDetail =
-    segments.includes("club") &&
-    segments.some((s) => s === "[id]" || s.startsWith("club-"));
+    segments.includes('club') && segments.some((s) => s === '[id]' || s.startsWith('club-'));
 
   if (isClubDetail && !isDesktop) return null;
 
   const numTabs = tabs.length;
   const padding = 12;
-  const safeAreaBottom = Platform.OS === "ios" ? 24 : 12;
+  const safeAreaBottom = Platform.OS === 'ios' ? 24 : 12;
 
-  const containerWidth = isDesktop
-    ? Math.min(width, LAYOUT.dashboardMaxWidth)
-    : width;
+  const containerWidth = isDesktop ? Math.min(width, LAYOUT.dashboardMaxWidth) : width;
   const usableWidth = containerWidth - padding * 2;
   const tabWidth = usableWidth / numTabs;
 
@@ -38,11 +35,11 @@ export default function CustomTabBar({ role }: Props) {
   return (
     <View
       style={{
-        position: "absolute",
+        position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        alignItems: "center",
+        alignItems: 'center',
       }}
     >
       <View
@@ -51,26 +48,26 @@ export default function CustomTabBar({ role }: Props) {
           width: containerWidth,
           borderTopLeftRadius: 40,
           borderTopRightRadius: 40,
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
         }}
       >
         <BlurView
           intensity={90}
           tint="light"
           style={{
-            width: "100%",
+            width: '100%',
             height: 76 + safeAreaBottom,
-            flexDirection: "row",
-            alignItems: "flex-start",
+            flexDirection: 'row',
+            alignItems: 'flex-start',
             paddingTop: 12,
             paddingHorizontal: padding,
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
             borderWidth: 1,
-            borderColor: "rgba(255, 255, 255, 0.8)",
+            borderColor: 'rgba(255, 255, 255, 0.8)',
             borderBottomWidth: 0,
-            overflow: "hidden",
-            backgroundColor: "rgba(0, 0, 0, 0.08)",
+            overflow: 'hidden',
+            backgroundColor: 'rgba(0, 0, 0, 0.08)',
           }}
         >
           {activeIndex >= 0 && !isDesktop && (
@@ -79,20 +76,20 @@ export default function CustomTabBar({ role }: Props) {
                 translateX: activeIndex * tabWidth,
               }}
               transition={{
-                type: "spring",
+                type: 'spring',
                 damping: 26,
                 stiffness: 350,
                 mass: 0.8,
               }}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 left: padding,
                 top: 12,
                 height: 54,
                 width: tabWidth,
                 borderRadius: 27,
-                overflow: "hidden",
-                boxShadow: "0px 4px 12px rgba(108, 92, 231, 0.4)",
+                overflow: 'hidden',
+                boxShadow: '0px 4px 12px rgba(108, 92, 231, 0.4)',
               }}
             >
               <MotiView
@@ -100,19 +97,19 @@ export default function CustomTabBar({ role }: Props) {
                   translateX: -activeIndex * tabWidth - 20,
                 }}
                 transition={{
-                  type: "spring",
+                  type: 'spring',
                   damping: 26,
                   stiffness: 350,
                   mass: 0.8,
                 }}
                 style={{
                   width: usableWidth + 40,
-                  height: "120%",
-                  top: "-10%",
+                  height: '120%',
+                  top: '-10%',
                 }}
               >
                 <LinearGradient
-                  colors={["#4F46E5", "#7C3AED", "#C026D3"]}
+                  colors={['#4F46E5', '#7C3AED', '#C026D3']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={{ flex: 1 }}
@@ -128,11 +125,11 @@ export default function CustomTabBar({ role }: Props) {
                 key={item.key}
                 onPress={() => go(item.route)}
                 style={{
-                  width: isDesktop ? "auto" : tabWidth,
+                  width: isDesktop ? 'auto' : tabWidth,
                   flex: isDesktop ? 1 : undefined,
                   height: 54,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   zIndex: 1,
                 }}
               >
@@ -146,7 +143,7 @@ export default function CustomTabBar({ role }: Props) {
                       fontSize: 10,
                       color: active ? COLORS.primary : COLORS.mutedForeground,
                       marginTop: 4,
-                      fontWeight: active ? "600" : "400",
+                      fontWeight: active ? '600' : '400',
                     }}
                   >
                     {item.label}

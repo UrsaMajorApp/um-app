@@ -1,15 +1,10 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { courseGradient, type PublicCourse } from "$hooks/usePublicData";
-import { formatKZT } from "$lib/formatCurrency";
-import { featherIconName } from "$lib/icons";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { courseGradient, type PublicCourse } from '$hooks/usePublicData';
+import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
 
 type EnrollmentRequestModalProps = {
   visible: boolean;
@@ -26,27 +21,20 @@ export function EnrollmentRequestModal({
   onClose,
   onRequestEnrollment,
 }: EnrollmentRequestModalProps) {
-  const isRequested = selectedCourse
-    ? enrollmentRequested.includes(selectedCourse.id)
-    : false;
+  const isRequested = selectedCourse ? enrollmentRequested.includes(selectedCourse.id) : false;
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          justifyContent: "flex-end",
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'flex-end',
         }}
       >
         <View
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
             padding: 24,
@@ -56,16 +44,16 @@ export function EnrollmentRequestModal({
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: 20,
             }}
           >
             <Text
               style={{
                 fontSize: 22,
-                fontWeight: "900",
+                fontWeight: '900',
                 color: COLORS.foreground,
               }}
             >
@@ -84,8 +72,8 @@ export function EnrollmentRequestModal({
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 14,
                   }}
                 >
@@ -94,13 +82,13 @@ export function EnrollmentRequestModal({
                       width: 56,
                       height: 56,
                       borderRadius: 16,
-                      backgroundColor: "rgba(255,255,255,0.25)",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: 'rgba(255,255,255,0.25)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Feather
-                      name={featherIconName(selectedCourse.icon, "book-open")}
+                      name={featherIconName(selectedCourse.icon, 'book-open')}
                       size={26}
                       color="white"
                     />
@@ -109,8 +97,8 @@ export function EnrollmentRequestModal({
                     <Text
                       style={{
                         fontSize: 18,
-                        fontWeight: "800",
-                        color: "white",
+                        fontWeight: '800',
+                        color: 'white',
                       }}
                     >
                       {selectedCourse.title}
@@ -118,11 +106,11 @@ export function EnrollmentRequestModal({
                     <Text
                       style={{
                         fontSize: 13,
-                        color: "rgba(255,255,255,0.8)",
+                        color: 'rgba(255,255,255,0.8)',
                         marginTop: 2,
                       }}
                     >
-                      {selectedCourse.org_name || "Организация"}
+                      {selectedCourse.org_name || 'Организация'}
                     </Text>
                   </View>
                 </View>
@@ -130,12 +118,12 @@ export function EnrollmentRequestModal({
 
               <View
                 style={{
-                  backgroundColor: "#FEF3C7",
+                  backgroundColor: '#FEF3C7',
                   borderRadius: 16,
                   padding: 16,
                   marginBottom: 20,
-                  flexDirection: "row",
-                  alignItems: "flex-start",
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
                   gap: 12,
                 }}
               >
@@ -144,9 +132,9 @@ export function EnrollmentRequestModal({
                     width: 36,
                     height: 36,
                     borderRadius: 18,
-                    backgroundColor: "#FDE68A",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: '#FDE68A',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="bell" size={18} color="#B45309" />
@@ -155,25 +143,22 @@ export function EnrollmentRequestModal({
                   <Text
                     style={{
                       fontSize: 14,
-                      fontWeight: "700",
-                      color: "#92400E",
+                      fontWeight: '700',
+                      color: '#92400E',
                       marginBottom: 4,
                     }}
                   >
                     Нужно одобрение родителя
                   </Text>
-                  <Text
-                    style={{ fontSize: 13, color: "#B45309", lineHeight: 18 }}
-                  >
-                    Родитель получит push-уведомление и сможет подтвердить или
-                    отклонить вашу заявку
+                  <Text style={{ fontSize: 13, color: '#B45309', lineHeight: 18 }}>
+                    Родитель получит push-уведомление и сможет подтвердить или отклонить вашу заявку
                   </Text>
                 </View>
               </View>
 
               <View
                 style={{
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: '#F9FAFB',
                   borderRadius: 16,
                   padding: 16,
                   marginBottom: 24,
@@ -182,17 +167,15 @@ export function EnrollmentRequestModal({
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  <Text style={{ fontSize: 13, color: COLORS.mutedForeground }}>
-                    Возраст
-                  </Text>
+                  <Text style={{ fontSize: 13, color: COLORS.mutedForeground }}>Возраст</Text>
                   <Text
                     style={{
                       fontSize: 13,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                     }}
                   >
@@ -201,23 +184,21 @@ export function EnrollmentRequestModal({
                 </View>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  <Text style={{ fontSize: 13, color: COLORS.mutedForeground }}>
-                    Стоимость
-                  </Text>
+                  <Text style={{ fontSize: 13, color: COLORS.mutedForeground }}>Стоимость</Text>
                   <Text
                     style={{
                       fontSize: 13,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                     }}
                   >
                     {selectedCourse.price != null
                       ? `${formatKZT(selectedCourse.price)}/мес`
-                      : "— ₸/мес"}
+                      : '— ₸/мес'}
                   </Text>
                 </View>
               </View>
@@ -226,29 +207,29 @@ export function EnrollmentRequestModal({
                 onPress={onRequestEnrollment}
                 disabled={isRequested}
                 style={{
-                  backgroundColor: isRequested ? "#E5E7EB" : COLORS.primary,
+                  backgroundColor: isRequested ? '#E5E7EB' : COLORS.primary,
                   paddingVertical: 18,
                   borderRadius: 20,
-                  alignItems: "center",
-                  flexDirection: "row",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
                   gap: 8,
                   ...SHADOWS.md,
                 }}
               >
                 <Feather
-                  name={isRequested ? "check" : "send"}
+                  name={isRequested ? 'check' : 'send'}
                   size={18}
-                  color={isRequested ? "#9CA3AF" : "white"}
+                  color={isRequested ? '#9CA3AF' : 'white'}
                 />
                 <Text
                   style={{
-                    color: isRequested ? "#9CA3AF" : "white",
+                    color: isRequested ? '#9CA3AF' : 'white',
                     fontSize: 16,
-                    fontWeight: "800",
+                    fontWeight: '800',
                   }}
                 >
-                  {isRequested ? "Запрос отправлен" : "Отправить запрос родителю"}
+                  {isRequested ? 'Запрос отправлен' : 'Отправить запрос родителю'}
                 </Text>
               </TouchableOpacity>
             </>

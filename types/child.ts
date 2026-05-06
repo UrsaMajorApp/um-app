@@ -1,6 +1,6 @@
-import type { Diagnostic } from "$types/diagnostic";
+import type { Diagnostic } from '$types/diagnostic';
 
-export type ChildAgeCategory = "child" | "teen" | "young-adult";
+export type ChildAgeCategory = 'child' | 'teen' | 'young-adult';
 
 export interface Child {
   id: string;

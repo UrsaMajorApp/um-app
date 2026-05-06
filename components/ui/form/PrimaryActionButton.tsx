@@ -1,10 +1,6 @@
-import React from "react";
-import {
-  Text,
-  TouchableOpacity,
-  type TouchableOpacityProps,
-} from "react-native";
-import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from "$constants/theme";
+import type React from 'react';
+import { Text, TouchableOpacity, type TouchableOpacityProps } from 'react-native';
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 
 export function PrimaryActionButton({
   children,
@@ -22,8 +18,8 @@ export function PrimaryActionButton({
         {
           height: 60,
           borderRadius: RADIUS.xl,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           marginTop: SPACING.xxl,
           backgroundColor: disabled ? COLORS.border : COLORS.primary,
           ...SHADOWS.md,
@@ -33,7 +29,7 @@ export function PrimaryActionButton({
     >
       <Text
         style={{
-          color: "white",
+          color: 'white',
           fontWeight: TYPOGRAPHY.weight.bold,
           fontSize: 16,
         }}

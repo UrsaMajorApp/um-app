@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -11,50 +11,36 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import {
-  FormCard,
-  LabeledTextInput,
-  PrimaryActionButton,
-} from "$components/ui/FormControls";
-import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
+} from 'react-native';
+import { FormCard, LabeledTextInput, PrimaryActionButton } from '$components/ui/FormControls';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import {
   ICON_OPTIONS,
   LEVEL_OPTIONS,
   SKILL_OPTIONS,
   type CourseLevel as Level,
-} from "$constants/courseOptions";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgCourses } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from '$constants/courseOptions';
+import { COLORS, LAYOUT, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgCourses } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CreateCourseScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { createCourse } = useOrgCourses();
   const [loading, setLoading] = useState(false);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [level, setLevel] = useState<Level>("beginner");
-  const [icon, setIcon] = useState("book");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [level, setLevel] = useState<Level>('beginner');
+  const [icon, setIcon] = useState('book');
   const [skills, setSkills] = useState<string[]>([]);
 
   const toggleSkill = (s: string) =>
-    setSkills((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
-    );
+    setSkills((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
 
   const handleSubmit = async () => {
     if (!title.trim()) return;
@@ -66,12 +52,12 @@ export default function CreateCourseScreen() {
       price: parseInt(price, 10) || 0,
       icon,
       skills,
-      status: "active",
+      status: 'active',
     });
     setLoading(false);
 
     if (result.error) {
-      Alert.alert("Ошибка", result.error);
+      Alert.alert('Ошибка', result.error);
       return;
     }
 
@@ -84,14 +70,10 @@ export default function CreateCourseScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <GradientScreenHeader
-        title="Создать курс"
-        paddingX={paddingX}
-        onBack={() => router.back()}
-      />
+      <GradientScreenHeader title="Создать курс" paddingX={paddingX} onBack={() => router.back()} />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <ScrollView
@@ -103,10 +85,7 @@ export default function CreateCourseScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <MotiView
-            from={{ opacity: 0, translateY: 20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-          >
+          <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
             {/* Main fields */}
             <FormCard style={{ gap: SPACING.xl }}>
               <LabeledTextInput
@@ -143,9 +122,7 @@ export default function CreateCourseScreen() {
             {/* Level selector */}
             <FormCard style={{ marginTop: SPACING.xl }}>
               <Text style={labelStyle}>Уровень</Text>
-              <View
-                style={{ flexDirection: "row", gap: SPACING.sm, marginTop: 8 }}
-              >
+              <View style={{ flexDirection: 'row', gap: SPACING.sm, marginTop: 8 }}>
                 {LEVEL_OPTIONS.map((opt) => (
                   <TouchableOpacity
                     key={opt.value}
@@ -154,24 +131,17 @@ export default function CreateCourseScreen() {
                       flex: 1,
                       paddingVertical: 10,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      backgroundColor:
-                        level === opt.value
-                          ? COLORS.primary
-                          : COLORS.background,
+                      alignItems: 'center',
+                      backgroundColor: level === opt.value ? COLORS.primary : COLORS.background,
                       borderWidth: 1,
-                      borderColor:
-                        level === opt.value ? COLORS.primary : COLORS.border,
+                      borderColor: level === opt.value ? COLORS.primary : COLORS.border,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 11,
                         fontWeight: TYPOGRAPHY.weight.bold,
-                        color:
-                          level === opt.value
-                            ? "white"
-                            : COLORS.mutedForeground,
+                        color: level === opt.value ? 'white' : COLORS.mutedForeground,
                       }}
                     >
                       {opt.label.toUpperCase()}
@@ -186,8 +156,8 @@ export default function CreateCourseScreen() {
               <Text style={labelStyle}>Иконка курса</Text>
               <View
                 style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
                   gap: SPACING.sm,
                   marginTop: 8,
                 }}
@@ -200,12 +170,9 @@ export default function CreateCourseScreen() {
                       width: 48,
                       height: 48,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor:
-                        icon === ic
-                          ? "rgba(108,92,231,0.1)"
-                          : COLORS.background,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: icon === ic ? 'rgba(108,92,231,0.1)' : COLORS.background,
                       borderWidth: 2,
                       borderColor: icon === ic ? COLORS.primary : COLORS.border,
                     }}
@@ -213,9 +180,7 @@ export default function CreateCourseScreen() {
                     <Feather
                       name={ic}
                       size={20}
-                      color={
-                        icon === ic ? COLORS.primary : COLORS.mutedForeground
-                      }
+                      color={icon === ic ? COLORS.primary : COLORS.mutedForeground}
                     />
                   </TouchableOpacity>
                 ))}
@@ -227,8 +192,8 @@ export default function CreateCourseScreen() {
               <Text style={labelStyle}>Развиваемые навыки</Text>
               <View
                 style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
                   gap: SPACING.sm,
                   marginTop: 8,
                 }}
@@ -245,16 +210,14 @@ export default function CreateCourseScreen() {
                         borderRadius: RADIUS.full,
                         borderWidth: 1,
                         borderColor: selected ? COLORS.primary : COLORS.border,
-                        backgroundColor: selected
-                          ? COLORS.primary
-                          : COLORS.white,
+                        backgroundColor: selected ? COLORS.primary : COLORS.white,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 11,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          color: selected ? "white" : COLORS.mutedForeground,
+                          color: selected ? 'white' : COLORS.mutedForeground,
                         }}
                       >
                         {skill.toUpperCase()}
@@ -273,7 +236,7 @@ export default function CreateCourseScreen() {
                 marginTop: SPACING.xxxl,
               }}
             >
-              {loading ? "СОХРАНЕНИЕ..." : "СОЗДАТЬ КУРС"}
+              {loading ? 'СОХРАНЕНИЕ...' : 'СОЗДАТЬ КУРС'}
             </PrimaryActionButton>
           </MotiView>
         </ScrollView>
@@ -286,7 +249,7 @@ const labelStyle = {
   fontSize: 10,
   color: COLORS.mutedForeground,
   fontWeight: TYPOGRAPHY.weight.bold,
-  textTransform: "uppercase" as const,
+  textTransform: 'uppercase' as const,
   letterSpacing: 1,
   marginBottom: 8,
   marginLeft: 4,

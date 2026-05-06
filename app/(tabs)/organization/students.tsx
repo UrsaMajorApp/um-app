@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { useState } from 'react';
 import {
   Platform,
   Pressable,
@@ -11,12 +11,12 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useOrgApplications } from "$hooks/useOrgData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-import type { FeatherIconName } from "$types/icons";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useOrgApplications } from '$hooks/useOrgData';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { FeatherIconName } from '$types/icons';
 
 type StudentStat = {
   label: string;
@@ -29,45 +29,43 @@ export default function OrgStudents() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
-  const [search, setSearch] = useState("");
-  const [activeClub, setActiveClub] = useState("Все");
+  const [search, setSearch] = useState('');
+  const [activeClub, setActiveClub] = useState('Все');
 
   const { apps, loading } = useOrgApplications();
 
   // Active students = activated or paid applications
   const students = apps
-    .filter((a) => a.status === "activated" || a.status === "paid")
+    .filter((a) => a.status === 'activated' || a.status === 'paid')
     .map((a) => ({
       id: a.id,
       name: a.child_name,
       age: a.child_age,
-      club: a.club ?? "—",
+      club: a.club ?? '—',
     }));
 
   // Dynamic club filter from real data
   const clubs = [
-    "Все",
-    ...Array.from(
-      new Set(students.map((s) => s.club).filter((c) => c !== "—")),
-    ),
+    'Все',
+    ...Array.from(new Set(students.map((s) => s.club).filter((c) => c !== '—'))),
   ];
 
   const filtered = students.filter((s) => {
     const matchSearch = s.name.toLowerCase().includes(search.toLowerCase());
-    const matchClub = activeClub === "Все" || s.club === activeClub;
+    const matchClub = activeClub === 'Все' || s.club === activeClub;
     return matchSearch && matchClub;
   });
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: paddingX,
@@ -75,9 +73,7 @@ export default function OrgStudents() {
                 paddingBottom: 32,
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "700", color: "white" }}>
-                Ученики
-              </Text>
+              <Text style={{ fontSize: 20, fontWeight: '700', color: 'white' }}>Ученики</Text>
             </View>
           </SafeAreaView>
         </LinearGradient>
@@ -94,24 +90,19 @@ export default function OrgStudents() {
         <View style={{ backgroundColor: COLORS.background, paddingBottom: 8 }}>
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: "white",
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: 'white',
               borderRadius: 14,
               paddingHorizontal: 14,
               paddingVertical: 12,
               marginBottom: 12,
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOpacity: 0.04,
               shadowRadius: 6,
             }}
           >
-            <Feather
-              name="search"
-              size={18}
-              color="#9CA3AF"
-              style={{ marginRight: 8 }}
-            />
+            <Feather name="search" size={18} color="#9CA3AF" style={{ marginRight: 8 }} />
             <TextInput
               value={search}
               onChangeText={setSearch}
@@ -131,18 +122,17 @@ export default function OrgStudents() {
                   paddingVertical: 8,
                   borderRadius: 20,
                   marginRight: 8,
-                  backgroundColor:
-                    activeClub === club ? COLORS.primary : COLORS.muted,
-                  shadowColor: "#000",
+                  backgroundColor: activeClub === club ? COLORS.primary : COLORS.muted,
+                  shadowColor: '#000',
                   shadowOpacity: 0.04,
                   shadowRadius: 4,
                 }}
               >
                 <Text
                   style={{
-                    fontWeight: "600",
+                    fontWeight: '600',
                     fontSize: 13,
-                    color: activeClub === club ? "white" : "#6B7280",
+                    color: activeClub === club ? 'white' : '#6B7280',
                   }}
                 >
                   {club}
@@ -155,29 +145,31 @@ export default function OrgStudents() {
         {/* Summary */}
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: 10,
             marginBottom: 20,
             marginTop: 8,
           }}
         >
-          {([
-            {
-              label: "Учеников",
-              value: filtered.length,
-              ico: "users",
-              color: COLORS.primary,
-            },
-          ] satisfies StudentStat[]).map((s) => (
+          {(
+            [
+              {
+                label: 'Учеников',
+                value: filtered.length,
+                ico: 'users',
+                color: COLORS.primary,
+              },
+            ] satisfies StudentStat[]
+          ).map((s) => (
             <View
               key={s.label}
               style={{
                 flex: 1,
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 borderRadius: 16,
                 padding: 12,
-                alignItems: "center",
-                shadowColor: "#000",
+                alignItems: 'center',
+                shadowColor: '#000',
                 shadowOpacity: 0.04,
                 shadowRadius: 6,
               }}
@@ -186,8 +178,8 @@ export default function OrgStudents() {
               <Text
                 style={{
                   fontSize: 20,
-                  fontWeight: "800",
-                  color: "#1F1F2E",
+                  fontWeight: '800',
+                  color: '#1F1F2E',
                   marginTop: 6,
                 }}
               >
@@ -196,8 +188,8 @@ export default function OrgStudents() {
               <Text
                 style={{
                   fontSize: 11,
-                  color: "#9CA3AF",
-                  textAlign: "center",
+                  color: '#9CA3AF',
+                  textAlign: 'center',
                   marginTop: 2,
                 }}
               >
@@ -210,7 +202,7 @@ export default function OrgStudents() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               color: COLORS.mutedForeground,
               marginBottom: 16,
             }}
@@ -223,47 +215,37 @@ export default function OrgStudents() {
         {filtered.map((student) => (
           <Pressable
             key={student.id}
-            onPress={() =>
-              router.push(appHref(`/organization/student/${student.id}`))
-            }
+            onPress={() => router.push(appHref(`/organization/student/${student.id}`))}
             style={SHADOWS.sm}
             className="bg-white rounded-3xl p-4 mb-4 border border-gray-100"
           >
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-2xl bg-purple-50 items-center justify-center mr-4">
-                <Text className="text-xl font-bold text-primary">
-                  {student.name.charAt(0)}
-                </Text>
+                <Text className="text-xl font-bold text-primary">{student.name.charAt(0)}</Text>
               </View>
               <View className="flex-1">
-                <Text className="font-bold text-gray-900 text-base">
-                  {student.name}
-                </Text>
+                <Text className="font-bold text-gray-900 text-base">{student.name}</Text>
                 <Text className="text-xs text-gray-500 mt-0.5">
-                  {student.age ? `${student.age} лет • ` : ""}
+                  {student.age ? `${student.age} лет • ` : ''}
                   {student.club}
                 </Text>
               </View>
-              <Feather
-                name="chevron-right"
-                size={20}
-                color={COLORS.mutedForeground}
-              />
+              <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
             </View>
           </Pressable>
         ))}
 
         {!loading && filtered.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Feather name="users" size={40} color="#E5E7EB" />
             <Text
               style={{
                 marginTop: 16,
                 color: COLORS.mutedForeground,
-                fontWeight: "600",
+                fontWeight: '600',
               }}
             >
-              {search ? "Ученики не найдены" : "Нет активных учеников"}
+              {search ? 'Ученики не найдены' : 'Нет активных учеников'}
             </Text>
           </View>
         )}

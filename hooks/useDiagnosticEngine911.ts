@@ -9,7 +9,7 @@
  * PRO    — 30 RPG quest tasks (visual-novel messenger UI)
  */
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 import {
   PRO_TASKS_911,
   SKILL_LABELS_911,
@@ -18,19 +18,14 @@ import {
   type BasicSkill911,
   type ProTask911,
   type StealthEvent911,
-  type WYRCard
-} from "$data/diagnosticData911";
-import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
-import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
+  type WYRCard,
+} from '$data/diagnosticData911';
+import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';
+import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';
 
 // ─── Phase & state types ──────────────────────────────────────────────────────
 
-export type DiagnosticPhase911 =
-  | "intro"
-  | "basic"
-  | "pro"
-  | "processing"
-  | "done";
+export type DiagnosticPhase911 = 'intro' | 'basic' | 'pro' | 'processing' | 'done';
 
 export interface Engine911State {
   phase: DiagnosticPhase911;
@@ -61,7 +56,7 @@ export function useDiagnosticEngine911(opts: {
 }) {
   const { childId, isPro, onComplete } = opts;
 
-  const [phase, setPhase] = useState<DiagnosticPhase911>("intro");
+  const [phase, setPhase] = useState<DiagnosticPhase911>('intro');
   const [basicIndex, setBasicIndex] = useState(0);
   const [proIndex, setProIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -75,11 +70,11 @@ export function useDiagnosticEngine911(opts: {
 
   const totalSteps = WYR_CARDS.length + (isPro ? PRO_TASKS_911.length : 0);
   const currentStep =
-    phase === "basic"
+    phase === 'basic'
       ? basicIndex
-      : phase === "pro"
+      : phase === 'pro'
         ? WYR_CARDS.length + proIndex
-        : phase === "processing" || phase === "done"
+        : phase === 'processing' || phase === 'done'
           ? totalSteps
           : 0;
   const progress = totalSteps > 0 ? currentStep / totalSteps : 0;
@@ -87,14 +82,14 @@ export function useDiagnosticEngine911(opts: {
   // ── Phase helpers ────────────────────────────────────────────────────────────
 
   const startBasic = useCallback(() => {
-    setPhase("basic");
+    setPhase('basic');
     setBasicIndex(0);
     taskEnteredAt.current = Date.now();
   }, []);
 
   const advanceToPro = useCallback(async () => {
     if (isPro) {
-      setPhase("pro");
+      setPhase('pro');
       setProIndex(0);
       taskEnteredAt.current = Date.now();
     } else {
@@ -215,11 +210,9 @@ export function useDiagnosticEngine911(opts: {
       }
     }
     const dominantPattern =
-      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
-      "balanced";
+      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'balanced';
     const stealthLabel =
-      STEALTH_PATTERNS_911.find((p) => p.id === dominantPattern)?.label ||
-      "Сбалансированный";
+      STEALTH_PATTERNS_911.find((p) => p.id === dominantPattern)?.label || 'Сбалансированный';
 
     return {
       scores,
@@ -235,8 +228,8 @@ export function useDiagnosticEngine911(opts: {
 
   const processWithAI = useCallback(
     async (computed: ReturnType<typeof computeResults>) => {
-      const top3str = computed.top3.map((x) => x.label).join(", ");
-      const weakStr = computed.weakest.join(", ");
+      const top3str = computed.top3.map((x) => x.label).join(', ');
+      const weakStr = computed.weakest.join(', ');
 
       const prompt = `You are an expert child psychologist. Analyze diagnostic data for a 9–11 year old child ("Creators" group).
 
@@ -247,10 +240,10 @@ ${
   isPro
     ? `PRO RPG quest scores: ${JSON.stringify(computed.rawScores)}.
 Stealth behavior profile: ${computed.stealthProfile}.`
-    : ""
+    : ''
 }
 
-Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include only base fields"}:
+Generate RAW JSON only (no markdown). ${isPro ? 'Include ALL fields' : 'Include only base fields'}:
 {
   "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Creative 1-2 word talent type in Russian (e.g. 'Творец-лидер')"
@@ -263,7 +256,7 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
   "personalityBehavior": "Personality/behavior pattern in Russian based on stealth profile: ${computed.stealthProfile}",
   "careerArchetypes": ["3 future career vectors in Russian appropriate for 9-11 age"],
   "parentAdvice": "1-2 sentences of advice for parents in Russian"`
-      : ""
+      : ''
   }
 }`;
 
@@ -275,7 +268,7 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
   // ── Finish ───────────────────────────────────────────────────────────────────
 
   const finishDiagnostic = useCallback(async () => {
-    setPhase("processing");
+    setPhase('processing');
     setIsProcessing(true);
 
     const computed = computeResults();
@@ -284,24 +277,18 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
     try {
       aiData = await processWithAI(computed);
     } catch (e) {
-      console.error("AI report error:", e);
+      console.error('AI report error:', e);
       aiData = {
-        summary:
-          "Сильная сторона ребёнка — инициативность и творческое мышление.",
-        recommendedConstellation: computed.top3[0]?.label ?? "Творец",
+        summary: 'Сильная сторона ребёнка — инициативность и творческое мышление.',
+        recommendedConstellation: computed.top3[0]?.label ?? 'Творец',
         ...(isPro
           ? {
               topStrengths: computed.top3.map((x) => x.label),
               developmentAreas: computed.weakest,
-              intellectType: "Социально-творческий интеллект",
+              intellectType: 'Социально-творческий интеллект',
               personalityBehavior: computed.stealthProfile,
-              careerArchetypes: [
-                "Проектный менеджер",
-                "UX-дизайнер",
-                "Педагог-новатор",
-              ],
-              parentAdvice:
-                "Поощряйте командные проекты и творческие инициативы ребёнка.",
+              careerArchetypes: ['Проектный менеджер', 'UX-дизайнер', 'Педагог-новатор'],
+              parentAdvice: 'Поощряйте командные проекты и творческие инициативы ребёнка.',
             }
           : {}),
       };
@@ -310,11 +297,11 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
     const diagnostic: Diagnostic = {
       childId,
       scores: computed.scores,
-      summary: aiData.summary || "Отличный потенциал!",
-      recommendedConstellation: aiData.recommendedConstellation || "Творец",
+      summary: aiData.summary || 'Отличный потенциал!',
+      recommendedConstellation: aiData.recommendedConstellation || 'Творец',
       timestamp: new Date().toISOString(),
-      tier: isPro ? "pro" : "basic",
-      ageGroup: "9-11",
+      tier: isPro ? 'pro' : 'basic',
+      ageGroup: '9-11',
       rawMetadata: {
         stealthProfile: computed.stealthProfile,
       },
@@ -334,23 +321,21 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
     try {
       await onComplete(diagnostic);
     } catch (e) {
-      console.error("Failed to save diagnostic:", e);
+      console.error('Failed to save diagnostic:', e);
     }
 
     setIsProcessing(false);
-    setPhase("done");
+    setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
 
   // ── Public API ────────────────────────────────────────────────────────────────
 
-  const currentCard =
-    phase === "basic" ? (WYR_CARDS[basicIndex] ?? null) : null;
-  const currentTask =
-    phase === "pro" ? (PRO_TASKS_911[proIndex] ?? null) : null;
+  const currentCard = phase === 'basic' ? (WYR_CARDS[basicIndex] ?? null) : null;
+  const currentTask = phase === 'pro' ? (PRO_TASKS_911[proIndex] ?? null) : null;
 
   return {
     phase,
-    currentIndex: phase === "basic" ? basicIndex : proIndex,
+    currentIndex: phase === 'basic' ? basicIndex : proIndex,
     progress,
     currentCard,
     currentTask,

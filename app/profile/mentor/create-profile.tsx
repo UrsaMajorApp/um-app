@@ -1,9 +1,9 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { AnimatePresence, MotiView } from "moti";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { AnimatePresence, MotiView } from 'moti';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -15,13 +15,13 @@ import {
   type TextInputProps,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ApprovalPendingSuccessView } from "$components/profile/ApprovalPendingSuccessView";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ApprovalPendingSuccessView } from '$components/profile/ApprovalPendingSuccessView';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { useIsDesktop } from '$lib/useIsDesktop';
 import {
   CITIES,
   PREDEFINED_SKILLS,
@@ -29,7 +29,7 @@ import {
   ROLE_GRADIENT,
   SPECIALIZATIONS,
   STEPS,
-} from "$constants/profile/mentorCreateProfileOptions";
+} from '$constants/profile/mentorCreateProfileOptions';
 
 export default function MentorCreateProfile() {
   const router = useRouter();
@@ -45,18 +45,18 @@ export default function MentorCreateProfile() {
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    city: "",
+    fullName: '',
+    city: '',
     languages: [] as string[],
-    specialization: "",
-    customSpecialization: "",
-    experienceYears: "",
-    education: "",
+    specialization: '',
+    customSpecialization: '',
+    experienceYears: '',
+    education: '',
     skills: [] as string[],
-    customSkill: "",
-    pitch: "",
-    bio: "",
-    sessionPrice: "",
+    customSkill: '',
+    pitch: '',
+    bio: '',
+    sessionPrice: '',
   });
 
   const toggleLanguage = (lang: string) => {
@@ -78,14 +78,11 @@ export default function MentorCreateProfile() {
   };
 
   const addCustomSkill = () => {
-    if (
-      formData.customSkill.trim() &&
-      !formData.skills.includes(formData.customSkill.trim())
-    ) {
+    if (formData.customSkill.trim() && !formData.skills.includes(formData.customSkill.trim())) {
       setFormData((prev) => ({
         ...prev,
         skills: [...prev.skills, prev.customSkill.trim()],
-        customSkill: "",
+        customSkill: '',
       }));
     }
   };
@@ -94,12 +91,10 @@ export default function MentorCreateProfile() {
     formData.fullName.trim() && formData.city && formData.languages.length > 0;
   const canProceedStep2 =
     formData.specialization &&
-    (formData.specialization !== "Другая специализация" ||
-      formData.customSpecialization.trim()) &&
+    (formData.specialization !== 'Другая специализация' || formData.customSpecialization.trim()) &&
     formData.experienceYears &&
     formData.education.trim();
-  const canSubmit =
-    formData.pitch.trim() && formData.bio.trim() && formData.sessionPrice;
+  const canSubmit = formData.pitch.trim() && formData.bio.trim() && formData.sessionPrice;
 
   const handleSubmit = async () => {
     setError(null);
@@ -108,26 +103,24 @@ export default function MentorCreateProfile() {
     try {
       if (supabase && isSupabaseConfigured) {
         const finalSpec =
-          formData.specialization === "Другая специализация"
+          formData.specialization === 'Другая специализация'
             ? formData.customSpecialization
             : formData.specialization;
 
-        const { error: insertErr } = await supabase
-          .from("mentor_applications")
-          .insert({
-            user_id: user?.id ?? null,
-            name: formData.fullName,
-            specialization: finalSpec,
-            city: formData.city,
-            languages: JSON.stringify(formData.languages),
-            experience: formData.experienceYears,
-            education: formData.education,
-            skills: JSON.stringify(formData.skills),
-            pitch: formData.pitch,
-            bio: formData.bio,
-            price: parseInt(formData.sessionPrice) || 0,
-            status: "pending",
-          });
+        const { error: insertErr } = await supabase.from('mentor_applications').insert({
+          user_id: user?.id ?? null,
+          name: formData.fullName,
+          specialization: finalSpec,
+          city: formData.city,
+          languages: JSON.stringify(formData.languages),
+          experience: formData.experienceYears,
+          education: formData.education,
+          skills: JSON.stringify(formData.skills),
+          pitch: formData.pitch,
+          bio: formData.bio,
+          price: parseInt(formData.sessionPrice) || 0,
+          status: 'pending',
+        });
 
         if (insertErr) {
           setError(insertErr.message);
@@ -137,7 +130,7 @@ export default function MentorCreateProfile() {
       await finalizeRegistration();
       setIsSuccess(true);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Ошибка при отправке");
+      setError(e instanceof Error ? e.message : 'Ошибка при отправке');
     } finally {
       setSubmitting(false);
     }
@@ -154,7 +147,7 @@ export default function MentorCreateProfile() {
       return;
     }
 
-    router.replace("/register");
+    router.replace('/register');
   };
 
   if (isSuccess) {
@@ -165,12 +158,12 @@ export default function MentorCreateProfile() {
         title="Данные успешно отправлены!"
         description="Мы проверяем ваш диплом и другие документы."
         buttonLabel="Вернуться на главную"
-        onHome={() => router.replace("/(tabs)/home")}
+        onHome={() => router.replace('/(tabs)/home')}
         variant="notes"
         noteText="⏱ Обычно это занимает до 24 часов"
         notes={[
-          "Мы отправим уведомление на вашу почту, как только проверка будет завершена",
-          "После одобрения вы получите доступ к платформе и сможете начать работу",
+          'Мы отправим уведомление на вашу почту, как только проверка будет завершена',
+          'После одобрения вы получите доступ к платформе и сможете начать работу',
         ]}
       />
     );
@@ -183,16 +176,16 @@ export default function MentorCreateProfile() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar style="dark" />
       <View style={{ flex: 1 }}>
         {/* Background blobs */}
-        <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+        <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -50,
               right: -50,
               width: 200,
@@ -203,8 +196,8 @@ export default function MentorCreateProfile() {
           />
           <View
             style={{
-              position: "absolute",
-              bottom: "20%",
+              position: 'absolute',
+              bottom: '20%',
               left: -80,
               width: 250,
               height: 250,
@@ -218,7 +211,7 @@ export default function MentorCreateProfile() {
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
-              alignItems: "center",
+              alignItems: 'center',
               paddingVertical: isDesktop ? 24 : 12,
             }}
             keyboardShouldPersistTaps="handled"
@@ -227,7 +220,7 @@ export default function MentorCreateProfile() {
             <View
               style={{
                 flex: 1,
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
                 paddingTop: 8,
@@ -236,27 +229,23 @@ export default function MentorCreateProfile() {
               {/* Header Nav */}
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 24,
                 }}
               >
                 <TouchableOpacity
                   onPress={handleBack}
-                  style={{ flexDirection: "row", alignItems: "center" }}
+                  style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
-                  <Feather
-                    name="arrow-left"
-                    size={20}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       color: COLORS.mutedForeground,
                       marginLeft: 8,
                       fontSize: 15,
-                      fontWeight: "500",
+                      fontWeight: '500',
                     }}
                   >
                     Назад
@@ -264,7 +253,7 @@ export default function MentorCreateProfile() {
                 </TouchableOpacity>
 
                 {/* Step dots: 3 steps shown as dots 1–3, last dot active for current step */}
-                <View style={{ flexDirection: "row", gap: 6 }}>
+                <View style={{ flexDirection: 'row', gap: 6 }}>
                   {[1, 2, 3].map((i) => (
                     <View
                       key={i}
@@ -296,7 +285,7 @@ export default function MentorCreateProfile() {
                 <Text
                   style={{
                     fontSize: 32,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                     marginBottom: 8,
                     letterSpacing: -0.5,
@@ -318,7 +307,7 @@ export default function MentorCreateProfile() {
               {/* Form Card */}
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: RADIUS.xxl,
                   padding: 24,
                   ...SHADOWS.md,
@@ -331,10 +320,10 @@ export default function MentorCreateProfile() {
                       from={{ opacity: 0, translateX: 20 }}
                       animate={{ opacity: 1, translateX: 0 }}
                       exit={{ opacity: 0, translateX: -20 }}
-                      transition={{ type: "timing", duration: 400 }}
+                      transition={{ type: 'timing', duration: 400 }}
                     >
                       {/* Photo upload */}
-                      <View style={{ alignItems: "center", marginBottom: 28 }}>
+                      <View style={{ alignItems: 'center', marginBottom: 28 }}>
                         <View
                           style={{
                             width: 100,
@@ -343,29 +332,25 @@ export default function MentorCreateProfile() {
                             backgroundColor: COLORS.muted,
                             borderWidth: 3,
                             borderColor: ROLE_COLOR,
-                            justifyContent: "center",
-                            alignItems: "center",
+                            justifyContent: 'center',
+                            alignItems: 'center',
                             ...SHADOWS.sm,
                           }}
                         >
-                          <Feather
-                            name="camera"
-                            size={28}
-                            color={COLORS.mutedForeground}
-                          />
+                          <Feather name="camera" size={28} color={COLORS.mutedForeground} />
                           <TouchableOpacity
                             style={{
-                              position: "absolute",
+                              position: 'absolute',
                               bottom: 0,
                               right: 0,
                               width: 30,
                               height: 30,
                               borderRadius: 15,
                               backgroundColor: ROLE_COLOR,
-                              alignItems: "center",
-                              justifyContent: "center",
+                              alignItems: 'center',
+                              justifyContent: 'center',
                               borderWidth: 2,
-                              borderColor: "white",
+                              borderColor: 'white',
                             }}
                           >
                             <Feather name="plus" size={16} color="white" />
@@ -385,9 +370,7 @@ export default function MentorCreateProfile() {
                       <InputField
                         label="ФИО *"
                         value={formData.fullName}
-                        onChange={(t: string) =>
-                          setFormData({ ...formData, fullName: t })
-                        }
+                        onChange={(t: string) => setFormData({ ...formData, fullName: t })}
                         placeholder="Иванов Иван Иванович"
                         roleColor={ROLE_COLOR}
                       />
@@ -403,27 +386,21 @@ export default function MentorCreateProfile() {
                           return (
                             <TouchableOpacity
                               key={c}
-                              onPress={() =>
-                                setFormData({ ...formData, city: c })
-                              }
+                              onPress={() => setFormData({ ...formData, city: c })}
                               style={{
                                 paddingHorizontal: 18,
                                 paddingVertical: 10,
                                 borderRadius: RADIUS.xl,
-                                backgroundColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.muted,
+                                backgroundColor: active ? ROLE_COLOR : COLORS.muted,
                                 borderWidth: 1,
-                                borderColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.border,
+                                borderColor: active ? ROLE_COLOR : COLORS.border,
                               }}
                             >
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontWeight: "600",
-                                  color: active ? "white" : COLORS.foreground,
+                                  fontWeight: '600',
+                                  color: active ? 'white' : COLORS.foreground,
                                 }}
                               >
                                 {c}
@@ -436,13 +413,13 @@ export default function MentorCreateProfile() {
                       <Text style={styles.fieldLabel}>ЯЗЫКИ ОБЩЕНИЯ *</Text>
                       <View
                         style={{
-                          flexDirection: "row",
-                          flexWrap: "wrap",
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
                           gap: 8,
                           marginBottom: 8,
                         }}
                       >
-                        {["Казахский", "Русский", "Английский"].map((l) => {
+                        {['Казахский', 'Русский', 'Английский'].map((l) => {
                           const active = formData.languages.includes(l);
                           return (
                             <TouchableOpacity
@@ -452,20 +429,16 @@ export default function MentorCreateProfile() {
                                 paddingHorizontal: 18,
                                 paddingVertical: 10,
                                 borderRadius: RADIUS.xl,
-                                backgroundColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.muted,
+                                backgroundColor: active ? ROLE_COLOR : COLORS.muted,
                                 borderWidth: 1,
-                                borderColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.border,
+                                borderColor: active ? ROLE_COLOR : COLORS.border,
                               }}
                             >
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontWeight: "600",
-                                  color: active ? "white" : COLORS.foreground,
+                                  fontWeight: '600',
+                                  color: active ? 'white' : COLORS.foreground,
                                 }}
                               >
                                 {l}
@@ -491,42 +464,34 @@ export default function MentorCreateProfile() {
                           return (
                             <TouchableOpacity
                               key={s}
-                              onPress={() =>
-                                setFormData({ ...formData, specialization: s })
-                              }
+                              onPress={() => setFormData({ ...formData, specialization: s })}
                               style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "space-between",
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
                                 padding: 16,
                                 borderRadius: RADIUS.md,
                                 borderWidth: 2,
-                                borderColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.border,
-                                backgroundColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.muted,
+                                borderColor: active ? ROLE_COLOR : COLORS.border,
+                                backgroundColor: active ? ROLE_COLOR : COLORS.muted,
                               }}
                             >
                               <Text
                                 style={{
                                   fontSize: 15,
-                                  fontWeight: "600",
-                                  color: active ? "white" : COLORS.foreground,
+                                  fontWeight: '600',
+                                  color: active ? 'white' : COLORS.foreground,
                                 }}
                               >
                                 {s}
                               </Text>
-                              {active && (
-                                <Feather name="check" size={18} color="white" />
-                              )}
+                              {active && <Feather name="check" size={18} color="white" />}
                             </TouchableOpacity>
                           );
                         })}
                       </View>
 
-                      {formData.specialization === "Другая специализация" && (
+                      {formData.specialization === 'Другая специализация' && (
                         <InputField
                           label="ВАША СПЕЦИАЛИЗАЦИЯ *"
                           value={formData.customSpecialization}
@@ -547,7 +512,7 @@ export default function MentorCreateProfile() {
                         onChange={(t: string) =>
                           setFormData({
                             ...formData,
-                            experienceYears: t.replace(/\D/g, ""),
+                            experienceYears: t.replace(/\D/g, ''),
                           })
                         }
                         placeholder="5"
@@ -557,20 +522,16 @@ export default function MentorCreateProfile() {
                       <InputField
                         label="УЧЕБНОЕ ЗАВЕДЕНИЕ *"
                         value={formData.education}
-                        onChange={(t: string) =>
-                          setFormData({ ...formData, education: t })
-                        }
+                        onChange={(t: string) => setFormData({ ...formData, education: t })}
                         placeholder="КазНУ им. аль-Фараби"
                         roleColor={ROLE_COLOR}
                       />
 
-                      <Text style={styles.fieldLabel}>
-                        КЛЮЧЕВЫЕ НАВЫКИ (ТЕГИ)
-                      </Text>
+                      <Text style={styles.fieldLabel}>КЛЮЧЕВЫЕ НАВЫКИ (ТЕГИ)</Text>
                       <View
                         style={{
-                          flexDirection: "row",
-                          flexWrap: "wrap",
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
                           gap: 8,
                           marginBottom: 16,
                         }}
@@ -585,22 +546,16 @@ export default function MentorCreateProfile() {
                                 paddingHorizontal: 14,
                                 paddingVertical: 8,
                                 borderRadius: RADIUS.xl,
-                                backgroundColor: active
-                                  ? `${ROLE_COLOR}15`
-                                  : COLORS.muted,
+                                backgroundColor: active ? `${ROLE_COLOR}15` : COLORS.muted,
                                 borderWidth: 1,
-                                borderColor: active
-                                  ? ROLE_COLOR
-                                  : COLORS.border,
+                                borderColor: active ? ROLE_COLOR : COLORS.border,
                               }}
                             >
                               <Text
                                 style={{
                                   fontSize: 13,
-                                  fontWeight: active ? "700" : "500",
-                                  color: active
-                                    ? ROLE_COLOR
-                                    : COLORS.foreground,
+                                  fontWeight: active ? '700' : '500',
+                                  color: active ? ROLE_COLOR : COLORS.foreground,
                                 }}
                               >
                                 {s}
@@ -612,7 +567,7 @@ export default function MentorCreateProfile() {
 
                       <View
                         style={{
-                          flexDirection: "row",
+                          flexDirection: 'row',
                           gap: 8,
                           marginBottom: 20,
                         }}
@@ -620,29 +575,27 @@ export default function MentorCreateProfile() {
                         <View
                           style={{
                             flex: 1,
-                            position: "relative",
-                            justifyContent: "center",
+                            position: 'relative',
+                            justifyContent: 'center',
                           }}
                         >
                           <TextInput
                             style={styles.input}
                             placeholder=""
                             value={formData.customSkill}
-                            onChangeText={(t) =>
-                              setFormData({ ...formData, customSkill: t })
-                            }
+                            onChangeText={(t) => setFormData({ ...formData, customSkill: t })}
                           />
                           {!formData.customSkill && (
                             <Text
                               numberOfLines={1}
                               style={{
-                                position: "absolute",
+                                position: 'absolute',
                                 left: 22,
                                 right: 16,
-                                pointerEvents: "none",
+                                pointerEvents: 'none',
                                 color: COLORS.mutedForeground,
                                 fontSize: 15,
-                                fontWeight: "500",
+                                fontWeight: '500',
                               }}
                             >
                               Добавить свой навык
@@ -656,8 +609,8 @@ export default function MentorCreateProfile() {
                             height: 50,
                             backgroundColor: ROLE_COLOR,
                             borderRadius: RADIUS.md,
-                            alignItems: "center",
-                            justifyContent: "center",
+                            alignItems: 'center',
+                            justifyContent: 'center',
                             ...SHADOWS.sm,
                           }}
                         >
@@ -667,11 +620,11 @@ export default function MentorCreateProfile() {
 
                       <TouchableOpacity
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           padding: 18,
-                          borderStyle: "dashed",
+                          borderStyle: 'dashed',
                           borderWidth: 2,
                           borderColor: ROLE_COLOR,
                           borderRadius: RADIUS.md,
@@ -682,7 +635,7 @@ export default function MentorCreateProfile() {
                         <Text
                           style={{
                             color: ROLE_COLOR,
-                            fontWeight: "700",
+                            fontWeight: '700',
                             marginLeft: 10,
                           }}
                         >
@@ -702,9 +655,7 @@ export default function MentorCreateProfile() {
                       <InputField
                         label="ЧЕМУ ОБУЧИТЕ? *"
                         value={formData.pitch}
-                        onChange={(t: string) =>
-                          setFormData({ ...formData, pitch: t })
-                        }
+                        onChange={(t: string) => setFormData({ ...formData, pitch: t })}
                         placeholder="Научу вашего ребенка не бояться публичных выступлений"
                         maxLength={60}
                         roleColor={ROLE_COLOR}
@@ -712,9 +663,7 @@ export default function MentorCreateProfile() {
                       <InputField
                         label="О СЕБЕ И МЕТОДЕ *"
                         value={formData.bio}
-                        onChange={(t: string) =>
-                          setFormData({ ...formData, bio: t })
-                        }
+                        onChange={(t: string) => setFormData({ ...formData, bio: t })}
                         placeholder="Расскажите про свои методики и результаты учеников..."
                         multiline
                         height={150}
@@ -726,7 +675,7 @@ export default function MentorCreateProfile() {
                         onChange={(t: string) =>
                           setFormData({
                             ...formData,
-                            sessionPrice: t.replace(/\D/g, ""),
+                            sessionPrice: t.replace(/\D/g, ''),
                           })
                         }
                         placeholder="10 000"
@@ -744,17 +693,17 @@ export default function MentorCreateProfile() {
                       marginTop: 12,
                       padding: 12,
                       borderRadius: RADIUS.md,
-                      backgroundColor: "#FEE2E2",
+                      backgroundColor: '#FEE2E2',
                       borderWidth: 1,
-                      borderColor: "#FCA5A5",
+                      borderColor: '#FCA5A5',
                     }}
                   >
                     <Text
                       style={{
-                        color: "#B91C1C",
-                        textAlign: "center",
+                        color: '#B91C1C',
+                        textAlign: 'center',
                         fontSize: 13,
-                        fontWeight: "600",
+                        fontWeight: '600',
                       }}
                     >
                       {error}
@@ -765,26 +714,18 @@ export default function MentorCreateProfile() {
 
               {/* Action Button */}
               <TouchableOpacity
-                onPress={
-                  currentStep < 3
-                    ? () => setCurrentStep((s) => s + 1)
-                    : handleSubmit
-                }
+                onPress={currentStep < 3 ? () => setCurrentStep((s) => s + 1) : handleSubmit}
                 disabled={!isCurrentStepValid || submitting}
                 style={{ marginTop: 24, marginBottom: 40 }}
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={
-                    isCurrentStepValid
-                      ? ROLE_GRADIENT
-                      : [COLORS.muted, COLORS.muted]
-                  }
+                  colors={isCurrentStepValid ? ROLE_GRADIENT : [COLORS.muted, COLORS.muted]}
                   style={{
                     paddingVertical: 18,
                     borderRadius: RADIUS.xl,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     ...SHADOWS.md,
                   }}
                 >
@@ -794,13 +735,11 @@ export default function MentorCreateProfile() {
                     <Text
                       style={{
                         fontSize: 18,
-                        fontWeight: "800",
-                        color: isCurrentStepValid
-                          ? "white"
-                          : COLORS.mutedForeground,
+                        fontWeight: '800',
+                        color: isCurrentStepValid ? 'white' : COLORS.mutedForeground,
                       }}
                     >
-                      {currentStep === 3 ? "Отправить на модерацию" : "Далее"}
+                      {currentStep === 3 ? 'Отправить на модерацию' : 'Далее'}
                     </Text>
                   )}
                 </LinearGradient>
@@ -816,9 +755,9 @@ export default function MentorCreateProfile() {
 type InputFieldProps = {
   label: string;
   value: string;
-  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  onChange: NonNullable<TextInputProps['onChangeText']>;
   placeholder?: string;
-  keyboardType?: TextInputProps["keyboardType"];
+  keyboardType?: TextInputProps['keyboardType'];
   multiline?: boolean;
   height?: number;
   suffix?: string;
@@ -831,7 +770,7 @@ function InputField({
   value,
   onChange,
   placeholder,
-  keyboardType = "default",
+  keyboardType = 'default',
   multiline = false,
   height,
   suffix,
@@ -840,7 +779,7 @@ function InputField({
   return (
     <View style={{ marginBottom: 20 }}>
       <Text style={styles.fieldLabel}>{label}</Text>
-      <View style={{ position: "relative", justifyContent: "center" }}>
+      <View style={{ position: 'relative', justifyContent: 'center' }}>
         <TextInput
           value={value}
           onChangeText={onChange}
@@ -852,7 +791,7 @@ function InputField({
             styles.input,
             multiline && {
               height: height || 100,
-              textAlignVertical: "top",
+              textAlignVertical: 'top',
               paddingTop: 16,
             },
             suffix && { paddingRight: 44 },
@@ -862,14 +801,14 @@ function InputField({
           <Text
             numberOfLines={multiline ? undefined : 1}
             style={{
-              position: "absolute",
+              position: 'absolute',
               left: 22,
               right: suffix ? 44 : 16,
               top: multiline ? 16 : undefined,
-              pointerEvents: "none",
+              pointerEvents: 'none',
               color: COLORS.mutedForeground,
               fontSize: 15,
-              fontWeight: "500",
+              fontWeight: '500',
             }}
           >
             {placeholder}
@@ -878,10 +817,10 @@ function InputField({
         {suffix && (
           <Text
             style={{
-              position: "absolute",
+              position: 'absolute',
               right: 16,
               fontSize: 17,
-              fontWeight: "700",
+              fontWeight: '700',
               color: COLORS.mutedForeground,
             }}
           >
@@ -891,7 +830,7 @@ function InputField({
         {maxLength && (
           <Text
             style={{
-              position: "absolute",
+              position: 'absolute',
               right: 10,
               bottom: -18,
               fontSize: 10,
@@ -909,10 +848,10 @@ function InputField({
 const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 10,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
     opacity: 0.7,
   },
@@ -924,7 +863,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 16,
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
     color: COLORS.foreground,
   },
 });

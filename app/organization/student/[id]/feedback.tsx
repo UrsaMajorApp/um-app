@@ -1,53 +1,44 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
-   KeyboardAvoidingView,
-   Platform,
-   ScrollView,
-   Text,
-   TextInput,
-   TouchableOpacity,
-   View
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-   COLORS,
-   LAYOUT,
-   RADIUS,
-   SHADOWS,
-   SPACING,
-   TYPOGRAPHY,
-} from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useOrgApplications } from "$hooks/useOrgData";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { useIsDesktop } from "$lib/useIsDesktop";
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useOrgApplications } from '$hooks/useOrgData';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 const FEEDBACK_TAGS = [
-  "Внимательно слушал",
-  "Проявил лидерство",
-  "Задавал вопросы",
-  "Старался",
-  "Отвлекался",
-  "Творческий подход",
-  "Помогал другим",
-  "Не сделал ДЗ",
+  'Внимательно слушал',
+  'Проявил лидерство',
+  'Задавал вопросы',
+  'Старался',
+  'Отвлекался',
+  'Творческий подход',
+  'Помогал другим',
+  'Не сделал ДЗ',
 ];
 
 export default function FeedbackFormScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
   const { user } = useAuth();
   const { apps } = useOrgApplications();
   const student = apps.find((app) => app.id === id);
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
 
@@ -61,12 +52,11 @@ export default function FeedbackFormScreen() {
 
   const handleSave = async () => {
     if (!supabase || !isSupabaseConfigured || !student) return;
-    await supabase.from("mentor_feedback").insert({
+    await supabase.from('mentor_feedback').insert({
       mentor_user_id: user?.id ?? null,
-      teacher_name:
-        [user?.firstName, user?.lastName].filter(Boolean).join(" ") || null,
+      teacher_name: [user?.firstName, user?.lastName].filter(Boolean).join(' ') || null,
       student_name: student.child_name,
-      tag: selectedTags.join(", "),
+      tag: selectedTags.join(', '),
       text: comment || `Оценка: ${rating}`,
     });
     router.back();
@@ -74,7 +64,7 @@ export default function FeedbackFormScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       {/* Header - Unified Brand Style */}
@@ -83,21 +73,16 @@ export default function FeedbackFormScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
+            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -107,9 +92,9 @@ export default function FeedbackFormScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
@@ -120,25 +105,25 @@ export default function FeedbackFormScreen() {
                     marginLeft: SPACING.md,
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Оставить отзыв
                 </Text>
               </View>
 
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View
                   style={{
                     width: 64,
                     height: 64,
-                    backgroundColor: "rgba(255,255,255,0.2)",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
                     borderRadius: RADIUS.lg,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: SPACING.lg,
                     borderWidth: 1,
-                    borderColor: "rgba(255,255,255,0.3)",
+                    borderColor: 'rgba(255,255,255,0.3)',
                   }}
                 >
                   <Feather name="user" size={28} color="white" />
@@ -148,20 +133,20 @@ export default function FeedbackFormScreen() {
                     style={{
                       fontSize: TYPOGRAPHY.size.xxl,
                       fontWeight: TYPOGRAPHY.weight.semibold,
-                      color: "white",
+                      color: 'white',
                       marginBottom: 2,
                     }}
                   >
-                    {student?.child_name || "Ученик"}
+                    {student?.child_name || 'Ученик'}
                   </Text>
                   <Text
                     style={{
-                      color: "rgba(255,255,255,0.8)",
+                      color: 'rgba(255,255,255,0.8)',
                       fontSize: TYPOGRAPHY.size.sm,
                       fontWeight: TYPOGRAPHY.weight.medium,
                     }}
                   >
-                    {student?.club || "Курс не указан"}
+                    {student?.club || 'Курс не указан'}
                   </Text>
                 </View>
               </View>
@@ -194,7 +179,7 @@ export default function FeedbackFormScreen() {
               fontSize: 10,
               fontWeight: TYPOGRAPHY.weight.bold,
               color: COLORS.mutedForeground,
-              textTransform: "uppercase",
+              textTransform: 'uppercase',
               letterSpacing: 1,
               marginBottom: SPACING.lg,
             }}
@@ -203,22 +188,18 @@ export default function FeedbackFormScreen() {
           </Text>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               marginBottom: 2,
             }}
           >
             {[1, 2, 3, 4, 5].map((star) => (
-              <TouchableOpacity
-                key={star}
-                onPress={() => setRating(star)}
-                style={{ padding: 4 }}
-              >
+              <TouchableOpacity key={star} onPress={() => setRating(star)} style={{ padding: 4 }}>
                 <Feather
                   name="star"
                   size={44}
                   color={star <= rating ? COLORS.accent : COLORS.muted}
-                  fill={star <= rating ? COLORS.accent : "transparent"}
+                  fill={star <= rating ? COLORS.accent : 'transparent'}
                 />
               </TouchableOpacity>
             ))}
@@ -241,16 +222,14 @@ export default function FeedbackFormScreen() {
               fontSize: 10,
               fontWeight: TYPOGRAPHY.weight.bold,
               color: COLORS.mutedForeground,
-              textTransform: "uppercase",
+              textTransform: 'uppercase',
               letterSpacing: 1,
               marginBottom: SPACING.lg,
             }}
           >
             Быстрые теги
           </Text>
-          <View
-            style={{ flexDirection: "row", flexWrap: "wrap", gap: SPACING.sm }}
-          >
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm }}>
             {FEEDBACK_TAGS.map((tag) => {
               const isSelected = selectedTags.includes(tag);
               return (
@@ -262,9 +241,7 @@ export default function FeedbackFormScreen() {
                     paddingVertical: SPACING.sm,
                     borderRadius: RADIUS.full,
                     borderWidth: 1.5,
-                    backgroundColor: isSelected
-                      ? "rgba(108, 92, 231, 0.1)"
-                      : COLORS.transparent,
+                    backgroundColor: isSelected ? 'rgba(108, 92, 231, 0.1)' : COLORS.transparent,
                     borderColor: isSelected ? COLORS.primary : COLORS.border,
                   }}
                 >
@@ -272,9 +249,7 @@ export default function FeedbackFormScreen() {
                     style={{
                       fontSize: TYPOGRAPHY.size.sm,
                       fontWeight: TYPOGRAPHY.weight.semibold,
-                      color: isSelected
-                        ? COLORS.primary
-                        : COLORS.mutedForeground,
+                      color: isSelected ? COLORS.primary : COLORS.mutedForeground,
                     }}
                   >
                     {tag}
@@ -300,7 +275,7 @@ export default function FeedbackFormScreen() {
               fontSize: 10,
               fontWeight: TYPOGRAPHY.weight.bold,
               color: COLORS.mutedForeground,
-              textTransform: "uppercase",
+              textTransform: 'uppercase',
               letterSpacing: 1,
               marginBottom: SPACING.lg,
             }}
@@ -315,7 +290,7 @@ export default function FeedbackFormScreen() {
             numberOfLines={4}
             style={{
               height: 140,
-              textAlignVertical: "top",
+              textAlignVertical: 'top',
               backgroundColor: COLORS.background,
               borderRadius: RADIUS.lg,
               padding: SPACING.lg,
@@ -334,15 +309,14 @@ export default function FeedbackFormScreen() {
               lineHeight: 16,
             }}
           >
-            Ваш отзыв поможет ИИ точнее построить карту талантов для этого
-            ребенка.
+            Ваш отзыв поможет ИИ точнее построить карту талантов для этого ребенка.
           </Text>
         </View>
       </ScrollView>
 
       <View
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
@@ -362,13 +336,13 @@ export default function FeedbackFormScreen() {
             backgroundColor: COLORS.primary,
             borderRadius: RADIUS.lg,
             paddingVertical: SPACING.lg,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Text
             style={{
-              color: "white",
+              color: 'white',
               fontWeight: TYPOGRAPHY.weight.bold,
               fontSize: TYPOGRAPHY.size.lg,
             }}

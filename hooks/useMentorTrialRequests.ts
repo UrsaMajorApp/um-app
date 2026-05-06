@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-import { Alert } from "react-native";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
-export type MentorTrialRequestTab = "requests" | "archive";
+export type MentorTrialRequestTab = 'requests' | 'archive';
 
 export interface MentorTrialRequest {
   id: string;
@@ -19,16 +19,11 @@ export interface MentorTrialRequest {
 }
 
 export function useMentorTrialRequests(mentorId: string | undefined) {
-  const [activeTab, setActiveTab] =
-    useState<MentorTrialRequestTab>("requests");
+  const [activeTab, setActiveTab] = useState<MentorTrialRequestTab>('requests');
   const [requests, setRequests] = useState<MentorTrialRequest[]>([]);
-  const [archivedRequests, setArchivedRequests] = useState<
-    MentorTrialRequest[]
-  >([]);
+  const [archivedRequests, setArchivedRequests] = useState<MentorTrialRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>(
-    {},
-  );
+  const [selectedSlots, setSelectedSlots] = useState<Record<string, string>>({});
 
   const refreshRequests = useCallback(async () => {
     if (!supabase || !isSupabaseConfigured || !mentorId) {
@@ -39,25 +34,25 @@ export function useMentorTrialRequests(mentorId: string | undefined) {
     setLoading(true);
     try {
       const pendingRes = await supabase
-        .from("trial_lesson_requests")
-        .select("*")
-        .eq("mentor_id", mentorId)
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+        .from('trial_lesson_requests')
+        .select('*')
+        .eq('mentor_id', mentorId)
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
 
       setRequests(rowsOrEmpty<MentorTrialRequest>(pendingRes));
 
       const archivedRes = await supabase
-        .from("trial_lesson_requests")
-        .select("*")
-        .eq("mentor_id", mentorId)
-        .in("status", ["confirmed", "completed", "declined"])
-        .order("created_at", { ascending: false })
+        .from('trial_lesson_requests')
+        .select('*')
+        .eq('mentor_id', mentorId)
+        .in('status', ['confirmed', 'completed', 'declined'])
+        .order('created_at', { ascending: false })
         .limit(20);
 
       setArchivedRequests(rowsOrEmpty<MentorTrialRequest>(archivedRes));
     } catch (error) {
-      console.error("Error fetching trial requests:", error);
+      console.error('Error fetching trial requests:', error);
     } finally {
       setLoading(false);
     }
@@ -70,51 +65,43 @@ export function useMentorTrialRequests(mentorId: string | undefined) {
   const selectSlot = (requestId: string, slotKey: string) => {
     setSelectedSlots((prev) => ({
       ...prev,
-      [requestId]: prev[requestId] === slotKey ? "" : slotKey,
+      [requestId]: prev[requestId] === slotKey ? '' : slotKey,
     }));
   };
 
   const confirmRequest = async (requestId: string) => {
     const slot = selectedSlots[requestId];
     if (!slot) {
-      Alert.alert(
-        "Выберите время",
-        "Пожалуйста, выберите удобное время для пробного урока",
-      );
+      Alert.alert('Выберите время', 'Пожалуйста, выберите удобное время для пробного урока');
       return;
     }
 
-    const [day, time] = slot.split("-");
+    const [day, time] = slot.split('-');
 
-    Alert.alert("Подтвердить пробный урок?", `Время: ${day} в ${time}`, [
-      { text: "Отмена", style: "cancel" },
+    Alert.alert('Подтвердить пробный урок?', `Время: ${day} в ${time}`, [
+      { text: 'Отмена', style: 'cancel' },
       {
-        text: "Подтвердить",
+        text: 'Подтвердить',
         onPress: async () => {
           if (!supabase || !isSupabaseConfigured) return;
 
           const { error } = await supabase
-            .from("trial_lesson_requests")
+            .from('trial_lesson_requests')
             .update({
-              status: "confirmed",
+              status: 'confirmed',
               confirmed_slot: { day, time },
               confirmed_at: new Date().toISOString(),
             })
-            .eq("id", requestId);
+            .eq('id', requestId);
 
           if (error) {
-            Alert.alert("Ошибка", error.message);
+            Alert.alert('Ошибка', error.message);
             return;
           }
 
           // TODO: Send push notification to parent
-          setRequests((prev) =>
-            prev.filter((request) => request.id !== requestId),
-          );
-          Alert.alert(
-            "Успешно!",
-            "Пробный урок подтверждён. Родитель получит уведомление.",
-          );
+          setRequests((prev) => prev.filter((request) => request.id !== requestId));
+          Alert.alert('Успешно!', 'Пробный урок подтверждён. Родитель получит уведомление.');
           refreshRequests();
         },
       },
@@ -122,30 +109,28 @@ export function useMentorTrialRequests(mentorId: string | undefined) {
   };
 
   const declineRequest = async (requestId: string) => {
-    Alert.alert("Отклонить заявку?", "Родитель получит уведомление об отказе", [
-      { text: "Отмена", style: "cancel" },
+    Alert.alert('Отклонить заявку?', 'Родитель получит уведомление об отказе', [
+      { text: 'Отмена', style: 'cancel' },
       {
-        text: "Отклонить",
-        style: "destructive",
+        text: 'Отклонить',
+        style: 'destructive',
         onPress: async () => {
           if (!supabase || !isSupabaseConfigured) return;
 
           const { error } = await supabase
-            .from("trial_lesson_requests")
+            .from('trial_lesson_requests')
             .update({
-              status: "declined",
+              status: 'declined',
             })
-            .eq("id", requestId);
+            .eq('id', requestId);
 
           if (error) {
-            Alert.alert("Ошибка", error.message);
+            Alert.alert('Ошибка', error.message);
             return;
           }
 
           // TODO: Send push notification to parent
-          setRequests((prev) =>
-            prev.filter((request) => request.id !== requestId),
-          );
+          setRequests((prev) => prev.filter((request) => request.id !== requestId));
           refreshRequests();
         },
       },

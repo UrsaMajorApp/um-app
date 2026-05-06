@@ -1,14 +1,14 @@
-import { Feather } from "@expo/vector-icons";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import React from "react";
-import { Text, View } from "react-native";
+import { Feather } from '@expo/vector-icons';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import type React from 'react';
+import { Text, View } from 'react-native';
 
 export function EmptyState({
-  icon = "inbox",
+  icon = 'inbox',
   title,
   body,
 }: {
-  icon?: React.ComponentProps<typeof Feather>["name"];
+  icon?: React.ComponentProps<typeof Feather>['name'];
   title: string;
   body?: string;
 }) {
@@ -16,8 +16,8 @@ export function EmptyState({
     <View
       style={{
         padding: SPACING.xl,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <View
@@ -26,8 +26,8 @@ export function EmptyState({
           height: 48,
           borderRadius: RADIUS.lg,
           backgroundColor: COLORS.muted,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           marginBottom: SPACING.sm,
         }}
       >
@@ -36,8 +36,8 @@ export function EmptyState({
       <Text
         style={{
           color: COLORS.foreground,
-          fontWeight: "900",
-          textAlign: "center",
+          fontWeight: '900',
+          textAlign: 'center',
         }}
       >
         {title}
@@ -48,7 +48,7 @@ export function EmptyState({
             color: COLORS.mutedForeground,
             fontSize: TYPOGRAPHY.size.sm,
             marginTop: 4,
-            textAlign: "center",
+            textAlign: 'center',
           }}
         >
           {body}

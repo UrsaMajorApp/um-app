@@ -1,6 +1,6 @@
-import { Feather } from "@expo/vector-icons";
-import { View } from "react-native";
-import type { FeatherIconName } from "$types/icons";
+import { Feather } from '@expo/vector-icons';
+import { View } from 'react-native';
+import type { FeatherIconName } from '$types/icons';
 
 export function TabIcon({
   icon,
@@ -12,12 +12,12 @@ export function TabIcon({
   focused: boolean;
 }) {
   return (
-    <View style={{ alignItems: "center", justifyContent: "center" }}>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <Feather name={icon} size={22} color={color} />
       {focused && (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             bottom: -8,
             width: 4,
             height: 4,

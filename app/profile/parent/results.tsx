@@ -1,20 +1,11 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import {
-  COLORS,
-  LAYOUT,
-  SHADOWS
-} from "$constants/theme";
-import { useParentData } from "$contexts/ParentDataContext";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
+import { useParentData } from '$contexts/ParentDataContext';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentResults() {
   const router = useRouter();
@@ -24,29 +15,28 @@ export default function ParentResults() {
     : LAYOUT.profileHorizontalPaddingMobile;
 
   const { childrenProfile, activeChildId } = useParentData();
-  const child =
-    childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
+  const child = childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
   const diagnostic = child?.talentProfile;
 
   // No results yet — guide parent to run the test
   if (!child || !diagnostic) {
     return (
       <LinearGradient
-        colors={["#6C5CE7", "#EDE9FE"]}
+        colors={['#6C5CE7', '#EDE9FE']}
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           padding: 40,
         }}
       >
         <Feather name="clipboard" size={48} color="rgba(255,255,255,0.6)" />
         <Text
           style={{
-            color: "white",
+            color: 'white',
             fontSize: 22,
-            fontWeight: "800",
-            textAlign: "center",
+            fontWeight: '800',
+            textAlign: 'center',
             marginTop: 20,
             marginBottom: 12,
           }}
@@ -55,9 +45,9 @@ export default function ParentResults() {
         </Text>
         <Text
           style={{
-            color: "rgba(255,255,255,0.7)",
+            color: 'rgba(255,255,255,0.7)',
             fontSize: 15,
-            textAlign: "center",
+            textAlign: 'center',
             lineHeight: 22,
             marginBottom: 32,
           }}
@@ -67,20 +57,18 @@ export default function ParentResults() {
         <TouchableOpacity
           onPress={() => {
             router.push({
-              pathname: "/profile/youth/testing",
+              pathname: '/profile/youth/testing',
               params: child?.id ? { childId: child.id } : undefined,
-                    });
+            });
           }}
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             paddingVertical: 16,
             paddingHorizontal: 32,
             borderRadius: 24,
           }}
         >
-          <Text
-            style={{ color: COLORS.primary, fontWeight: "800", fontSize: 16 }}
-          >
+          <Text style={{ color: COLORS.primary, fontWeight: '800', fontSize: 16 }}>
             Начать тестирование
           </Text>
         </TouchableOpacity>
@@ -89,30 +77,30 @@ export default function ParentResults() {
   }
 
   const scores = [
-    { label: "Логика", value: diagnostic.scores.logical, color: "#10B981" },
-    { label: "Креатив", value: diagnostic.scores.creative, color: "#8B5CF6" },
-    { label: "Социум", value: diagnostic.scores.social, color: "#3B82F6" },
-    { label: "Физика", value: diagnostic.scores.physical, color: "#F59E0B" },
+    { label: 'Логика', value: diagnostic.scores.logical, color: '#10B981' },
+    { label: 'Креатив', value: diagnostic.scores.creative, color: '#8B5CF6' },
+    { label: 'Социум', value: diagnostic.scores.social, color: '#3B82F6' },
+    { label: 'Физика', value: diagnostic.scores.physical, color: '#F59E0B' },
     {
-      label: "Лингвист.",
+      label: 'Лингвист.',
       value: diagnostic.scores.linguistic,
-      color: "#EC4899",
+      color: '#EC4899',
     },
   ];
 
   return (
-    <LinearGradient colors={["#6C5CE7", "#EDE9FE"]} style={{ flex: 1 }}>
+    <LinearGradient colors={['#6C5CE7', '#EDE9FE']} style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: horizontalPadding,
           paddingTop: isDesktop ? 72 : 60,
           paddingBottom: 120,
-          alignItems: "center",
+          alignItems: 'center',
         }}
       >
         <View
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined,
           }}
         >
@@ -126,9 +114,9 @@ export default function ParentResults() {
             <Text
               style={{
                 fontSize: 30,
-                fontWeight: "800",
-                color: "white",
-                textAlign: "center",
+                fontWeight: '800',
+                color: 'white',
+                textAlign: 'center',
               }}
             >
               Результаты тестирования
@@ -137,10 +125,10 @@ export default function ParentResults() {
           {child.name && (
             <Text
               style={{
-                color: "rgba(255,255,255,0.7)",
-                textAlign: "center",
+                color: 'rgba(255,255,255,0.7)',
+                textAlign: 'center',
                 fontSize: 15,
-                fontWeight: "600",
+                fontWeight: '600',
                 marginBottom: 30,
               }}
             >
@@ -154,8 +142,8 @@ export default function ParentResults() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 500 }}
             style={{
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               marginBottom: 30,
             }}
           >
@@ -164,9 +152,9 @@ export default function ParentResults() {
                 width: 80,
                 height: 80,
                 borderRadius: 40,
-                backgroundColor: "rgba(255,255,255,0.2)",
-                alignItems: "center",
-                justifyContent: "center",
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Feather name="award" size={40} color="white" />
@@ -179,7 +167,7 @@ export default function ParentResults() {
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 400 }}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               borderRadius: 24,
               padding: 24,
               marginBottom: 26,
@@ -188,8 +176,8 @@ export default function ParentResults() {
           >
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginBottom: 12,
               }}
             >
@@ -198,9 +186,9 @@ export default function ParentResults() {
                   width: 40,
                   height: 40,
                   borderRadius: 14,
-                  backgroundColor: COLORS.primary + "20",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: `${COLORS.primary}20`,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 12,
                 }}
               >
@@ -209,7 +197,7 @@ export default function ParentResults() {
               <Text
                 style={{
                   fontSize: 20,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.foreground,
                 }}
               >
@@ -221,7 +209,7 @@ export default function ParentResults() {
                 fontSize: 15,
                 color: COLORS.mutedForeground,
                 lineHeight: 22,
-                fontWeight: "500",
+                fontWeight: '500',
               }}
             >
               {diagnostic.summary}
@@ -234,7 +222,7 @@ export default function ParentResults() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 500, delay: 200 }}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               borderRadius: 32,
               padding: 24,
               marginBottom: 26,
@@ -244,7 +232,7 @@ export default function ParentResults() {
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: "800",
+                fontWeight: '800',
                 marginBottom: 20,
                 color: COLORS.foreground,
               }}
@@ -256,15 +244,15 @@ export default function ParentResults() {
                 <View key={idx}>
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                       marginBottom: 8,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 14,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.mutedForeground,
                       }}
                     >
@@ -273,7 +261,7 @@ export default function ParentResults() {
                     <Text
                       style={{
                         fontSize: 14,
-                        fontWeight: "900",
+                        fontWeight: '900',
                         color: COLORS.primary,
                       }}
                     >
@@ -283,9 +271,9 @@ export default function ParentResults() {
                   <View
                     style={{
                       height: 8,
-                      backgroundColor: "#F3F4F6",
+                      backgroundColor: '#F3F4F6',
                       borderRadius: 4,
-                      overflow: "hidden",
+                      overflow: 'hidden',
                     }}
                   >
                     <MotiView
@@ -293,7 +281,7 @@ export default function ParentResults() {
                       animate={{ width: `${score.value}%` }}
                       transition={{ duration: 1000, delay: 500 + idx * 100 }}
                       style={{
-                        height: "100%",
+                        height: '100%',
                         backgroundColor: score.color,
                         borderRadius: 4,
                       }}
@@ -308,13 +296,13 @@ export default function ParentResults() {
           <TouchableOpacity
             onPress={() => {
               router.push({
-                pathname: "/profile/youth/testing",
+                pathname: '/profile/youth/testing',
                 params: { childId: child.id },
-                    });
+              });
             }}
             style={{
               borderWidth: 2,
-              borderColor: "white",
+              borderColor: 'white',
               paddingVertical: 16,
               borderRadius: 24,
               marginBottom: 12,
@@ -322,10 +310,10 @@ export default function ParentResults() {
           >
             <Text
               style={{
-                textAlign: "center",
-                color: "white",
+                textAlign: 'center',
+                color: 'white',
                 fontSize: 15,
-                fontWeight: "700",
+                fontWeight: '700',
               }}
             >
               Пройти тест заново
@@ -335,17 +323,17 @@ export default function ParentResults() {
           <TouchableOpacity
             onPress={() => router.back()}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               paddingVertical: 16,
               borderRadius: 24,
             }}
           >
             <Text
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 color: COLORS.primary,
                 fontSize: 16,
-                fontWeight: "800",
+                fontWeight: '800',
               }}
             >
               Назад

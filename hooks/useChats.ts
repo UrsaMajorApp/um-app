@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "$contexts/AuthContext";
-import { useDevDataVersion } from "$lib/devDataEvents";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '$contexts/AuthContext';
+import { useDevDataVersion } from '$lib/devDataEvents';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export interface Chat {
   id: string;
@@ -19,7 +19,7 @@ type ConversationParticipantRow = {
   unread_count: number | null;
 };
 
-type ConversationRow = Omit<Chat, "unread_count">;
+type ConversationRow = Omit<Chat, 'unread_count'>;
 
 export function useChats() {
   const { user } = useAuth();
@@ -36,13 +36,11 @@ export function useChats() {
     setLoading(true);
 
     const partRes = await supabase
-      .from("conversation_participants")
-      .select("conversation_id, unread_count")
-      .eq("user_id", user.id);
+      .from('conversation_participants')
+      .select('conversation_id, unread_count')
+      .eq('user_id', user.id);
     const participantRows = rowsOrEmpty<ConversationParticipantRow>(partRes);
-    const conversationIds = participantRows
-      .map((row) => row.conversation_id)
-      .filter(Boolean);
+    const conversationIds = participantRows.map((row) => row.conversation_id).filter(Boolean);
 
     if (conversationIds.length === 0) {
       setChats([]);
@@ -56,17 +54,17 @@ export function useChats() {
     }
 
     const convRes = await supabase
-      .from("conversations")
-      .select("id, name, icon_name, last_message, last_message_at, archived")
-      .in("id", conversationIds)
-      .order("last_message_at", { ascending: false });
+      .from('conversations')
+      .select('id, name, icon_name, last_message, last_message_at, archived')
+      .in('id', conversationIds)
+      .order('last_message_at', { ascending: false });
     const convRows = rowsOrEmpty<ConversationRow>(convRes);
 
     setChats(
       convRows.map((c) => ({
         id: c.id,
         name: c.name,
-        icon_name: c.icon_name ?? "message-circle",
+        icon_name: c.icon_name ?? 'message-circle',
         last_message: c.last_message,
         last_message_at: c.last_message_at,
         unread_count: unreadMap.get(c.id) ?? 0,
@@ -82,20 +80,17 @@ export function useChats() {
 
   const archiveChat = async (id: string) => {
     if (!supabase) return;
-    await supabase
-      .from("conversations")
-      .update({ archived: true })
-      .eq("id", id);
+    await supabase.from('conversations').update({ archived: true }).eq('id', id);
     refresh();
   };
 
   const markRead = async (id: string) => {
     if (!supabase || !user?.id) return;
     await supabase
-      .from("conversation_participants")
+      .from('conversation_participants')
       .update({ unread_count: 0 })
-      .eq("conversation_id", id)
-      .eq("user_id", user.id);
+      .eq('conversation_id', id)
+      .eq('user_id', user.id);
     refresh();
   };
 
@@ -112,7 +107,7 @@ export interface ChatMessage {
   is_mine: boolean;
 }
 
-type MessageRow = Omit<ChatMessage, "is_mine">;
+type MessageRow = Omit<ChatMessage, 'is_mine'>;
 
 export function useChatMessages(conversationId: string | null) {
   const { user } = useAuth();
@@ -128,10 +123,10 @@ export function useChatMessages(conversationId: string | null) {
     }
     setLoading(true);
     const res = await supabase
-      .from("messages")
-      .select("*")
-      .eq("conversation_id", conversationId)
-      .order("created_at", { ascending: true });
+      .from('messages')
+      .select('*')
+      .eq('conversation_id', conversationId)
+      .order('created_at', { ascending: true });
     const rows = rowsOrEmpty<MessageRow>(res);
     setMessages(
       rows.map((m) => ({
@@ -152,19 +147,19 @@ export function useChatMessages(conversationId: string | null) {
 
   const sendMessage = async (text: string) => {
     if (!supabase || !conversationId || !text.trim()) return;
-    await supabase.from("messages").insert({
+    await supabase.from('messages').insert({
       conversation_id: conversationId,
       sender_id: user?.id ?? null,
       body: text.trim(),
     });
     // Update conversation last_message
     await supabase
-      .from("conversations")
+      .from('conversations')
       .update({
         last_message: text.trim(),
         last_message_at: new Date().toISOString(),
       })
-      .eq("id", conversationId);
+      .eq('id', conversationId);
     refresh();
   };
 

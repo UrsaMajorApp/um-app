@@ -1,9 +1,9 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter, type Href } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { MotiView } from "moti";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter, type Href } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { MotiView } from 'moti';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -15,45 +15,41 @@ import {
   type TextStyle,
   type TextInputProps,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  AuthMethodSwitcher,
-  type AuthMethod,
-} from "$components/auth/AuthMethodSwitcher";
-import { PressableScale } from "$components/ui/PressableScale";
-import { AUTH_ROLE_OPTIONS } from "$constants/authRoleOptions";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth, type UserRole } from "$contexts/AuthContext";
-import { useDevSettings } from "$contexts/DevSettingsContext";
-import { formatPhone } from "$lib/formatPhone";
-import { useIsDesktop } from "$lib/useIsDesktop";
-import type { FeatherIconName } from "$types/icons";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AuthMethodSwitcher, type AuthMethod } from '$components/auth/AuthMethodSwitcher';
+import { PressableScale } from '$components/ui/PressableScale';
+import { AUTH_ROLE_OPTIONS } from '$constants/authRoleOptions';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth, type UserRole } from '$contexts/AuthContext';
+import { useDevSettings } from '$contexts/DevSettingsContext';
+import { formatPhone } from '$lib/formatPhone';
+import { useIsDesktop } from '$lib/useIsDesktop';
+import type { FeatherIconName } from '$types/icons';
 
 type WebTextStyle = TextStyle & { outlineWidth?: number };
 
 export default function RegisterScreen() {
   const router = useRouter();
-  const { sendRegistrationCode, registerWithIdentifier, devOtpCode, devMode } =
-    useAuth();
+  const { sendRegistrationCode, registerWithIdentifier, devOtpCode, devMode } = useAuth();
   const { useRealOtp } = useDevSettings();
 
   // step 0 = role, step 1 = phone/email + password, step 2 = OTP for phone, step 3 = name
   const [step, setStep] = useState<number>(0);
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
-  const [selectedRoute, setSelectedRoute] = useState<Href | "">("");
+  const [selectedRoute, setSelectedRoute] = useState<Href | ''>('');
 
-  const [authMethod, setAuthMethod] = useState<AuthMethod>("phone");
-  const [identifier, setIdentifier] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [authMethod, setAuthMethod] = useState<AuthMethod>('phone');
+  const [identifier, setIdentifier] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [error, setError] = useState("");
-  const [confirmationEmail, setConfirmationEmail] = useState("");
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
+  const [confirmationEmail, setConfirmationEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isDesktop = useIsDesktop();
@@ -61,9 +57,9 @@ export default function RegisterScreen() {
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;
 
-  const isEmail = authMethod === "email";
+  const isEmail = authMethod === 'email';
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier.trim());
-  const isValidPhone = identifier.replace(/\D/g, "").length >= 10;
+  const isValidPhone = identifier.replace(/\D/g, '').length >= 10;
   const handleIdentifierChange = (text: string) => {
     if (isEmail) {
       setIdentifier(text.trim());
@@ -74,17 +70,17 @@ export default function RegisterScreen() {
 
   const handleAuthMethodChange = (method: AuthMethod) => {
     setAuthMethod(method);
-    setIdentifier("");
-    setOtp("");
-    setError("");
+    setIdentifier('');
+    setOtp('');
+    setError('');
   };
 
   const handleAction = async () => {
-    setError("");
+    setError('');
 
     if (step === 0) {
       if (!selectedRole) {
-        setError("Выберите роль для продолжения");
+        setError('Выберите роль для продолжения');
         return;
       }
       setStep(1);
@@ -93,15 +89,15 @@ export default function RegisterScreen() {
 
     if (step === 1) {
       if (isEmail ? !isValidEmail : !isValidPhone) {
-        setError("Введите корректный телефон или email");
+        setError('Введите корректный телефон или email');
         return;
       }
       if (password.length < 6) {
-        setError("Пароль должен содержать минимум 6 символов");
+        setError('Пароль должен содержать минимум 6 символов');
         return;
       }
       if (password !== confirmPassword) {
-        setError("Пароли не совпадают");
+        setError('Пароли не совпадают');
         return;
       }
 
@@ -110,18 +106,18 @@ export default function RegisterScreen() {
       setIsSubmitting(false);
 
       if (!result.success) {
-        setError(result.error || "Не удалось отправить код");
+        setError(result.error || 'Не удалось отправить код');
         return;
       }
 
-      setOtp("");
+      setOtp('');
       setStep(isEmail ? 3 : 2);
       return;
     }
 
     if (step === 2) {
       if (otp.length < 6) {
-        setError("Введите 6-значный код");
+        setError('Введите 6-значный код');
         return;
       }
       setStep(3);
@@ -130,7 +126,7 @@ export default function RegisterScreen() {
 
     // step 3: name collected — create account
     if (!firstName.trim()) {
-      setError("Введите имя");
+      setError('Введите имя');
       return;
     }
 
@@ -146,7 +142,7 @@ export default function RegisterScreen() {
     setIsSubmitting(false);
 
     if (!result.success) {
-      setError(result.error || "Не удалось завершить регистрацию");
+      setError(result.error || 'Не удалось завершить регистрацию');
       return;
     }
 
@@ -159,14 +155,14 @@ export default function RegisterScreen() {
   };
 
   const handleBack = () => {
-    setError("");
+    setError('');
     if (step === 0) {
       if (router.canGoBack()) {
         router.back();
         return;
       }
 
-      router.replace("/intro");
+      router.replace('/intro');
       return;
     }
 
@@ -187,26 +183,26 @@ export default function RegisterScreen() {
   };
 
   const getButtonLabel = () => {
-    if (step === 0) return "Далее";
-    if (step === 1) return isEmail ? "Продолжить" : "Получить код";
-    if (step === 2) return "Подтвердить";
-    return "Создать аккаунт";
+    if (step === 0) return 'Далее';
+    if (step === 1) return isEmail ? 'Продолжить' : 'Получить код';
+    if (step === 2) return 'Подтвердить';
+    return 'Создать аккаунт';
   };
 
   const currentRoleInfo = AUTH_ROLE_OPTIONS.find((r) => r.role === selectedRole);
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar style="dark" />
       <View style={{ flex: 1 }}>
         {/* Background blobs for color */}
-        <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+        <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -50,
               right: -50,
               width: 200,
@@ -217,8 +213,8 @@ export default function RegisterScreen() {
           />
           <View
             style={{
-              position: "absolute",
-              bottom: "20%",
+              position: 'absolute',
+              bottom: '20%',
               left: -80,
               width: 250,
               height: 250,
@@ -232,7 +228,7 @@ export default function RegisterScreen() {
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
-              alignItems: "center",
+              alignItems: 'center',
               paddingTop: isDesktop ? 24 : 12,
               paddingBottom: 20,
             }}
@@ -242,7 +238,7 @@ export default function RegisterScreen() {
             <View
               style={{
                 flex: 1,
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
                 paddingTop: 8,
@@ -251,28 +247,24 @@ export default function RegisterScreen() {
               {/* Header Nav */}
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 24,
                 }}
               >
                 <PressableScale
                   onPress={handleBack}
-                  style={{ flexDirection: "row", alignItems: "center" }}
+                  style={{ flexDirection: 'row', alignItems: 'center' }}
                   scaleTo={0.93}
                 >
-                  <Feather
-                    name="arrow-left"
-                    size={20}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       color: COLORS.mutedForeground,
                       marginLeft: 8,
                       fontSize: 15,
-                      fontWeight: "500",
+                      fontWeight: '500',
                     }}
                   >
                     Назад
@@ -280,7 +272,7 @@ export default function RegisterScreen() {
                 </PressableScale>
 
                 {/* Step Indicator */}
-                <View style={{ flexDirection: "row", gap: 6 }}>
+                <View style={{ flexDirection: 'row', gap: 6 }}>
                   {[0, 1, 2, 3].map((i) => (
                     <View
                       key={i}
@@ -305,27 +297,27 @@ export default function RegisterScreen() {
                 from={{ opacity: 0, translateY: 10 }}
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{
-                  type: "timing",
-                  duration: Platform.OS === "web" ? 300 : 500,
+                  type: 'timing',
+                  duration: Platform.OS === 'web' ? 300 : 500,
                 }}
                 style={{ marginBottom: 32 }}
               >
                 <Text
                   style={{
                     fontSize: 32,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                     marginBottom: 8,
                     letterSpacing: -0.5,
                   }}
                 >
                   {step === 0
-                    ? "Давайте знакомиться"
+                    ? 'Давайте знакомиться'
                     : step === 1
-                      ? "Создайте аккаунт"
+                      ? 'Создайте аккаунт'
                       : step === 2
-                        ? "Подтвердите номер"
-                        : "Как вас зовут?"}
+                        ? 'Подтвердите номер'
+                        : 'Как вас зовут?'}
                 </Text>
                 <Text
                   style={{
@@ -335,12 +327,12 @@ export default function RegisterScreen() {
                   }}
                 >
                   {step === 0
-                    ? "Выберите вашу роль, чтобы мы настроили приложение специально под вас"
+                    ? 'Выберите вашу роль, чтобы мы настроили приложение специально под вас'
                     : step === 1
-                      ? "Введите телефон или email и придумайте пароль"
+                      ? 'Введите телефон или email и придумайте пароль'
                       : step === 2
                         ? `Введите 6-значный код, отправленный на ${identifier}`
-                        : "Введите ваше имя для профиля"}
+                        : 'Введите ваше имя для профиля'}
                 </Text>
               </MotiView>
 
@@ -349,7 +341,7 @@ export default function RegisterScreen() {
                 <MotiView
                   from={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "timing", duration: 200, delay: 100 }}
+                  transition={{ type: 'timing', duration: 200, delay: 100 }}
                 >
                   {AUTH_ROLE_OPTIONS.map((item) => {
                     const isSelected = selectedRole === item.role;
@@ -361,14 +353,14 @@ export default function RegisterScreen() {
                           setSelectedRoute(item.route);
                         }}
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           padding: 18,
                           marginBottom: 12,
                           borderRadius: RADIUS.xl,
-                          backgroundColor: isSelected ? "white" : COLORS.card,
+                          backgroundColor: isSelected ? 'white' : COLORS.card,
                           borderWidth: 2,
-                          borderColor: isSelected ? item.color : "transparent",
+                          borderColor: isSelected ? item.color : 'transparent',
                           ...SHADOWS.sm,
                           elevation: isSelected ? 4 : 1,
                         }}
@@ -379,8 +371,8 @@ export default function RegisterScreen() {
                             width: 54,
                             height: 54,
                             borderRadius: 16,
-                            justifyContent: "center",
-                            alignItems: "center",
+                            justifyContent: 'center',
+                            alignItems: 'center',
                             marginRight: 16,
                           }}
                         >
@@ -390,14 +382,14 @@ export default function RegisterScreen() {
                         <View style={{ flex: 1, paddingRight: 12 }}>
                           <View
                             style={{
-                              flexDirection: "row",
-                              alignItems: "center",
+                              flexDirection: 'row',
+                              alignItems: 'center',
                               marginBottom: 4,
                             }}
                           >
                             <Text
                               style={{
-                                fontWeight: "800",
+                                fontWeight: '800',
                                 fontSize: 16,
                                 color: COLORS.foreground,
                               }}
@@ -420,8 +412,8 @@ export default function RegisterScreen() {
                           style={{
                             width: 18,
                             height: 18,
-                            alignItems: "center",
-                            justifyContent: "center",
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
                           <MotiView
@@ -429,8 +421,8 @@ export default function RegisterScreen() {
                               opacity: isSelected ? 1 : 0,
                               scale: isSelected ? 1 : 0.7,
                             }}
-                            transition={{ type: "spring" }}
-                            style={{ pointerEvents: "none" }}
+                            transition={{ type: 'spring' }}
+                            style={{ pointerEvents: 'none' }}
                           >
                             <View
                               style={{
@@ -438,8 +430,8 @@ export default function RegisterScreen() {
                                 height: 18,
                                 borderRadius: 9,
                                 backgroundColor: item.color,
-                                alignItems: "center",
-                                justifyContent: "center",
+                                alignItems: 'center',
+                                justifyContent: 'center',
                               }}
                             >
                               <Feather name="check" size={11} color="white" />
@@ -457,9 +449,9 @@ export default function RegisterScreen() {
                 <MotiView
                   from={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "timing", duration: 200 }}
+                  transition={{ type: 'timing', duration: 200 }}
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                     borderRadius: RADIUS.xxl,
                     padding: 24,
                     ...SHADOWS.md,
@@ -473,21 +465,16 @@ export default function RegisterScreen() {
                       key="s1"
                       from={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ type: "timing", duration: 150 }}
+                      transition={{ type: 'timing', duration: 150 }}
                     >
-                      <AuthMethodSwitcher
-                        value={authMethod}
-                        onChange={handleAuthMethodChange}
-                      />
+                      <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
                       <Field
-                        label={isEmail ? "Email" : "Номер телефона"}
-                        icon={isEmail ? "mail" : "phone"}
+                        label={isEmail ? 'Email' : 'Номер телефона'}
+                        icon={isEmail ? 'mail' : 'phone'}
                         value={identifier}
                         onChange={handleIdentifierChange}
-                        placeholder={
-                          isEmail ? "you@example.com" : "+7 777 777 7777"
-                        }
-                        keyboardType={isEmail ? "email-address" : "phone-pad"}
+                        placeholder={isEmail ? 'you@example.com' : '+7 777 777 7777'}
+                        keyboardType={isEmail ? 'email-address' : 'phone-pad'}
                         autoFocus
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -509,9 +496,7 @@ export default function RegisterScreen() {
                         onChange={setConfirmPassword}
                         placeholder="Повторите пароль"
                         secure
-                        showToggle={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
+                        showToggle={() => setShowConfirmPassword(!showConfirmPassword)}
                         shown={showConfirmPassword}
                         last
                       />
@@ -524,25 +509,25 @@ export default function RegisterScreen() {
                       key="s2"
                       from={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ type: "timing", duration: 150 }}
+                      transition={{ type: 'timing', duration: 150 }}
                     >
-                      <View style={{ alignItems: "center" }}>
+                      <View style={{ alignItems: 'center' }}>
                         {!!devOtpCode && devMode && !useRealOtp && (
                           <View
                             style={{
-                              backgroundColor: "#FEF9C3",
+                              backgroundColor: '#FEF9C3',
                               padding: 8,
                               borderRadius: 8,
                               marginBottom: 20,
-                              width: "100%",
-                              alignItems: "center",
+                              width: '100%',
+                              alignItems: 'center',
                             }}
                           >
                             <Text
                               style={{
-                                color: "#854D0E",
+                                color: '#854D0E',
                                 fontSize: 12,
-                                fontWeight: "bold",
+                                fontWeight: 'bold',
                               }}
                             >
                               DEV MODE: {devOtpCode}
@@ -553,20 +538,20 @@ export default function RegisterScreen() {
                           placeholder="000000"
                           placeholderTextColor={COLORS.border}
                           value={otp}
-                          onChangeText={(t) =>
-                            setOtp(t.replace(/\D/g, "").slice(0, 6))
-                          }
+                          onChangeText={(t) => setOtp(t.replace(/\D/g, '').slice(0, 6))}
                           keyboardType="number-pad"
                           autoFocus
-                          style={{
-                            fontSize: 48,
-                            fontWeight: "900",
-                            textAlign: "center",
-                            letterSpacing: 10,
-                            color: currentRoleInfo?.color || COLORS.primary,
-                            marginBottom: 20,
-                            outlineWidth: 0,
-                          } satisfies WebTextStyle}
+                          style={
+                            {
+                              fontSize: 48,
+                              fontWeight: '900',
+                              textAlign: 'center',
+                              letterSpacing: 10,
+                              color: currentRoleInfo?.color || COLORS.primary,
+                              marginBottom: 20,
+                              outlineWidth: 0,
+                            } satisfies WebTextStyle
+                          }
                         />
                         <PressableScale
                           onPress={() => sendRegistrationCode(identifier)}
@@ -578,11 +563,11 @@ export default function RegisterScreen() {
                               fontSize: 14,
                             }}
                           >
-                            Не получили код?{" "}
+                            Не получили код?{' '}
                             <Text
                               style={{
                                 color: currentRoleInfo?.color || COLORS.primary,
-                                fontWeight: "bold",
+                                fontWeight: 'bold',
                               }}
                             >
                               Отправить еще раз
@@ -599,7 +584,7 @@ export default function RegisterScreen() {
                       key="s3"
                       from={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ type: "timing", duration: 150 }}
+                      transition={{ type: 'timing', duration: 150 }}
                     >
                       <Field
                         label="Имя"
@@ -626,23 +611,23 @@ export default function RegisterScreen() {
                 <MotiView
                   from={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "timing", duration: 200 }}
+                  transition={{ type: 'timing', duration: 200 }}
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                     borderRadius: RADIUS.xxl,
                     padding: 24,
                     ...SHADOWS.md,
                   }}
                 >
-                  <View style={{ alignItems: "center", gap: 14 }}>
+                  <View style={{ alignItems: 'center', gap: 14 }}>
                     <View
                       style={{
                         width: 54,
                         height: 54,
                         borderRadius: 16,
                         backgroundColor: `${currentRoleInfo?.color || COLORS.primary}15`,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       <Feather
@@ -654,9 +639,9 @@ export default function RegisterScreen() {
                     <Text
                       style={{
                         fontSize: 20,
-                        fontWeight: "900",
+                        fontWeight: '900',
                         color: COLORS.foreground,
-                        textAlign: "center",
+                        textAlign: 'center',
                       }}
                     >
                       Проверьте почту
@@ -666,12 +651,11 @@ export default function RegisterScreen() {
                         fontSize: 15,
                         lineHeight: 22,
                         color: COLORS.mutedForeground,
-                        textAlign: "center",
+                        textAlign: 'center',
                       }}
                     >
-                      Мы отправили письмо для подтверждения на{" "}
-                      {confirmationEmail}. После подтверждения вы сможете войти
-                      с email и паролем.
+                      Мы отправили письмо для подтверждения на {confirmationEmail}. После
+                      подтверждения вы сможете войти с email и паролем.
                     </Text>
                   </View>
                 </MotiView>
@@ -685,17 +669,17 @@ export default function RegisterScreen() {
                     marginTop: 16,
                     padding: 12,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "#FEE2E2",
+                    backgroundColor: '#FEE2E2',
                     borderWidth: 1,
-                    borderColor: "#FCA5A5",
+                    borderColor: '#FCA5A5',
                   }}
                 >
                   <Text
                     style={{
-                      color: "#B91C1C",
-                      textAlign: "center",
+                      color: '#B91C1C',
+                      textAlign: 'center',
                       fontSize: 13,
-                      fontWeight: "600",
+                      fontWeight: '600',
                     }}
                   >
                     {error}
@@ -707,24 +691,19 @@ export default function RegisterScreen() {
           <View style={styles.bottomBar}>
             <View
               style={{
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
               }}
             >
               <PressableScale
                 onPress={handleAction}
-                disabled={
-                  !!confirmationEmail || !isButtonEnabled() || isSubmitting
-                }
+                disabled={!!confirmationEmail || !isButtonEnabled() || isSubmitting}
               >
                 <LinearGradient
                   colors={
                     isButtonEnabled()
-                      ? currentRoleInfo?.gradient || [
-                          COLORS.primary,
-                          COLORS.secondary,
-                        ]
+                      ? currentRoleInfo?.gradient || [COLORS.primary, COLORS.secondary]
                       : [COLORS.muted, COLORS.muted]
                   }
                   style={styles.footerActionButton}
@@ -735,10 +714,8 @@ export default function RegisterScreen() {
                     <Text
                       style={{
                         fontSize: 18,
-                        fontWeight: "800",
-                        color: isButtonEnabled()
-                          ? "white"
-                          : COLORS.mutedForeground,
+                        fontWeight: '800',
+                        color: isButtonEnabled() ? 'white' : COLORS.mutedForeground,
                       }}
                     >
                       {getButtonLabel()}
@@ -749,10 +726,7 @@ export default function RegisterScreen() {
 
               <View style={styles.accountSwitchRow}>
                 <Text style={styles.accountSwitchText}>Уже есть аккаунт? </Text>
-                <PressableScale
-                  onPress={() => router.push("/login")}
-                  scaleTo={0.93}
-                >
+                <PressableScale onPress={() => router.push('/login')} scaleTo={0.93}>
                   <Text
                     style={[
                       styles.accountSwitchLink,
@@ -775,15 +749,15 @@ type FieldProps = {
   label: string;
   icon: FeatherIconName;
   value: string;
-  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  onChange: NonNullable<TextInputProps['onChangeText']>;
   placeholder: string;
-  keyboardType?: TextInputProps["keyboardType"];
+  keyboardType?: TextInputProps['keyboardType'];
   secure?: boolean;
   autoFocus?: boolean;
   showToggle?: () => void;
   shown?: boolean;
-  autoCapitalize?: TextInputProps["autoCapitalize"];
-  autoCorrect?: TextInputProps["autoCorrect"];
+  autoCapitalize?: TextInputProps['autoCapitalize'];
+  autoCorrect?: TextInputProps['autoCorrect'];
   last?: boolean;
 };
 
@@ -793,7 +767,7 @@ function Field({
   value,
   onChange,
   placeholder,
-  keyboardType = "default",
+  keyboardType = 'default',
   secure = false,
   autoFocus = false,
   showToggle,
@@ -807,22 +781,22 @@ function Field({
       <Text
         style={{
           fontSize: 13,
-          fontWeight: "700",
+          fontWeight: '700',
           color: COLORS.foreground,
           marginBottom: 8,
-          textTransform: "uppercase",
+          textTransform: 'uppercase',
           letterSpacing: 0.5,
           opacity: 0.7,
         }}
       >
         {label}
       </Text>
-      <View style={{ position: "relative", justifyContent: "center" }}>
+      <View style={{ position: 'relative', justifyContent: 'center' }}>
         <Feather
           name={icon}
           size={18}
           color={COLORS.mutedForeground}
-          style={{ position: "absolute", left: 16, zIndex: 1 }}
+          style={{ position: 'absolute', left: 16, zIndex: 1 }}
         />
         <TextInput
           value={value}
@@ -835,18 +809,18 @@ function Field({
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
           className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
-          style={{ fontSize: 15, fontWeight: "500" }}
+          style={{ fontSize: 15, fontWeight: '500' }}
         />
         {!value && (
           <Text
             style={{
-              position: "absolute",
+              position: 'absolute',
               left: 48,
               right: 48,
-              pointerEvents: "none",
+              pointerEvents: 'none',
               color: COLORS.mutedForeground,
               fontSize: 15,
-              fontWeight: "500",
+              fontWeight: '500',
             }}
             numberOfLines={1}
           >
@@ -856,14 +830,10 @@ function Field({
         {secure && showToggle && (
           <PressableScale
             onPress={showToggle}
-            style={{ position: "absolute", right: 16, zIndex: 1 }}
+            style={{ position: 'absolute', right: 16, zIndex: 1 }}
             scaleTo={0.85}
           >
-            <Feather
-              name={shown ? "eye-off" : "eye"}
-              size={18}
-              color={COLORS.mutedForeground}
-            />
+            <Feather name={shown ? 'eye-off' : 'eye'} size={18} color={COLORS.mutedForeground} />
           </PressableScale>
         )}
       </View>
@@ -873,7 +843,7 @@ function Field({
 
 const styles = StyleSheet.create({
   bottomBar: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: COLORS.background,
     paddingTop: 12,
     paddingBottom: 10,
@@ -883,14 +853,14 @@ const styles = StyleSheet.create({
   footerActionButton: {
     paddingVertical: 18,
     borderRadius: RADIUS.xl,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.md,
   },
   accountSwitchRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     minHeight: 32,
     marginTop: 10,
   },
@@ -899,7 +869,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   accountSwitchLink: {
-    fontWeight: "800",
+    fontWeight: '800',
     fontSize: 15,
   },
 });

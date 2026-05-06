@@ -1,9 +1,9 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { MotiView } from "moti";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { MotiView } from 'moti';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -13,18 +13,18 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { PressableScale } from "$components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
   const { requestPasswordReset } = useAuth();
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,13 +35,13 @@ export default function ForgotPasswordScreen() {
   const canSubmit = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   const handleSubmit = async () => {
-    setError("");
+    setError('');
     setIsSubmitting(true);
     const result = await requestPasswordReset(email);
     setIsSubmitting(false);
 
     if (!result.success) {
-      setError(result.error || "Не удалось отправить письмо");
+      setError(result.error || 'Не удалось отправить письмо');
       return;
     }
 
@@ -50,7 +50,7 @@ export default function ForgotPasswordScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar style="dark" />
@@ -58,7 +58,7 @@ export default function ForgotPasswordScreen() {
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
-            alignItems: "center",
+            alignItems: 'center',
             paddingVertical: isDesktop ? 24 : 12,
           }}
           keyboardShouldPersistTaps="handled"
@@ -67,7 +67,7 @@ export default function ForgotPasswordScreen() {
           <View
             style={{
               flex: 1,
-              width: "100%",
+              width: '100%',
               maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
               paddingHorizontal: horizontalPadding,
               paddingTop: 8,
@@ -76,23 +76,19 @@ export default function ForgotPasswordScreen() {
             <PressableScale
               onPress={() => router.back()}
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginBottom: 32,
               }}
               scaleTo={0.93}
             >
-              <Feather
-                name="arrow-left"
-                size={20}
-                color={COLORS.mutedForeground}
-              />
+              <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
               <Text
                 style={{
                   color: COLORS.mutedForeground,
                   marginLeft: 8,
                   fontSize: 15,
-                  fontWeight: "500",
+                  fontWeight: '500',
                 }}
               >
                 Назад
@@ -107,8 +103,7 @@ export default function ForgotPasswordScreen() {
             >
               <Text style={styles.title}>Восстановление пароля</Text>
               <Text style={styles.subtitle}>
-                Укажите email аккаунта, и мы отправим ссылку для создания нового
-                пароля.
+                Укажите email аккаунта, и мы отправим ссылку для создания нового пароля.
               </Text>
             </MotiView>
 
@@ -119,19 +114,16 @@ export default function ForgotPasswordScreen() {
               style={styles.card}
             >
               {sent ? (
-                <View style={{ alignItems: "center", gap: 14 }}>
+                <View style={{ alignItems: 'center', gap: 14 }}>
                   <View style={styles.iconBox}>
                     <Feather name="mail" size={24} color={COLORS.primary} />
                   </View>
                   <Text style={styles.sentTitle}>Письмо отправлено</Text>
                   <Text style={styles.sentText}>
-                    Проверьте {email.trim().toLowerCase()} и перейдите по
-                    ссылке, чтобы задать новый пароль.
+                    Проверьте {email.trim().toLowerCase()} и перейдите по ссылке, чтобы задать новый
+                    пароль.
                   </Text>
-                  <PressableScale
-                    onPress={() => router.replace("/login")}
-                    scaleTo={0.93}
-                  >
+                  <PressableScale onPress={() => router.replace('/login')} scaleTo={0.93}>
                     <Text style={styles.linkText}>Вернуться ко входу</Text>
                   </PressableScale>
                 </View>
@@ -208,7 +200,7 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   title: {
     fontSize: 32,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
     marginBottom: 8,
   },
@@ -218,82 +210,82 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   card: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: RADIUS.xxl,
     padding: 24,
     ...SHADOWS.md,
   },
   label: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 1,
     opacity: 0.6,
   },
   inputWrapper: {
-    position: "relative",
-    justifyContent: "center",
+    position: 'relative',
+    justifyContent: 'center',
   },
   inputIcon: {
-    position: "absolute",
+    position: 'absolute',
     left: 16,
     zIndex: 1,
   },
   inputText: {
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   errorBox: {
     marginTop: 16,
     padding: 12,
     borderRadius: RADIUS.md,
-    backgroundColor: "#FEE2E2",
+    backgroundColor: '#FEE2E2',
     borderWidth: 1,
-    borderColor: "#FCA5A5",
+    borderColor: '#FCA5A5',
   },
   errorText: {
-    color: "#B91C1C",
-    textAlign: "center",
+    color: '#B91C1C',
+    textAlign: 'center',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   submitBtn: {
     paddingVertical: 18,
     borderRadius: RADIUS.xl,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.md,
   },
   submitText: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "white",
+    fontWeight: '800',
+    color: 'white',
   },
   iconBox: {
     width: 54,
     height: 54,
     borderRadius: 16,
     backgroundColor: `${COLORS.primary}15`,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sentTitle: {
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
-    textAlign: "center",
+    textAlign: 'center',
   },
   sentText: {
     fontSize: 15,
     lineHeight: 22,
     color: COLORS.mutedForeground,
-    textAlign: "center",
+    textAlign: 'center',
   },
   linkText: {
     color: COLORS.primary,
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: '800',
   },
 });

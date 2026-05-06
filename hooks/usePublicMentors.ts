@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export interface PublicMentor {
   id: string;
@@ -28,10 +28,10 @@ export function usePublicMentors() {
     }
     setLoading(true);
     const res = await supabase
-      .from("mentor_applications")
-      .select("*")
-      .eq("status", "approved")
-      .order("created_at", { ascending: false });
+      .from('mentor_applications')
+      .select('*')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false });
     setMentors(rowsOrEmpty<PublicMentor>(res));
     setLoading(false);
   }, []);

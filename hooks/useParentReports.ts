@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export interface ChildSkillSnapshot {
   skill_label: string;
@@ -48,25 +48,22 @@ export function useChildReports(childName: string | null) {
 
     const [skillsRes, attRes] = await Promise.all([
       supabase
-        .from("child_skill_snapshots")
-        .select("skill_label, current_value, prev_value, color")
-        .eq("parent_user_id", user.id)
-        .eq("child_name", childName),
+        .from('child_skill_snapshots')
+        .select('skill_label, current_value, prev_value, color')
+        .eq('parent_user_id', user.id)
+        .eq('child_name', childName),
       supabase
-        .from("child_attendance_monthly")
-        .select("month_label, attendance_pct, month_order")
-        .eq("parent_user_id", user.id)
-        .eq("child_name", childName)
-        .order("month_order", { ascending: true }),
+        .from('child_attendance_monthly')
+        .select('month_label, attendance_pct, month_order')
+        .eq('parent_user_id', user.id)
+        .eq('child_name', childName)
+        .order('month_order', { ascending: true }),
     ]);
 
     const skills = rowsOrEmpty<ChildSkillSnapshot>(skillsRes);
     const attendance = rowsOrEmpty<ChildAttendanceMonth>(attRes);
     const avgAttendance = attendance.length
-      ? Math.round(
-          attendance.reduce((s, a) => s + a.attendance_pct, 0) /
-            attendance.length,
-        )
+      ? Math.round(attendance.reduce((s, a) => s + a.attendance_pct, 0) / attendance.length)
       : 0;
 
     setReport({

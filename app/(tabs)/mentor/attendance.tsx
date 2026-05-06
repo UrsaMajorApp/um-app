@@ -1,39 +1,24 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useMentorAttendance } from "$hooks/useMentorData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useMentorAttendance } from '$hooks/useMentorData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorAttendance() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
   const { records, loading } = useMentorAttendance();
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <SafeAreaView edges={["top"]} style={{ backgroundColor: COLORS.primary }}>
+      <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.primary }}>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingHorizontal: paddingX,
             paddingVertical: 16,
             gap: 12,
@@ -45,9 +30,9 @@ export default function MentorAttendance() {
               width: 40,
               height: 40,
               borderRadius: RADIUS.md,
-              backgroundColor: "rgba(255,255,255,0.2)",
-              alignItems: "center",
-              justifyContent: "center",
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Feather name="arrow-left" size={20} color="white" />
@@ -56,7 +41,7 @@ export default function MentorAttendance() {
             style={{
               fontSize: TYPOGRAPHY.size.xl,
               fontWeight: TYPOGRAPHY.weight.bold,
-              color: "white",
+              color: 'white',
             }}
           >
             График посещений
@@ -85,7 +70,7 @@ export default function MentorAttendance() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               marginTop: 20,
               color: COLORS.mutedForeground,
             }}
@@ -102,8 +87,8 @@ export default function MentorAttendance() {
                 backgroundColor: COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: 16,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 borderWidth: 1,
                 borderColor: COLORS.border,
               }}
@@ -113,16 +98,14 @@ export default function MentorAttendance() {
                   width: 40,
                   height: 40,
                   borderRadius: RADIUS.full,
-                  backgroundColor: item.present
-                    ? COLORS.success + "15"
-                    : COLORS.destructive + "15",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: item.present ? `${COLORS.success}15` : `${COLORS.destructive}15`,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 12,
                 }}
               >
                 <Feather
-                  name={item.present ? "check" : "x"}
+                  name={item.present ? 'check' : 'x'}
                   size={18}
                   color={item.present ? COLORS.success : COLORS.destructive}
                 />
@@ -152,9 +135,7 @@ export default function MentorAttendance() {
                   paddingHorizontal: 10,
                   paddingVertical: 4,
                   borderRadius: RADIUS.sm,
-                  backgroundColor: item.present
-                    ? COLORS.success + "15"
-                    : COLORS.destructive + "15",
+                  backgroundColor: item.present ? `${COLORS.success}15` : `${COLORS.destructive}15`,
                 }}
               >
                 <Text
@@ -164,7 +145,7 @@ export default function MentorAttendance() {
                     color: item.present ? COLORS.success : COLORS.destructive,
                   }}
                 >
-                  {item.present ? "Присутствовал" : "Отсутствовал"}
+                  {item.present ? 'Присутствовал' : 'Отсутствовал'}
                 </Text>
               </View>
             </View>

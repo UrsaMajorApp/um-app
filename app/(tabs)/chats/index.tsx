@@ -1,29 +1,16 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import { useMemo, useState } from "react";
-import {
-    Platform,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-    COLORS,
-    LAYOUT,
-    RADIUS,
-    SHADOWS,
-    TYPOGRAPHY,
-} from "$constants/theme";
-import { useChats } from "$hooks/useChats";
-import { featherIconName } from "$lib/icons";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useMemo, useState } from 'react';
+import { Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { useChats } from '$hooks/useChats';
+import { featherIconName } from '$lib/icons';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
-const DEFAULT_TABS = ["все", "непрочитанные", "архив"];
+const DEFAULT_TABS = ['все', 'непрочитанные', 'архив'];
 
 function formatChatTime(isoString: string): string {
   const d = new Date(isoString);
@@ -33,32 +20,30 @@ function formatChatTime(isoString: string): string {
     d.getMonth() === now.getMonth() &&
     d.getFullYear() === now.getFullYear();
   if (isToday) {
-    return d.toLocaleTimeString("ru", { hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
   }
   const yesterday = new Date(now);
   yesterday.setDate(now.getDate() - 1);
-  if (d.toDateString() === yesterday.toDateString()) return "Вчера";
-  return d.toLocaleDateString("ru", { day: "numeric", month: "short" });
+  if (d.toDateString() === yesterday.toDateString()) return 'Вчера';
+  return d.toLocaleDateString('ru', { day: 'numeric', month: 'short' });
 }
 
 export default function ChatsScreen() {
   const router = useRouter();
   const IS_DESKTOP = useIsDesktop();
-  const horizontalPadding = IS_DESKTOP
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : 20;
+  const horizontalPadding = IS_DESKTOP ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
   const TABS = DEFAULT_TABS;
 
-  const [activeTab, setActiveTab] = useState("все");
-  const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState('все');
+  const [search, setSearch] = useState('');
   const { chats, loading } = useChats();
 
   const filteredChats = useMemo(() => {
     return chats.filter((chat) => {
       const byTab =
-        activeTab === "все"
+        activeTab === 'все'
           ? !chat.archived
-          : activeTab === "непрочитанные"
+          : activeTab === 'непрочитанные'
             ? chat.unread_count > 0 && !chat.archived
             : chat.archived;
       const bySearch = chat.name.toLowerCase().includes(search.toLowerCase());
@@ -68,14 +53,14 @@ export default function ChatsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: horizontalPadding,
@@ -95,9 +80,9 @@ export default function ChatsScreen() {
               </Text>
               <Text
                 style={{
-                  color: "rgba(255,255,255,0.7)",
+                  color: 'rgba(255,255,255,0.7)',
                   fontSize: 13,
-                  fontWeight: "500",
+                  fontWeight: '500',
                   marginTop: 4,
                 }}
               >
@@ -110,8 +95,8 @@ export default function ChatsScreen() {
 
       <View
         style={{
-          width: IS_DESKTOP ? "50%" : "100%",
-          alignSelf: "center",
+          width: IS_DESKTOP ? '50%' : '100%',
+          alignSelf: 'center',
           flex: 1,
           marginTop: 24,
         }}
@@ -119,16 +104,16 @@ export default function ChatsScreen() {
         {/* Search */}
         <View
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderRadius: RADIUS.xl,
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingHorizontal: 16,
             height: 52,
             marginHorizontal: 20,
             marginBottom: 16,
             borderWidth: 1,
-            borderColor: "#F3F4F6",
+            borderColor: '#F3F4F6',
             ...SHADOWS.sm,
           }}
         >
@@ -150,7 +135,7 @@ export default function ChatsScreen() {
         {/* Tabs */}
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             backgroundColor: COLORS.muted,
             borderRadius: RADIUS.full,
             marginHorizontal: 20,
@@ -166,18 +151,18 @@ export default function ChatsScreen() {
                 onPress={() => setActiveTab(tab)}
                 style={{
                   flex: 1,
-                  backgroundColor: active ? "white" : "transparent",
+                  backgroundColor: active ? 'white' : 'transparent',
                   borderRadius: RADIUS.full,
                   paddingVertical: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   ...(active ? SHADOWS.sm : {}),
                 }}
               >
                 <Text
                   style={{
                     color: active ? COLORS.primary : COLORS.mutedForeground,
-                    fontWeight: active ? "700" : "600",
+                    fontWeight: active ? '700' : '600',
                     fontSize: 13,
                   }}
                 >
@@ -189,13 +174,11 @@ export default function ChatsScreen() {
         </View>
 
         {/* Content List */}
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
-        >
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}>
           {loading ? (
             <Text
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 marginTop: 40,
                 color: COLORS.mutedForeground,
               }}
@@ -207,10 +190,10 @@ export default function ChatsScreen() {
               <TouchableOpacity
                 key={chat.id}
                 activeOpacity={0.7}
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onPress={() =>
                   router.push({
-                    pathname: "/chats/[id]",
+                    pathname: '/chats/[id]',
                     params: { id: chat.id, name: chat.name },
                   })
                 }
@@ -220,15 +203,15 @@ export default function ChatsScreen() {
                   animate={{ opacity: 1, translateY: 0 }}
                   transition={{ duration: 300, delay: idx * 50 }}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    width: "100%",
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: '100%',
                     marginBottom: 12,
                     padding: 16,
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                     borderRadius: 24,
                     borderWidth: 1,
-                    borderColor: "#F3F4F6",
+                    borderColor: '#F3F4F6',
                     ...SHADOWS.sm,
                   }}
                 >
@@ -240,12 +223,12 @@ export default function ChatsScreen() {
                       borderRadius: 26,
                       backgroundColor: `${COLORS.primary}12`,
                       marginRight: 14,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Feather
-                      name={featherIconName(chat.icon_name, "message-circle")}
+                      name={featherIconName(chat.icon_name, 'message-circle')}
                       size={22}
                       color={COLORS.primary}
                     />
@@ -256,7 +239,7 @@ export default function ChatsScreen() {
                     <Text
                       style={{
                         fontSize: 16,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.foreground,
                       }}
                     >
@@ -275,7 +258,7 @@ export default function ChatsScreen() {
                   </View>
 
                   {/* Time + Badge */}
-                  <View style={{ alignItems: "flex-end" }}>
+                  <View style={{ alignItems: 'flex-end' }}>
                     <Text
                       style={{
                         color: COLORS.mutedForeground,
@@ -292,15 +275,15 @@ export default function ChatsScreen() {
                           height: 24,
                           borderRadius: 12,
                           backgroundColor: COLORS.primary,
-                          justifyContent: "center",
-                          alignItems: "center",
+                          justifyContent: 'center',
+                          alignItems: 'center',
                         }}
                       >
                         <Text
                           style={{
-                            color: "white",
+                            color: 'white',
                             fontSize: 11,
-                            fontWeight: "800",
+                            fontWeight: '800',
                           }}
                         >
                           {chat.unread_count}
@@ -316,7 +299,7 @@ export default function ChatsScreen() {
           {!loading && filteredChats.length === 0 && (
             <Text
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 marginTop: 40,
                 color: COLORS.mutedForeground,
               }}

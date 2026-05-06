@@ -1,40 +1,25 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useLearningMaterials } from "$hooks/useMentorData";
-import { featherIconName } from "$lib/icons";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useLearningMaterials } from '$hooks/useMentorData';
+import { featherIconName } from '$lib/icons';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorLibrary() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
   const { materials, loading } = useLearningMaterials();
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <SafeAreaView edges={["top"]} style={{ backgroundColor: COLORS.primary }}>
+      <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.primary }}>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingHorizontal: paddingX,
             paddingVertical: 16,
             gap: 12,
@@ -46,9 +31,9 @@ export default function MentorLibrary() {
               width: 40,
               height: 40,
               borderRadius: RADIUS.md,
-              backgroundColor: "rgba(255,255,255,0.2)",
-              alignItems: "center",
-              justifyContent: "center",
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Feather name="arrow-left" size={20} color="white" />
@@ -57,7 +42,7 @@ export default function MentorLibrary() {
             style={{
               fontSize: TYPOGRAPHY.size.xl,
               fontWeight: TYPOGRAPHY.weight.bold,
-              color: "white",
+              color: 'white',
             }}
           >
             База материалов
@@ -86,7 +71,7 @@ export default function MentorLibrary() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               marginTop: 20,
               color: COLORS.mutedForeground,
             }}
@@ -104,8 +89,8 @@ export default function MentorLibrary() {
                 backgroundColor: COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: 16,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 borderWidth: 1,
                 borderColor: COLORS.border,
               }}
@@ -115,14 +100,14 @@ export default function MentorLibrary() {
                   width: 48,
                   height: 48,
                   borderRadius: RADIUS.md,
-                  backgroundColor: item.color + "15",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: `${item.color}15`,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 14,
                 }}
               >
                 <Feather
-                  name={featherIconName(item.icon_name, "file-text")}
+                  name={featherIconName(item.icon_name, 'file-text')}
                   size={22}
                   color={item.color}
                 />
@@ -147,11 +132,7 @@ export default function MentorLibrary() {
                   {item.material_type} · {item.size_label}
                 </Text>
               </View>
-              <Feather
-                name="download"
-                size={18}
-                color={COLORS.mutedForeground}
-              />
+              <Feather name="download" size={18} color={COLORS.mutedForeground} />
             </TouchableOpacity>
           ))}
         </View>

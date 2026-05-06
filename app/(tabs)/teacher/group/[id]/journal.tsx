@@ -1,23 +1,14 @@
-import { Feather } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useTeacherGroup } from "$hooks/usePlatformData";
-import { useTeacherAttendanceEditor } from "$hooks/useTeacherAttendanceEditor";
-import { formatDateKey } from "$lib/date";
-import {
-  getDashboardHorizontalPadding,
-  useIsDesktop,
-} from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useTeacherGroup } from '$hooks/usePlatformData';
+import { useTeacherAttendanceEditor } from '$hooks/useTeacherAttendanceEditor';
+import { formatDateKey } from '$lib/date';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function TeacherGroupJournal() {
   const { id } = useLocalSearchParams();
@@ -33,31 +24,23 @@ export default function TeacherGroupJournal() {
     attendance: savedAttendance,
     saveAttendance,
   } = useTeacherGroup(id as string, selectedDateKey);
-  const attendanceEditor = useTeacherAttendanceEditor(
-    savedAttendance,
-    saveAttendance,
-  );
+  const attendanceEditor = useTeacherAttendanceEditor(savedAttendance, saveAttendance);
 
   const submitAttendance = async () => {
     await attendanceEditor.submitAttendance();
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
-      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+      <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         {/* Header */}
         <View style={[styles.header, { paddingHorizontal: paddingX }]}>
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={styles.backBtn}
-          >
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
             <Feather name="arrow-left" size={20} color={COLORS.foreground} />
           </TouchableOpacity>
           <View style={{ flex: 1, marginLeft: 16 }}>
-            <Text style={styles.headerTitle}>
-              {group?.course_title || "Группа"}
-            </Text>
-            <Text style={styles.headerSubtitle}>{group?.name || "—"}</Text>
+            <Text style={styles.headerTitle}>{group?.course_title || 'Группа'}</Text>
+            <Text style={styles.headerSubtitle}>{group?.name || '—'}</Text>
           </View>
         </View>
 
@@ -65,9 +48,7 @@ export default function TeacherGroupJournal() {
         <View style={[styles.dateSelector, { marginHorizontal: paddingX }]}>
           <TouchableOpacity
             onPress={() =>
-              setSelectedDate(
-                new Date(selectedDate.setDate(selectedDate.getDate() - 1)),
-              )
+              setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() - 1)))
             }
           >
             <Feather name="chevron-left" size={24} color={COLORS.foreground} />
@@ -75,18 +56,16 @@ export default function TeacherGroupJournal() {
           <View style={styles.dateInfo}>
             <Feather name="calendar" size={16} color={COLORS.primary} />
             <Text style={styles.dateLabel}>
-              {selectedDate.toLocaleDateString("ru-RU", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
+              {selectedDate.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
               })}
             </Text>
           </View>
           <TouchableOpacity
             onPress={() =>
-              setSelectedDate(
-                new Date(selectedDate.setDate(selectedDate.getDate() + 1)),
-              )
+              setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() + 1)))
             }
           >
             <Feather name="chevron-right" size={24} color={COLORS.foreground} />
@@ -102,10 +81,7 @@ export default function TeacherGroupJournal() {
         >
           <View style={{ marginBottom: 16 }}>
             <Text style={styles.listLabel}>
-              Учеников в списке:{" "}
-              <Text style={{ color: COLORS.foreground }}>
-                {students.length}
-              </Text>
+              Учеников в списке: <Text style={{ color: COLORS.foreground }}>{students.length}</Text>
             </Text>
           </View>
 
@@ -114,7 +90,7 @@ export default function TeacherGroupJournal() {
               <Text
                 style={{
                   color: COLORS.mutedForeground,
-                  textAlign: "center",
+                  textAlign: 'center',
                   paddingVertical: 24,
                 }}
               >
@@ -122,10 +98,8 @@ export default function TeacherGroupJournal() {
               </Text>
             )}
             {students.map((student, idx) => {
-              const isPresent =
-                attendanceEditor.attendance[student.id] === "present";
-              const isAbsent =
-                attendanceEditor.attendance[student.id] === "absent";
+              const isPresent = attendanceEditor.attendance[student.id] === 'present';
+              const isAbsent = attendanceEditor.attendance[student.id] === 'absent';
 
               return (
                 <MotiView
@@ -137,56 +111,32 @@ export default function TeacherGroupJournal() {
                 >
                   <View style={styles.studentMain}>
                     <View style={styles.avatarCircle}>
-                      <Text style={styles.avatarText}>
-                        {student.student_name.charAt(0)}
-                      </Text>
+                      <Text style={styles.avatarText}>{student.student_name.charAt(0)}</Text>
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.studentName}>
-                        {student.student_name}
-                      </Text>
+                      <Text style={styles.studentName}>{student.student_name}</Text>
                       <Text style={styles.studentDetails}>
-                        {student.student_age
-                          ? `${student.student_age} лет`
-                          : "Возраст не указан"}
-                        {student.status_label
-                          ? ` • ${student.status_label}`
-                          : ""}
+                        {student.student_age ? `${student.student_age} лет` : 'Возраст не указан'}
+                        {student.status_label ? ` • ${student.status_label}` : ''}
                       </Text>
                     </View>
                   </View>
 
                   <View style={styles.actionsRow}>
                     <TouchableOpacity
-                      onPress={() =>
-                        attendanceEditor.toggleStatus(student.id, "present")
-                      }
+                      onPress={() => attendanceEditor.toggleStatus(student.id, 'present')}
                       style={[styles.actionBtn, isPresent && styles.btnPresent]}
                     >
-                      <Feather
-                        name="check"
-                        size={24}
-                        color={isPresent ? "white" : "#9CA3AF"}
-                      />
+                      <Feather name="check" size={24} color={isPresent ? 'white' : '#9CA3AF'} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() =>
-                        attendanceEditor.toggleStatus(student.id, "absent")
-                      }
+                      onPress={() => attendanceEditor.toggleStatus(student.id, 'absent')}
                       style={[styles.actionBtn, isAbsent && styles.btnAbsent]}
                     >
-                      <Feather
-                        name="x"
-                        size={24}
-                        color={isAbsent ? "white" : "#9CA3AF"}
-                      />
+                      <Feather name="x" size={24} color={isAbsent ? 'white' : '#9CA3AF'} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.actionBtnMsg}>
-                      <Feather
-                        name="message-square"
-                        size={20}
-                        color={COLORS.primary}
-                      />
+                      <Feather name="message-square" size={20} color={COLORS.primary} />
                     </TouchableOpacity>
                   </View>
                 </MotiView>
@@ -206,46 +156,46 @@ export default function TeacherGroupJournal() {
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 16,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: '#F3F4F6',
   },
   backBtn: {
     width: 44,
     height: 44,
     borderRadius: 14,
-    backgroundColor: "#F3F4F6",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  headerTitle: { fontSize: 18, fontWeight: "900", color: COLORS.foreground },
+  headerTitle: { fontSize: 18, fontWeight: '900', color: COLORS.foreground },
   headerSubtitle: { fontSize: 13, color: COLORS.mutedForeground, marginTop: 2 },
   dateSelector: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#F3F4F6",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F3F4F6',
     borderRadius: 20,
     padding: 12,
     marginVertical: 24,
   },
-  dateInfo: { flexDirection: "row", alignItems: "center", gap: 8 },
-  dateLabel: { fontSize: 15, fontWeight: "700", color: COLORS.foreground },
+  dateInfo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  dateLabel: { fontSize: 15, fontWeight: '700', color: COLORS.foreground },
   listLabel: { fontSize: 14, color: COLORS.mutedForeground },
   studentCard: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 24,
     padding: 16,
     ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderColor: '#F3F4F6',
   },
   studentMain: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     marginBottom: 16,
   },
@@ -253,38 +203,38 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#F5F3FF",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F5F3FF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  avatarText: { fontSize: 18, fontWeight: "800", color: COLORS.primary },
-  studentName: { fontSize: 16, fontWeight: "700", color: COLORS.foreground },
+  avatarText: { fontSize: 18, fontWeight: '800', color: COLORS.primary },
+  studentName: { fontSize: 16, fontWeight: '700', color: COLORS.foreground },
   studentDetails: { fontSize: 12, color: COLORS.mutedForeground, marginTop: 2 },
-  actionsRow: { flexDirection: "row", gap: 10 },
+  actionsRow: { flexDirection: 'row', gap: 10 },
   actionBtn: {
     flex: 1,
     height: 52,
     borderRadius: 16,
-    backgroundColor: "#F9FAFB",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F9FAFB',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderColor: '#F3F4F6',
   },
   actionBtnMsg: {
     width: 52,
     height: 52,
     borderRadius: 16,
-    backgroundColor: "#F5F3FF",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F5F3FF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  btnPresent: { backgroundColor: "#10B981", ...SHADOWS.sm },
-  btnAbsent: { backgroundColor: "#EF4444", ...SHADOWS.sm },
+  btnPresent: { backgroundColor: '#10B981', ...SHADOWS.sm },
+  btnAbsent: { backgroundColor: '#EF4444', ...SHADOWS.sm },
   submitBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 10,
     backgroundColor: COLORS.primary,
     height: 60,
@@ -292,5 +242,5 @@ const styles = StyleSheet.create({
     marginTop: 32,
     ...SHADOWS.md,
   },
-  submitText: { color: "white", fontSize: 16, fontWeight: "800" },
+  submitText: { color: 'white', fontSize: 16, fontWeight: '800' },
 });

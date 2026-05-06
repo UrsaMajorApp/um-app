@@ -1,54 +1,35 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import {
   useGroupMembers,
   useMentorGroups,
   useMentorStudentAttendanceSummary,
-} from "$hooks/useMentorData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from '$hooks/useMentorData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorGroupDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { members, loading } = useGroupMembers(id as string);
   const { groups } = useMentorGroups();
   const { summary } = useMentorStudentAttendanceSummary();
   const group = groups.find((item) => item.id === id);
 
-  const getStatusColor = (
-    memberId: string,
-  ): { color: string; label: string } => {
+  const getStatusColor = (memberId: string): { color: string; label: string } => {
     const data = summary[memberId];
-    if (!data || data.total === 0)
-      return { color: "#9CA3AF", label: "Нет отметок" };
-    if (data.missed === 0) return { color: "#10B981", label: "Всё ок" };
-    if (data.missed <= 2)
-      return { color: "#F59E0B", label: `${data.missed} пропуска` };
-    return { color: "#EF4444", label: "Требует внимания" };
+    if (!data || data.total === 0) return { color: '#9CA3AF', label: 'Нет отметок' };
+    if (data.missed === 0) return { color: '#10B981', label: 'Всё ок' };
+    if (data.missed <= 2) return { color: '#F59E0B', label: `${data.missed} пропуска` };
+    return { color: '#EF4444', label: 'Требует внимания' };
   };
 
   const statusCounts = members.reduce(
@@ -76,14 +57,11 @@ export default function MentorGroupDetail() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
             <MotiView
               from={{ opacity: 0, translateY: -10 }}
               animate={{ opacity: 1, translateY: 0 }}
@@ -91,8 +69,8 @@ export default function MentorGroupDetail() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -102,9 +80,9 @@ export default function MentorGroupDetail() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: SPACING.md,
                   }}
                 >
@@ -115,19 +93,19 @@ export default function MentorGroupDetail() {
                     style={{
                       fontSize: TYPOGRAPHY.size.xl,
                       fontWeight: TYPOGRAPHY.weight.semibold,
-                      color: "white",
+                      color: 'white',
                     }}
                   >
-                    {group?.name || "Группа"}
+                    {group?.name || 'Группа'}
                   </Text>
                   <Text
                     style={{
-                      color: "rgba(255,255,255,0.7)",
+                      color: 'rgba(255,255,255,0.7)',
                       fontSize: TYPOGRAPHY.size.sm,
                       fontWeight: TYPOGRAPHY.weight.medium,
                     }}
                   >
-                    {group?.schedule || "Расписание не указано"}
+                    {group?.schedule || 'Расписание не указано'}
                   </Text>
                 </View>
               </View>
@@ -181,14 +159,14 @@ export default function MentorGroupDetail() {
                   fontSize: 9,
                   fontWeight: TYPOGRAPHY.weight.bold,
                   color: COLORS.mutedForeground,
-                  textAlign: "center",
+                  textAlign: 'center',
                 }}
               >
                 {new Date()
-                  .toLocaleDateString("ru-RU", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
+                  .toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
                   })
                   .toUpperCase()}
               </Text>
@@ -196,11 +174,7 @@ export default function MentorGroupDetail() {
           </View>
 
           {loading && (
-            <Text
-              style={{ textAlign: "center", color: COLORS.mutedForeground }}
-            >
-              Загрузка...
-            </Text>
+            <Text style={{ textAlign: 'center', color: COLORS.mutedForeground }}>Загрузка...</Text>
           )}
           <View style={{ gap: SPACING.md }}>
             {members.map((s) => {
@@ -208,13 +182,11 @@ export default function MentorGroupDetail() {
               return (
                 <TouchableOpacity
                   key={s.id}
-                  onPress={() =>
-                    router.push(appHref(`/(tabs)/mentor/student/${s.id}`))
-                  }
+                  onPress={() => router.push(appHref(`/(tabs)/mentor/student/${s.id}`))}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     padding: SPACING.lg,
                     backgroundColor: COLORS.background,
                     borderRadius: RADIUS.lg,
@@ -229,8 +201,8 @@ export default function MentorGroupDetail() {
                         height: 44,
                         backgroundColor: COLORS.white,
                         borderRadius: RADIUS.full,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         borderWidth: 2,
                         borderColor: status.color,
                         ...SHADOWS.sm,
@@ -307,7 +279,7 @@ export default function MentorGroupDetail() {
 
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               gap: SPACING.md,
               marginBottom: SPACING.xl,
             }}
@@ -315,17 +287,17 @@ export default function MentorGroupDetail() {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "#F0FDF4",
+                backgroundColor: '#F0FDF4',
                 padding: SPACING.lg,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <Text
                 style={{
                   fontSize: 24,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  color: "#10B981",
+                  color: '#10B981',
                 }}
               >
                 {statusCounts.ok}
@@ -333,9 +305,9 @@ export default function MentorGroupDetail() {
               <Text
                 style={{
                   fontSize: 10,
-                  color: "#10B981",
+                  color: '#10B981',
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   marginTop: 4,
                 }}
               >
@@ -345,17 +317,17 @@ export default function MentorGroupDetail() {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "#FEF3C7",
+                backgroundColor: '#FEF3C7',
                 padding: SPACING.lg,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <Text
                 style={{
                   fontSize: 24,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  color: "#F59E0B",
+                  color: '#F59E0B',
                 }}
               >
                 {statusCounts.warning}
@@ -363,9 +335,9 @@ export default function MentorGroupDetail() {
               <Text
                 style={{
                   fontSize: 10,
-                  color: "#F59E0B",
+                  color: '#F59E0B',
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   marginTop: 4,
                 }}
               >
@@ -375,17 +347,17 @@ export default function MentorGroupDetail() {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "#FEF2F2",
+                backgroundColor: '#FEF2F2',
                 padding: SPACING.lg,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <Text
                 style={{
                   fontSize: 24,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  color: "#EF4444",
+                  color: '#EF4444',
                 }}
               >
                 {statusCounts.risk}
@@ -393,9 +365,9 @@ export default function MentorGroupDetail() {
               <Text
                 style={{
                   fontSize: 10,
-                  color: "#EF4444",
+                  color: '#EF4444',
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   marginTop: 4,
                 }}
               >
@@ -409,17 +381,14 @@ export default function MentorGroupDetail() {
               backgroundColor: COLORS.muted,
               padding: SPACING.md,
               borderRadius: RADIUS.md,
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: SPACING.sm,
             }}
           >
             <Feather name="info" size={16} color={COLORS.mutedForeground} />
-            <Text
-              style={{ fontSize: 12, color: COLORS.mutedForeground, flex: 1 }}
-            >
-              Посещаемость отмечается учителем. Вы можете отслеживать статус и
-              получать фидбек.
+            <Text style={{ fontSize: 12, color: COLORS.mutedForeground, flex: 1 }}>
+              Посещаемость отмечается учителем. Вы можете отслеживать статус и получать фидбек.
             </Text>
           </View>
         </View>

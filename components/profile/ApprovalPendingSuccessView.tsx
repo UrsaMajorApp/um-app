@@ -1,11 +1,10 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { MotiView } from "moti";
-import React from "react";
-import type { ReactNode } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MotiView } from 'moti';
+import type { ReactNode } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
 type ApprovalStep = {
   label: string;
@@ -19,7 +18,7 @@ type ApprovalPendingSuccessViewProps = {
   description: ReactNode;
   buttonLabel: string;
   onHome: () => void;
-  variant: "steps" | "notes";
+  variant: 'steps' | 'notes';
   steps?: ApprovalStep[];
   noteText?: string;
   notes?: string[];
@@ -39,10 +38,10 @@ export function ApprovalPendingSuccessView({
 }: ApprovalPendingSuccessViewProps) {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+      <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: -50,
             right: -50,
             width: 200,
@@ -53,8 +52,8 @@ export function ApprovalPendingSuccessView({
         />
         <View
           style={{
-            position: "absolute",
-            bottom: "20%",
+            position: 'absolute',
+            bottom: '20%',
             left: -80,
             width: 250,
             height: 250,
@@ -64,41 +63,37 @@ export function ApprovalPendingSuccessView({
         />
       </View>
 
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", padding: 24 }}>
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
         <MotiView
           from={{ opacity: 0, scale: 0.9, translateY: 20 }}
           animate={{ opacity: 1, scale: 1, translateY: 0 }}
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderRadius: RADIUS.xxl,
             padding: 32,
-            alignItems: "center",
-            ...(variant === "notes" ? SHADOWS.lg : SHADOWS.md),
+            alignItems: 'center',
+            ...(variant === 'notes' ? SHADOWS.lg : SHADOWS.md),
           }}
         >
-          {variant === "notes" ? (
-            <View style={{ position: "relative", marginBottom: 28 }}>
-              <MaterialCommunityIcons
-                name="check-circle"
-                size={96}
-                color={COLORS.success}
-              />
+          {variant === 'notes' ? (
+            <View style={{ position: 'relative', marginBottom: 28 }}>
+              <MaterialCommunityIcons name="check-circle" size={96} color={COLORS.success} />
               <MotiView
                 from={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 500 }}
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   bottom: 4,
                   right: 4,
                   width: 32,
                   height: 32,
                   borderRadius: 16,
                   backgroundColor: accentColor,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderWidth: 3,
-                  borderColor: "white",
+                  borderColor: 'white',
                 }}
               >
                 <Feather name="clock" size={16} color="white" />
@@ -108,14 +103,14 @@ export function ApprovalPendingSuccessView({
             <MotiView
               from={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: "spring", delay: 200 }}
+              transition={{ type: 'spring', delay: 200 }}
               style={{
                 width: 80,
                 height: 80,
                 borderRadius: 40,
                 backgroundColor: `${accentColor}15`,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: 24,
               }}
             >
@@ -126,9 +121,9 @@ export function ApprovalPendingSuccessView({
           <Text
             style={{
               fontSize: 26,
-              fontWeight: "900",
+              fontWeight: '900',
               color: COLORS.foreground,
-              textAlign: "center",
+              textAlign: 'center',
               marginBottom: 12,
               letterSpacing: 0,
             }}
@@ -137,17 +132,17 @@ export function ApprovalPendingSuccessView({
           </Text>
           <Text
             style={{
-              fontSize: variant === "notes" ? 16 : 15,
+              fontSize: variant === 'notes' ? 16 : 15,
               color: COLORS.mutedForeground,
-              textAlign: "center",
+              textAlign: 'center',
               lineHeight: 24,
-              marginBottom: variant === "notes" ? 20 : 24,
+              marginBottom: variant === 'notes' ? 20 : 24,
             }}
           >
             {description}
           </Text>
 
-          {variant === "notes" && noteText ? (
+          {variant === 'notes' && noteText ? (
             <View
               style={{
                 backgroundColor: `${accentColor}10`,
@@ -157,22 +152,20 @@ export function ApprovalPendingSuccessView({
                 marginBottom: 28,
               }}
             >
-              <Text
-                style={{ color: accentColor, fontWeight: "800", fontSize: 14 }}
-              >
+              <Text style={{ color: accentColor, fontWeight: '800', fontSize: 14 }}>
                 {noteText}
               </Text>
             </View>
           ) : null}
 
-          {variant === "steps" ? (
-            <View style={{ width: "100%", gap: 14, marginBottom: 32 }}>
+          {variant === 'steps' ? (
+            <View style={{ width: '100%', gap: 14, marginBottom: 32 }}>
               {steps.map((item) => (
                 <View
                   key={item.label}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 12,
                   }}
                 >
@@ -181,15 +174,13 @@ export function ApprovalPendingSuccessView({
                       width: 24,
                       height: 24,
                       borderRadius: 12,
-                      backgroundColor: item.done
-                        ? `${accentColor}20`
-                        : COLORS.muted,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: item.done ? `${accentColor}20` : COLORS.muted,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Feather
-                      name={item.done ? "check" : "circle"}
+                      name={item.done ? 'check' : 'circle'}
                       size={12}
                       color={item.done ? accentColor : COLORS.mutedForeground}
                     />
@@ -197,10 +188,8 @@ export function ApprovalPendingSuccessView({
                   <Text
                     style={{
                       fontSize: 14,
-                      color: item.done
-                        ? COLORS.foreground
-                        : COLORS.mutedForeground,
-                      fontWeight: item.done ? "700" : "400",
+                      color: item.done ? COLORS.foreground : COLORS.mutedForeground,
+                      fontWeight: item.done ? '700' : '400',
                     }}
                   >
                     {item.label}
@@ -209,13 +198,13 @@ export function ApprovalPendingSuccessView({
               ))}
             </View>
           ) : (
-            <View style={{ width: "100%", gap: 14, marginBottom: 36 }}>
+            <View style={{ width: '100%', gap: 14, marginBottom: 36 }}>
               {notes.map((text) => (
                 <View
                   key={text}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "flex-start",
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
                     gap: 12,
                   }}
                 >
@@ -243,23 +232,17 @@ export function ApprovalPendingSuccessView({
             </View>
           )}
 
-          <TouchableOpacity
-            onPress={onHome}
-            style={{ width: "100%" }}
-            activeOpacity={0.8}
-          >
+          <TouchableOpacity onPress={onHome} style={{ width: '100%' }} activeOpacity={0.8}>
             <LinearGradient
               colors={gradient}
               style={{
                 paddingVertical: 18,
                 borderRadius: RADIUS.xl,
-                alignItems: "center",
+                alignItems: 'center',
                 ...SHADOWS.md,
               }}
             >
-              <Text style={{ color: "white", fontWeight: "900", fontSize: 17 }}>
-                {buttonLabel}
-              </Text>
+              <Text style={{ color: 'white', fontWeight: '900', fontSize: 17 }}>{buttonLabel}</Text>
             </LinearGradient>
           </TouchableOpacity>
         </MotiView>

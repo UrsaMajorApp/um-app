@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
-} from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+} from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
   FadeOut,
@@ -16,35 +16,35 @@ import Animated, {
   useSharedValue,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { COLORS, RADIUS } from "$constants/theme";
-import { isWebMinWidth } from "$lib/useIsDesktop";
+} from 'react-native-reanimated';
+import { COLORS, RADIUS } from '$constants/theme';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 
 const GRID_SIZE = 4;
 const CELL_MARGIN = 10;
 const MAX_BOARD_SIZE = 520;
 
 const TILE_COLORS: Record<number, string> = {
-  2: "#EEE4DA",
-  4: "#EDE0C8",
-  8: "#F2B179",
-  16: "#F59563",
-  32: "#F67C5F",
-  64: "#F65E3B",
-  128: "#EDCF72",
-  256: "#EDCC61",
-  512: "#EDC850",
-  1024: "#EDC53F",
-  2048: "#EDC22E",
+  2: '#EEE4DA',
+  4: '#EDE0C8',
+  8: '#F2B179',
+  16: '#F59563',
+  32: '#F67C5F',
+  64: '#F65E3B',
+  128: '#EDCF72',
+  256: '#EDCC61',
+  512: '#EDC850',
+  1024: '#EDC53F',
+  2048: '#EDC22E',
 };
 
 const TEXT_COLORS: Record<string | number, string> = {
-  2: "#776E65",
-  4: "#776E65",
-  default: "white",
+  2: '#776E65',
+  4: '#776E65',
+  default: 'white',
 };
 
-type Direction = "up" | "down" | "left" | "right";
+type Direction = 'up' | 'down' | 'left' | 'right';
 
 type Tile = {
   id: number;
@@ -88,28 +88,19 @@ function moveTiles(tiles: Tile[], direction: Direction) {
   let moved = false;
 
   const getLineTiles = (line: number) => {
-    if (direction === "left")
-      return tiles
-        .filter((tile) => tile.row === line)
-        .sort((a, b) => a.col - b.col);
-    if (direction === "right")
-      return tiles
-        .filter((tile) => tile.row === line)
-        .sort((a, b) => b.col - a.col);
-    if (direction === "up")
-      return tiles
-        .filter((tile) => tile.col === line)
-        .sort((a, b) => a.row - b.row);
-    return tiles
-      .filter((tile) => tile.col === line)
-      .sort((a, b) => b.row - a.row);
+    if (direction === 'left')
+      return tiles.filter((tile) => tile.row === line).sort((a, b) => a.col - b.col);
+    if (direction === 'right')
+      return tiles.filter((tile) => tile.row === line).sort((a, b) => b.col - a.col);
+    if (direction === 'up')
+      return tiles.filter((tile) => tile.col === line).sort((a, b) => a.row - b.row);
+    return tiles.filter((tile) => tile.col === line).sort((a, b) => b.row - a.row);
   };
 
   const getTargetPosition = (line: number, offset: number) => {
-    if (direction === "left") return { row: line, col: offset };
-    if (direction === "right")
-      return { row: line, col: GRID_SIZE - 1 - offset };
-    if (direction === "up") return { row: offset, col: line };
+    if (direction === 'left') return { row: line, col: offset };
+    if (direction === 'right') return { row: line, col: GRID_SIZE - 1 - offset };
+    if (direction === 'up') return { row: offset, col: line };
     return { row: GRID_SIZE - 1 - offset, col: line };
   };
 
@@ -140,8 +131,7 @@ function moveTiles(tiles: Tile[], direction: Direction) {
         });
         i++;
       } else {
-        moved =
-          moved || current.row !== target.row || current.col !== target.col;
+        moved = moved || current.row !== target.row || current.col !== target.col;
         nextTiles.push({
           ...current,
           ...target,
@@ -158,10 +148,8 @@ function moveTiles(tiles: Tile[], direction: Direction) {
 }
 
 function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
-  const targetLeft =
-    CELL_MARGIN + CELL_MARGIN / 2 + tile.col * (cellSize + CELL_MARGIN);
-  const targetTop =
-    CELL_MARGIN + CELL_MARGIN / 2 + tile.row * (cellSize + CELL_MARGIN);
+  const targetLeft = CELL_MARGIN + CELL_MARGIN / 2 + tile.col * (cellSize + CELL_MARGIN);
+  const targetTop = CELL_MARGIN + CELL_MARGIN / 2 + tile.row * (cellSize + CELL_MARGIN);
 
   const leftVal = useSharedValue(targetLeft);
   const topVal = useSharedValue(targetTop);
@@ -201,7 +189,7 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
         {
           width: cellSize,
           height: cellSize,
-          backgroundColor: TILE_COLORS[tile.value] || "#3C3A32",
+          backgroundColor: TILE_COLORS[tile.value] || '#3C3A32',
         },
         animatedStyle,
       ]}
@@ -212,9 +200,7 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
           {
             color: TEXT_COLORS[tile.value] || TEXT_COLORS.default,
             fontSize:
-              tile.value > 100
-                ? Math.max(22, cellSize * 0.28)
-                : Math.max(28, cellSize * 0.38),
+              tile.value > 100 ? Math.max(22, cellSize * 0.28) : Math.max(28, cellSize * 0.38),
           },
         ]}
       >
@@ -224,11 +210,7 @@ function AnimatedTile({ tile, cellSize }: { tile: Tile; cellSize: number }) {
   );
 }
 
-export default function Game2048({
-  onFinish,
-}: {
-  onFinish: (score: number) => void;
-}) {
+export default function Game2048({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
   const nextTileId = useRef(1);
   const isMoving = useRef(false);
@@ -240,13 +222,11 @@ export default function Game2048({
   const cellSize = (boardSize - CELL_MARGIN * (GRID_SIZE + 2)) / GRID_SIZE;
   const isDesktopWeb = isWebMinWidth(width, 768);
   const hintText = isDesktopWeb
-    ? "Используйте стрелки или мышь, чтобы перемещать плитки"
-    : "Свайпайте, чтобы перемещать плитки";
+    ? 'Используйте стрелки или мышь, чтобы перемещать плитки'
+    : 'Свайпайте, чтобы перемещать плитки';
 
   const addRandomTile = useCallback((currentTiles: Tile[]) => {
-    const occupied = new Set(
-      currentTiles.map((tile) => `${tile.row}:${tile.col}`),
-    );
+    const occupied = new Set(currentTiles.map((tile) => `${tile.row}:${tile.col}`));
     const emptyCells = [];
     for (let row = 0; row < GRID_SIZE; row++) {
       for (let col = 0; col < GRID_SIZE; col++) {
@@ -256,8 +236,7 @@ export default function Game2048({
 
     if (emptyCells.length === 0) return currentTiles;
 
-    const { row, col } =
-      emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const { row, col } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
     return [
       ...currentTiles,
       {
@@ -310,14 +289,14 @@ export default function Game2048({
   );
 
   useEffect(() => {
-    if (Platform.OS !== "web" || typeof window === "undefined") return;
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      const keyToDirection: Record<string, "up" | "down" | "left" | "right"> = {
-        ArrowUp: "up",
-        ArrowDown: "down",
-        ArrowLeft: "left",
-        ArrowRight: "right",
+      const keyToDirection: Record<string, 'up' | 'down' | 'left' | 'right'> = {
+        ArrowUp: 'up',
+        ArrowDown: 'down',
+        ArrowLeft: 'left',
+        ArrowRight: 'right',
       };
       const direction = keyToDirection[event.key];
       if (!direction) return;
@@ -326,8 +305,8 @@ export default function Game2048({
       move(direction);
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [move]);
 
   const swipeGesture = React.useMemo(
@@ -340,12 +319,12 @@ export default function Game2048({
         if (Math.max(absX, absY) < 30) return;
 
         if (absX > absY) {
-          if (translationX > 0) runOnJS(move)("right");
-          else runOnJS(move)("left");
+          if (translationX > 0) runOnJS(move)('right');
+          else runOnJS(move)('left');
         } else {
           // Отрицательный translationY - свайп вверх, положительный - вниз.
-          if (translationY < 0) runOnJS(move)("up");
-          else runOnJS(move)("down");
+          if (translationY < 0) runOnJS(move)('up');
+          else runOnJS(move)('down');
         }
       }),
     [move],
@@ -368,10 +347,7 @@ export default function Game2048({
           {Array.from({ length: GRID_SIZE }).map((_, r) => (
             <View key={r} style={styles.row}>
               {Array.from({ length: GRID_SIZE }).map((__, c) => (
-                <View
-                  key={c}
-                  style={[styles.cell, { width: cellSize, height: cellSize }]}
-                />
+                <View key={c} style={[styles.cell, { width: cellSize, height: cellSize }]} />
               ))}
             </View>
           ))}
@@ -396,102 +372,102 @@ export default function Game2048({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: 20,
-    width: "100%",
+    width: '100%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
   },
   scoreContainer: {
-    backgroundColor: "#BBADA0",
+    backgroundColor: '#BBADA0',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: RADIUS.md,
-    alignItems: "center",
+    alignItems: 'center',
   },
   scoreLabel: {
-    color: "#EEE4DA",
-    fontWeight: "bold",
+    color: '#EEE4DA',
+    fontWeight: 'bold',
     fontSize: 10,
   },
   scoreValue: {
-    color: "white",
+    color: 'white',
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: '900',
   },
   resetBtn: {
-    backgroundColor: "#8F7A66",
+    backgroundColor: '#8F7A66',
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: RADIUS.md,
   },
   resetBtnText: {
-    color: "white",
-    fontWeight: "900",
+    color: 'white',
+    fontWeight: '900',
     fontSize: 14,
   },
   board: {
-    backgroundColor: "#BBADA0",
+    backgroundColor: '#BBADA0',
     padding: CELL_MARGIN,
     borderRadius: RADIUS.lg,
-    position: "relative",
+    position: 'relative',
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   cell: {
     margin: CELL_MARGIN / 2,
-    backgroundColor: "#CDC1B4",
+    backgroundColor: '#CDC1B4',
     borderRadius: RADIUS.sm,
   },
   tile: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: RADIUS.sm,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 2,
   },
   cellText: {
-    fontWeight: "900",
+    fontWeight: '900',
   },
   overlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(238, 228, 218, 0.73)",
+    backgroundColor: 'rgba(238, 228, 218, 0.73)',
     borderRadius: RADIUS.lg,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 10,
   },
   gameOverText: {
     fontSize: 40,
-    fontWeight: "900",
-    color: "#776E65",
+    fontWeight: '900',
+    color: '#776E65',
     marginBottom: 20,
   },
   overlayBtn: {
-    backgroundColor: "#8F7A66",
+    backgroundColor: '#8F7A66',
     paddingHorizontal: 30,
     paddingVertical: 15,
     borderRadius: RADIUS.md,
   },
   overlayBtnText: {
-    color: "white",
-    fontWeight: "900",
+    color: 'white',
+    fontWeight: '900',
   },
   hint: {
     marginTop: 20,
     color: COLORS.mutedForeground,
     fontSize: 12,
-    fontWeight: "bold",
-    textTransform: "uppercase",
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
     opacity: 0.5,
   },
 });

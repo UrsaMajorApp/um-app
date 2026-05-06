@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { isUuid } from "$lib/idUtils";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { isUuid } from '$lib/idUtils';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export type ParentCalendarChild = {
   id: string;
@@ -15,21 +15,18 @@ export type ParentCalendarEnrollment = {
   group_schedule: string | null;
 };
 
-async function fetchParentCalendarEnrollments(
-  userId: string,
-  activeChild: ParentCalendarChild,
-) {
+async function fetchParentCalendarEnrollments(userId: string, activeChild: ParentCalendarChild) {
   if (!supabase) return [];
 
   let query = supabase
-    .from("org_applications")
-    .select("id, club, group_name, group_schedule")
-    .eq("parent_user_id", userId)
-    .in("status", ["activated", "completed"])
-    .order("created_at", { ascending: false });
+    .from('org_applications')
+    .select('id, club, group_name, group_schedule')
+    .eq('parent_user_id', userId)
+    .in('status', ['activated', 'completed'])
+    .order('created_at', { ascending: false });
 
   if (isUuid(activeChild.id)) {
-    query = query.eq("child_profile_id", activeChild.id);
+    query = query.eq('child_profile_id', activeChild.id);
   }
 
   const res = await query;
@@ -40,9 +37,7 @@ export function useParentCalendar(
   userId: string | undefined,
   activeChild: ParentCalendarChild | undefined,
 ) {
-  const [enrollments, setEnrollments] = useState<ParentCalendarEnrollment[]>(
-    [],
-  );
+  const [enrollments, setEnrollments] = useState<ParentCalendarEnrollment[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {

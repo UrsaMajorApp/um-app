@@ -1,17 +1,11 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import { useState } from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { LAYOUT } from "$constants/theme";
-import { useOnboardingQuestions } from "$hooks/usePlatformData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { LAYOUT } from '$constants/theme';
+import { useOnboardingQuestions } from '$hooks/usePlatformData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentTesting() {
   const router = useRouter();
@@ -20,13 +14,12 @@ export default function ParentTesting() {
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
 
-  const { questions, loading } = useOnboardingQuestions("parent");
+  const { questions, loading } = useOnboardingQuestions('parent');
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
 
   const current = questions[step];
-  const progress =
-    questions.length > 0 ? ((step + 1) / questions.length) * 100 : 0;
+  const progress = questions.length > 0 ? ((step + 1) / questions.length) * 100 : 0;
 
   const selectAnswer = (index: number) => {
     const updated = [...answers];
@@ -38,15 +31,15 @@ export default function ParentTesting() {
     if (step < questions.length - 1) {
       setStep(step + 1);
     } else {
-      router.push("/profile/parent/results");
+      router.push('/profile/parent/results');
     }
   };
 
   if (loading || !current) {
     return (
       <LinearGradient
-        colors={["#6A63D8", "#C7C4F2"]}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        colors={['#6A63D8', '#C7C4F2']}
+        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
         <ActivityIndicator color="white" size="large" />
       </LinearGradient>
@@ -55,7 +48,7 @@ export default function ParentTesting() {
 
   return (
     <LinearGradient
-      colors={["#6A63D8", "#C7C4F2"]}
+      colors={['#6A63D8', '#C7C4F2']}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={{ flex: 1 }}
@@ -65,12 +58,12 @@ export default function ParentTesting() {
           paddingHorizontal: horizontalPadding,
           paddingTop: isDesktop ? 72 : 60,
           paddingBottom: 120,
-          alignItems: "center",
+          alignItems: 'center',
         }}
       >
         <View
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined,
           }}
         >
@@ -83,8 +76,8 @@ export default function ParentTesting() {
             <Text
               style={{
                 fontSize: 28,
-                fontWeight: "700",
-                color: "white",
+                fontWeight: '700',
+                color: 'white',
                 marginBottom: 16,
               }}
             >
@@ -95,18 +88,18 @@ export default function ParentTesting() {
           {/* PROGRESS */}
           <View
             style={{
-              backgroundColor: "rgba(255,255,255,0.25)",
+              backgroundColor: 'rgba(255,255,255,0.25)',
               height: 10,
               borderRadius: 10,
-              overflow: "hidden",
+              overflow: 'hidden',
               marginBottom: 30,
             }}
           >
             <View
               style={{
                 width: `${progress}%`,
-                height: "100%",
-                backgroundColor: "white",
+                height: '100%',
+                backgroundColor: 'white',
               }}
             />
           </View>
@@ -118,11 +111,11 @@ export default function ParentTesting() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 400 }}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               borderRadius: 24,
               padding: 22,
               marginBottom: 40,
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOpacity: 0.08,
               shadowRadius: 10,
             }}
@@ -130,7 +123,7 @@ export default function ParentTesting() {
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: "700",
+                fontWeight: '700',
                 opacity: 0.6,
                 marginBottom: 10,
               }}
@@ -138,7 +131,7 @@ export default function ParentTesting() {
               Вопрос {step + 1} из {questions.length}
             </Text>
 
-            <Text style={{ fontSize: 18, fontWeight: "700", marginBottom: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 20 }}>
               {current.question_text}
             </Text>
 
@@ -149,7 +142,7 @@ export default function ParentTesting() {
                   key={i}
                   onPress={() => selectAnswer(i)}
                   style={{
-                    backgroundColor: active ? "#6C5CE7" : "#EFEFFE",
+                    backgroundColor: active ? '#6C5CE7' : '#EFEFFE',
                     borderRadius: 30,
                     paddingVertical: 14,
                     paddingHorizontal: 20,
@@ -158,10 +151,10 @@ export default function ParentTesting() {
                 >
                   <Text
                     style={{
-                      textAlign: "center",
+                      textAlign: 'center',
                       fontSize: 16,
-                      color: active ? "white" : "#000",
-                      fontWeight: active ? "700" : "500",
+                      color: active ? 'white' : '#000',
+                      fontWeight: active ? '700' : '500',
                     }}
                   >
                     {text}
@@ -176,20 +169,20 @@ export default function ParentTesting() {
             disabled={answers[step] === undefined}
             onPress={next}
             style={{
-              backgroundColor: answers[step] === undefined ? "#999" : "#6C5CE7",
+              backgroundColor: answers[step] === undefined ? '#999' : '#6C5CE7',
               paddingVertical: 16,
               borderRadius: 30,
             }}
           >
             <Text
               style={{
-                textAlign: "center",
-                color: "white",
+                textAlign: 'center',
+                color: 'white',
                 fontSize: 18,
-                fontWeight: "600",
+                fontWeight: '600',
               }}
             >
-              {step === questions.length - 1 ? "Завершить" : "Следующий вопрос"}
+              {step === questions.length - 1 ? 'Завершить' : 'Следующий вопрос'}
             </Text>
           </TouchableOpacity>
         </View>

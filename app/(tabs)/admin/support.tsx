@@ -1,68 +1,56 @@
-import { AdminHeader } from "$components/admin/AdminHeader";
-import { EmptyState } from "$components/admin/EmptyState";
-import { SegmentTabs } from "$components/admin/SegmentTabs";
-import {
-  formatAdminDate,
-  useAdminLayout,
-} from "$components/admin/adminUtils";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import { useTickets } from "$hooks/useAdminData";
-import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { EmptyState } from '$components/admin/EmptyState';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useTickets } from '$hooks/useAdminData';
+import { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
-type SupportTab = "logs" | "tickets";
+type SupportTab = 'logs' | 'tickets';
 
 export default function AdminSupportScreen() {
   const { paddingX } = useAdminLayout();
   const tickets = useTickets();
-  const [tab, setTab] = useState<SupportTab>("logs");
+  const [tab, setTab] = useState<SupportTab>('logs');
   const rows = tickets.data.filter((ticket) =>
-    tab === "tickets"
-      ? ticket.kind === "complaint"
-      : ticket.kind === "feedback",
+    tab === 'tickets' ? ticket.kind === 'complaint' : ticket.kind === 'feedback',
   );
 
   return (
     <View style={{ flex: 1 }}>
-      <AdminHeader
-        title="Поддержка"
-        subtitle="Жалобы, отзывы и контроль качества"
-      />
+      <AdminHeader title="Поддержка" subtitle="Жалобы, отзывы и контроль качества" />
       <SegmentTabs
         value={tab}
         onChange={setTab}
         tabs={[
-          { key: "logs", label: "Лог фидбеков" },
-          { key: "tickets", label: "Тикеты и жалобы" },
+          { key: 'logs', label: 'Лог фидбеков' },
+          { key: 'tickets', label: 'Тикеты и жалобы' },
         ]}
       />
       <ScrollView style={{ flex: 1, backgroundColor: COLORS.background }}>
         {tickets.loading ? (
-          <Text style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}>
-            Загрузка...
-          </Text>
+          <Text style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}>Загрузка...</Text>
         ) : null}
-        {!tickets.loading && rows.length === 0 ? (
-          <EmptyState title="Записей нет" />
-        ) : null}
+        {!tickets.loading && rows.length === 0 ? <EmptyState title="Записей нет" /> : null}
         {rows.map((ticket) => {
-          const kindLabel = ticket.kind === "complaint" ? "Жалоба" : "Отзыв";
+          const kindLabel = ticket.kind === 'complaint' ? 'Жалоба' : 'Отзыв';
           const statusLabel =
-            ticket.status === "open"
-              ? "Открыт"
-              : ticket.status === "in_progress"
-                ? "В работе"
-                : "Решен";
+            ticket.status === 'open'
+              ? 'Открыт'
+              : ticket.status === 'in_progress'
+                ? 'В работе'
+                : 'Решен';
           const statusBg =
-            ticket.status === "open"
-              ? "#FEF9C3"
-              : ticket.status === "in_progress"
-                ? COLORS.primary + "20"
-                : COLORS.success + "20";
+            ticket.status === 'open'
+              ? '#FEF9C3'
+              : ticket.status === 'in_progress'
+                ? `${COLORS.primary}20`
+                : `${COLORS.success}20`;
           const statusColor =
-            ticket.status === "open"
-              ? "#854D0E"
-              : ticket.status === "in_progress"
+            ticket.status === 'open'
+              ? '#854D0E'
+              : ticket.status === 'in_progress'
                 ? COLORS.primary
                 : COLORS.success;
           return (
@@ -76,31 +64,29 @@ export default function AdminSupportScreen() {
                 backgroundColor: COLORS.surface,
                 borderWidth: 1,
                 borderColor:
-                  ticket.kind === "complaint"
-                    ? COLORS.destructive + "30"
-                    : COLORS.border,
+                  ticket.kind === 'complaint' ? `${COLORS.destructive}30` : COLORS.border,
               }}
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                   marginBottom: SPACING.sm,
                 }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     gap: SPACING.sm,
-                    alignItems: "center",
+                    alignItems: 'center',
                   }}
                 >
                   <View
                     style={{
                       backgroundColor:
-                        ticket.kind === "complaint"
-                          ? COLORS.destructive + "15"
-                          : COLORS.primary + "15",
+                        ticket.kind === 'complaint'
+                          ? `${COLORS.destructive}15`
+                          : `${COLORS.primary}15`,
                       paddingHorizontal: 8,
                       paddingVertical: 2,
                       borderRadius: RADIUS.sm,
@@ -108,13 +94,10 @@ export default function AdminSupportScreen() {
                   >
                     <Text
                       style={{
-                        color:
-                          ticket.kind === "complaint"
-                            ? COLORS.destructive
-                            : COLORS.primary,
+                        color: ticket.kind === 'complaint' ? COLORS.destructive : COLORS.primary,
                         fontSize: 10,
-                        fontWeight: "bold",
-                        textTransform: "uppercase",
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
                       }}
                     >
                       {kindLabel}
@@ -141,7 +124,7 @@ export default function AdminSupportScreen() {
                     style={{
                       color: statusColor,
                       fontSize: 10,
-                      fontWeight: "bold",
+                      fontWeight: 'bold',
                     }}
                   >
                     {statusLabel}
@@ -151,7 +134,7 @@ export default function AdminSupportScreen() {
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.md,
-                  fontWeight: "bold",
+                  fontWeight: 'bold',
                   color: COLORS.foreground,
                   marginBottom: 4,
                 }}
@@ -180,12 +163,12 @@ export default function AdminSupportScreen() {
               </Text>
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   gap: SPACING.sm,
                   marginTop: SPACING.md,
                 }}
               >
-                {ticket.status === "open" ? (
+                {ticket.status === 'open' ? (
                   <TouchableOpacity
                     onPress={() => tickets.takeInProgress(ticket.id)}
                     style={{
@@ -198,7 +181,7 @@ export default function AdminSupportScreen() {
                     <Text
                       style={{
                         color: COLORS.white,
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         fontSize: TYPOGRAPHY.size.sm,
                       }}
                     >
@@ -206,7 +189,7 @@ export default function AdminSupportScreen() {
                     </Text>
                   </TouchableOpacity>
                 ) : null}
-                {ticket.status !== "resolved" ? (
+                {ticket.status !== 'resolved' ? (
                   <TouchableOpacity
                     onPress={() => tickets.resolve(ticket.id)}
                     style={{
@@ -219,7 +202,7 @@ export default function AdminSupportScreen() {
                     <Text
                       style={{
                         color: COLORS.white,
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         fontSize: TYPOGRAPHY.size.sm,
                       }}
                     >

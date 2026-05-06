@@ -1,45 +1,38 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useMemo, useState } from "react";
-import {
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useParentData } from "$contexts/ParentDataContext";
-import { useParentCalendar } from "$hooks/useParentCalendar";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useMemo, useState } from 'react';
+import { ActivityIndicator, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { useParentCalendar } from '$hooks/useParentCalendar';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 const MONTHS = [
-  "Январь",
-  "Февраль",
-  "Март",
-  "Апрель",
-  "Май",
-  "Июнь",
-  "Июль",
-  "Август",
-  "Сентябрь",
-  "Октябрь",
-  "Ноябрь",
-  "Декабрь",
+  'Январь',
+  'Февраль',
+  'Март',
+  'Апрель',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентябрь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь',
 ];
-const WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 const DAY_ALIASES: Record<number, string[]> = {
-  0: ["вс", "воск"],
-  1: ["пн", "пон"],
-  2: ["вт", "втор"],
-  3: ["ср", "сред"],
-  4: ["чт", "чет", "четв"],
-  5: ["пт", "пят"],
-  6: ["сб", "суб"],
+  0: ['вс', 'воск'],
+  1: ['пн', 'пон'],
+  2: ['вт', 'втор'],
+  3: ['ср', 'сред'],
+  4: ['чт', 'чет', 'четв'],
+  5: ['пт', 'пят'],
+  6: ['сб', 'суб'],
 };
 
 function getCalendarDays(year: number, month: number) {
@@ -54,17 +47,15 @@ function getCalendarDays(year: number, month: number) {
 
 function scheduleMatchesDate(schedule: string | null, date: Date) {
   if (!schedule) return false;
-  const normalized = schedule.toLowerCase().replace(/ё/g, "е");
+  const normalized = schedule.toLowerCase().replace(/ё/g, 'е');
   const aliases = DAY_ALIASES[date.getDay()] ?? [];
-  return aliases.some((alias) =>
-    new RegExp(`(^|[^а-яa-z])${alias}`, "i").test(normalized),
-  );
+  return aliases.some((alias) => new RegExp(`(^|[^а-яa-z])${alias}`, 'i').test(normalized));
 }
 
 function getScheduleTime(schedule: string | null) {
-  if (!schedule) return "Время уточняется";
+  if (!schedule) return 'Время уточняется';
   const match = schedule.match(/\d{1,2}:\d{2}(?:\s*[-–]\s*\d{1,2}:\d{2})?/);
-  return match?.[0]?.replace(/\s+/g, " ") ?? schedule;
+  return match?.[0]?.replace(/\s+/g, ' ') ?? schedule;
 }
 
 export default function ParentCalendar() {
@@ -79,8 +70,7 @@ export default function ParentCalendar() {
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const activeChild =
-    childrenProfile.find((child) => child.id === activeChildId) ||
-    childrenProfile[0];
+    childrenProfile.find((child) => child.id === activeChildId) || childrenProfile[0];
   const { enrollments, loading } = useParentCalendar(user?.id, activeChild);
 
   const days = getCalendarDays(currentDate.year, currentDate.month);
@@ -89,10 +79,7 @@ export default function ParentCalendar() {
     [currentDate.month, currentDate.year, selectedDay],
   );
   const selectedEvents = useMemo(
-    () =>
-      enrollments.filter((item) =>
-        scheduleMatchesDate(item.group_schedule, selectedDate),
-      ),
+    () => enrollments.filter((item) => scheduleMatchesDate(item.group_schedule, selectedDate)),
     [enrollments, selectedDate],
   );
 
@@ -105,14 +92,14 @@ export default function ParentCalendar() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: horizontalPadding,
@@ -122,16 +109,12 @@ export default function ParentCalendar() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 20,
                 }}
               >
-                <Text
-                  style={{ fontSize: 20, fontWeight: "800", color: "white" }}
-                >
-                  Календарь
-                </Text>
+                <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Календарь</Text>
               </View>
 
               <View className="flex-row justify-between items-center">
@@ -165,8 +148,8 @@ export default function ParentCalendar() {
           paddingBottom: 40,
           // On web, cap content width and center it so the calendar doesn't stretch
           maxWidth: isDesktop ? 600 : undefined,
-          alignSelf: isDesktop ? "center" : undefined,
-          width: "100%",
+          alignSelf: isDesktop ? 'center' : undefined,
+          width: '100%',
         }}
         showsVerticalScrollIndicator={false}
       >
@@ -174,26 +157,26 @@ export default function ParentCalendar() {
         <View
           style={{
             ...SHADOWS.md,
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderRadius: 32,
             padding: 20,
             marginBottom: 32,
             borderWidth: 1,
-            borderColor: "#F9FAFB",
+            borderColor: '#F9FAFB',
           }}
         >
           {/* Weekday headers */}
-          <View style={{ flexDirection: "row", marginBottom: 8 }}>
+          <View style={{ flexDirection: 'row', marginBottom: 8 }}>
             {WEEKDAYS.map((d) => (
               <Text
                 key={d}
                 style={{
                   flex: 1,
-                  textAlign: "center",
+                  textAlign: 'center',
                   fontSize: 10,
-                  fontWeight: "900",
-                  color: "#9CA3AF",
-                  textTransform: "uppercase",
+                  fontWeight: '900',
+                  color: '#9CA3AF',
+                  textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
               >
@@ -202,36 +185,35 @@ export default function ParentCalendar() {
             ))}
           </View>
           {/* Day cells — fixed 40px height avoids giant cells on wide web */}
-          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             {days.map((day, idx) => (
               <View
                 key={idx}
                 style={{
-                  width: "14.2857%",
+                  width: '14.2857%',
                   height: 44,
                   padding: 2,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 {day && (
                   <Pressable
                     onPress={() => setSelectedDay(day)}
                     style={{
-                      width: "100%",
-                      height: "100%",
+                      width: '100%',
+                      height: '100%',
                       borderRadius: 12,
-                      backgroundColor:
-                        day === selectedDay ? "#7C3AED" : "transparent",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: day === selectedDay ? '#7C3AED' : 'transparent',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text
                       style={{
-                        fontWeight: "700",
+                        fontWeight: '700',
                         fontSize: 14,
-                        color: day === selectedDay ? "white" : "#111827",
+                        color: day === selectedDay ? 'white' : '#111827',
                       }}
                     >
                       {day}
@@ -245,12 +227,12 @@ export default function ParentCalendar() {
                       day !== selectedDay && (
                         <View
                           style={{
-                            position: "absolute",
+                            position: 'absolute',
                             bottom: 4,
                             width: 4,
                             height: 4,
                             borderRadius: 2,
-                            backgroundColor: "#7C3AED",
+                            backgroundColor: '#7C3AED',
                           }}
                         />
                       )}
@@ -276,17 +258,17 @@ export default function ParentCalendar() {
                 key={item.id}
                 style={{
                   ...SHADOWS.sm,
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: 24,
                   padding: 16,
                   borderWidth: 1,
-                  borderColor: "#F3F4F6",
+                  borderColor: '#F3F4F6',
                 }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 12,
                   }}
                 >
@@ -295,37 +277,32 @@ export default function ParentCalendar() {
                       width: 44,
                       height: 44,
                       borderRadius: 16,
-                      backgroundColor: COLORS.primary + "12",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: `${COLORS.primary}12`,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    <Feather
-                      name="book-open"
-                      size={20}
-                      color={COLORS.primary}
-                    />
+                    <Feather name="book-open" size={20} color={COLORS.primary} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
                         fontSize: 15,
-                        fontWeight: "900",
+                        fontWeight: '900',
                         color: COLORS.foreground,
                       }}
                     >
-                      {item.club ?? "Занятие"}
+                      {item.club ?? 'Занятие'}
                     </Text>
                     <Text
                       style={{
                         fontSize: 12,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.mutedForeground,
                         marginTop: 3,
                       }}
                     >
-                      {item.group_name || "Группа"} ·{" "}
-                      {getScheduleTime(item.group_schedule)}
+                      {item.group_name || 'Группа'} · {getScheduleTime(item.group_schedule)}
                     </Text>
                   </View>
                 </View>

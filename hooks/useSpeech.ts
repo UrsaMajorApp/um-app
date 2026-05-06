@@ -4,8 +4,8 @@
  * Provides a child-friendly TTS experience with Russian language support,
  * slightly higher pitch and slower rate for clarity.
  */
-import * as Speech from "expo-speech";
-import { useCallback, useRef, useState } from "react";
+import * as Speech from 'expo-speech';
+import { useCallback, useRef, useState } from 'react';
 
 interface SpeechOptions {
   pitch?: number;
@@ -14,10 +14,10 @@ interface SpeechOptions {
   onDone?: () => void;
 }
 
-const DEFAULTS: Required<Pick<SpeechOptions, "pitch" | "rate" | "language">> = {
+const DEFAULTS: Required<Pick<SpeechOptions, 'pitch' | 'rate' | 'language'>> = {
   pitch: 1.15, // slightly higher → friendlier for kids
   rate: 0.85, // slightly slower → easier to understand
-  language: "ru-RU",
+  language: 'ru-RU',
 };
 
 export function useSpeech() {

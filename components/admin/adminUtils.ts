@@ -1,10 +1,10 @@
-import { ADMIN_ROUTES, type AdminRouteKey } from "$constants/admin";
-import { LAYOUT, SPACING } from "$constants/theme";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
-import { useRouter, type Href } from "expo-router";
-import { useWindowDimensions } from "react-native";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { ADMIN_ROUTES, type AdminRouteKey } from '$constants/admin';
+import { LAYOUT, SPACING } from '$constants/theme';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
+import { useRouter, type Href } from 'expo-router';
+import { useWindowDimensions } from 'react-native';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 type ConversationParticipantRow = {
   conversation_id: string;
@@ -22,11 +22,11 @@ export function useAdminLayout() {
 
 export function formatAdminDate(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("ru-RU", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(iso).toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   } catch {
     return iso;
@@ -44,31 +44,24 @@ export async function ensureConversation(
   name: string,
   iconName: string,
 ) {
-  if (!supabase || !isSupabaseConfigured)
-    return { id: null, error: "Supabase is not configured" };
+  if (!supabase || !isSupabaseConfigured) return { id: null, error: 'Supabase is not configured' };
   const [currentParts, otherParts] = await Promise.all([
     supabase
-      .from("conversation_participants")
-      .select("conversation_id")
-      .eq("user_id", currentUserId),
-    supabase
-      .from("conversation_participants")
-      .select("conversation_id")
-      .eq("user_id", otherUserId),
+      .from('conversation_participants')
+      .select('conversation_id')
+      .eq('user_id', currentUserId),
+    supabase.from('conversation_participants').select('conversation_id').eq('user_id', otherUserId),
   ]);
   const currentIds = new Set(
-    rowsOrEmpty<ConversationParticipantRow>(currentParts).map(
-      (p) => p.conversation_id,
-    ),
+    rowsOrEmpty<ConversationParticipantRow>(currentParts).map((p) => p.conversation_id),
   );
   const shared = rowsOrEmpty<ConversationParticipantRow>(otherParts).find((p) =>
     currentIds.has(p.conversation_id),
   );
-  if (shared?.conversation_id)
-    return { id: shared.conversation_id as string, error: null };
+  if (shared?.conversation_id) return { id: shared.conversation_id as string, error: null };
 
   const { data: conv, error } = await supabase
-    .from("conversations")
+    .from('conversations')
     .insert({
       name,
       icon_name: iconName,
@@ -76,9 +69,8 @@ export async function ensureConversation(
     })
     .select()
     .single();
-  if (error || !conv)
-    return { id: null, error: error?.message ?? "Не удалось создать чат" };
-  await supabase.from("conversation_participants").insert([
+  if (error || !conv) return { id: null, error: error?.message ?? 'Не удалось создать чат' };
+  await supabase.from('conversation_participants').insert([
     { conversation_id: conv.id, user_id: currentUserId, unread_count: 0 },
     { conversation_id: conv.id, user_id: otherUserId, unread_count: 0 },
   ]);

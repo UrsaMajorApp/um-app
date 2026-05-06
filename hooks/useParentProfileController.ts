@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-import { Alert } from "react-native";
-import type { AuthUser } from "$contexts/AuthContext";
-import { formatPhone } from "$lib/formatPhone";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
-import type { Child } from "$types/child";
+import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import type { AuthUser } from '$contexts/AuthContext';
+import { formatPhone } from '$lib/formatPhone';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
+import type { Child } from '$types/child';
 
 type ParentProfile = {
   firstName?: string;
   lastName?: string;
   phone?: string;
-  tariff?: "basic" | "pro";
+  tariff?: 'basic' | 'pro';
 } | null;
 
 type ParentProfileEditForm = {
@@ -52,21 +52,20 @@ export function useParentProfileController({
   const [enrollments, setEnrollments] = useState<ParentEnrollmentRequest[]>([]);
   const [loadingEnrollments, setLoadingEnrollments] = useState(false);
   const [editForm, setEditForm] = useState<ParentProfileEditForm>({
-    firstName: "",
-    lastName: "",
-    phone: "",
+    firstName: '',
+    lastName: '',
+    phone: '',
   });
 
-  const selectedChild =
-    children.find((child) => child.id === selectedChildId) || children[0];
+  const selectedChild = children.find((child) => child.id === selectedChildId) || children[0];
 
   useEffect(() => {
     if (!parentProfile) return;
 
     setEditForm({
-      firstName: parentProfile.firstName || "",
-      lastName: parentProfile.lastName || "",
-      phone: parentProfile.phone || user?.phone || "",
+      firstName: parentProfile.firstName || '',
+      lastName: parentProfile.lastName || '',
+      phone: parentProfile.phone || user?.phone || '',
     });
   }, [parentProfile, user?.phone]);
 
@@ -76,10 +75,7 @@ export function useParentProfileController({
       return;
     }
 
-    if (
-      !selectedChildId ||
-      !children.some((child) => child.id === selectedChildId)
-    ) {
+    if (!selectedChildId || !children.some((child) => child.id === selectedChildId)) {
       setSelectedChildId(children[0].id);
     }
   }, [children, selectedChildId]);
@@ -90,17 +86,17 @@ export function useParentProfileController({
     setLoadingEnrollments(true);
     try {
       const res = await supabase
-        .from("student_enrollment_requests")
-        .select("id, course_title, org_name, status, created_at")
-        .eq("parent_id", user.id)
-        .order("created_at", { ascending: false });
+        .from('student_enrollment_requests')
+        .select('id, course_title, org_name, status, created_at')
+        .eq('parent_id', user.id)
+        .order('created_at', { ascending: false });
 
       setEnrollments(rowsOrEmpty<ParentEnrollmentRequest>(res));
       if (res.error) {
-        console.error("Error fetching enrollments:", res.error.message);
+        console.error('Error fetching enrollments:', res.error.message);
       }
     } catch (error) {
-      console.error("Error fetching enrollments:", error);
+      console.error('Error fetching enrollments:', error);
       setEnrollments([]);
     } finally {
       setLoadingEnrollments(false);
@@ -113,20 +109,17 @@ export function useParentProfileController({
     }
   }, [fetchEnrollments, selectedChild?.id]);
 
-  const updateEditFormField = (
-    field: keyof ParentProfileEditForm,
-    value: string,
-  ) => {
+  const updateEditFormField = (field: keyof ParentProfileEditForm, value: string) => {
     setEditForm((prev) => ({
       ...prev,
-      [field]: field === "phone" ? formatPhone(value) : value,
+      [field]: field === 'phone' ? formatPhone(value) : value,
     }));
   };
 
   const handleUpdateProfile = async () => {
     await updateParentProfile(editForm);
     setShowEditModal(false);
-    Alert.alert("Успех", "Профиль обновлен");
+    Alert.alert('Успех', 'Профиль обновлен');
   };
 
   const handleGeneratePin = async () => {

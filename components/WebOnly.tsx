@@ -1,5 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
-import { Platform } from "react-native";
+import type { CSSProperties, ReactNode } from 'react';
+import { Platform } from 'react-native';
 
 interface WebOnlyProps {
   children?: ReactNode;
@@ -8,7 +8,7 @@ interface WebOnlyProps {
 }
 
 export default function WebOnly({ children, style, className }: WebOnlyProps) {
-  if (Platform.OS !== "web") return null;
+  if (Platform.OS !== 'web') return null;
 
   return (
     <div style={style} className={className}>

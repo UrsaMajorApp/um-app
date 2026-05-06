@@ -1,5 +1,5 @@
-import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { useState } from 'react';
 import {
   Modal,
   Pressable,
@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
-} from "react-native";
-import { COLORS, RADIUS, SHADOWS, SPACING } from "$constants/theme";
-import { isWebMinWidth } from "$lib/useIsDesktop";
-import type { Child } from "$types/child";
+} from 'react-native';
+import { COLORS, RADIUS, SHADOWS, SPACING } from '$constants/theme';
+import { isWebMinWidth } from '$lib/useIsDesktop';
+import type { Child } from '$types/child';
 
 export default function EditChildModal({
   child,
@@ -23,14 +23,14 @@ export default function EditChildModal({
   onClose: () => void;
 }) {
   const [name, setName] = useState(child.name);
-  const [age, setAge] = useState(String(child.age ?? ""));
+  const [age, setAge] = useState(String(child.age ?? ''));
   const { width } = useWindowDimensions();
   const isDesktop = isWebMinWidth(width, 768);
 
   const handleSave = () => {
     const parsed = parseInt(age, 10);
-    const ageCategory: Child["ageCategory"] =
-      parsed <= 11 ? "child" : parsed <= 17 ? "teen" : "young-adult";
+    const ageCategory: Child['ageCategory'] =
+      parsed <= 11 ? 'child' : parsed <= 17 ? 'teen' : 'young-adult';
     onSave({
       name: name.trim() || child.name,
       age: Number.isFinite(parsed) ? parsed : child.age,
@@ -44,16 +44,16 @@ export default function EditChildModal({
       <Pressable
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          justifyContent: "center",
-          alignItems: "center",
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
         onPress={onClose}
       >
         <Pressable
           onPress={(e) => e.stopPropagation()}
           style={{
-            width: isDesktop ? 400 : "90%",
+            width: isDesktop ? 400 : '90%',
             backgroundColor: COLORS.card,
             borderRadius: RADIUS.lg,
             padding: 24,
@@ -62,16 +62,16 @@ export default function EditChildModal({
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: 20,
             }}
           >
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: "700",
+                fontWeight: '700',
                 color: COLORS.foreground,
               }}
             >
@@ -85,7 +85,7 @@ export default function EditChildModal({
           <Text
             style={{
               fontSize: 13,
-              fontWeight: "600",
+              fontWeight: '600',
               color: COLORS.mutedForeground,
               marginBottom: 6,
             }}
@@ -111,7 +111,7 @@ export default function EditChildModal({
           <Text
             style={{
               fontSize: 13,
-              fontWeight: "600",
+              fontWeight: '600',
               color: COLORS.mutedForeground,
               marginBottom: 6,
             }}
@@ -135,7 +135,7 @@ export default function EditChildModal({
             placeholder="Возраст"
           />
 
-          <View style={{ flexDirection: "row", gap: 12 }}>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
             <TouchableOpacity
               onPress={onClose}
               style={{
@@ -144,12 +144,10 @@ export default function EditChildModal({
                 borderRadius: RADIUS.md,
                 borderWidth: 1,
                 borderColor: COLORS.border,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
-              <Text style={{ color: COLORS.foreground, fontWeight: "600" }}>
-                Отмена
-              </Text>
+              <Text style={{ color: COLORS.foreground, fontWeight: '600' }}>Отмена</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSave}
@@ -158,12 +156,10 @@ export default function EditChildModal({
                 padding: 14,
                 borderRadius: RADIUS.md,
                 backgroundColor: COLORS.primary,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
-              <Text style={{ color: "white", fontWeight: "700" }}>
-                Сохранить
-              </Text>
+              <Text style={{ color: 'white', fontWeight: '700' }}>Сохранить</Text>
             </TouchableOpacity>
           </View>
         </Pressable>

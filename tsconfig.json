@@ -5,41 +5,16 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "$app/*": [
-        "./app/*"
-      ],
-      "$components/*": [
-        "./components/*"
-      ],
-      "$constants/*": [
-        "./constants/*"
-      ],
-      "$contexts/*": [
-        "./contexts/*"
-      ],
-      "$data/*": [
-        "./data/*"
-      ],
-      "$hooks/*": [
-        "./hooks/*"
-      ],
-      "$lib/*": [
-        "./lib/*"
-      ],
-      "$types/*": [
-        "./types/*"
-      ]
+      "$app/*": ["./app/*"],
+      "$components/*": ["./components/*"],
+      "$constants/*": ["./constants/*"],
+      "$contexts/*": ["./contexts/*"],
+      "$data/*": ["./data/*"],
+      "$hooks/*": ["./hooks/*"],
+      "$lib/*": ["./lib/*"],
+      "$types/*": ["./types/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts"
-  ],
-  "exclude": [
-    "tmp",
-    "tmp/**/*"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"],
+  "exclude": ["tmp", "tmp/**/*"]
 }

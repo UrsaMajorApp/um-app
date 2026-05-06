@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import type { TeacherAttendanceEntry } from "$hooks/usePlatformData";
+import { useCallback, useEffect, useState } from 'react';
+import type { TeacherAttendanceEntry } from '$hooks/usePlatformData';
 
-export type TeacherAttendanceStatus = "present" | "absent";
+export type TeacherAttendanceStatus = 'present' | 'absent';
 export type TeacherAttendanceSelection = TeacherAttendanceStatus | null;
 
 type AttendanceDraft = Record<string, TeacherAttendanceSelection>;
@@ -36,15 +36,12 @@ export function useTeacherAttendanceEditor(
     setComments(nextComments);
   }, [savedAttendance]);
 
-  const toggleStatus = useCallback(
-    (studentId: string, status: TeacherAttendanceStatus) => {
-      setAttendance((prev) => ({
-        ...prev,
-        [studentId]: prev[studentId] === status ? null : status,
-      }));
-    },
-    [],
-  );
+  const toggleStatus = useCallback((studentId: string, status: TeacherAttendanceStatus) => {
+    setAttendance((prev) => ({
+      ...prev,
+      [studentId]: prev[studentId] === status ? null : status,
+    }));
+  }, []);
 
   const setStudentComment = useCallback((studentId: string, comment: string) => {
     setComments((prev) => ({ ...prev, [studentId]: comment }));
@@ -54,14 +51,11 @@ export function useTeacherAttendanceEditor(
     async (options?: { includeComments?: boolean }) => {
       setSaving(true);
       const entries = Object.entries(attendance)
-        .filter(
-          (entry): entry is [string, TeacherAttendanceStatus] =>
-            entry[1] !== null,
-        )
+        .filter((entry): entry is [string, TeacherAttendanceStatus] => entry[1] !== null)
         .map(([studentId, status]) => ({
           studentId,
           status,
-          comment: options?.includeComments ? comments[studentId] ?? null : null,
+          comment: options?.includeComments ? (comments[studentId] ?? null) : null,
         }));
 
       const result = await saveAttendance(entries);

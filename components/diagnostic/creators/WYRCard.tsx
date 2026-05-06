@@ -4,14 +4,11 @@
  * Shows a situation and two large choice buttons.
  * A 10-second countdown timer encourages intuitive responses.
  */
-import { MotiView } from "moti";
-import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
-import type {
-  BasicSkill911,
-  WYRCard as WYRCardType,
-} from "$data/diagnosticData911";
+import { MotiView } from 'moti';
+import { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import type { BasicSkill911, WYRCard as WYRCardType } from '$data/diagnosticData911';
 
 interface Props {
   card: WYRCardType;
@@ -22,15 +19,9 @@ interface Props {
   timerSeconds?: number;
 }
 
-export default function WYRCard({
-  card,
-  index,
-  total,
-  onChoice,
-  timerSeconds = 10,
-}: Props) {
+export default function WYRCard({ card, index, total, onChoice, timerSeconds = 10 }: Props) {
   const [timeLeft, setTimeLeft] = useState(timerSeconds);
-  const [chosen, setChosen] = useState<"A" | "B" | null>(null);
+  const [chosen, setChosen] = useState<'A' | 'B' | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Reset on card change
@@ -47,13 +38,9 @@ export default function WYRCard({
         if (t <= 1) {
           clearInterval(timerRef.current!);
           // Auto-choose randomly on timeout for natural flow
-          const auto = Math.random() < 0.5 ? "A" : "B";
+          const auto = Math.random() < 0.5 ? 'A' : 'B';
           setChosen(auto);
-          setTimeout(
-            () =>
-              onChoice(auto === "A" ? card.optionA.skill : card.optionB.skill),
-            300,
-          );
+          setTimeout(() => onChoice(auto === 'A' ? card.optionA.skill : card.optionB.skill), 300);
           return 0;
         }
         return t - 1;
@@ -65,22 +52,15 @@ export default function WYRCard({
     };
   }, [card.id, chosen]);
 
-  const handleChoice = (which: "A" | "B") => {
+  const handleChoice = (which: 'A' | 'B') => {
     if (chosen) return;
     if (timerRef.current) clearInterval(timerRef.current);
     setChosen(which);
-    setTimeout(
-      () => onChoice(which === "A" ? card.optionA.skill : card.optionB.skill),
-      350,
-    );
+    setTimeout(() => onChoice(which === 'A' ? card.optionA.skill : card.optionB.skill), 350);
   };
 
   const timerColor =
-    timeLeft > 6
-      ? COLORS.success
-      : timeLeft > 3
-        ? COLORS.warning
-        : COLORS.destructive;
+    timeLeft > 6 ? COLORS.success : timeLeft > 3 ? COLORS.warning : COLORS.destructive;
   const timerPct = (timeLeft / timerSeconds) * 100;
 
   return (
@@ -89,7 +69,7 @@ export default function WYRCard({
       from={{ opacity: 0, translateY: 28 }}
       animate={{ opacity: 1, translateY: 0 }}
       exit={{ opacity: 0, translateY: -28 }}
-      transition={{ type: "timing", duration: 350 }}
+      transition={{ type: 'timing', duration: 350 }}
       style={styles.wrapper}
     >
       {/* Step badge */}
@@ -108,13 +88,11 @@ export default function WYRCard({
         <View style={styles.timerTrack}>
           <MotiView
             animate={{ width: `${timerPct}%` }}
-            transition={{ type: "timing", duration: 900 }}
+            transition={{ type: 'timing', duration: 900 }}
             style={[styles.timerFill, { backgroundColor: timerColor }]}
           />
         </View>
-        <Text style={[styles.timerLabel, { color: timerColor }]}>
-          {timeLeft} сек
-        </Text>
+        <Text style={[styles.timerLabel, { color: timerColor }]}>{timeLeft} сек</Text>
       </View>
 
       {/* VS divider */}
@@ -129,28 +107,28 @@ export default function WYRCard({
       {/* Option buttons */}
       <View style={styles.optionsRow}>
         <TouchableOpacity
-          onPress={() => handleChoice("A")}
+          onPress={() => handleChoice('A')}
           activeOpacity={0.75}
           disabled={!!chosen}
           style={[
             styles.optionButton,
             styles.optionA,
-            chosen === "A" && styles.optionChosen,
-            chosen === "B" && styles.optionFaded,
+            chosen === 'A' && styles.optionChosen,
+            chosen === 'B' && styles.optionFaded,
           ]}
         >
           <Text style={styles.optionLabel}>{card.optionA.label}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleChoice("B")}
+          onPress={() => handleChoice('B')}
           activeOpacity={0.75}
           disabled={!!chosen}
           style={[
             styles.optionButton,
             styles.optionB,
-            chosen === "B" && styles.optionChosen,
-            chosen === "A" && styles.optionFaded,
+            chosen === 'B' && styles.optionChosen,
+            chosen === 'A' && styles.optionFaded,
           ]}
         >
           <Text style={styles.optionLabel}>{card.optionB.label}</Text>
@@ -162,26 +140,26 @@ export default function WYRCard({
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   stepRow: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     marginBottom: 12,
   },
   stepText: {
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: '800',
     color: COLORS.mutedForeground,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 1,
   },
   situationCard: {
-    width: "100%",
-    backgroundColor: "white",
+    width: '100%',
+    backgroundColor: 'white',
     borderRadius: RADIUS.xl,
     padding: 24,
-    alignItems: "center",
+    alignItems: 'center',
     ...SHADOWS.md,
   },
   questionEmoji: {
@@ -190,33 +168,33 @@ const styles = StyleSheet.create({
   },
   situationText: {
     fontSize: 19,
-    fontWeight: "800",
+    fontWeight: '800',
     color: COLORS.foreground,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 27,
     marginBottom: 20,
   },
   timerTrack: {
-    width: "100%",
+    width: '100%',
     height: 6,
     backgroundColor: COLORS.muted,
     borderRadius: 3,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginBottom: 6,
   },
   timerFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 3,
   },
   timerLabel: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
   vsDivider: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     marginVertical: 18,
     gap: 10,
   },
@@ -233,21 +211,21 @@ const styles = StyleSheet.create({
   },
   vsText: {
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: '800',
     color: COLORS.mutedForeground,
     letterSpacing: 1.5,
   },
   optionsRow: {
-    width: "100%",
+    width: '100%',
     gap: 14,
   },
   optionButton: {
-    width: "100%",
+    width: '100%',
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: RADIUS.lg,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.sm,
   },
   optionA: {
@@ -271,9 +249,9 @@ const styles = StyleSheet.create({
   },
   optionLabel: {
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 22,
   },
 });

@@ -1,8 +1,7 @@
-import { Feather } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, RADIUS, TYPOGRAPHY } from "$constants/theme";
+import { Feather } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, RADIUS, TYPOGRAPHY } from '$constants/theme';
 
 export default function TeacherStudentDetail() {
   const { id } = useLocalSearchParams();
@@ -24,8 +23,8 @@ export default function TeacherStudentDetail() {
         <TouchableOpacity
           onPress={() => router.back()}
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             marginBottom: 16,
           }}
         >
@@ -41,20 +40,18 @@ export default function TeacherStudentDetail() {
           </Text>
         </TouchableOpacity>
 
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View
             style={{
               width: 48,
               height: 48,
               borderRadius: 24,
               backgroundColor: COLORS.primary,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Text style={{ color: "white", fontSize: 20, fontWeight: "700" }}>
-              И
-            </Text>
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: '700' }}>И</Text>
           </View>
           <View>
             <Text
@@ -66,9 +63,7 @@ export default function TeacherStudentDetail() {
             >
               Ученик #{id}
             </Text>
-            <Text style={{ color: COLORS.mutedForeground }}>
-              Оценка прогресса
-            </Text>
+            <Text style={{ color: COLORS.mutedForeground }}>Оценка прогресса</Text>
           </View>
         </View>
       </View>

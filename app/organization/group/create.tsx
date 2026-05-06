@@ -1,67 +1,53 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import {
-  Alert,
-  ScrollView,
-  View,
-} from "react-native";
-import {
-  FormCard,
-  LabeledTextInput,
-  PrimaryActionButton,
-} from "$components/ui/FormControls";
-import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
-import {
-  COLORS,
-  LAYOUT,
-  SPACING,
-} from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { resolveOwnedOrgId } from "$lib/supabaseHelpers";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { Alert, ScrollView, View } from 'react-native';
+import { FormCard, LabeledTextInput, PrimaryActionButton } from '$components/ui/FormControls';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
+import { COLORS, LAYOUT, SPACING } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { resolveOwnedOrgId } from '$lib/supabaseHelpers';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function GroupCreateScreen() {
   const router = useRouter();
   const { courseId } = useLocalSearchParams();
   const { user } = useAuth();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const [formData, setFormData] = useState({
-    name: "",
-    maxStudents: "12",
-    schedule: "",
+    name: '',
+    maxStudents: '12',
+    schedule: '',
   });
 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!supabase || !isSupabaseConfigured || !user?.id) {
-      Alert.alert("Ошибка", "Supabase не настроен");
+      Alert.alert('Ошибка', 'Supabase не настроен');
       return;
     }
     setLoading(true);
     const orgId = await resolveOwnedOrgId(user.id);
     if (!orgId) {
       setLoading(false);
-      Alert.alert("Ошибка", "Организация не найдена");
+      Alert.alert('Ошибка', 'Организация не найдена');
       return;
     }
-    const res = await supabase.from("org_groups").insert({
+    const res = await supabase.from('org_groups').insert({
       org_id: orgId,
       name: formData.name,
-      course_id: typeof courseId === "string" ? courseId : null,
+      course_id: typeof courseId === 'string' ? courseId : null,
       schedule: formData.schedule || null,
       capacity: parseInt(formData.maxStudents, 10) || 0,
       active: true,
     });
     setLoading(false);
     if (res.error) {
-      Alert.alert("Ошибка", res.error.message);
+      Alert.alert('Ошибка', res.error.message);
       return;
     }
     router.back();
@@ -83,10 +69,7 @@ export default function GroupCreateScreen() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-        >
+        <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
           <FormCard>
             <View style={{ gap: SPACING.xl }}>
               <LabeledTextInput
@@ -100,9 +83,7 @@ export default function GroupCreateScreen() {
                 label="Расписание"
                 placeholder="Напр: Вт, Чт 16:00"
                 value={formData.schedule}
-                onChangeText={(val) =>
-                  setFormData({ ...formData, schedule: val })
-                }
+                onChangeText={(val) => setFormData({ ...formData, schedule: val })}
               />
 
               <LabeledTextInput
@@ -110,18 +91,13 @@ export default function GroupCreateScreen() {
                 placeholder="12"
                 keyboardType="numeric"
                 value={formData.maxStudents}
-                onChangeText={(val) =>
-                  setFormData({ ...formData, maxStudents: val })
-                }
+                onChangeText={(val) => setFormData({ ...formData, maxStudents: val })}
               />
             </View>
           </FormCard>
 
-          <PrimaryActionButton
-            onPress={handleSubmit}
-            disabled={loading || !formData.name}
-          >
-            {loading ? "СОЗДАНИЕ..." : "СОЗДАТЬ ГРУППУ"}
+          <PrimaryActionButton onPress={handleSubmit} disabled={loading || !formData.name}>
+            {loading ? 'СОЗДАНИЕ...' : 'СОЗДАТЬ ГРУППУ'}
           </PrimaryActionButton>
         </MotiView>
       </ScrollView>

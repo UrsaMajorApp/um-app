@@ -1,44 +1,26 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgApplications, useOrgGroupById } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgApplications, useOrgGroupById } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function GroupDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { group, loading: groupLoading } = useOrgGroupById(id);
   const { apps, loading: appsLoading } = useOrgApplications();
 
   // Students are applications with active status
   const students = apps.filter(
-    (a) =>
-      ["paid", "activated"].includes(a.status) &&
-      (!group?.course || a.club === group.course),
+    (a) => ['paid', 'activated'].includes(a.status) && (!group?.course || a.club === group.course),
   );
 
   const loading = groupLoading || appsLoading;
@@ -50,21 +32,16 @@ export default function GroupDetailScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
+            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -74,9 +51,9 @@ export default function GroupDetailScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
@@ -87,22 +64,20 @@ export default function GroupDetailScreen() {
                     marginLeft: SPACING.md,
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Детали группы
                 </Text>
                 <TouchableOpacity
-                  onPress={() =>
-                    router.push(appHref(`/organization/group/${id}/edit`))
-                  }
+                  onPress={() => router.push(appHref(`/organization/group/${id}/edit`))}
                   style={{
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="settings" size={18} color="white" />
@@ -117,20 +92,20 @@ export default function GroupDetailScreen() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xxxl,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    color: "white",
+                    color: 'white',
                     marginBottom: 4,
                   }}
                 >
-                  {group?.name ?? "Группа"}
+                  {group?.name ?? 'Группа'}
                 </Text>
                 <Text
                   style={{
-                    color: "rgba(255,255,255,0.8)",
+                    color: 'rgba(255,255,255,0.8)',
                     fontSize: TYPOGRAPHY.size.sm,
                     fontWeight: TYPOGRAPHY.weight.medium,
                   }}
                 >
-                  {group?.course ?? ""}
+                  {group?.course ?? ''}
                 </Text>
               </MotiView>
             </View>
@@ -147,17 +122,13 @@ export default function GroupDetailScreen() {
         showsVerticalScrollIndicator={false}
       >
         {loading && (
-          <ActivityIndicator
-            size="small"
-            color={COLORS.primary}
-            style={{ marginBottom: 24 }}
-          />
+          <ActivityIndicator size="small" color={COLORS.primary} style={{ marginBottom: 24 }} />
         )}
 
         {/* Info Cards Row */}
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: SPACING.md,
             marginBottom: SPACING.xl,
           }}
@@ -175,8 +146,8 @@ export default function GroupDetailScreen() {
           >
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: SPACING.sm,
                 marginBottom: SPACING.xs,
               }}
@@ -187,7 +158,7 @@ export default function GroupDetailScreen() {
                   fontSize: 10,
                   color: COLORS.mutedForeground,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
               >
@@ -201,7 +172,7 @@ export default function GroupDetailScreen() {
                 color: COLORS.foreground,
               }}
             >
-              {students.length} / {group?.capacity ?? "—"}
+              {students.length} / {group?.capacity ?? '—'}
             </Text>
           </View>
           <View
@@ -217,8 +188,8 @@ export default function GroupDetailScreen() {
           >
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: SPACING.sm,
                 marginBottom: SPACING.xs,
               }}
@@ -229,7 +200,7 @@ export default function GroupDetailScreen() {
                   fontSize: 10,
                   color: COLORS.mutedForeground,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
               >
@@ -243,7 +214,7 @@ export default function GroupDetailScreen() {
                 color: COLORS.foreground,
               }}
             >
-              {group?.schedule ?? "—"}
+              {group?.schedule ?? '—'}
             </Text>
           </View>
         </View>
@@ -252,9 +223,9 @@ export default function GroupDetailScreen() {
         <View
           style={{
             marginBottom: SPACING.lg,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
           <Text
@@ -268,11 +239,9 @@ export default function GroupDetailScreen() {
             Список учеников
           </Text>
           <TouchableOpacity
-            onPress={() =>
-              router.push(appHref(`/organization/group/${id}/attendance`))
-            }
+            onPress={() => router.push(appHref(`/organization/group/${id}/attendance`))}
             style={{
-              backgroundColor: "rgba(108, 92, 231, 0.1)",
+              backgroundColor: 'rgba(108, 92, 231, 0.1)',
               paddingHorizontal: 12,
               paddingVertical: 6,
               borderRadius: RADIUS.full,
@@ -291,14 +260,14 @@ export default function GroupDetailScreen() {
         </View>
 
         {!loading && students.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Feather name="users" size={36} color={COLORS.muted} />
             <Text
               style={{
                 marginTop: 12,
                 color: COLORS.mutedForeground,
-                fontWeight: "600",
-                textAlign: "center",
+                fontWeight: '600',
+                textAlign: 'center',
               }}
             >
               Нет зачисленных учеников
@@ -315,9 +284,7 @@ export default function GroupDetailScreen() {
               transition={{ delay: idx * 50 }}
             >
               <TouchableOpacity
-                onPress={() =>
-                  router.push(appHref(`/organization/student/${student.id}`))
-                }
+                onPress={() => router.push(appHref(`/organization/student/${student.id}`))}
                 style={{
                   ...SHADOWS.sm,
                   backgroundColor: COLORS.white,
@@ -325,15 +292,15 @@ export default function GroupDetailScreen() {
                   padding: SPACING.lg,
                   borderWidth: 1,
                   borderColor: COLORS.border,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: SPACING.lg,
                   }}
                 >
@@ -343,17 +310,13 @@ export default function GroupDetailScreen() {
                       height: 48,
                       backgroundColor: COLORS.background,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       borderWidth: 1,
                       borderColor: COLORS.border,
                     }}
                   >
-                    <Feather
-                      name="user"
-                      size={20}
-                      color={COLORS.mutedForeground}
-                    />
+                    <Feather name="user" size={20} color={COLORS.mutedForeground} />
                   </View>
                   <View>
                     <Text
@@ -372,25 +335,21 @@ export default function GroupDetailScreen() {
                         fontWeight: TYPOGRAPHY.weight.medium,
                       }}
                     >
-                      {student.child_age
-                        ? `${student.child_age} лет`
-                        : (student.club ?? "")}
+                      {student.child_age ? `${student.child_age} лет` : (student.club ?? '')}
                     </Text>
                   </View>
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(
-                      appHref(`/organization/student/${student.id}/feedback`),
-                    )
+                    router.push(appHref(`/organization/student/${student.id}/feedback`))
                   }
                   style={{
                     backgroundColor: COLORS.background,
                     paddingHorizontal: 16,
                     height: 36,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text
@@ -398,7 +357,7 @@ export default function GroupDetailScreen() {
                       fontSize: 10,
                       fontWeight: TYPOGRAPHY.weight.bold,
                       color: COLORS.mutedForeground,
-                      textTransform: "uppercase",
+                      textTransform: 'uppercase',
                       letterSpacing: 0.5,
                     }}
                   >

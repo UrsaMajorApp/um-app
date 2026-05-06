@@ -1,15 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import {
-  Modal,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import QRCode from "react-native-qrcode-svg";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
 type YouthPassModalProps = {
   visible: boolean;
@@ -18,47 +11,37 @@ type YouthPassModalProps = {
   onClose: () => void;
 };
 
-export function YouthPassModal({
-  visible,
-  qrValue,
-  userName,
-  onClose,
-}: YouthPassModalProps) {
+export function YouthPassModal({ visible, qrValue, userName, onClose }: YouthPassModalProps) {
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.6)",
-          alignItems: "center",
-          justifyContent: "center",
+          backgroundColor: 'rgba(0,0,0,0.6)',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
         onPress={onClose}
       >
         <Pressable
           onPress={(e) => e.stopPropagation()}
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderRadius: 32,
             padding: 32,
-            alignItems: "center",
+            alignItems: 'center',
             width: 300,
             ...SHADOWS.lg,
           }}
         >
           <LinearGradient
-            colors={[COLORS.primary, "#A78BFA"]}
+            colors={[COLORS.primary, '#A78BFA']}
             style={{
               width: 72,
               height: 72,
               borderRadius: 20,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               marginBottom: 16,
             }}
           >
@@ -67,7 +50,7 @@ export function YouthPassModal({
           <Text
             style={{
               fontSize: 20,
-              fontWeight: "800",
+              fontWeight: '800',
               color: COLORS.foreground,
               marginBottom: 4,
             }}
@@ -87,7 +70,7 @@ export function YouthPassModal({
           <View
             style={{
               padding: 16,
-              backgroundColor: "#F9FAFB",
+              backgroundColor: '#F9FAFB',
               borderRadius: 20,
               borderWidth: 1,
               borderColor: COLORS.border,
@@ -106,7 +89,7 @@ export function YouthPassModal({
             style={{
               fontSize: 11,
               color: COLORS.mutedForeground,
-              textAlign: "center",
+              textAlign: 'center',
               marginBottom: 20,
             }}
           >
@@ -122,7 +105,7 @@ export function YouthPassModal({
               backgroundColor: COLORS.primary,
             }}
           >
-            <Text style={{ color: "white", fontWeight: "700" }}>Закрыть</Text>
+            <Text style={{ color: 'white', fontWeight: '700' }}>Закрыть</Text>
           </TouchableOpacity>
         </Pressable>
       </Pressable>

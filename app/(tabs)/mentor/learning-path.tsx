@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import React from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -12,25 +12,16 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useLearningPath } from "$hooks/useMentorData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useLearningPath } from '$hooks/useMentorData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorLearningPath() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   // Student name can be passed as a query param from student detail screen
   const { student } = useLocalSearchParams<{ student?: string }>();
@@ -41,7 +32,7 @@ export default function MentorLearningPath() {
     phase: string;
     order: number;
   } | null>(null);
-  const [newTaskText, setNewTaskText] = React.useState("");
+  const [newTaskText, setNewTaskText] = React.useState('');
 
   // Group steps into phases
   const phaseMap = new Map<
@@ -59,25 +50,16 @@ export default function MentorLearningPath() {
     }
     phaseMap.get(step.phase)!.items.push(step);
   }
-  const phases = Array.from(phaseMap.values()).sort(
-    (a, b) => a.phase_order - b.phase_order,
-  );
+  const phases = Array.from(phaseMap.values()).sort((a, b) => a.phase_order - b.phase_order);
 
   const totalItems = steps.length;
   const doneItems = steps.filter((s) => s.done).length;
-  const progressPct = totalItems
-    ? Math.round((doneItems / totalItems) * 100)
-    : 0;
+  const progressPct = totalItems ? Math.round((doneItems / totalItems) * 100) : 0;
 
   const handleAddTask = async () => {
     if (!newTaskText.trim() || !activePhase) return;
-    await addStep(
-      activePhase.phase,
-      activePhase.order,
-      newTaskText.trim(),
-      student,
-    );
-    setNewTaskText("");
+    await addStep(activePhase.phase, activePhase.order, newTaskText.trim(), student);
+    setNewTaskText('');
     setShowAddModal(false);
   };
 
@@ -88,14 +70,11 @@ export default function MentorLearningPath() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
             <MotiView
               from={{ opacity: 0, translateY: -10 }}
               animate={{ opacity: 1, translateY: 0 }}
@@ -103,8 +82,8 @@ export default function MentorLearningPath() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -114,9 +93,9 @@ export default function MentorLearningPath() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: SPACING.md,
                   }}
                 >
@@ -127,7 +106,7 @@ export default function MentorLearningPath() {
                     style={{
                       fontSize: TYPOGRAPHY.size.xl,
                       fontWeight: TYPOGRAPHY.weight.semibold,
-                      color: "white",
+                      color: 'white',
                     }}
                   >
                     План развития
@@ -135,7 +114,7 @@ export default function MentorLearningPath() {
                   {student && (
                     <Text
                       style={{
-                        color: "rgba(255,255,255,0.7)",
+                        color: 'rgba(255,255,255,0.7)',
                         fontSize: TYPOGRAPHY.size.sm,
                         fontWeight: TYPOGRAPHY.weight.medium,
                       }}
@@ -161,7 +140,7 @@ export default function MentorLearningPath() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               color: COLORS.mutedForeground,
               marginBottom: 20,
             }}
@@ -187,7 +166,7 @@ export default function MentorLearningPath() {
               fontSize: 10,
               color: COLORS.mutedForeground,
               fontWeight: TYPOGRAPHY.weight.bold,
-              textTransform: "uppercase",
+              textTransform: 'uppercase',
               letterSpacing: 1,
               marginBottom: SPACING.sm,
             }}
@@ -196,8 +175,8 @@ export default function MentorLearningPath() {
           </Text>
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: SPACING.md,
               marginBottom: SPACING.sm,
             }}
@@ -208,13 +187,13 @@ export default function MentorLearningPath() {
                 height: 10,
                 backgroundColor: COLORS.muted,
                 borderRadius: RADIUS.full,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <View
                 style={{
                   width: `${progressPct}%`,
-                  height: "100%",
+                  height: '100%',
                   backgroundColor: COLORS.primary,
                   borderRadius: RADIUS.full,
                 }}
@@ -243,10 +222,10 @@ export default function MentorLearningPath() {
 
         {/* Timeline */}
         {phases.length > 0 && (
-          <View style={{ position: "relative" }}>
+          <View style={{ position: 'relative' }}>
             <View
               style={{
-                position: "absolute",
+                position: 'absolute',
                 left: 21,
                 top: 0,
                 bottom: 0,
@@ -258,7 +237,7 @@ export default function MentorLearningPath() {
               <View
                 key={phase.phase}
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   gap: 20,
                   marginBottom: SPACING.xl,
                 }}
@@ -269,18 +248,16 @@ export default function MentorLearningPath() {
                       width: 44,
                       height: 44,
                       borderRadius: RADIUS.full,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       backgroundColor:
-                        phase.status === "completed"
-                          ? COLORS.success
-                          : COLORS.primary,
+                        phase.status === 'completed' ? COLORS.success : COLORS.primary,
                       borderWidth: 4,
                       borderColor: COLORS.white,
                     }}
                   >
                     <Feather
-                      name={phase.status === "completed" ? "check" : "target"}
+                      name={phase.status === 'completed' ? 'check' : 'target'}
                       size={18}
                       color="white"
                     />
@@ -300,9 +277,9 @@ export default function MentorLearningPath() {
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                       marginBottom: SPACING.xl,
                     }}
                   >
@@ -321,23 +298,20 @@ export default function MentorLearningPath() {
                         paddingVertical: SPACING.xs,
                         borderRadius: RADIUS.md,
                         backgroundColor:
-                          phase.status === "completed"
-                            ? "rgba(52,199,89,0.1)"
-                            : "rgba(108,92,231,0.1)",
+                          phase.status === 'completed'
+                            ? 'rgba(52,199,89,0.1)'
+                            : 'rgba(108,92,231,0.1)',
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 9,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          textTransform: "uppercase",
-                          color:
-                            phase.status === "completed"
-                              ? COLORS.success
-                              : COLORS.primary,
+                          textTransform: 'uppercase',
+                          color: phase.status === 'completed' ? COLORS.success : COLORS.primary,
                         }}
                       >
-                        {phase.status === "completed" ? "ГОТОВО" : "В ПРОЦЕССЕ"}
+                        {phase.status === 'completed' ? 'ГОТОВО' : 'В ПРОЦЕССЕ'}
                       </Text>
                     </View>
                   </View>
@@ -348,18 +322,14 @@ export default function MentorLearningPath() {
                         key={item.id}
                         onPress={() => toggleStep(item.id)}
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: SPACING.md,
                           padding: SPACING.md,
                           borderRadius: RADIUS.lg,
-                          backgroundColor: item.done
-                            ? "rgba(52,199,89,0.05)"
-                            : COLORS.background,
+                          backgroundColor: item.done ? 'rgba(52,199,89,0.05)' : COLORS.background,
                           borderWidth: 1,
-                          borderColor: item.done
-                            ? "rgba(52,199,89,0.1)"
-                            : COLORS.border,
+                          borderColor: item.done ? 'rgba(52,199,89,0.1)' : COLORS.border,
                         }}
                       >
                         <View
@@ -367,32 +337,24 @@ export default function MentorLearningPath() {
                             width: 20,
                             height: 20,
                             borderRadius: 6,
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backgroundColor: item.done
-                              ? COLORS.success
-                              : COLORS.white,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: item.done ? COLORS.success : COLORS.white,
                             borderWidth: item.done ? 0 : 1,
                             borderColor: COLORS.mutedForeground,
                           }}
                         >
-                          {item.done && (
-                            <Feather name="check" size={12} color="white" />
-                          )}
+                          {item.done && <Feather name="check" size={12} color="white" />}
                         </View>
                         <Text
                           style={{
                             flex: 1,
                             fontSize: TYPOGRAPHY.size.sm,
-                            color: item.done
-                              ? COLORS.mutedForeground
-                              : COLORS.foreground,
+                            color: item.done ? COLORS.mutedForeground : COLORS.foreground,
                             fontWeight: item.done
                               ? TYPOGRAPHY.weight.regular
                               : TYPOGRAPHY.weight.medium,
-                            textDecorationLine: item.done
-                              ? "line-through"
-                              : "none",
+                            textDecorationLine: item.done ? 'line-through' : 'none',
                           }}
                         >
                           {item.item_text}
@@ -401,7 +363,7 @@ export default function MentorLearningPath() {
                     ))}
                   </View>
 
-                  {phase.status === "active" && (
+                  {phase.status === 'active' && (
                     <TouchableOpacity
                       onPress={() => {
                         setActivePhase({
@@ -415,25 +377,21 @@ export default function MentorLearningPath() {
                         height: 48,
                         borderRadius: RADIUS.md,
                         borderWidth: 1,
-                        borderStyle: "dashed",
+                        borderStyle: 'dashed',
                         borderColor: COLORS.border,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "row",
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'row',
                         gap: SPACING.xs,
                       }}
                     >
-                      <Feather
-                        name="plus-circle"
-                        size={14}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="plus-circle" size={14} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.size.xs,
                           fontWeight: TYPOGRAPHY.weight.bold,
                           color: COLORS.mutedForeground,
-                          textTransform: "uppercase",
+                          textTransform: 'uppercase',
                         }}
                       >
                         Добавить цель
@@ -447,14 +405,14 @@ export default function MentorLearningPath() {
         )}
 
         {!loading && phases.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Feather name="map" size={40} color="#E5E7EB" />
             <Text
               style={{
                 marginTop: 16,
                 color: COLORS.mutedForeground,
-                fontWeight: "600",
-                textAlign: "center",
+                fontWeight: '600',
+                textAlign: 'center',
               }}
             >
               Нет шагов плана. Добавьте первый!
@@ -466,11 +424,11 @@ export default function MentorLearningPath() {
       {/* Add Task Modal */}
       <Modal visible={showAddModal} transparent animationType="slide">
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{
             flex: 1,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            justifyContent: "flex-end",
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: 'flex-end',
           }}
         >
           <View
@@ -484,9 +442,9 @@ export default function MentorLearningPath() {
           >
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: SPACING.lg,
               }}
             >
@@ -525,17 +483,15 @@ export default function MentorLearningPath() {
               onPress={handleAddTask}
               disabled={!newTaskText.trim()}
               style={{
-                backgroundColor: newTaskText.trim()
-                  ? COLORS.primary
-                  : COLORS.muted,
+                backgroundColor: newTaskText.trim() ? COLORS.primary : COLORS.muted,
                 paddingVertical: SPACING.lg,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <Text
                 style={{
-                  color: newTaskText.trim() ? "white" : COLORS.mutedForeground,
+                  color: newTaskText.trim() ? 'white' : COLORS.mutedForeground,
                   fontWeight: TYPOGRAPHY.weight.bold,
                   fontSize: TYPOGRAPHY.size.md,
                 }}

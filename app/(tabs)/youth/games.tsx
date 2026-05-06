@@ -1,40 +1,31 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import React, { useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { useEffect, useState } from 'react';
 import {
-    Platform,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-    GameId,
-    GAMES,
-    getDailyChallenge,
-} from "$components/games/gameCatalog";
-import { COLORS, LAYOUT, SHADOWS } from "$constants/theme";
-import { useYouthGameIq } from "$hooks/useYouthGameIq";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { type GameId, GAMES, getDailyChallenge } from '$components/games/gameCatalog';
+import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
+import { useYouthGameIq } from '$hooks/useYouthGameIq';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function GamesLobby() {
   const router = useRouter();
   const { totalIq, loading: iqLoading } = useYouthGameIq();
-  const [dailyChallenge, setDailyChallenge] = useState(() =>
-    getDailyChallenge(),
-  );
+  const [dailyChallenge, setDailyChallenge] = useState(() => getDailyChallenge());
   const { width } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop);
   const lobbyContentWidth = isDesktop
-    ? Math.min(
-        width - LAYOUT.sideNavWidth - paddingX * 2,
-        LAYOUT.dashboardMaxWidth,
-      )
+    ? Math.min(width - LAYOUT.sideNavWidth - paddingX * 2, LAYOUT.dashboardMaxWidth)
     : width - paddingX * 2;
   const cardWidth = isDesktop
     ? Math.min(Math.max((lobbyContentWidth - 48) / 4, 220), 280)
@@ -45,15 +36,8 @@ export default function GamesLobby() {
 
     const scheduleDailyRefresh = () => {
       const now = new Date();
-      const nextLocalMidnight = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1,
-      );
-      const delay = Math.max(
-        1000,
-        nextLocalMidnight.getTime() - now.getTime() + 1000,
-      );
+      const nextLocalMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const delay = Math.max(1000, nextLocalMidnight.getTime() - now.getTime() + 1000);
 
       timeoutId = setTimeout(() => {
         setDailyChallenge(getDailyChallenge());
@@ -72,14 +56,14 @@ export default function GamesLobby() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: paddingX,
@@ -89,42 +73,38 @@ export default function GamesLobby() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   gap: 16,
                 }}
               >
                 <View>
                   <Text
                     style={{
-                      color: "rgba(255,255,255,0.7)",
+                      color: 'rgba(255,255,255,0.7)',
                       fontSize: 13,
-                      fontWeight: "700",
-                      textTransform: "uppercase",
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
                       letterSpacing: 1,
                     }}
                   >
                     Игровой Центр
                   </Text>
-                  <Text
-                    style={{ color: "white", fontSize: 24, fontWeight: "900" }}
-                  >
+                  <Text style={{ color: 'white', fontSize: 24, fontWeight: '900' }}>
                     Развивайся играя
                   </Text>
                 </View>
                 {!iqLoading && (
                   <View
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.2)",
+                      backgroundColor: 'rgba(255,255,255,0.2)',
                       paddingHorizontal: 16,
                       paddingVertical: 8,
                       borderRadius: 20,
                     }}
                   >
-                    <Text style={{ color: "white", fontWeight: "900" }}>
-                      {totalIq} IQ
-                    </Text>
+                    <Text style={{ color: 'white', fontWeight: '900' }}>{totalIq} IQ</Text>
                   </View>
                 )}
               </View>
@@ -138,13 +118,13 @@ export default function GamesLobby() {
           paddingHorizontal: paddingX,
           paddingTop: 24,
           paddingBottom: 100,
-          alignItems: "center",
+          alignItems: 'center',
         }}
         showsVerticalScrollIndicator={false}
       >
         <View
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: isDesktop ? LAYOUT.dashboardMaxWidth : undefined,
           }}
         >
@@ -166,9 +146,9 @@ export default function GamesLobby() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   gap: 20,
                 }}
               >
@@ -176,7 +156,7 @@ export default function GamesLobby() {
                   <View
                     style={{
                       backgroundColor: dailyChallenge.accentColor,
-                      alignSelf: "flex-start",
+                      alignSelf: 'flex-start',
                       paddingHorizontal: 8,
                       paddingVertical: 4,
                       borderRadius: 8,
@@ -185,9 +165,9 @@ export default function GamesLobby() {
                   >
                     <Text
                       style={{
-                        color: "white",
+                        color: 'white',
                         fontSize: 10,
-                        fontWeight: "900",
+                        fontWeight: '900',
                       }}
                     >
                       ЧЕЛЛЕНДЖ ДНЯ
@@ -195,17 +175,15 @@ export default function GamesLobby() {
                   </View>
                   <Text
                     style={{
-                      color: "white",
+                      color: 'white',
                       fontSize: isDesktop ? 24 : 20,
-                      fontWeight: "900",
+                      fontWeight: '900',
                       marginBottom: 4,
                     }}
                   >
                     {dailyChallenge.title}
                   </Text>
-                  <Text
-                    style={{ color: "rgba(255,255,255,0.58)", fontSize: 14 }}
-                  >
+                  <Text style={{ color: 'rgba(255,255,255,0.58)', fontSize: 14 }}>
                     {dailyChallenge.prize}
                   </Text>
                 </View>
@@ -213,10 +191,10 @@ export default function GamesLobby() {
                   style={{
                     width: 60,
                     height: 60,
-                    backgroundColor: "rgba(255,255,255,0.1)",
+                    backgroundColor: 'rgba(255,255,255,0.1)',
                     borderRadius: 18,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather
@@ -232,7 +210,7 @@ export default function GamesLobby() {
           <Text
             style={{
               fontSize: 18,
-              fontWeight: "900",
+              fontWeight: '900',
               color: COLORS.foreground,
               marginBottom: 20,
             }}
@@ -242,9 +220,9 @@ export default function GamesLobby() {
 
           <View
             style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: isDesktop ? "flex-start" : "space-between",
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: isDesktop ? 'flex-start' : 'space-between',
               gap: 16,
             }}
           >
@@ -257,14 +235,11 @@ export default function GamesLobby() {
                 style={{
                   width: cardWidth,
                   minHeight: isDesktop ? 164 : undefined,
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   padding: 20,
                   borderRadius: isDesktop ? 24 : 32,
                   borderWidth: isDesktop ? 1 : 0,
-                  borderColor:
-                    game.id === dailyChallenge.gameId
-                      ? game.color
-                      : COLORS.border,
+                  borderColor: game.id === dailyChallenge.gameId ? game.color : COLORS.border,
                   ...SHADOWS.sm,
                   opacity: game.locked ? 0.7 : 1,
                 }}
@@ -273,23 +248,19 @@ export default function GamesLobby() {
                   style={{
                     width: 48,
                     height: 48,
-                    backgroundColor: game.color + "10",
+                    backgroundColor: `${game.color}10`,
                     borderRadius: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginBottom: 16,
                   }}
                 >
-                  <Feather
-                    name={game.icon}
-                    size={24}
-                    color={game.color}
-                  />
+                  <Feather name={game.icon} size={24} color={game.color} />
                 </View>
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                     marginBottom: 4,
                   }}
@@ -307,27 +278,21 @@ export default function GamesLobby() {
                 </Text>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 11,
-                      fontWeight: "800",
+                      fontWeight: '800',
                       color: game.color,
                     }}
                   >
                     {game.points}
                   </Text>
-                  {game.locked && (
-                    <Feather
-                      name="lock"
-                      size={12}
-                      color={COLORS.mutedForeground}
-                    />
-                  )}
+                  {game.locked && <Feather name="lock" size={12} color={COLORS.mutedForeground} />}
                 </View>
               </TouchableOpacity>
             ))}
@@ -337,7 +302,7 @@ export default function GamesLobby() {
           <View
             style={{
               marginTop: 40,
-              backgroundColor: "white",
+              backgroundColor: 'white',
               padding: 24,
               borderRadius: isDesktop ? 24 : 32,
               borderWidth: isDesktop ? 1 : 0,
@@ -347,23 +312,23 @@ export default function GamesLobby() {
           >
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: 20,
               }}
             >
               <Text
                 style={{
                   fontSize: 18,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.foreground,
                 }}
               >
                 Зал славы
               </Text>
             </View>
-            <Text style={{ color: COLORS.mutedForeground, fontWeight: "600" }}>
+            <Text style={{ color: COLORS.mutedForeground, fontWeight: '600' }}>
               Рейтинг появится после публикации результатов игроков.
             </Text>
           </View>

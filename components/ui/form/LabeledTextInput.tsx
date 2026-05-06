@@ -1,10 +1,5 @@
-import {
-  Text,
-  TextInput,
-  type TextInputProps,
-  View,
-} from "react-native";
-import { COLORS, RADIUS, TYPOGRAPHY } from "$constants/theme";
+import { Text, TextInput, type TextInputProps, View } from 'react-native';
+import { COLORS, RADIUS, TYPOGRAPHY } from '$constants/theme';
 
 export function LabeledTextInput({
   label,
@@ -12,7 +7,7 @@ export function LabeledTextInput({
   ...props
 }: TextInputProps & {
   label: string;
-  inputStyle?: TextInputProps["style"];
+  inputStyle?: TextInputProps['style'];
 }) {
   return (
     <View>
@@ -21,7 +16,7 @@ export function LabeledTextInput({
           fontSize: 10,
           fontWeight: TYPOGRAPHY.weight.bold,
           color: COLORS.mutedForeground,
-          textTransform: "uppercase",
+          textTransform: 'uppercase',
           letterSpacing: 1,
           marginBottom: 8,
           marginLeft: 4,

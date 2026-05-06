@@ -1,50 +1,32 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgTasks } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgTasks } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgTasks() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
-  const [selectedClub, setSelectedClub] = useState("all");
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const [selectedClub, setSelectedClub] = useState('all');
   const { tasks: allTasks, loading } = useOrgTasks();
 
   // Build clubs list dynamically from fetched tasks
   const clubs = [
-    { id: "all", name: "Все кружки" },
-    ...Array.from(new Set(allTasks.map((t) => t.club).filter(Boolean))).map(
-      (c) => ({
-        id: c as string,
-        name: c as string,
-      }),
-    ),
+    { id: 'all', name: 'Все кружки' },
+    ...Array.from(new Set(allTasks.map((t) => t.club).filter(Boolean))).map((c) => ({
+      id: c as string,
+      name: c as string,
+    })),
   ];
 
   const filtered =
-    selectedClub === "all"
-      ? allTasks
-      : allTasks.filter((t) => t.club === selectedClub);
+    selectedClub === 'all' ? allTasks : allTasks.filter((t) => t.club === selectedClub);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -54,7 +36,7 @@ export default function OrgTasks() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
         <LinearGradient
@@ -63,14 +45,12 @@ export default function OrgTasks() {
           end={{ x: 1, y: 1 }}
           style={{ paddingBottom: SPACING.xl }}
         >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
+          <SafeAreaView edges={['top']}>
+            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -80,9 +60,9 @@ export default function OrgTasks() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: SPACING.md,
                   }}
                 >
@@ -92,28 +72,26 @@ export default function OrgTasks() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                     flex: 1,
                   }}
                 >
                   Задания
                 </Text>
                 <TouchableOpacity
-                  onPress={() =>
-                    router.push("/organization/task/create")
-                  }
+                  onPress={() => router.push('/organization/task/create')}
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.2)",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
                     paddingHorizontal: SPACING.lg,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text
                     style={{
-                      color: "white",
+                      color: 'white',
                       fontWeight: TYPOGRAPHY.weight.bold,
                       fontSize: 13,
                     }}
@@ -123,11 +101,7 @@ export default function OrgTasks() {
                 </TouchableOpacity>
               </View>
 
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                className="-mx-1 px-1"
-              >
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-1 px-1">
                 {clubs.map((club) => (
                   <TouchableOpacity
                     key={club.id}
@@ -138,20 +112,14 @@ export default function OrgTasks() {
                       borderRadius: RADIUS.md,
                       marginRight: SPACING.sm,
                       backgroundColor:
-                        selectedClub === club.id
-                          ? "white"
-                          : "rgba(255,255,255,0.15)",
+                        selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.15)',
                       borderWidth: 1,
-                      borderColor:
-                        selectedClub === club.id
-                          ? "white"
-                          : "rgba(255,255,255,0.2)",
+                      borderColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.2)',
                     }}
                   >
                     <Text
                       style={{
-                        color:
-                          selectedClub === club.id ? COLORS.primary : "white",
+                        color: selectedClub === club.id ? COLORS.primary : 'white',
                         fontWeight: TYPOGRAPHY.weight.bold,
                         fontSize: 13,
                       }}
@@ -177,7 +145,7 @@ export default function OrgTasks() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               marginTop: 20,
               color: COLORS.mutedForeground,
             }}
@@ -187,9 +155,7 @@ export default function OrgTasks() {
         )}
         {filtered.map((task, idx) => {
           const percent = Math.round(
-            ((task.completed_students ?? 0) /
-              Math.max(task.total_students, 1)) *
-              100,
+            ((task.completed_students ?? 0) / Math.max(task.total_students, 1)) * 100,
           );
           return (
             <MotiView
@@ -211,9 +177,9 @@ export default function OrgTasks() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
                     marginBottom: SPACING.lg,
                   }}
                 >
@@ -230,16 +196,12 @@ export default function OrgTasks() {
                     </Text>
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 6,
                       }}
                     >
-                      <Feather
-                        name="book-open"
-                        size={12}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="book-open" size={12} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.size.xs,
@@ -253,12 +215,12 @@ export default function OrgTasks() {
                   </View>
                   <View
                     style={{
-                      backgroundColor: "rgba(108, 92, 231, 0.05)",
+                      backgroundColor: 'rgba(108, 92, 231, 0.05)',
                       paddingHorizontal: 12,
                       paddingVertical: 6,
                       borderRadius: RADIUS.lg,
                       borderWidth: 1,
-                      borderColor: "rgba(108, 92, 231, 0.1)",
+                      borderColor: 'rgba(108, 92, 231, 0.1)',
                     }}
                   >
                     <Text
@@ -283,29 +245,25 @@ export default function OrgTasks() {
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                       marginBottom: SPACING.sm,
                     }}
                   >
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 6,
                       }}
                     >
-                      <Feather
-                        name="users"
-                        size={12}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="users" size={12} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           fontSize: 10,
                           color: COLORS.mutedForeground,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          textTransform: "uppercase",
+                          textTransform: 'uppercase',
                           letterSpacing: 1,
                         }}
                       >
@@ -324,28 +282,24 @@ export default function OrgTasks() {
                   </View>
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 6,
                       }}
                     >
-                      <Feather
-                        name="clock"
-                        size={12}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="clock" size={12} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           fontSize: 10,
                           color: COLORS.mutedForeground,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          textTransform: "uppercase",
+                          textTransform: 'uppercase',
                           letterSpacing: 1,
                         }}
                       >
@@ -367,9 +321,9 @@ export default function OrgTasks() {
                 <View style={{ marginBottom: SPACING.xl }}>
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-end',
                       marginBottom: 8,
                     }}
                   >
@@ -397,28 +351,28 @@ export default function OrgTasks() {
                       height: 6,
                       backgroundColor: COLORS.border,
                       borderRadius: RADIUS.full,
-                      overflow: "hidden",
+                      overflow: 'hidden',
                     }}
                   >
                     <View
                       style={{
                         width: `${percent}%`,
-                        height: "100%",
+                        height: '100%',
                         backgroundColor: COLORS.primary,
                       }}
                     />
                   </View>
                 </View>
 
-                <View style={{ flexDirection: "row", gap: SPACING.md }}>
+                <View style={{ flexDirection: 'row', gap: SPACING.md }}>
                   <TouchableOpacity
                     style={{
                       flex: 1,
                       height: 48,
-                      backgroundColor: "rgba(108, 92, 231, 0.1)",
+                      backgroundColor: 'rgba(108, 92, 231, 0.1)',
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text
@@ -435,19 +389,15 @@ export default function OrgTasks() {
                     style={{
                       width: 48,
                       height: 48,
-                      backgroundColor: "rgba(239, 68, 68, 0.05)",
+                      backgroundColor: 'rgba(239, 68, 68, 0.05)',
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       borderWidth: 1,
-                      borderColor: "rgba(239, 68, 68, 0.1)",
+                      borderColor: 'rgba(239, 68, 68, 0.1)',
                     }}
                   >
-                    <Feather
-                      name="trash-2"
-                      size={18}
-                      color={COLORS.destructive}
-                    />
+                    <Feather name="trash-2" size={18} color={COLORS.destructive} />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>

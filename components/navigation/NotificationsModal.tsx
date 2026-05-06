@@ -1,6 +1,6 @@
-import { Feather } from "@expo/vector-icons";
-import { Modal, Pressable, Text, View } from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import { Feather } from '@expo/vector-icons';
+import { Modal, Pressable, Text, View } from 'react-native';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
 export function NotificationsModal({
   visible,
@@ -10,18 +10,13 @@ export function NotificationsModal({
   onClose: () => void;
 }) {
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.4)",
-          justifyContent: "center",
-          alignItems: "center",
+          backgroundColor: 'rgba(0,0,0,0.4)',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
         onPress={onClose}
       >
@@ -37,8 +32,8 @@ export function NotificationsModal({
         >
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               marginBottom: 20,
             }}
           >
@@ -46,7 +41,7 @@ export function NotificationsModal({
               style={{
                 flex: 1,
                 fontSize: 18,
-                fontWeight: "700",
+                fontWeight: '700',
                 color: COLORS.foreground,
               }}
             >
@@ -56,16 +51,14 @@ export function NotificationsModal({
               <Feather name="x" size={22} color={COLORS.mutedForeground} />
             </Pressable>
           </View>
-          <View style={{ alignItems: "center", paddingVertical: 32 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 32 }}>
             <Feather
               name="bell-off"
               size={36}
               color={COLORS.mutedForeground}
               style={{ marginBottom: 12 }}
             />
-            <Text
-              style={{ color: COLORS.mutedForeground, textAlign: "center" }}
-            >
+            <Text style={{ color: COLORS.mutedForeground, textAlign: 'center' }}>
               Нет новых уведомлений
             </Text>
           </View>
@@ -76,4 +69,3 @@ export function NotificationsModal({
 }
 
 // ─── Desktop side nav ────────────────────────────────────────────────────────
-

@@ -1,12 +1,12 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter, type Href } from "expo-router";
-import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { NotificationsModal } from "$components/navigation/NotificationsModal";
-import { useTabNav } from "$components/navigation/useTabNav";
-import type { Role } from "$constants/navigation/tabItems";
+import { Feather } from '@expo/vector-icons';
+import { useRouter, type Href } from 'expo-router';
+import { useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { NotificationsModal } from '$components/navigation/NotificationsModal';
+import { useTabNav } from '$components/navigation/useTabNav';
+import type { Role } from '$constants/navigation/tabItems';
 
 type Props = { role: Role | string | null };
 type PressableInteractionState = { hovered?: boolean; pressed: boolean };
@@ -20,17 +20,15 @@ export function SideNav({ role }: Props) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   // Profile tab is replaced by the user footer
-  const navTabs = tabs.filter((t) => t.key !== "profile");
+  const navTabs = tabs.filter((t) => t.key !== 'profile');
 
   const handleLogout = async () => {
     setDropdownVisible(false);
     await logout();
   };
 
-  const userInitial = user?.firstName?.charAt(0)?.toUpperCase() ?? "?";
-  const userName =
-    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-    "Пользователь";
+  const userInitial = user?.firstName?.charAt(0)?.toUpperCase() ?? '?';
+  const userName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || 'Пользователь';
 
   return (
     <View
@@ -39,16 +37,16 @@ export function SideNav({ role }: Props) {
         backgroundColor: COLORS.white,
         borderRightWidth: 1,
         borderRightColor: COLORS.border,
-        flexDirection: "column",
-        height: "100%",
+        flexDirection: 'column',
+        height: '100%',
       }}
     >
       {/* Brand header */}
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           paddingHorizontal: 20,
           paddingTop: 24,
           paddingBottom: 20,
@@ -60,7 +58,7 @@ export function SideNav({ role }: Props) {
           style={{
             color: COLORS.primary,
             fontSize: 28,
-            fontWeight: "800",
+            fontWeight: '800',
             letterSpacing: -0.5,
           }}
         >
@@ -73,8 +71,8 @@ export function SideNav({ role }: Props) {
             height: 36,
             borderRadius: 18,
             backgroundColor: COLORS.muted,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Feather name="bell" size={18} color={COLORS.mutedForeground} />
@@ -90,8 +88,8 @@ export function SideNav({ role }: Props) {
               key={item.key}
               onPress={() => go(item.route)}
               style={({ hovered, pressed }: PressableInteractionState) => ({
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 paddingHorizontal: 14,
                 paddingVertical: 11,
                 marginBottom: 2,
@@ -102,7 +100,7 @@ export function SideNav({ role }: Props) {
                     ? `${COLORS.primary}10`
                     : hovered
                       ? COLORS.muted
-                      : "transparent",
+                      : 'transparent',
               })}
             >
               {item.icon({
@@ -113,7 +111,7 @@ export function SideNav({ role }: Props) {
                 style={{
                   marginLeft: 12,
                   fontSize: 14,
-                  fontWeight: active ? "600" : "400",
+                  fontWeight: active ? '600' : '400',
                   color: active ? COLORS.primary : COLORS.mutedForeground,
                 }}
               >
@@ -135,8 +133,8 @@ export function SideNav({ role }: Props) {
         <Pressable
           onPress={() => setDropdownVisible((v) => !v)}
           style={({ hovered, pressed }: PressableInteractionState) => ({
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             padding: 10,
             borderRadius: RADIUS.sm,
             backgroundColor:
@@ -144,7 +142,7 @@ export function SideNav({ role }: Props) {
                 ? COLORS.muted
                 : hovered
                   ? `${COLORS.muted}CC`
-                  : "transparent",
+                  : 'transparent',
           })}
         >
           <View
@@ -153,14 +151,12 @@ export function SideNav({ role }: Props) {
               height: 36,
               borderRadius: 18,
               backgroundColor: `${COLORS.primary}15`,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               marginRight: 10,
             }}
           >
-            <Text
-              style={{ color: COLORS.primary, fontWeight: "700", fontSize: 15 }}
-            >
+            <Text style={{ color: COLORS.primary, fontWeight: '700', fontSize: 15 }}>
               {userInitial}
             </Text>
           </View>
@@ -168,7 +164,7 @@ export function SideNav({ role }: Props) {
             style={{
               flex: 1,
               fontSize: 14,
-              fontWeight: "500",
+              fontWeight: '500',
               color: COLORS.foreground,
             }}
             numberOfLines={1}
@@ -176,7 +172,7 @@ export function SideNav({ role }: Props) {
             {userName}
           </Text>
           <Feather
-            name={dropdownVisible ? "chevron-up" : "chevron-down"}
+            name={dropdownVisible ? 'chevron-up' : 'chevron-down'}
             size={16}
             color={COLORS.mutedForeground}
           />
@@ -188,7 +184,7 @@ export function SideNav({ role }: Props) {
           <Pressable
             onPress={() => setDropdownVisible(false)}
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -9999,
               left: -9999,
               right: -9999,
@@ -198,7 +194,7 @@ export function SideNav({ role }: Props) {
           />
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               bottom: 80,
               left: 12,
               width: LAYOUT.sideNavWidth - 24,
@@ -206,42 +202,42 @@ export function SideNav({ role }: Props) {
               borderRadius: RADIUS.md,
               borderWidth: 1,
               borderColor: COLORS.border,
-              overflow: "hidden",
+              overflow: 'hidden',
               zIndex: 100,
               ...SHADOWS.md,
             }}
           >
             {[
               {
-                label: "Редактировать профиль",
-                icon: "user" as const,
+                label: 'Редактировать профиль',
+                icon: 'user' as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push("/profile");
+                  router.push('/profile');
                 },
                 destructive: false,
               },
               {
-                label: "Способы оплаты",
-                icon: "credit-card" as const,
+                label: 'Способы оплаты',
+                icon: 'credit-card' as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push("/parent/subscription" as Href);
+                  router.push('/parent/subscription' as Href);
                 },
                 destructive: false,
               },
               {
-                label: "Настройки",
-                icon: "settings" as const,
+                label: 'Настройки',
+                icon: 'settings' as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push("/profile");
+                  router.push('/profile');
                 },
                 destructive: false,
               },
               {
-                label: "Выйти",
-                icon: "log-out" as const,
+                label: 'Выйти',
+                icon: 'log-out' as const,
                 onPress: handleLogout,
                 destructive: true,
               },
@@ -250,8 +246,8 @@ export function SideNav({ role }: Props) {
                 key={item.label}
                 onPress={item.onPress}
                 style={({ hovered, pressed }: PressableInteractionState) => ({
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   paddingHorizontal: 16,
                   paddingVertical: 13,
                   borderBottomWidth: index < arr.length - 1 ? 1 : 0,
@@ -262,26 +258,20 @@ export function SideNav({ role }: Props) {
                       ? item.destructive
                         ? `${COLORS.destructive}08`
                         : COLORS.muted
-                      : "transparent",
+                      : 'transparent',
                 })}
               >
                 <Feather
                   name={item.icon}
                   size={16}
-                  color={
-                    item.destructive
-                      ? COLORS.destructive
-                      : COLORS.mutedForeground
-                  }
+                  color={item.destructive ? COLORS.destructive : COLORS.mutedForeground}
                   style={{ marginRight: 12 }}
                 />
                 <Text
                   style={{
                     fontSize: 14,
-                    color: item.destructive
-                      ? COLORS.destructive
-                      : COLORS.foreground,
-                    fontWeight: item.destructive ? "500" : "400",
+                    color: item.destructive ? COLORS.destructive : COLORS.foreground,
+                    fontWeight: item.destructive ? '500' : '400',
                   }}
                 >
                   {item.label}

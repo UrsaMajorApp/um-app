@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export interface MentorGroup {
   id: string;
@@ -67,11 +67,11 @@ export interface MentorFeedback {
   created_at: string;
 }
 
-type MentorGroupRow = Omit<MentorGroup, "student_count">;
+type MentorGroupRow = Omit<MentorGroup, 'student_count'>;
 
-type GroupIdRow = Pick<MentorGroup, "id">;
+type GroupIdRow = Pick<MentorGroup, 'id'>;
 
-type GroupCountRow = Pick<GroupMember, "group_id">;
+type GroupCountRow = Pick<GroupMember, 'group_id'>;
 
 type AttendanceSessionRow = {
   id: string;
@@ -85,9 +85,9 @@ type AttendanceRecordRow = {
   present: boolean;
 };
 
-type AttendanceSummaryRecordRow = Omit<AttendanceRecordRow, "id">;
+type AttendanceSummaryRecordRow = Omit<AttendanceRecordRow, 'id'>;
 
-type MemberNameRow = Pick<GroupMember, "id" | "student_name">;
+type MemberNameRow = Pick<GroupMember, 'id' | 'student_name'>;
 
 // ─── useMentorGroups ──────────────────────────────────────────
 export function useMentorGroups() {
@@ -103,19 +103,16 @@ export function useMentorGroups() {
     }
     setLoading(true);
     const res = await supabase
-      .from("mentor_groups")
-        .select("*")
-        .eq("mentor_user_id", user.id)
-        .order("created_at", { ascending: true });
+      .from('mentor_groups')
+      .select('*')
+      .eq('mentor_user_id', user.id)
+      .order('created_at', { ascending: true });
     const raw = rowsOrEmpty<MentorGroupRow>(res);
 
     // Fetch member counts for each group
     const ids = raw.map((g) => g.id);
     const countRes = ids.length
-      ? await supabase
-          .from("group_members")
-          .select("group_id")
-          .in("group_id", ids)
+      ? await supabase.from('group_members').select('group_id').in('group_id', ids)
       : { data: [], error: null };
     const countMap = new Map<string, number>();
     for (const row of rowsOrEmpty<GroupCountRow>(countRes)) {
@@ -151,10 +148,10 @@ export function useGroupMembers(groupId: string | null) {
     }
     setLoading(true);
     const res = await supabase
-      .from("group_members")
-      .select("*")
-      .eq("group_id", groupId)
-      .order("enrolled_at", { ascending: true });
+      .from('group_members')
+      .select('*')
+      .eq('group_id', groupId)
+      .order('enrolled_at', { ascending: true });
     setMembers(rowsOrEmpty<GroupMember>(res));
     setLoading(false);
   }, [groupId]);
@@ -181,9 +178,9 @@ export function useMentorStudents() {
     setLoading(true);
     // Fetch mentor's group IDs first
     const groupRes = await supabase
-      .from("mentor_groups")
-      .select("id")
-      .eq("mentor_user_id", user.id);
+      .from('mentor_groups')
+      .select('id')
+      .eq('mentor_user_id', user.id);
     const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     if (!groupIds.length) {
       setStudents([]);
@@ -191,10 +188,10 @@ export function useMentorStudents() {
       return;
     }
     const memberRes = await supabase
-      .from("group_members")
-      .select("*")
-      .in("group_id", groupIds)
-      .order("enrolled_at", { ascending: true });
+      .from('group_members')
+      .select('*')
+      .in('group_id', groupIds)
+      .order('enrolled_at', { ascending: true });
     setStudents(rowsOrEmpty<GroupMember>(memberRes));
     setLoading(false);
   }, [user?.id]);
@@ -220,10 +217,10 @@ export function useMentorFeedback() {
     }
     setLoading(true);
     const res = await supabase
-      .from("mentor_feedback")
-      .select("*")
-      .eq("mentor_user_id", user.id)
-      .order("created_at", { ascending: false });
+      .from('mentor_feedback')
+      .select('*')
+      .eq('mentor_user_id', user.id)
+      .order('created_at', { ascending: false });
     setFeedback(rowsOrEmpty<MentorFeedback>(res));
     setLoading(false);
   }, [user?.id]);
@@ -249,10 +246,10 @@ export function useStudentGoals() {
     }
     setLoading(true);
     const res = await supabase
-      .from("student_goals")
-      .select("*")
-      .eq("mentor_user_id", user.id)
-      .order("created_at", { ascending: true });
+      .from('student_goals')
+      .select('*')
+      .eq('mentor_user_id', user.id)
+      .order('created_at', { ascending: true });
     setGoals(rowsOrEmpty<StudentGoal>(res));
     setLoading(false);
   }, [user?.id]);
@@ -263,7 +260,7 @@ export function useStudentGoals() {
 
   const updateProgress = async (id: string, progress: number) => {
     if (!supabase) return;
-    await supabase.from("student_goals").update({ progress }).eq("id", id);
+    await supabase.from('student_goals').update({ progress }).eq('id', id);
     refresh();
   };
 
@@ -284,10 +281,10 @@ export function useLearningMaterials() {
     }
     setLoading(true);
     const res = await supabase
-      .from("learning_materials")
-      .select("*")
-      .eq("mentor_user_id", user.id)
-      .order("created_at", { ascending: true });
+      .from('learning_materials')
+      .select('*')
+      .eq('mentor_user_id', user.id)
+      .order('created_at', { ascending: true });
     setMaterials(rowsOrEmpty<LearningMaterial>(res));
     setLoading(false);
   }, [user?.id]);
@@ -314,9 +311,9 @@ export function useMentorAttendance() {
     setLoading(true);
     // Fetch mentor groups
     const groupRes = await supabase
-      .from("mentor_groups")
-      .select("id")
-      .eq("mentor_user_id", user.id);
+      .from('mentor_groups')
+      .select('id')
+      .eq('mentor_user_id', user.id);
     const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     if (!groupIds.length) {
       setRecords([]);
@@ -326,10 +323,10 @@ export function useMentorAttendance() {
 
     // Fetch sessions
     const sessionRes = await supabase
-      .from("attendance_sessions")
-      .select("id, session_date, group_id")
-      .in("group_id", groupIds)
-      .order("session_date", { ascending: false });
+      .from('attendance_sessions')
+      .select('id, session_date, group_id')
+      .in('group_id', groupIds)
+      .order('session_date', { ascending: false });
     const sessions = rowsOrEmpty<AttendanceSessionRow>(sessionRes);
     if (!sessions.length) {
       setRecords([]);
@@ -338,23 +335,18 @@ export function useMentorAttendance() {
     }
 
     const sessionIds = sessions.map((s) => s.id);
-    const sessionMap = new Map<string, string>(
-      sessions.map((s) => [s.id, s.session_date]),
-    );
+    const sessionMap = new Map<string, string>(sessions.map((s) => [s.id, s.session_date]));
 
     // Fetch records + member names
     const recRes = await supabase
-      .from("attendance_records")
-      .select("id, session_id, member_id, present")
-      .in("session_id", sessionIds);
+      .from('attendance_records')
+      .select('id, session_id, member_id, present')
+      .in('session_id', sessionIds);
     const recRows = rowsOrEmpty<AttendanceRecordRow>(recRes);
 
     const memberIds = [...new Set(recRows.map((r) => r.member_id))];
     const memberRes = memberIds.length
-      ? await supabase
-          .from("group_members")
-          .select("id, student_name")
-          .in("id", memberIds)
+      ? await supabase.from('group_members').select('id, student_name').in('id', memberIds)
       : { data: [], error: null };
     const memberMap = new Map<string, string>(
       rowsOrEmpty<MemberNameRow>(memberRes).map((m) => [m.id, m.student_name]),
@@ -362,14 +354,14 @@ export function useMentorAttendance() {
 
     const flat: AttendanceRecord[] = recRows.map((r) => ({
       id: r.id,
-      name: memberMap.get(r.member_id) ?? "—",
+      name: memberMap.get(r.member_id) ?? '—',
       present: r.present,
       date: sessionMap.get(r.session_id)
-        ? new Date(sessionMap.get(r.session_id)!).toLocaleDateString("ru", {
-            day: "numeric",
-            month: "short",
-          }) + ", 15:00"
-        : "—",
+        ? `${new Date(sessionMap.get(r.session_id)!).toLocaleDateString('ru', {
+            day: 'numeric',
+            month: 'short',
+          })}, 15:00`
+        : '—',
     }));
 
     setRecords(flat);
@@ -391,9 +383,7 @@ export interface MentorStudentAttendanceSummary {
 
 export function useMentorStudentAttendanceSummary() {
   const { user } = useAuth();
-  const [summary, setSummary] = useState<
-    Record<string, MentorStudentAttendanceSummary>
-  >({});
+  const [summary, setSummary] = useState<Record<string, MentorStudentAttendanceSummary>>({});
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
@@ -405,9 +395,9 @@ export function useMentorStudentAttendanceSummary() {
 
     setLoading(true);
     const groupRes = await supabase
-      .from("mentor_groups")
-      .select("id")
-      .eq("mentor_user_id", user.id);
+      .from('mentor_groups')
+      .select('id')
+      .eq('mentor_user_id', user.id);
     const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     if (!groupIds.length) {
       setSummary({});
@@ -416,10 +406,10 @@ export function useMentorStudentAttendanceSummary() {
     }
 
     const sessionRes = await supabase
-      .from("attendance_sessions")
-      .select("id, session_date")
-      .in("group_id", groupIds)
-      .order("session_date", { ascending: false });
+      .from('attendance_sessions')
+      .select('id, session_date')
+      .in('group_id', groupIds)
+      .order('session_date', { ascending: false });
     const sessions = rowsOrEmpty<AttendanceSessionRow>(sessionRes);
     const sessionIds = sessions.map((s) => s.id);
     if (!sessionIds.length) {
@@ -429,13 +419,13 @@ export function useMentorStudentAttendanceSummary() {
     }
 
     const sessionOrder = new Map<string, number>();
-    sessions.forEach((session, index) =>
-      sessionOrder.set(session.id, index),
-    );
+    sessions.forEach((session, index) => {
+      sessionOrder.set(session.id, index);
+    });
     const recordsRes = await supabase
-      .from("attendance_records")
-      .select("member_id, session_id, present")
-      .in("session_id", sessionIds);
+      .from('attendance_records')
+      .select('member_id, session_id, present')
+      .in('session_id', sessionIds);
 
     const next: Record<string, MentorStudentAttendanceSummary> = {};
     const records = rowsOrEmpty<AttendanceSummaryRecordRow>(recordsRes).sort(
@@ -474,7 +464,7 @@ export interface LearningPathStep {
   student_name: string;
   phase: string;
   phase_order: number;
-  status: "active" | "completed";
+  status: 'active' | 'completed';
   item_text: string;
   done: boolean;
 }
@@ -492,11 +482,11 @@ export function useLearningPath(studentName?: string) {
     }
     setLoading(true);
     let q = supabase
-      .from("learning_path_steps")
-      .select("*")
-      .eq("mentor_user_id", user.id)
-      .order("phase_order", { ascending: true });
-    if (studentName) q = q.eq("student_name", studentName);
+      .from('learning_path_steps')
+      .select('*')
+      .eq('mentor_user_id', user.id)
+      .order('phase_order', { ascending: true });
+    if (studentName) q = q.eq('student_name', studentName);
     const res = await q;
     setSteps(rowsOrEmpty<LearningPathStep>(res));
     setLoading(false);
@@ -510,26 +500,18 @@ export function useLearningPath(studentName?: string) {
     if (!supabase) return;
     const step = steps.find((s) => s.id === id);
     if (!step) return;
-    await supabase
-      .from("learning_path_steps")
-      .update({ done: !step.done })
-      .eq("id", id);
+    await supabase.from('learning_path_steps').update({ done: !step.done }).eq('id', id);
     refresh();
   };
 
-  const addStep = async (
-    phase: string,
-    phaseOrder: number,
-    itemText: string,
-    sName?: string,
-  ) => {
+  const addStep = async (phase: string, phaseOrder: number, itemText: string, sName?: string) => {
     if (!supabase || !user?.id) return;
-    await supabase.from("learning_path_steps").insert({
+    await supabase.from('learning_path_steps').insert({
       mentor_user_id: user.id,
-      student_name: sName ?? studentName ?? "",
+      student_name: sName ?? studentName ?? '',
       phase,
       phase_order: phaseOrder,
-      status: "active",
+      status: 'active',
       item_text: itemText,
       done: false,
     });
@@ -561,16 +543,16 @@ export function useMentorProfileStats() {
     }
     setLoading(true);
     const groupRes = await supabase
-      .from("mentor_groups")
-      .select("id")
-      .eq("mentor_user_id", user.id);
+      .from('mentor_groups')
+      .select('id')
+      .eq('mentor_user_id', user.id);
     const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     let studentCount = 0;
     if (groupIds.length) {
       const { count } = await supabase
-        .from("group_members")
-        .select("id", { count: "exact", head: true })
-        .in("group_id", groupIds);
+        .from('group_members')
+        .select('id', { count: 'exact', head: true })
+        .in('group_id', groupIds);
       studentCount = count ?? 0;
     }
     setStats({ studentCount, groupCount: groupIds.length });
@@ -608,11 +590,9 @@ export function useMentorOwnProfile() {
     }
     setLoading(true);
     const res = await supabase
-      .from("mentor_applications")
-      .select(
-        "specialization, bio, experience, education, photo_emoji, rating, sessions",
-      )
-      .eq("user_id", user.id)
+      .from('mentor_applications')
+      .select('specialization, bio, experience, education, photo_emoji, rating, sessions')
+      .eq('user_id', user.id)
       .maybeSingle();
     setProfile(res.data ?? null);
     setLoading(false);
@@ -623,14 +603,9 @@ export function useMentorOwnProfile() {
   }, [refresh]);
 
   const updateProfile = useCallback(
-    async (
-      patch: Partial<MentorOwnProfile>,
-    ): Promise<{ error: string | null }> => {
-      if (!supabase || !user?.id) return { error: "Not configured" };
-      const res = await supabase
-        .from("mentor_applications")
-        .update(patch)
-        .eq("user_id", user.id);
+    async (patch: Partial<MentorOwnProfile>): Promise<{ error: string | null }> => {
+      if (!supabase || !user?.id) return { error: 'Not configured' };
+      const res = await supabase.from('mentor_applications').update(patch).eq('user_id', user.id);
       if (res.error) return { error: res.error.message };
       await refresh();
       return { error: null };
@@ -644,11 +619,11 @@ export function useMentorOwnProfile() {
 // ─── useMentorRequests ────────────────────────────────────────
 export interface MentorRequest {
   id: string;
-  request_type: "mentorship" | "session";
+  request_type: 'mentorship' | 'session';
   parent_name: string | null;
   child_name: string | null;
   interest_text: string | null;
-  status: "pending" | "accepted" | "rejected";
+  status: 'pending' | 'accepted' | 'rejected';
   slots: string[] | null;
   created_at: string;
 }
@@ -666,10 +641,10 @@ export function useMentorRequests() {
     }
     setLoading(true);
     const res = await supabase
-      .from("mentorship_requests")
-      .select("*")
-      .eq("mentor_user_id", user.id)
-      .order("created_at", { ascending: false });
+      .from('mentorship_requests')
+      .select('*')
+      .eq('mentor_user_id', user.id)
+      .order('created_at', { ascending: false });
     setRequests(rowsOrEmpty<MentorRequest>(res));
     setLoading(false);
   }, [user?.id]);
@@ -678,9 +653,9 @@ export function useMentorRequests() {
     refresh();
   }, [refresh]);
 
-  const respond = async (id: string, status: "accepted" | "rejected") => {
+  const respond = async (id: string, status: 'accepted' | 'rejected') => {
     if (!supabase) return;
-    await supabase.from("mentorship_requests").update({ status }).eq("id", id);
+    await supabase.from('mentorship_requests').update({ status }).eq('id', id);
     refresh();
   };
 

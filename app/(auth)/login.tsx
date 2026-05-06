@@ -1,9 +1,9 @@
-import { AntDesign, Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { MotiView } from "moti";
-import React, { useState } from "react";
+import { AntDesign, Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { MotiView } from 'moti';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -13,27 +13,24 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  AuthMethodSwitcher,
-  type AuthMethod,
-} from "$components/auth/AuthMethodSwitcher";
-import { PressableScale } from "$components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { formatPhone } from "$lib/formatPhone";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AuthMethodSwitcher, type AuthMethod } from '$components/auth/AuthMethodSwitcher';
+import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { formatPhone } from '$lib/formatPhone';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { loginWithIdentifier, loginWithGoogle } = useAuth();
 
-  const [authMethod, setAuthMethod] = useState<AuthMethod>("phone");
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
+  const [authMethod, setAuthMethod] = useState<AuthMethod>('phone');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
@@ -42,11 +39,10 @@ export default function LoginScreen() {
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;
 
-  const isEmail = authMethod === "email";
+  const isEmail = authMethod === 'email';
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier.trim());
-  const isValidPhone = identifier.replace(/\D/g, "").length >= 10;
-  const canSubmit =
-    (isEmail ? isValidEmail : isValidPhone) && password.length >= 6;
+  const isValidPhone = identifier.replace(/\D/g, '').length >= 10;
+  const canSubmit = (isEmail ? isValidEmail : isValidPhone) && password.length >= 6;
 
   const handleIdentifierChange = (text: string) => {
     if (isEmail) {
@@ -58,28 +54,26 @@ export default function LoginScreen() {
 
   const handleAuthMethodChange = (method: AuthMethod) => {
     setAuthMethod(method);
-    setIdentifier("");
-    setError("");
+    setIdentifier('');
+    setError('');
   };
 
   const handleGoogleLogin = async () => {
-    setError("");
+    setError('');
     setIsGoogleLoading(true);
     try {
       const result = await loginWithGoogle();
       if (!result.success) {
-        setError(result.error || "Не удалось войти через Google");
+        setError(result.error || 'Не удалось войти через Google');
         return;
       }
       // On web the browser navigates to Google before this runs — don't push a
       // route with no authenticated user or the root guard bounces to /intro.
-      if (Platform.OS !== "web") {
-        router.replace("/(tabs)/home");
+      if (Platform.OS !== 'web') {
+        router.replace('/(tabs)/home');
       }
     } catch (e: unknown) {
-      setError(
-        e instanceof Error ? e.message : "Не удалось войти через Google",
-      );
+      setError(e instanceof Error ? e.message : 'Не удалось войти через Google');
     } finally {
       setIsGoogleLoading(false);
     }
@@ -88,15 +82,15 @@ export default function LoginScreen() {
   };
 
   const handleLogin = async () => {
-    setError("");
+    setError('');
     setIsSubmitting(true);
     const result = await loginWithIdentifier(identifier, password);
     setIsSubmitting(false);
     if (!result.success) {
-      setError(result.error || "Не удалось войти");
+      setError(result.error || 'Не удалось войти');
       return;
     }
-    router.replace("/(tabs)/home");
+    router.replace('/(tabs)/home');
   };
 
   const handleBack = () => {
@@ -105,21 +99,21 @@ export default function LoginScreen() {
       return;
     }
 
-    router.replace("/intro");
+    router.replace('/intro');
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar style="dark" />
       <View style={{ flex: 1 }}>
         {/* Background Blobs */}
-        <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+        <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -60,
               left: -60,
               width: 220,
@@ -130,8 +124,8 @@ export default function LoginScreen() {
           />
           <View
             style={{
-              position: "absolute",
-              bottom: "15%",
+              position: 'absolute',
+              bottom: '15%',
               right: -80,
               width: 280,
               height: 280,
@@ -145,7 +139,7 @@ export default function LoginScreen() {
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
-              alignItems: "center",
+              alignItems: 'center',
               paddingTop: isDesktop ? 24 : 12,
               paddingBottom: 20,
             }}
@@ -155,7 +149,7 @@ export default function LoginScreen() {
             <View
               style={{
                 flex: 1,
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
                 paddingTop: 8,
@@ -165,23 +159,19 @@ export default function LoginScreen() {
               <PressableScale
                 onPress={handleBack}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 32,
                 }}
                 scaleTo={0.93}
               >
-                <Feather
-                  name="arrow-left"
-                  size={20}
-                  color={COLORS.mutedForeground}
-                />
+                <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                 <Text
                   style={{
                     color: COLORS.mutedForeground,
                     marginLeft: 8,
                     fontSize: 15,
-                    fontWeight: "500",
+                    fontWeight: '500',
                   }}
                 >
                   Назад
@@ -198,7 +188,7 @@ export default function LoginScreen() {
                 <Text
                   style={{
                     fontSize: 32,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                     marginBottom: 8,
                     letterSpacing: -1,
@@ -213,8 +203,7 @@ export default function LoginScreen() {
                     lineHeight: 24,
                   }}
                 >
-                  Введите данные ниже, чтобы продолжить обучение и достигать
-                  новых высот
+                  Введите данные ниже, чтобы продолжить обучение и достигать новых высот
                 </Text>
               </MotiView>
 
@@ -224,37 +213,30 @@ export default function LoginScreen() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 100 }}
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: RADIUS.xxl,
                   padding: 24,
                   ...SHADOWS.md,
                 }}
               >
-                <AuthMethodSwitcher
-                  value={authMethod}
-                  onChange={handleAuthMethodChange}
-                />
+                <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
 
                 {/* Login Field */}
                 <View style={{ marginBottom: 20 }}>
-                  <Text style={styles.label}>
-                    {isEmail ? "EMAIL" : "НОМЕР ТЕЛЕФОНА"}
-                  </Text>
+                  <Text style={styles.label}>{isEmail ? 'EMAIL' : 'НОМЕР ТЕЛЕФОНА'}</Text>
                   <View style={styles.inputWrapper}>
                     <Feather
-                      name={isEmail ? "mail" : "phone"}
+                      name={isEmail ? 'mail' : 'phone'}
                       size={18}
                       color={COLORS.mutedForeground}
                       style={styles.inputIcon}
                     />
                     <TextInput
-                      placeholder={
-                        isEmail ? "you@example.com" : "+7 777 777 7777"
-                      }
+                      placeholder={isEmail ? 'you@example.com' : '+7 777 777 7777'}
                       placeholderTextColor={COLORS.mutedForeground}
                       value={identifier}
                       onChangeText={handleIdentifierChange}
-                      keyboardType={isEmail ? "email-address" : "phone-pad"}
+                      keyboardType={isEmail ? 'email-address' : 'phone-pad'}
                       autoCapitalize="none"
                       autoCorrect={false}
                       className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border border-gray-100"
@@ -288,7 +270,7 @@ export default function LoginScreen() {
                       scaleTo={0.85}
                     >
                       <Feather
-                        name={showPassword ? "eye-off" : "eye"}
+                        name={showPassword ? 'eye-off' : 'eye'}
                         size={18}
                         color={COLORS.mutedForeground}
                       />
@@ -297,15 +279,15 @@ export default function LoginScreen() {
                 </View>
 
                 <PressableScale
-                  onPress={() => router.push("/forgot-password")}
-                  style={{ alignSelf: "flex-end", marginBottom: 24 }}
+                  onPress={() => router.push('/forgot-password')}
+                  style={{ alignSelf: 'flex-end', marginBottom: 24 }}
                   scaleTo={0.93}
                 >
                   <Text
                     style={{
                       color: COLORS.primary,
                       fontSize: 13,
-                      fontWeight: "700",
+                      fontWeight: '700',
                     }}
                   >
                     Забыли пароль?
@@ -323,15 +305,10 @@ export default function LoginScreen() {
                 )}
 
                 {/* Submit button inside card for cohesion */}
-                <PressableScale
-                  onPress={handleLogin}
-                  disabled={isSubmitting || !canSubmit}
-                >
+                <PressableScale onPress={handleLogin} disabled={isSubmitting || !canSubmit}>
                   <LinearGradient
                     colors={
-                      canSubmit
-                        ? [COLORS.primary, COLORS.secondary]
-                        : [COLORS.muted, COLORS.muted]
+                      canSubmit ? [COLORS.primary, COLORS.secondary] : [COLORS.muted, COLORS.muted]
                     }
                     style={styles.submitBtn}
                   >
@@ -341,8 +318,8 @@ export default function LoginScreen() {
                       <Text
                         style={{
                           fontSize: 18,
-                          fontWeight: "800",
-                          color: canSubmit ? "white" : COLORS.mutedForeground,
+                          fontWeight: '800',
+                          color: canSubmit ? 'white' : COLORS.mutedForeground,
                         }}
                       >
                         Войти
@@ -354,13 +331,8 @@ export default function LoginScreen() {
 
               <View style={styles.accountSwitchRow}>
                 <Text style={styles.accountSwitchText}>Нет аккаунта? </Text>
-                <PressableScale
-                  onPress={() => router.push("/register")}
-                  scaleTo={0.93}
-                >
-                  <Text style={styles.accountSwitchLink}>
-                    Зарегистрироваться
-                  </Text>
+                <PressableScale onPress={() => router.push('/register')} scaleTo={0.93}>
+                  <Text style={styles.accountSwitchLink}>Зарегистрироваться</Text>
                 </PressableScale>
               </View>
 
@@ -380,10 +352,7 @@ export default function LoginScreen() {
                     style={styles.socialChip}
                   >
                     {isGoogleLoading ? (
-                      <ActivityIndicator
-                        size="small"
-                        color={COLORS.mutedForeground}
-                      />
+                      <ActivityIndicator size="small" color={COLORS.mutedForeground} />
                     ) : (
                       <AntDesign name="google" size={20} color="#4285F4" />
                     )}
@@ -392,7 +361,7 @@ export default function LoginScreen() {
 
                   {/* QR */}
                   <PressableScale
-                    onPress={() => router.push("/(auth)/qr-scan")}
+                    onPress={() => router.push('/(auth)/qr-scan')}
                     style={styles.socialChip}
                   >
                     <Feather name="grid" size={20} color={COLORS.primary} />
@@ -411,28 +380,28 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   label: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 1,
     opacity: 0.6,
   },
   inputWrapper: {
-    position: "relative",
-    justifyContent: "center",
+    position: 'relative',
+    justifyContent: 'center',
   },
   inputIcon: {
-    position: "absolute",
+    position: 'absolute',
     left: 16,
     zIndex: 1,
   },
   inputText: {
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   eyeIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 16,
     zIndex: 1,
   },
@@ -440,26 +409,26 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 12,
     borderRadius: RADIUS.md,
-    backgroundColor: "#FEE2E2",
+    backgroundColor: '#FEE2E2',
     borderWidth: 1,
-    borderColor: "#FCA5A5",
+    borderColor: '#FCA5A5',
   },
   errorText: {
-    color: "#B91C1C",
-    textAlign: "center",
+    color: '#B91C1C',
+    textAlign: 'center',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   submitBtn: {
     paddingVertical: 18,
     borderRadius: RADIUS.xl,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.md,
   },
   dividerRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
   },
   dividerLine: {
@@ -471,37 +440,37 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     color: COLORS.mutedForeground,
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   socialChipRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
     marginTop: 12,
   },
   socialChip: {
     flex: 1,
     minHeight: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: RADIUS.xl,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderWidth: 1.5,
     borderColor: COLORS.border,
     ...SHADOWS.sm,
   },
   socialChipText: {
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
   },
   accountSwitchRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     minHeight: 32,
     marginTop: 18,
   },
@@ -511,7 +480,7 @@ const styles = StyleSheet.create({
   },
   accountSwitchLink: {
     color: COLORS.primary,
-    fontWeight: "800",
+    fontWeight: '800',
     fontSize: 15,
   },
 });

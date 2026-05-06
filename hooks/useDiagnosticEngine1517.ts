@@ -6,18 +6,18 @@
  * PRO: 30 OS tasks (Mail, Slack, Trello) with Stealth Analytics
  */
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 import {
   ANCHOR_MAP,
   CAREER_CARDS,
   PRO_TASKS_1517,
   type AnchorType,
-  type StealthEvent1517
-} from "$data/diagnosticData1517";
-import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
-import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
+  type StealthEvent1517,
+} from '$data/diagnosticData1517';
+import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';
+import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';
 
-export type Phase1517 = "intro" | "basic" | "pro" | "processing" | "done";
+export type Phase1517 = 'intro' | 'basic' | 'pro' | 'processing' | 'done';
 
 export function useDiagnosticEngine1517(opts: {
   childId: string;
@@ -27,7 +27,7 @@ export function useDiagnosticEngine1517(opts: {
 }) {
   const { childId, isPro, onComplete } = opts;
 
-  const [phase, setPhase] = useState<Phase1517>("intro");
+  const [phase, setPhase] = useState<Phase1517>('intro');
   const [basicIndex, setBasicIndex] = useState(0);
   const [proIndex, setProIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -43,25 +43,25 @@ export function useDiagnosticEngine1517(opts: {
   // ── Progress ──
   const totalSteps = CAREER_CARDS.length + (isPro ? PRO_TASKS_1517.length : 0);
   const currentStep =
-    phase === "basic"
+    phase === 'basic'
       ? basicIndex
-      : phase === "pro"
+      : phase === 'pro'
         ? CAREER_CARDS.length + proIndex
-        : phase === "processing" || phase === "done"
+        : phase === 'processing' || phase === 'done'
           ? totalSteps
           : 0;
   const progress = totalSteps > 0 ? currentStep / totalSteps : 0;
 
   // ── Transitions ──
   const startBasic = useCallback(() => {
-    setPhase("basic");
+    setPhase('basic');
     setBasicIndex(0);
     taskEnteredAt.current = Date.now();
   }, []);
 
   const advanceToPro = useCallback(async () => {
     if (isPro) {
-      setPhase("pro");
+      setPhase('pro');
       setProIndex(0);
       taskEnteredAt.current = Date.now();
     } else {
@@ -144,9 +144,9 @@ export function useDiagnosticEngine1517(opts: {
       }
     });
 
-    const sortedAnchors = (
-      Object.entries(anchorCounts) as [AnchorType, number][]
-    ).sort((a, b) => b[1] - a[1]);
+    const sortedAnchors = (Object.entries(anchorCounts) as [AnchorType, number][]).sort(
+      (a, b) => b[1] - a[1],
+    );
     const top3Anchors = sortedAnchors.slice(0, 3);
     const weakestAnchor = sortedAnchors.slice(-1)[0];
 
@@ -167,7 +167,7 @@ export function useDiagnosticEngine1517(opts: {
       }
       if (ev.erasedOrFrantic) {
         // If it was a Slack task, it's a self-correction. If Trello, it's frantic clicks.
-        if (ev.taskId.startsWith("P1") || ev.taskId.startsWith("P20")) {
+        if (ev.taskId.startsWith('P1') || ev.taskId.startsWith('P20')) {
           erasedCount++;
         } else {
           franticCount++;
@@ -177,12 +177,12 @@ export function useDiagnosticEngine1517(opts: {
 
     const stealthProfile =
       franticCount > 1
-        ? "Склонен к панике при жестких дедлайнах (Высокий риск выгорания)"
+        ? 'Склонен к панике при жестких дедлайнах (Высокий риск выгорания)'
         : erasedCount > 1
-          ? "Высокий EQ (Обдумывает резкие ответы перед отправкой)"
+          ? 'Высокий EQ (Обдумывает резкие ответы перед отправкой)'
           : fastClicks > 4
-            ? "Низкое внимание к деталям (Игнорирует длинные тексты)"
-            : "Ответственный Исполнитель (Стрессоустойчив, сбалансирован)";
+            ? 'Низкое внимание к деталям (Игнорирует длинные тексты)'
+            : 'Ответственный Исполнитель (Стрессоустойчив, сбалансирован)';
 
     const scores: Record<string, number> = { ...anchorCounts, ...proScores };
 
@@ -199,16 +199,14 @@ export function useDiagnosticEngine1517(opts: {
 
   const processWithAI = useCallback(
     async (computed: ReturnType<typeof computeResults>) => {
-      const topSkillsStr = computed.top3Anchors
-        .map((t) => ANCHOR_MAP[t[0]])
-        .join(", ");
+      const topSkillsStr = computed.top3Anchors.map((t) => ANCHOR_MAP[t[0]]).join(', ');
       const weakSkillStr = ANCHOR_MAP[computed.weakestAnchor[0]];
 
       const prompt = `Analyze diagnostic data for a 15-17 year old teenager ("Architects" group).
 BASIC (Career Anchors): Top drivers: ${topSkillsStr}. Weak area: ${weakSkillStr}.
-${isPro ? `PRO (Office Simulation): Scores: ${JSON.stringify(computed.proScores)}. Stealth Analytics: ${computed.stealthProfile}` : ""}
+${isPro ? `PRO (Office Simulation): Scores: ${JSON.stringify(computed.proScores)}. Stealth Analytics: ${computed.stealthProfile}` : ''}
 
-Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 11th graders." : "Include only base fields."}:
+Generate RAW JSON only. ${isPro ? 'Include ALL fields. Write pragmatically for 11th graders.' : 'Include only base fields.'}:
 {
   "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Professional 2-word talent title in Russian (e.g. 'Data Scientist')"
@@ -221,7 +219,7 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
   "personalityBehavior": "Personality pattern and Burnout Risk based on stealth data: ${computed.stealthProfile}. In Russian.",
   "careerArchetypes": ["3 future career vectors based on Shain anchors and UNT"],
   "parentAdvice": "Pragmatic advice for parents in Russian regarding university prep and burnout prevention"`
-      : ""
+      : ''
   }
 }`;
 
@@ -231,35 +229,26 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
   );
 
   const finishDiagnostic = useCallback(async () => {
-    setPhase("processing");
+    setPhase('processing');
     setIsProcessing(true);
     const computed = computeResults();
 
     let aiData: DiagnosticAiResponse = {};
     try {
       aiData = await processWithAI(computed);
-    } catch (e) {
+    } catch {
       aiData = {
-        summary: "Сильная сторона подростка — самоорганизация и лидерство.",
-        recommendedConstellation: "Менеджер Проектов",
+        summary: 'Сильная сторона подростка — самоорганизация и лидерство.',
+        recommendedConstellation: 'Менеджер Проектов',
         ...(isPro
           ? {
-              topStrengths: [
-                "Стрессоустойчивость",
-                "Командная работа",
-                "Аналитическое мышление",
-              ],
-              developmentAreas: ["Внимание к рутинным документам"],
-              intellectType:
-                "Аналитико-Математический (ЕНТ: Физмат / Информатика)",
+              topStrengths: ['Стрессоустойчивость', 'Командная работа', 'Аналитическое мышление'],
+              developmentAreas: ['Внимание к рутинным документам'],
+              intellectType: 'Аналитико-Математический (ЕНТ: Физмат / Информатика)',
               personalityBehavior: computed.stealthProfile,
-              careerArchetypes: [
-                "Data Scientist",
-                "Backend-разработчик",
-                "Продакт-менеджер",
-              ],
+              careerArchetypes: ['Data Scientist', 'Backend-разработчик', 'Продакт-менеджер'],
               parentAdvice:
-                "Поддерживайте фокус на технических навыках. Риск выгорания низкий, подросток хорошо справляется со стрессом.",
+                'Поддерживайте фокус на технических навыках. Риск выгорания низкий, подросток хорошо справляется со стрессом.',
             }
           : {}),
       };
@@ -268,11 +257,11 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
     const diagnostic: Diagnostic = {
       childId,
       scores: computed.scores,
-      summary: aiData.summary || "Сильный профиль",
-      recommendedConstellation: aiData.recommendedConstellation || "Аналитик",
+      summary: aiData.summary || 'Сильный профиль',
+      recommendedConstellation: aiData.recommendedConstellation || 'Аналитик',
       timestamp: new Date().toISOString(),
-      tier: isPro ? "pro" : "basic",
-      ageGroup: "15-17",
+      tier: isPro ? 'pro' : 'basic',
+      ageGroup: '15-17',
       rawMetadata: {
         fastClicks: computed.fastClicks,
         franticCount: computed.franticCount,
@@ -293,17 +282,17 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields. Write pragmatically for 1
     setResults(diagnostic);
     try {
       await onComplete(diagnostic);
-    } catch (e) {}
+    } catch {}
     setIsProcessing(false);
-    setPhase("done");
+    setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
 
   return {
     phase,
-    currentIndex: phase === "basic" ? basicIndex : proIndex,
+    currentIndex: phase === 'basic' ? basicIndex : proIndex,
     progress,
-    currentCard: phase === "basic" ? CAREER_CARDS[basicIndex] : null,
-    currentTask: phase === "pro" ? PRO_TASKS_1517[proIndex] : null,
+    currentCard: phase === 'basic' ? CAREER_CARDS[basicIndex] : null,
+    currentTask: phase === 'pro' ? PRO_TASKS_1517[proIndex] : null,
     results,
     isProcessing,
     totalBasicCards: CAREER_CARDS.length,

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "$contexts/AuthContext";
-import { useDevDataVersion } from "$lib/devDataEvents";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '$contexts/AuthContext';
+import { useDevDataVersion } from '$lib/devDataEvents';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export interface StudentTask {
   id: string;
@@ -28,10 +28,10 @@ export function useStudentTasks() {
     }
     setLoading(true);
     const res = await supabase
-      .from("student_tasks")
-      .select("*")
-      .eq("student_user_id", user.id)
-      .order("created_at", { ascending: true });
+      .from('student_tasks')
+      .select('*')
+      .eq('student_user_id', user.id)
+      .order('created_at', { ascending: true });
     setTasks(rowsOrEmpty<StudentTask>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -44,10 +44,7 @@ export function useStudentTasks() {
     if (!supabase) return;
     const task = tasks.find((t) => t.id === id);
     if (!task) return;
-    await supabase
-      .from("student_tasks")
-      .update({ done: !task.done })
-      .eq("id", id);
+    await supabase.from('student_tasks').update({ done: !task.done }).eq('id', id);
     refresh();
   };
 
@@ -95,20 +92,20 @@ export function useYouthGoals() {
     }
     setLoading(true);
     const goalRes = await supabase
-      .from("youth_goals")
-      .select("*")
-      .eq("student_user_id", user.id)
-      .order("created_at", { ascending: true });
+      .from('youth_goals')
+      .select('*')
+      .eq('student_user_id', user.id)
+      .order('created_at', { ascending: true });
     const rawGoals = rowsOrEmpty<YouthGoalRow>(goalRes);
     const ids = rawGoals.map((g) => g.id);
 
-    let stepsMap = new Map<string, YouthGoalStep[]>();
+    const stepsMap = new Map<string, YouthGoalStep[]>();
     if (ids.length) {
       const stepsRes = await supabase
-        .from("youth_goal_steps")
-        .select("*")
-        .in("goal_id", ids)
-        .order("step_order", { ascending: true });
+        .from('youth_goal_steps')
+        .select('*')
+        .in('goal_id', ids)
+        .order('step_order', { ascending: true });
       for (const s of rowsOrEmpty<YouthGoalStepRow>(stepsRes)) {
         const arr = stepsMap.get(s.goal_id) ?? [];
         arr.push({
@@ -149,7 +146,7 @@ export interface UserAchievement {
   unlocked: boolean;
 }
 
-type AchievementCatalogRow = Omit<UserAchievement, "unlocked">;
+type AchievementCatalogRow = Omit<UserAchievement, 'unlocked'>;
 
 type UserAchievementRow = {
   achievement_id: string;
@@ -170,19 +167,19 @@ export function useYouthAchievements() {
     setLoading(true);
     // Load catalog
     const catalogRes = await supabase
-      .from("achievements_catalog")
-      .select("*")
-      .order("name", { ascending: true });
+      .from('achievements_catalog')
+      .select('*')
+      .order('name', { ascending: true });
     const catalog = rowsOrEmpty<AchievementCatalogRow>(catalogRes);
 
     // Load user's unlocked achievements
     const unlockedSet = new Set<string>();
     if (user?.id) {
       const userRes = await supabase
-        .from("user_achievements")
-        .select("achievement_id")
-        .eq("user_id", user.id)
-        .eq("unlocked", true);
+        .from('user_achievements')
+        .select('achievement_id')
+        .eq('user_id', user.id)
+        .eq('unlocked', true);
       for (const r of rowsOrEmpty<UserAchievementRow>(userRes)) {
         unlockedSet.add(r.achievement_id);
       }

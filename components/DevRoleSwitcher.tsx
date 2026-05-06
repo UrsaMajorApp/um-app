@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  View, Text, TouchableOpacity, Modal, StyleSheet,
-  ScrollView, Switch, Platform, useWindowDimensions, Pressable, ActivityIndicator, Alert,
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+  ScrollView,
+  Switch,
+  Platform,
+  useWindowDimensions,
+  Pressable,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useAuth, UserRole } from '$contexts/AuthContext';
+import { useAuth, type UserRole } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { emitDevDataChanged } from '$lib/devDataEvents';
@@ -18,8 +28,6 @@ const DEV_TOOLS_KEY = 'um_dev_tools_enabled';
 const DEV_DATA_KEY = 'um_dev_seed_data_enabled';
 
 export function DevRoleSwitcher() {
-  if (!__DEV__) return null;
-
   const [visible, setVisible] = useState(false);
   const [devToolsEnabled, setDevToolsEnabledState] = useState(false);
   const [devDataEnabled, setDevDataEnabled] = useState(false);
@@ -30,15 +38,25 @@ export function DevRoleSwitcher() {
   // All hooks up-front so they're in scope for toggleDevTools
   const { user, devLogin, logout, devMode, setDevMode, devOtpCode } = useAuth();
   const { parentProfile, setParentTariff } = useParentData();
-  const { mentorApproved, setMentorApproved, orgVerified, setOrgVerified, useRealOtp, setUseRealOtp } = useDevSettings();
+  const {
+    mentorApproved,
+    setMentorApproved,
+    orgVerified,
+    setOrgVerified,
+    useRealOtp,
+    setUseRealOtp,
+  } = useDevSettings();
   const { width } = useWindowDimensions();
   const router = useRouter();
   const isDesktop = isWebMinWidth(width, 768);
   const isDevSessionUser = Boolean(
     user &&
-    (user.email.endsWith('@dev.local') || (user.email.endsWith('@example.com') && user.phone === '79991234567'))
+      (user.email.endsWith('@dev.local') ||
+        (user.email.endsWith('@example.com') && user.phone === '79991234567')),
   );
   const canManageDevData = devToolsEnabled && isDevSessionUser && !syncingDevData;
+
+  if (!__DEV__) return null;
 
   const notifyDevDataError = (message: string) => {
     Alert.alert('Dev data sync failed', message);
@@ -104,7 +122,8 @@ export function DevRoleSwitcher() {
     if (!canManageDevData) return;
 
     const title = 'Clear all populated data?';
-    const message = 'This restores every active dev snapshot and removes populated records for everyone.';
+    const message =
+      'This restores every active dev snapshot and removes populated records for everyone.';
 
     if (Platform.OS === 'web') {
       if (globalThis.confirm(`${title}\n\n${message}`)) {
@@ -179,11 +198,7 @@ export function DevRoleSwitcher() {
 
   return (
     <>
-      <TouchableOpacity
-        onPress={handleOpen}
-        style={styles.floatingButton}
-        activeOpacity={0.8}
-      >
+      <TouchableOpacity onPress={handleOpen} style={styles.floatingButton} activeOpacity={0.8}>
         <Feather name="settings" size={20} color="white" />
         <Text style={styles.buttonText}>DEV</Text>
       </TouchableOpacity>
@@ -212,7 +227,6 @@ export function DevRoleSwitcher() {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-
               {/* ── Master toggle ── */}
               <View style={styles.devModeRow}>
                 <View style={{ flex: 1, marginRight: 12 }}>
@@ -228,193 +242,211 @@ export function DevRoleSwitcher() {
 
               {devToolsEnabled && (
                 <>
-              <View style={styles.devModeRow}>
-                <View style={{ flex: 1, marginRight: 12 }}>
-                  <Text style={styles.devModeTitle}>Populated Dev Data</Text>
-                  <Text style={styles.devModeSubtitle}>
-                    {isDevSessionUser
-                      ? 'Seed or restore deterministic Supabase demo records'
-                      : 'Switch into any dev role first'}
-                  </Text>
-                </View>
-                {syncingDevData ? (
-                  <ActivityIndicator size="small" color={COLORS.primary} />
-                ) : (
-                  <Switch
-                    value={devDataEnabled}
-                    onValueChange={toggleDevData}
-                    trackColor={{ false: COLORS.muted, true: COLORS.success }}
-                    disabled={!canManageDevData}
-                  />
-                )}
-              </View>
-
-              <TouchableOpacity
-                style={[
-                  styles.clearAllDevDataButton,
-                  (!canManageDevData || syncingDevData) && styles.disabledRoleButton,
-                ]}
-                onPress={clearAllPopulatedDevData}
-                disabled={!canManageDevData || syncingDevData}
-                activeOpacity={0.75}
-              >
-                <Feather
-                  name="trash-2"
-                  size={14}
-                  color={COLORS.destructive}
-                  style={styles.roleButtonSpinner}
-                />
-                <Text style={styles.clearAllDevDataText}>Clear all populated data</Text>
-              </TouchableOpacity>
-
-                {/* OTP mode toggle */}
-                <View style={styles.devModeRow}>
-                  <View style={{ flex: 1, marginRight: 12 }}>
-                    <Text style={styles.devModeTitle}>
-                      OTP: {useRealOtp ? 'Real SMS ✉️' : `Fake (${devOtpCode ?? '1234'})`}
-                    </Text>
-                    <Text style={styles.devModeSubtitle}>
-                      {useRealOtp ? 'Supabase sends a real SMS code' : 'Any login accepts the dev code above'}
-                    </Text>
-                  </View>
-                  <Switch
-                    value={useRealOtp}
-                    onValueChange={(val) => {
-                      if (devToolsEnabled) setUseRealOtp(val);
-                    }}
-                    trackColor={{ false: COLORS.muted, true: '#F59E0B' }}
-                  />
-                </View>
-
-                {/* Tariff toggle (parent/child roles) */}
-                {['parent', 'youth', 'child'].includes(user?.role || '') && (
                   <View style={styles.devModeRow}>
                     <View style={{ flex: 1, marginRight: 12 }}>
-                      <Text style={styles.devModeTitle}>
-                        Tariff: {parentProfile?.tariff?.toUpperCase() || 'BASIC'}
+                      <Text style={styles.devModeTitle}>Populated Dev Data</Text>
+                      <Text style={styles.devModeSubtitle}>
+                        {isDevSessionUser
+                          ? 'Seed or restore deterministic Supabase demo records'
+                          : 'Switch into any dev role first'}
                       </Text>
-                      <Text style={styles.devModeSubtitle}>Toggle PRO features</Text>
                     </View>
-                    <Switch
-                      value={parentProfile?.tariff === 'pro'}
-                      onValueChange={(val) => {
-                        if (devToolsEnabled) setParentTariff(val ? 'pro' : 'basic');
-                      }}
-                      trackColor={{ false: COLORS.muted, true: '#A78BFA' }}
-                    />
-                  </View>
-                )}
-
-                {/* Mentor approval toggle */}
-                {user?.role === 'mentor' && (
-                  <View style={styles.devModeRow}>
-                    <View style={{ flex: 1, marginRight: 12 }}>
-                      <Text style={styles.devModeTitle}>
-                        Mentor: {mentorApproved ? 'Approved ✓' : 'Pending…'}
-                      </Text>
-                      <Text style={styles.devModeSubtitle}>Simulate admin approval state</Text>
-                    </View>
-                    <Switch
-                      value={mentorApproved}
-                      onValueChange={(val) => {
-                        if (devToolsEnabled) setMentorApproved(val);
-                      }}
-                      trackColor={{ false: COLORS.muted, true: COLORS.success }}
-                    />
-                  </View>
-                )}
-
-                {/* Org verification toggle */}
-                {user?.role === 'org' && (
-                  <View style={styles.devModeRow}>
-                    <View style={{ flex: 1, marginRight: 12 }}>
-                      <Text style={styles.devModeTitle}>
-                        Org: {orgVerified ? 'Verified ✓' : 'Pending…'}
-                      </Text>
-                      <Text style={styles.devModeSubtitle}>Simulate admin verification state</Text>
-                    </View>
-                    <Switch
-                      value={orgVerified}
-                      onValueChange={(val) => {
-                        if (devToolsEnabled) setOrgVerified(val);
-                      }}
-                      trackColor={{ false: COLORS.muted, true: COLORS.success }}
-                    />
-                  </View>
-                )}
-
-                {/* Current user info */}
-                <View style={styles.infoRow}>
-                  <Text style={styles.infoLabel}>Role</Text>
-                  <Text style={styles.infoValue}>{user?.role || 'none'}</Text>
-                </View>
-                <View style={[styles.infoRow, { marginBottom: 16 }]}>
-                  <Text style={styles.infoLabel}>User ID</Text>
-                  <Text style={[styles.infoValue, { fontSize: 11 }]} numberOfLines={1}>
-                    {user?.id || '—'}
-                  </Text>
-                </View>
-
-                <Text style={styles.sectionTitle}>Switch role</Text>
-                <View style={styles.grid}>
-                  {roles.map((role) => {
-                    const isActive = user?.role === role;
-                    const isSwitching = switchingRole === role;
-
-                    return (
-                      <TouchableOpacity
-                        key={role}
-                        style={[
-                          styles.roleButton,
-                          isActive && styles.activeRoleButton,
-                          (!devToolsEnabled || clearingRole || (switchingRole && !isSwitching)) && styles.disabledRoleButton,
-                        ]}
-                        onPress={() => handleSwitch(role)}
-                        disabled={!devToolsEnabled || Boolean(switchingRole) || clearingRole}
-                        activeOpacity={0.75}
-                      >
-                        {isSwitching && (
-                          <ActivityIndicator
-                            size="small"
-                            color={isActive ? 'white' : COLORS.primary}
-                            style={styles.roleButtonSpinner}
-                          />
-                        )}
-                        <Text style={[styles.roleButtonText, isActive && styles.activeRoleButtonText]}>
-                          {role}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                  <TouchableOpacity
-                    style={[
-                      styles.roleButton,
-                      styles.clearRoleButton,
-                      (!user || !isDevSessionUser || !devToolsEnabled || switchingRole || clearingRole) && styles.disabledRoleButton,
-                    ]}
-                    onPress={handleClearRole}
-                    disabled={!user || !isDevSessionUser || !devToolsEnabled || Boolean(switchingRole) || clearingRole}
-                    activeOpacity={0.75}
-                  >
-                    {clearingRole ? (
-                      <ActivityIndicator
-                        size="small"
-                        color={COLORS.destructive}
-                        style={styles.roleButtonSpinner}
-                      />
+                    {syncingDevData ? (
+                      <ActivityIndicator size="small" color={COLORS.primary} />
                     ) : (
-                      <Feather
-                        name="user-x"
-                        size={14}
-                        color={COLORS.destructive}
-                        style={styles.roleButtonSpinner}
+                      <Switch
+                        value={devDataEnabled}
+                        onValueChange={toggleDevData}
+                        trackColor={{ false: COLORS.muted, true: COLORS.success }}
+                        disabled={!canManageDevData}
                       />
                     )}
-                    <Text style={[styles.roleButtonText, styles.clearRoleButtonText]}>
-                      clear role
-                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.clearAllDevDataButton,
+                      (!canManageDevData || syncingDevData) && styles.disabledRoleButton,
+                    ]}
+                    onPress={clearAllPopulatedDevData}
+                    disabled={!canManageDevData || syncingDevData}
+                    activeOpacity={0.75}
+                  >
+                    <Feather
+                      name="trash-2"
+                      size={14}
+                      color={COLORS.destructive}
+                      style={styles.roleButtonSpinner}
+                    />
+                    <Text style={styles.clearAllDevDataText}>Clear all populated data</Text>
                   </TouchableOpacity>
-                </View>
+
+                  {/* OTP mode toggle */}
+                  <View style={styles.devModeRow}>
+                    <View style={{ flex: 1, marginRight: 12 }}>
+                      <Text style={styles.devModeTitle}>
+                        OTP: {useRealOtp ? 'Real SMS ✉️' : `Fake (${devOtpCode ?? '1234'})`}
+                      </Text>
+                      <Text style={styles.devModeSubtitle}>
+                        {useRealOtp
+                          ? 'Supabase sends a real SMS code'
+                          : 'Any login accepts the dev code above'}
+                      </Text>
+                    </View>
+                    <Switch
+                      value={useRealOtp}
+                      onValueChange={(val) => {
+                        if (devToolsEnabled) setUseRealOtp(val);
+                      }}
+                      trackColor={{ false: COLORS.muted, true: '#F59E0B' }}
+                    />
+                  </View>
+
+                  {/* Tariff toggle (parent/child roles) */}
+                  {['parent', 'youth', 'child'].includes(user?.role || '') && (
+                    <View style={styles.devModeRow}>
+                      <View style={{ flex: 1, marginRight: 12 }}>
+                        <Text style={styles.devModeTitle}>
+                          Tariff: {parentProfile?.tariff?.toUpperCase() || 'BASIC'}
+                        </Text>
+                        <Text style={styles.devModeSubtitle}>Toggle PRO features</Text>
+                      </View>
+                      <Switch
+                        value={parentProfile?.tariff === 'pro'}
+                        onValueChange={(val) => {
+                          if (devToolsEnabled) setParentTariff(val ? 'pro' : 'basic');
+                        }}
+                        trackColor={{ false: COLORS.muted, true: '#A78BFA' }}
+                      />
+                    </View>
+                  )}
+
+                  {/* Mentor approval toggle */}
+                  {user?.role === 'mentor' && (
+                    <View style={styles.devModeRow}>
+                      <View style={{ flex: 1, marginRight: 12 }}>
+                        <Text style={styles.devModeTitle}>
+                          Mentor: {mentorApproved ? 'Approved ✓' : 'Pending…'}
+                        </Text>
+                        <Text style={styles.devModeSubtitle}>Simulate admin approval state</Text>
+                      </View>
+                      <Switch
+                        value={mentorApproved}
+                        onValueChange={(val) => {
+                          if (devToolsEnabled) setMentorApproved(val);
+                        }}
+                        trackColor={{ false: COLORS.muted, true: COLORS.success }}
+                      />
+                    </View>
+                  )}
+
+                  {/* Org verification toggle */}
+                  {user?.role === 'org' && (
+                    <View style={styles.devModeRow}>
+                      <View style={{ flex: 1, marginRight: 12 }}>
+                        <Text style={styles.devModeTitle}>
+                          Org: {orgVerified ? 'Verified ✓' : 'Pending…'}
+                        </Text>
+                        <Text style={styles.devModeSubtitle}>
+                          Simulate admin verification state
+                        </Text>
+                      </View>
+                      <Switch
+                        value={orgVerified}
+                        onValueChange={(val) => {
+                          if (devToolsEnabled) setOrgVerified(val);
+                        }}
+                        trackColor={{ false: COLORS.muted, true: COLORS.success }}
+                      />
+                    </View>
+                  )}
+
+                  {/* Current user info */}
+                  <View style={styles.infoRow}>
+                    <Text style={styles.infoLabel}>Role</Text>
+                    <Text style={styles.infoValue}>{user?.role || 'none'}</Text>
+                  </View>
+                  <View style={[styles.infoRow, { marginBottom: 16 }]}>
+                    <Text style={styles.infoLabel}>User ID</Text>
+                    <Text style={[styles.infoValue, { fontSize: 11 }]} numberOfLines={1}>
+                      {user?.id || '—'}
+                    </Text>
+                  </View>
+
+                  <Text style={styles.sectionTitle}>Switch role</Text>
+                  <View style={styles.grid}>
+                    {roles.map((role) => {
+                      const isActive = user?.role === role;
+                      const isSwitching = switchingRole === role;
+
+                      return (
+                        <TouchableOpacity
+                          key={role}
+                          style={[
+                            styles.roleButton,
+                            isActive && styles.activeRoleButton,
+                            (!devToolsEnabled || clearingRole || (switchingRole && !isSwitching)) &&
+                              styles.disabledRoleButton,
+                          ]}
+                          onPress={() => handleSwitch(role)}
+                          disabled={!devToolsEnabled || Boolean(switchingRole) || clearingRole}
+                          activeOpacity={0.75}
+                        >
+                          {isSwitching && (
+                            <ActivityIndicator
+                              size="small"
+                              color={isActive ? 'white' : COLORS.primary}
+                              style={styles.roleButtonSpinner}
+                            />
+                          )}
+                          <Text
+                            style={[styles.roleButtonText, isActive && styles.activeRoleButtonText]}
+                          >
+                            {role}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                    <TouchableOpacity
+                      style={[
+                        styles.roleButton,
+                        styles.clearRoleButton,
+                        (!user ||
+                          !isDevSessionUser ||
+                          !devToolsEnabled ||
+                          switchingRole ||
+                          clearingRole) &&
+                          styles.disabledRoleButton,
+                      ]}
+                      onPress={handleClearRole}
+                      disabled={
+                        !user ||
+                        !isDevSessionUser ||
+                        !devToolsEnabled ||
+                        Boolean(switchingRole) ||
+                        clearingRole
+                      }
+                      activeOpacity={0.75}
+                    >
+                      {clearingRole ? (
+                        <ActivityIndicator
+                          size="small"
+                          color={COLORS.destructive}
+                          style={styles.roleButtonSpinner}
+                        />
+                      ) : (
+                        <Feather
+                          name="user-x"
+                          size={14}
+                          color={COLORS.destructive}
+                          style={styles.roleButtonSpinner}
+                        />
+                      )}
+                      <Text style={[styles.roleButtonText, styles.clearRoleButtonText]}>
+                        clear role
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </>
               )}
             </ScrollView>

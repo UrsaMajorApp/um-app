@@ -1,19 +1,12 @@
-import { COLORS } from "$constants/theme";
-import { useYouthAchievements } from "$hooks/useStudentData";
-import { featherIconName } from "$lib/icons";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from '$constants/theme';
+import { useYouthAchievements } from '$hooks/useStudentData';
+import { featherIconName } from '$lib/icons';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function YouthAchievements() {
   const router = useRouter();
@@ -23,9 +16,7 @@ export default function YouthAchievements() {
 
   const { achievements, loading } = useYouthAchievements();
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
-  const progress = achievements.length
-    ? (unlockedCount / achievements.length) * 100
-    : 0;
+  const progress = achievements.length ? (unlockedCount / achievements.length) * 100 : 0;
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -39,14 +30,12 @@ export default function YouthAchievements() {
           borderBottomRightRadius: 32,
         }}
       >
-        <SafeAreaView edges={["top"]}>
-          <View
-            style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}
-          >
+        <SafeAreaView edges={['top']}>
+          <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginBottom: 20,
               }}
             >
@@ -56,17 +45,15 @@ export default function YouthAchievements() {
                   width: 40,
                   height: 40,
                   borderRadius: 20,
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 12,
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
               </Pressable>
-              <Text style={{ fontSize: 20, fontWeight: "800", color: "white" }}>
-                Достижения
-              </Text>
+              <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Достижения</Text>
             </View>
 
             <View className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
@@ -79,10 +66,7 @@ export default function YouthAchievements() {
                 </Text>
               </View>
               <View className="h-2 bg-white/20 rounded-full overflow-hidden">
-                <View
-                  style={{ width: `${progress}%` }}
-                  className="h-full bg-white rounded-full"
-                />
+                <View style={{ width: `${progress}%` }} className="h-full bg-white rounded-full" />
               </View>
             </View>
           </View>
@@ -97,14 +81,12 @@ export default function YouthAchievements() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <Text className="text-lg font-black text-gray-900 mb-6 px-1">
-          Твои награды
-        </Text>
+        <Text className="text-lg font-black text-gray-900 mb-6 px-1">Твои награды</Text>
 
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               color: COLORS.mutedForeground,
               marginBottom: 16,
             }}
@@ -118,29 +100,21 @@ export default function YouthAchievements() {
             <View
               key={item.id}
               style={{ width: (width - horizontalPadding * 2 - 16) / 2 }}
-              className={`p-6 rounded-[32px] items-center border ${item.unlocked ? "bg-white border-gray-50" : "bg-gray-50 border-gray-100 opacity-60"}`}
+              className={`p-6 rounded-[32px] items-center border ${item.unlocked ? 'bg-white border-gray-50' : 'bg-gray-50 border-gray-100 opacity-60'}`}
             >
               <LinearGradient
-                colors={
-                  item.unlocked
-                    ? ["#EFF6FF", "#F5F3FF"]
-                    : ["#F3F4F6", "#E5E7EB"]
-                }
+                colors={item.unlocked ? ['#EFF6FF', '#F5F3FF'] : ['#F3F4F6', '#E5E7EB']}
                 className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
               >
                 <Feather
-                  name={
-                    item.unlocked
-                      ? featherIconName(item.icon_name, "award")
-                      : "lock"
-                  }
+                  name={item.unlocked ? featherIconName(item.icon_name, 'award') : 'lock'}
                   size={32}
-                  color={item.unlocked ? "#6C5CE7" : "#9CA3AF"}
+                  color={item.unlocked ? '#6C5CE7' : '#9CA3AF'}
                 />
               </LinearGradient>
 
               <Text
-                className={`font-black text-sm text-center ${item.unlocked ? "text-gray-900" : "text-gray-400"}`}
+                className={`font-black text-sm text-center ${item.unlocked ? 'text-gray-900' : 'text-gray-400'}`}
               >
                 {item.name}
               </Text>

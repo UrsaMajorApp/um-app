@@ -1,7 +1,7 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { appHref } from "$lib/router";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
 import {
   ActivityIndicator,
   Dimensions,
@@ -9,15 +9,15 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { LEVEL_LABELS } from "$constants/courseOptions";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { courseGradient, usePublicCourseById } from "$hooks/usePublicData";
-import { formatKZT } from "$lib/formatCurrency";
-import { featherIconName } from "$lib/icons";
-import { isWebMinWidth } from "$lib/useIsDesktop";
+} from 'react-native';
+import { LEVEL_LABELS } from '$constants/courseOptions';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { courseGradient, usePublicCourseById } from '$hooks/usePublicData';
+import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const IS_DESKTOP = isWebMinWidth(width, 900);
 
 export default function CourseModal() {
@@ -31,8 +31,8 @@ export default function CourseModal() {
       <View
         style={{
           flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: COLORS.background,
         }}
       >
@@ -46,21 +46,14 @@ export default function CourseModal() {
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           padding: 32,
         }}
       >
-        <Text style={{ color: COLORS.mutedForeground, fontSize: 16 }}>
-          Курс не найден
-        </Text>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{ marginTop: 16 }}
-        >
-          <Text style={{ color: COLORS.primary, fontWeight: "700" }}>
-            ← Закрыть
-          </Text>
+        <Text style={{ color: COLORS.mutedForeground, fontSize: 16 }}>Курс не найден</Text>
+        <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 16 }}>
+          <Text style={{ color: COLORS.primary, fontWeight: '700' }}>← Закрыть</Text>
         </TouchableOpacity>
       </View>
     );
@@ -72,24 +65,19 @@ export default function CourseModal() {
         contentContainerStyle={{
           padding: 24,
           paddingBottom: 80,
-          alignItems: IS_DESKTOP ? "center" : "stretch",
+          alignItems: IS_DESKTOP ? 'center' : 'stretch',
         }}
       >
-        <View style={{ width: IS_DESKTOP ? "50%" : "100%" }}>
+        <View style={{ width: IS_DESKTOP ? '50%' : '100%' }}>
           {/* Close */}
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={{ marginBottom: 20 }}
-          >
-            <Text style={{ fontSize: 16, color: "white", fontWeight: "700" }}>
-              ← закрыть
-            </Text>
+          <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: 20 }}>
+            <Text style={{ fontSize: 16, color: 'white', fontWeight: '700' }}>← закрыть</Text>
           </TouchableOpacity>
 
           {/* Card */}
           <View
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               borderRadius: 30,
               padding: 24,
               ...SHADOWS.lg,
@@ -98,8 +86,8 @@ export default function CourseModal() {
             {/* Icon + title */}
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: 14,
                 marginBottom: 16,
               }}
@@ -109,29 +97,23 @@ export default function CourseModal() {
                   width: 52,
                   height: 52,
                   borderRadius: 16,
-                  backgroundColor: c1 + "15",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: `${c1}15`,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <Feather
-                  name={featherIconName(course.icon, "book-open")}
-                  size={26}
-                  color={c1}
-                />
+                <Feather name={featherIconName(course.icon, 'book-open')} size={26} color={c1} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text
-                  style={{ fontSize: 22, fontWeight: "900", color: "#111827" }}
-                >
+                <Text style={{ fontSize: 22, fontWeight: '900', color: '#111827' }}>
                   {course.title}
                 </Text>
                 {course.org_name ? (
                   <Text
                     style={{
                       fontSize: 13,
-                      color: "#9CA3AF",
-                      fontWeight: "600",
+                      color: '#9CA3AF',
+                      fontWeight: '600',
                       marginTop: 2,
                     }}
                   >
@@ -144,28 +126,28 @@ export default function CourseModal() {
             {/* Meta */}
             <View
               style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
+                flexDirection: 'row',
+                flexWrap: 'wrap',
                 gap: 8,
                 marginBottom: 16,
               }}
             >
               <View
                 style={{
-                  backgroundColor: c1 + "15",
+                  backgroundColor: `${c1}15`,
                   paddingHorizontal: 12,
                   paddingVertical: 5,
                   borderRadius: 10,
                 }}
               >
-                <Text style={{ fontSize: 11, fontWeight: "800", color: c1 }}>
+                <Text style={{ fontSize: 11, fontWeight: '800', color: c1 }}>
                   {(LEVEL_LABELS[course.level] ?? course.level).toUpperCase()}
                 </Text>
               </View>
               {course.age_min || course.age_max ? (
                 <View
                   style={{
-                    backgroundColor: "#F3F4F6",
+                    backgroundColor: '#F3F4F6',
                     paddingHorizontal: 12,
                     paddingVertical: 5,
                     borderRadius: 10,
@@ -174,11 +156,11 @@ export default function CourseModal() {
                   <Text
                     style={{
                       fontSize: 11,
-                      fontWeight: "800",
-                      color: "#6B7280",
+                      fontWeight: '800',
+                      color: '#6B7280',
                     }}
                   >
-                    {course.age_min ?? ""}–{course.age_max ?? ""} ЛЕТ
+                    {course.age_min ?? ''}–{course.age_max ?? ''} ЛЕТ
                   </Text>
                 </View>
               ) : null}
@@ -190,7 +172,7 @@ export default function CourseModal() {
                 style={{
                   fontSize: 15,
                   lineHeight: 22,
-                  color: "#4B5563",
+                  color: '#4B5563',
                   marginBottom: 20,
                 }}
               >
@@ -203,21 +185,19 @@ export default function CourseModal() {
               <View style={{ marginBottom: 20 }}>
                 <Text
                   style={{
-                    fontWeight: "800",
-                    color: "#111827",
+                    fontWeight: '800',
+                    color: '#111827',
                     marginBottom: 8,
                   }}
                 >
                   Навыки
                 </Text>
-                <View
-                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}
-                >
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
                   {course.skills.map((s) => (
                     <View
                       key={s}
                       style={{
-                        backgroundColor: "#EDE9FE",
+                        backgroundColor: '#EDE9FE',
                         paddingHorizontal: 10,
                         paddingVertical: 4,
                         borderRadius: 8,
@@ -226,8 +206,8 @@ export default function CourseModal() {
                       <Text
                         style={{
                           fontSize: 11,
-                          fontWeight: "700",
-                          color: "#6C5CE7",
+                          fontWeight: '700',
+                          color: '#6C5CE7',
                         }}
                       >
                         {s}
@@ -241,20 +221,14 @@ export default function CourseModal() {
             {/* Price + CTA */}
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
               <View>
-                <Text
-                  style={{ fontSize: 11, color: "#9CA3AF", fontWeight: "600" }}
-                >
-                  Стоимость
-                </Text>
-                <Text
-                  style={{ fontSize: 20, fontWeight: "900", color: "#111827" }}
-                >
+                <Text style={{ fontSize: 11, color: '#9CA3AF', fontWeight: '600' }}>Стоимость</Text>
+                <Text style={{ fontSize: 20, fontWeight: '900', color: '#111827' }}>
                   {formatKZT(course.price)}/мес
                 </Text>
               </View>
@@ -270,11 +244,7 @@ export default function CourseModal() {
                   borderRadius: 18,
                 }}
               >
-                <Text
-                  style={{ color: "white", fontWeight: "900", fontSize: 15 }}
-                >
-                  Записаться
-                </Text>
+                <Text style={{ color: 'white', fontWeight: '900', fontSize: 15 }}>Записаться</Text>
               </TouchableOpacity>
             </View>
           </View>

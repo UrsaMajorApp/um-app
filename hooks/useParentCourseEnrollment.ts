@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { Alert } from "react-native";
-import type { AuthUser } from "$contexts/AuthContext";
-import type { Child } from "$types/child";
-import type { OrgGroup } from "$hooks/useOrgData";
+import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import type { AuthUser } from '$contexts/AuthContext';
+import type { Child } from '$types/child';
+import type { OrgGroup } from '$hooks/useOrgData';
 import {
   applyToCourse,
   applyToTrialLesson,
   checkEnrollment,
   type PublicCourse,
   type TrialLessonSlot,
-} from "$hooks/usePublicData";
+} from '$hooks/usePublicData';
 
-type EnrollmentType = "trial" | "full" | null;
+type EnrollmentType = 'trial' | 'full' | null;
 
 type UseParentCourseEnrollmentParams = {
   course: PublicCourse | null;
@@ -78,11 +78,11 @@ export function useParentCourseEnrollment({
   };
 
   const selectTrial = () => {
-    setEnrollmentType("trial");
+    setEnrollmentType('trial');
   };
 
   const selectFullCourse = () => {
-    setEnrollmentType("full");
+    setEnrollmentType('full');
     setShowEnrollmentChoice(false);
     setShowBookingModal(true);
   };
@@ -109,9 +109,7 @@ export function useParentCourseEnrollment({
       childName: activeChild.name,
       childAge: activeChild.age ?? null,
       parentUserId: user?.id,
-      parentName: user
-        ? `${user.firstName} ${user.lastName}`.trim()
-        : undefined,
+      parentName: user ? `${user.firstName} ${user.lastName}`.trim() : undefined,
       groupId: selectedGroup?.id ?? null,
       groupName: selectedGroup?.name ?? null,
       groupSchedule: selectedGroup?.schedule ?? null,
@@ -119,7 +117,7 @@ export function useParentCourseEnrollment({
     setApplying(false);
 
     if (result.error) {
-      Alert.alert("Ошибка", result.error);
+      Alert.alert('Ошибка', result.error);
       return;
     }
 
@@ -157,7 +155,7 @@ export function useParentCourseEnrollment({
     setApplying(false);
 
     if (result.error) {
-      Alert.alert("Ошибка", result.error);
+      Alert.alert('Ошибка', result.error);
       return;
     }
 
@@ -165,7 +163,7 @@ export function useParentCourseEnrollment({
     setShowEnrollmentChoice(false);
     setEnrollmentType(null);
     setSelectedTimeSlot(null);
-    Alert.alert("Успешно!", `Пробный урок забронирован на ${day} в ${time}`);
+    Alert.alert('Успешно!', `Пробный урок забронирован на ${day} в ${time}`);
   };
 
   return {

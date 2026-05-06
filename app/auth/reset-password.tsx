@@ -1,10 +1,10 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import * as Linking from "expo-linking";
-import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { MotiView } from "moti";
-import React, { useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as Linking from 'expo-linking';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { MotiView } from 'moti';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -15,22 +15,22 @@ import {
   TextInput,
   type TextInputProps,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { PressableScale } from "$components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
   const { updatePassword } = useAuth();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [done, setDone] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,17 +41,17 @@ export default function ResetPasswordScreen() {
   const canSubmit = password.length >= 6 && password === confirmPassword;
 
   useEffect(() => {
-    if (Platform.OS === "web") return;
+    if (Platform.OS === 'web') return;
 
     const parseAndSetSession = async (url: string | null) => {
       if (!url || !supabase || !isSupabaseConfigured) return;
-      const hashPart = url.split("#")[1] ?? "";
-      const queryPart = url.split("?")[1]?.split("#")[0] ?? "";
+      const hashPart = url.split('#')[1] ?? '';
+      const queryPart = url.split('?')[1]?.split('#')[0] ?? '';
       const hashParams = new URLSearchParams(hashPart);
       const queryParams = new URLSearchParams(queryPart);
-      const accessToken = hashParams.get("access_token");
-      const refreshToken = hashParams.get("refresh_token");
-      const code = queryParams.get("code");
+      const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
+      const code = queryParams.get('code');
 
       if (accessToken && refreshToken) {
         await supabase.auth.setSession({
@@ -64,16 +64,14 @@ export default function ResetPasswordScreen() {
     };
 
     Linking.getInitialURL().then(parseAndSetSession);
-    const sub = Linking.addEventListener("url", ({ url }) =>
-      parseAndSetSession(url),
-    );
+    const sub = Linking.addEventListener('url', ({ url }) => parseAndSetSession(url));
     return () => sub.remove();
   }, []);
 
   const handleSubmit = async () => {
-    setError("");
+    setError('');
     if (password !== confirmPassword) {
-      setError("Пароли не совпадают");
+      setError('Пароли не совпадают');
       return;
     }
 
@@ -82,7 +80,7 @@ export default function ResetPasswordScreen() {
     setIsSubmitting(false);
 
     if (!result.success) {
-      setError(result.error || "Не удалось обновить пароль");
+      setError(result.error || 'Не удалось обновить пароль');
       return;
     }
 
@@ -91,7 +89,7 @@ export default function ResetPasswordScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar style="dark" />
@@ -99,7 +97,7 @@ export default function ResetPasswordScreen() {
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
-            alignItems: "center",
+            alignItems: 'center',
             paddingVertical: isDesktop ? 24 : 12,
           }}
           keyboardShouldPersistTaps="handled"
@@ -108,7 +106,7 @@ export default function ResetPasswordScreen() {
           <View
             style={{
               flex: 1,
-              width: "100%",
+              width: '100%',
               maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
               paddingHorizontal: horizontalPadding,
               paddingTop: 8,
@@ -121,9 +119,7 @@ export default function ResetPasswordScreen() {
               style={{ marginBottom: 32 }}
             >
               <Text style={styles.title}>Новый пароль</Text>
-              <Text style={styles.subtitle}>
-                Придумайте новый пароль для входа в аккаунт.
-              </Text>
+              <Text style={styles.subtitle}>Придумайте новый пароль для входа в аккаунт.</Text>
             </MotiView>
 
             <MotiView
@@ -133,15 +129,12 @@ export default function ResetPasswordScreen() {
               style={styles.card}
             >
               {done ? (
-                <View style={{ alignItems: "center", gap: 14 }}>
+                <View style={{ alignItems: 'center', gap: 14 }}>
                   <View style={styles.iconBox}>
                     <Feather name="check" size={24} color={COLORS.primary} />
                   </View>
                   <Text style={styles.doneTitle}>Пароль обновлен</Text>
-                  <PressableScale
-                    onPress={() => router.replace("/login")}
-                    scaleTo={0.93}
-                  >
+                  <PressableScale onPress={() => router.replace('/login')} scaleTo={0.93}>
                     <Text style={styles.linkText}>Войти</Text>
                   </PressableScale>
                 </View>
@@ -159,9 +152,7 @@ export default function ResetPasswordScreen() {
                     value={confirmPassword}
                     onChange={setConfirmPassword}
                     shown={showConfirmPassword}
-                    onToggle={() =>
-                      setShowConfirmPassword(!showConfirmPassword)
-                    }
+                    onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
                   />
 
                   {!!error && (
@@ -214,28 +205,17 @@ export default function ResetPasswordScreen() {
 type PasswordFieldProps = {
   label: string;
   value: string;
-  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  onChange: NonNullable<TextInputProps['onChangeText']>;
   shown: boolean;
   onToggle: () => void;
 };
 
-function PasswordField({
-  label,
-  value,
-  onChange,
-  shown,
-  onToggle,
-}: PasswordFieldProps) {
+function PasswordField({ label, value, onChange, shown, onToggle }: PasswordFieldProps) {
   return (
     <View style={{ marginBottom: 20 }}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputWrapper}>
-        <Feather
-          name="lock"
-          size={18}
-          color={COLORS.mutedForeground}
-          style={styles.inputIcon}
-        />
+        <Feather name="lock" size={18} color={COLORS.mutedForeground} style={styles.inputIcon} />
         <TextInput
           placeholder="Минимум 6 символов"
           placeholderTextColor={COLORS.mutedForeground}
@@ -245,16 +225,8 @@ function PasswordField({
           className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
           style={styles.inputText}
         />
-        <PressableScale
-          onPress={onToggle}
-          style={styles.eyeIcon}
-          scaleTo={0.85}
-        >
-          <Feather
-            name={shown ? "eye-off" : "eye"}
-            size={18}
-            color={COLORS.mutedForeground}
-          />
+        <PressableScale onPress={onToggle} style={styles.eyeIcon} scaleTo={0.85}>
+          <Feather name={shown ? 'eye-off' : 'eye'} size={18} color={COLORS.mutedForeground} />
         </PressableScale>
       </View>
     </View>
@@ -264,7 +236,7 @@ function PasswordField({
 const styles = StyleSheet.create({
   title: {
     fontSize: 32,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
     marginBottom: 8,
   },
@@ -274,35 +246,35 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   card: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: RADIUS.xxl,
     padding: 24,
     ...SHADOWS.md,
   },
   label: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 1,
     opacity: 0.6,
   },
   inputWrapper: {
-    position: "relative",
-    justifyContent: "center",
+    position: 'relative',
+    justifyContent: 'center',
   },
   inputIcon: {
-    position: "absolute",
+    position: 'absolute',
     left: 16,
     zIndex: 1,
   },
   inputText: {
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   eyeIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 16,
     zIndex: 1,
   },
@@ -310,45 +282,45 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 12,
     borderRadius: RADIUS.md,
-    backgroundColor: "#FEE2E2",
+    backgroundColor: '#FEE2E2',
     borderWidth: 1,
-    borderColor: "#FCA5A5",
+    borderColor: '#FCA5A5',
   },
   errorText: {
-    color: "#B91C1C",
-    textAlign: "center",
+    color: '#B91C1C',
+    textAlign: 'center',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   submitBtn: {
     paddingVertical: 18,
     borderRadius: RADIUS.xl,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.md,
   },
   submitText: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "white",
+    fontWeight: '800',
+    color: 'white',
   },
   iconBox: {
     width: 54,
     height: 54,
     borderRadius: 16,
     backgroundColor: `${COLORS.primary}15`,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   doneTitle: {
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
-    textAlign: "center",
+    textAlign: 'center',
   },
   linkText: {
     color: COLORS.primary,
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: '800',
   },
 });

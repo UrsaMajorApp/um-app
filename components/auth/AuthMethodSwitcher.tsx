@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import { COLORS, RADIUS } from "$constants/theme";
-import { PressableScale } from "$components/ui/PressableScale";
+import { StyleSheet, Text, View } from 'react-native';
+import { COLORS, RADIUS } from '$constants/theme';
+import { PressableScale } from '$components/ui/PressableScale';
 
-export type AuthMethod = "phone" | "email";
+export type AuthMethod = 'phone' | 'email';
 
 export function AuthMethodSwitcher({
   value,
@@ -13,7 +13,7 @@ export function AuthMethodSwitcher({
 }) {
   return (
     <View style={styles.switcher}>
-      {(["phone", "email"] as const).map((method) => {
+      {(['phone', 'email'] as const).map((method) => {
         const active = method === value;
         return (
           <PressableScale
@@ -22,10 +22,8 @@ export function AuthMethodSwitcher({
             style={[styles.switcherItem, active && styles.switcherItemActive]}
             scaleTo={0.94}
           >
-            <Text
-              style={[styles.switcherText, active && styles.switcherTextActive]}
-            >
-              {method === "phone" ? "Телефон" : "Email"}
+            <Text style={[styles.switcherText, active && styles.switcherTextActive]}>
+              {method === 'phone' ? 'Телефон' : 'Email'}
             </Text>
           </PressableScale>
         );
@@ -36,7 +34,7 @@ export function AuthMethodSwitcher({
 
 const styles = StyleSheet.create({
   switcher: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: COLORS.muted,
     borderRadius: RADIUS.md,
     padding: 4,
@@ -46,14 +44,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     borderRadius: RADIUS.md - 2,
-    alignItems: "center",
-    backgroundColor: "transparent",
+    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   switcherItemActive: {
     backgroundColor: COLORS.card,
   },
   switcherText: {
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 13,
     color: COLORS.mutedForeground,
   },

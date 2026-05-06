@@ -1,42 +1,25 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import {
-  FormCard,
-  LabeledTextInput,
-  PrimaryActionButton,
-} from "$components/ui/FormControls";
-import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { FormCard, LabeledTextInput, PrimaryActionButton } from '$components/ui/FormControls';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
+import { COLORS, LAYOUT, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function TaskCreateScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    courseId: "",
-    groupId: "",
-    dueDate: "",
-    xp: "50",
+    title: '',
+    description: '',
+    courseId: '',
+    groupId: '',
+    dueDate: '',
+    xp: '50',
   });
 
   const [loading, setLoading] = useState(false);
@@ -65,19 +48,14 @@ export default function TaskCreateScreen() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-        >
+        <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
           <FormCard>
             <View style={{ gap: SPACING.xl }}>
               <LabeledTextInput
                 label="Название задания *"
                 placeholder="Например: Домашняя работа №1"
                 value={formData.title}
-                onChangeText={(val) =>
-                  setFormData({ ...formData, title: val })
-                }
+                onChangeText={(val) => setFormData({ ...formData, title: val })}
               />
 
               <LabeledTextInput
@@ -87,9 +65,7 @@ export default function TaskCreateScreen() {
                 numberOfLines={4}
                 textAlignVertical="top"
                 value={formData.description}
-                onChangeText={(val) =>
-                  setFormData({ ...formData, description: val })
-                }
+                onChangeText={(val) => setFormData({ ...formData, description: val })}
                 inputStyle={{
                   height: undefined,
                   minHeight: 120,
@@ -111,7 +87,7 @@ export default function TaskCreateScreen() {
                     fontSize: 10,
                     fontWeight: TYPOGRAPHY.weight.bold,
                     color: COLORS.mutedForeground,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                     letterSpacing: 1,
                     marginBottom: 8,
                     marginLeft: 4,
@@ -125,9 +101,9 @@ export default function TaskCreateScreen() {
                     backgroundColor: COLORS.background,
                     borderRadius: RADIUS.lg,
                     paddingHorizontal: 16,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     borderWidth: 1,
                     borderColor: COLORS.border,
                   }}
@@ -136,12 +112,10 @@ export default function TaskCreateScreen() {
                     style={{
                       fontSize: 16,
                       fontWeight: TYPOGRAPHY.weight.medium,
-                      color: formData.dueDate
-                        ? COLORS.foreground
-                        : COLORS.mutedForeground,
+                      color: formData.dueDate ? COLORS.foreground : COLORS.mutedForeground,
                     }}
                   >
-                    {formData.dueDate || "Выберите дату"}
+                    {formData.dueDate || 'Выберите дату'}
                   </Text>
                   <Feather name="calendar" size={18} color={COLORS.primary} />
                 </TouchableOpacity>
@@ -149,11 +123,8 @@ export default function TaskCreateScreen() {
             </View>
           </FormCard>
 
-          <PrimaryActionButton
-            onPress={handleSubmit}
-            disabled={loading || !formData.title}
-          >
-            {loading ? "СОЗДАНИЕ..." : "ОПУБЛИКОВАТЬ ЗАДАНИЕ"}
+          <PrimaryActionButton onPress={handleSubmit} disabled={loading || !formData.title}>
+            {loading ? 'СОЗДАНИЕ...' : 'ОПУБЛИКОВАТЬ ЗАДАНИЕ'}
           </PrimaryActionButton>
         </MotiView>
       </ScrollView>

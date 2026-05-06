@@ -1,8 +1,8 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
 import {
   FlatList,
   type ListRenderItem,
@@ -11,20 +11,17 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  SHADOWS
-} from "$constants/theme";
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SHADOWS } from '$constants/theme';
 import {
   useMentorStudentAttendanceSummary,
   type GroupMember,
   useMentorStudents,
-} from "$hooks/useMentorData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-import type { FeatherIconName } from "$types/icons";
+} from '$hooks/useMentorData';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { FeatherIconName } from '$types/icons';
 
 export default function MentorStudentsScreen() {
   const router = useRouter();
@@ -33,7 +30,7 @@ export default function MentorStudentsScreen() {
 
   const { students } = useMentorStudents();
   const { summary } = useMentorStudentAttendanceSummary();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredStudents = students.filter((s) =>
     s.student_name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -44,19 +41,18 @@ export default function MentorStudentsScreen() {
   ): { color: string; label: string; icon: FeatherIconName } => {
     const data = summary[studentId];
     if (!data || data.total === 0)
-      return { color: "#9CA3AF", label: "Нет отметок", icon: "minus-circle" };
-    if (data.missed === 0)
-      return { color: "#10B981", label: "Всё ок", icon: "check-circle" };
+      return { color: '#9CA3AF', label: 'Нет отметок', icon: 'minus-circle' };
+    if (data.missed === 0) return { color: '#10B981', label: 'Всё ок', icon: 'check-circle' };
     if (data.missed <= 2)
       return {
-        color: "#F59E0B",
+        color: '#F59E0B',
         label: `Пропусков: ${data.missed}`,
-        icon: "alert-circle",
+        icon: 'alert-circle',
       };
     return {
-      color: "#EF4444",
-      label: "Требует внимания",
-      icon: "alert-triangle",
+      color: '#EF4444',
+      label: 'Требует внимания',
+      icon: 'alert-triangle',
     };
   };
 
@@ -76,18 +72,13 @@ export default function MentorStudentsScreen() {
           style={styles.cardHeader}
         >
           <View style={[styles.avatarContainer, { borderColor: status.color }]}>
-            <LinearGradient
-              colors={["#6C5CE7", "#8B7FE8"]}
-              style={styles.avatarGradient}
-            >
-              <Text style={styles.avatarText}>
-                {student.student_name.charAt(0)}
-              </Text>
+            <LinearGradient colors={['#6C5CE7', '#8B7FE8']} style={styles.avatarGradient}>
+              <Text style={styles.avatarText}>{student.student_name.charAt(0)}</Text>
             </LinearGradient>
             {/* Status indicator dot */}
             <View
               style={{
-                position: "absolute",
+                position: 'absolute',
                 bottom: -2,
                 right: -2,
                 width: 16,
@@ -95,9 +86,9 @@ export default function MentorStudentsScreen() {
                 borderRadius: 8,
                 backgroundColor: status.color,
                 borderWidth: 2,
-                borderColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
+                borderColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Feather name={status.icon} size={8} color="white" />
@@ -117,21 +108,12 @@ export default function MentorStudentsScreen() {
                   marginRight: 6,
                 }}
               />
-              <Text
-                style={[
-                  styles.nextSessionText,
-                  { color: status.color, fontWeight: "600" },
-                ]}
-              >
+              <Text style={[styles.nextSessionText, { color: status.color, fontWeight: '600' }]}>
                 {status.label}
               </Text>
             </View>
           </View>
-          <Feather
-            name="chevron-right"
-            size={20}
-            color={COLORS.mutedForeground}
-          />
+          <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
         </TouchableOpacity>
 
         {/* Stats Grid */}
@@ -148,16 +130,11 @@ export default function MentorStudentsScreen() {
 
         {/* Progress Bar */}
         <View style={styles.progressContainer}>
-          <View
-            style={[styles.progressBar, { width: `${student.progress}%` }]}
-          />
+          <View style={[styles.progressBar, { width: `${student.progress}%` }]} />
         </View>
 
         {/* Chat Button */}
-        <TouchableOpacity
-          style={styles.chatBtn}
-          onPress={() => router.push("/(tabs)/chats")}
-        >
+        <TouchableOpacity style={styles.chatBtn} onPress={() => router.push('/(tabs)/chats')}>
           <Feather name="message-circle" size={18} color="white" />
           <Text style={styles.chatBtnText}>Перейти в диалог</Text>
         </TouchableOpacity>
@@ -166,15 +143,15 @@ export default function MentorStudentsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: paddingX,
@@ -184,43 +161,32 @@ export default function MentorStudentsScreen() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 16,
                 }}
               >
                 <View>
-                  <Text style={[styles.mainTitle, { color: "white" }]}>
-                    Мои ученики
-                  </Text>
-                  <Text
-                    style={[
-                      styles.subtitle,
-                      { color: "rgba(255,255,255,0.7)" },
-                    ]}
-                  >
+                  <Text style={[styles.mainTitle, { color: 'white' }]}>Мои ученики</Text>
+                  <Text style={[styles.subtitle, { color: 'rgba(255,255,255,0.7)' }]}>
                     Сопровождение и прогресс
                   </Text>
                 </View>
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "rgba(255,255,255,0.15)",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
                   borderRadius: 14,
                   paddingHorizontal: 14,
                   height: 44,
                   borderWidth: 1,
-                  borderColor: "rgba(255,255,255,0.2)",
+                  borderColor: 'rgba(255,255,255,0.2)',
                 }}
               >
-                <Feather
-                  name="search"
-                  size={18}
-                  color="rgba(255,255,255,0.6)"
-                />
+                <Feather name="search" size={18} color="rgba(255,255,255,0.6)" />
                 <TextInput
                   placeholder="Поиск ученика..."
                   placeholderTextColor="rgba(255,255,255,0.6)"
@@ -228,7 +194,7 @@ export default function MentorStudentsScreen() {
                     flex: 1,
                     marginLeft: 10,
                     fontSize: 15,
-                    color: "white",
+                    color: 'white',
                   }}
                   value={searchQuery}
                   onChangeText={setSearchQuery}
@@ -249,15 +215,9 @@ export default function MentorStudentsScreen() {
         }}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <View style={{ padding: 40, alignItems: "center" }}>
-            <MaterialCommunityIcons
-              name="account-search-outline"
-              size={64}
-              color="#E5E7EB"
-            />
-            <Text style={{ color: COLORS.mutedForeground, marginTop: 16 }}>
-              Ученики не найдены
-            </Text>
+          <View style={{ padding: 40, alignItems: 'center' }}>
+            <MaterialCommunityIcons name="account-search-outline" size={64} color="#E5E7EB" />
+            <Text style={{ color: COLORS.mutedForeground, marginTop: 16 }}>Ученики не найдены</Text>
           </View>
         }
       />
@@ -268,7 +228,7 @@ export default function MentorStudentsScreen() {
 const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
     letterSpacing: -0.5,
   },
@@ -281,62 +241,62 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 14,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.sm,
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
     borderRadius: 16,
     paddingHorizontal: 16,
     height: 52,
     ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderColor: '#F3F4F6',
   },
   searchInput: {
     flex: 1,
     marginLeft: 12,
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   card: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 24,
     padding: 20,
     marginBottom: 20,
     ...SHADOWS.md,
   },
   cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
   },
   avatarContainer: {
     width: 64,
     height: 64,
     borderRadius: 32,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginRight: 16,
     borderWidth: 2,
-    borderColor: "#6C5CE7",
+    borderColor: '#6C5CE7',
   },
   avatarGradient: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatarText: {
     fontSize: 24,
-    fontWeight: "800",
-    color: "white",
+    fontWeight: '800',
+    color: 'white',
   },
   studentName: {
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: '800',
     color: COLORS.foreground,
   },
   studentAge: {
@@ -345,8 +305,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   nextSessionRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 4,
     gap: 6,
   },
@@ -355,21 +315,21 @@ const styles = StyleSheet.create({
     color: COLORS.mutedForeground,
   },
   statsGrid: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
     marginBottom: 16,
   },
   statBox: {
     flex: 1,
-    backgroundColor: "#F8F7FF",
+    backgroundColor: '#F8F7FF',
     borderRadius: 16,
     paddingVertical: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   statValue: {
     fontSize: 20,
-    fontWeight: "800",
-    color: "#6C5CE7",
+    fontWeight: '800',
+    color: '#6C5CE7',
   },
   statLabel: {
     fontSize: 11,
@@ -378,29 +338,29 @@ const styles = StyleSheet.create({
   },
   progressContainer: {
     height: 8,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: '#F3F4F6',
     borderRadius: 4,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginBottom: 20,
   },
   progressBar: {
-    height: "100%",
-    backgroundColor: "#6C5CE7",
+    height: '100%',
+    backgroundColor: '#6C5CE7',
     borderRadius: 4,
   },
   chatBtn: {
-    backgroundColor: "#6C5CE7",
+    backgroundColor: '#6C5CE7',
     height: 52,
     borderRadius: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
     ...SHADOWS.sm,
   },
   chatBtnText: {
-    color: "white",
+    color: 'white',
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: '700',
   },
 });

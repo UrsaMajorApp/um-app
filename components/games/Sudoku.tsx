@@ -1,20 +1,17 @@
-import { Feather } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { useCallback, useEffect, useState } from 'react';
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    UIManager,
-    useWindowDimensions,
-    View
-} from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  UIManager,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -28,11 +25,7 @@ type Cell = {
   error: boolean;
 };
 
-export default function Sudoku({
-  onFinish,
-}: {
-  onFinish: (score: number) => void;
-}) {
+export default function Sudoku({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
   const [grid, setGrid] = useState<Cell[][]>([]);
   const [solution, setSolution] = useState<number[][]>([]);
@@ -60,17 +53,13 @@ export default function Sudoku({
     // Shuffle rows within 3x3 blocks
     const shuffle = <T,>(arr: T[]) => arr.sort(() => Math.random() - 0.5);
 
-    const rowBlocks = [0, 1, 2].map((i) =>
-      shuffle([i * 3, i * 3 + 1, i * 3 + 2]),
-    );
+    const rowBlocks = [0, 1, 2].map((i) => shuffle([i * 3, i * 3 + 1, i * 3 + 2]));
     const shuffledRows = rowBlocks.flat();
 
     let board = shuffledRows.map((r) => base[r]);
 
     // Shuffle columns within 3x3 blocks
-    const colBlocks = [0, 1, 2].map((i) =>
-      shuffle([i * 3, i * 3 + 1, i * 3 + 2]),
-    );
+    const colBlocks = [0, 1, 2].map((i) => shuffle([i * 3, i * 3 + 1, i * 3 + 2]));
     const shuffledCols = colBlocks.flat();
 
     board = board.map((row) => shuffledCols.map((c) => row[c]));
@@ -87,11 +76,11 @@ export default function Sudoku({
     );
 
     // Mark original non-zero cells
-    maskedGrid.forEach((row) =>
+    maskedGrid.forEach((row) => {
       row.forEach((cell) => {
         if (cell.value === 0) cell.original = false;
-      }),
-    );
+      });
+    });
 
     setGrid(maskedGrid);
     setGameOver(false);
@@ -147,14 +136,10 @@ export default function Sudoku({
     const { r: sr, c: sc } = selectedCell;
     // Same row, column or 3x3 box
     if (r === sr || c === sc) return true;
-    if (
-      Math.floor(r / 3) === Math.floor(sr / 3) &&
-      Math.floor(c / 3) === Math.floor(sc / 3)
-    )
+    if (Math.floor(r / 3) === Math.floor(sr / 3) && Math.floor(c / 3) === Math.floor(sc / 3))
       return true;
     // Same value
-    if (grid[r][c].value !== 0 && grid[r][c].value === grid[sr][sc].value)
-      return true;
+    if (grid[r][c].value !== 0 && grid[r][c].value === grid[sr][sc].value) return true;
     return false;
   };
 
@@ -181,10 +166,7 @@ export default function Sudoku({
       <View style={styles.board}>
         <View style={styles.boardInner}>
           {grid.map((row, r) => (
-            <View
-              key={r}
-              style={[styles.row, r % 3 === 2 && r !== 8 && styles.rowBorder]}
-            >
+            <View key={r} style={[styles.row, r % 3 === 2 && r !== 8 && styles.rowBorder]}>
               {row.map((cell, c) => (
                 <TouchableOpacity
                   key={c}
@@ -194,19 +176,13 @@ export default function Sudoku({
                     styles.cell,
                     { width: cellSize, height: cellSize },
                     c % 3 === 2 && c !== 8 && styles.cellBorder,
-                    selectedCell?.r === r &&
-                      selectedCell?.c === c &&
-                      styles.cellActive,
-                    !grid[r][c].original &&
-                      isRelated(r, c) &&
-                      styles.cellRelated,
+                    selectedCell?.r === r && selectedCell?.c === c && styles.cellActive,
+                    !grid[r][c].original && isRelated(r, c) && styles.cellRelated,
                     cell.error && styles.cellError,
                     r === 0 && c === 0 && styles.cellTopLeft,
                     r === 0 && c === GRID_SIZE - 1 && styles.cellTopRight,
                     r === GRID_SIZE - 1 && c === 0 && styles.cellBottomLeft,
-                    r === GRID_SIZE - 1 &&
-                      c === GRID_SIZE - 1 &&
-                      styles.cellBottomRight,
+                    r === GRID_SIZE - 1 && c === GRID_SIZE - 1 && styles.cellBottomRight,
                   ]}
                 >
                   {cell.value !== 0 && (
@@ -233,10 +209,7 @@ export default function Sudoku({
           <TouchableOpacity
             key={num}
             onPress={() => handleNumberInput(num)}
-            style={[
-              styles.padBtn,
-              { width: numberPadButtonSize, height: numberPadButtonSize },
-            ]}
+            style={[styles.padBtn, { width: numberPadButtonSize, height: numberPadButtonSize }]}
           >
             <Text style={styles.padBtnText}>{num}</Text>
           </TouchableOpacity>
@@ -249,10 +222,7 @@ export default function Sudoku({
             <Feather name="check-circle" size={48} color="#10B981" />
             <Text style={styles.winText}>Превосходно!</Text>
             <Text style={styles.winSub}>Головоломка решена</Text>
-            <TouchableOpacity
-              onPress={generateSudoku}
-              style={styles.continueBtn}
-            >
+            <TouchableOpacity onPress={generateSudoku} style={styles.continueBtn}>
               <Text style={styles.continueText}>Еще разок</Text>
             </TouchableOpacity>
           </View>
@@ -264,20 +234,20 @@ export default function Sudoku({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: BOARD_PADDING,
-    width: "100%",
+    width: '100%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
   },
   statBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: RADIUS.md,
@@ -285,7 +255,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   statText: {
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
     fontSize: 13,
   },
@@ -294,34 +264,34 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: COLORS.primary,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.md,
   },
   board: {
-    backgroundColor: "#1F2937",
+    backgroundColor: '#1F2937',
     padding: 3,
     borderRadius: RADIUS.md,
-    overflow: "hidden",
+    overflow: 'hidden',
     ...SHADOWS.lg,
   },
   boardInner: {
-    backgroundColor: "#1F2937",
+    backgroundColor: '#1F2937',
     borderRadius: RADIUS.md,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   rowBorder: {
     borderBottomWidth: 2,
-    borderBottomColor: "#1F2937",
+    borderBottomColor: '#1F2937',
   },
   cell: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     margin: 0.5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cellTopLeft: {
     borderTopLeftRadius: RADIUS.md,
@@ -337,23 +307,23 @@ const styles = StyleSheet.create({
   },
   cellBorder: {
     borderRightWidth: 2,
-    borderRightColor: "#1F2937",
+    borderRightColor: '#1F2937',
   },
   cellActive: {
-    backgroundColor: "#E0E7FF",
+    backgroundColor: '#E0E7FF',
   },
   cellRelated: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: '#F3F4F6',
   },
   cellError: {
-    backgroundColor: "#FEE2E2",
+    backgroundColor: '#FEE2E2',
   },
   cellText: {
-    fontWeight: "700",
+    fontWeight: '700',
   },
   textOriginal: {
-    color: "#1F2937",
-    fontWeight: "900",
+    color: '#1F2937',
+    fontWeight: '900',
   },
   textInput: {
     color: COLORS.primary,
@@ -362,43 +332,43 @@ const styles = StyleSheet.create({
     color: COLORS.destructive,
   },
   numberPad: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     marginTop: 30,
     gap: 10,
   },
   padBtn: {
     width: 50,
     height: 50,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: RADIUS.md,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.sm,
   },
   padBtnText: {
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.primary,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255,255,255,0.9)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 10,
   },
   overlayContent: {
-    alignItems: "center",
-    backgroundColor: "white",
+    alignItems: 'center',
+    backgroundColor: 'white',
     padding: 40,
     borderRadius: RADIUS.xxl,
     ...SHADOWS.lg,
   },
   winText: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
     marginTop: 20,
   },
@@ -413,7 +383,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xl,
   },
   continueText: {
-    color: "white",
-    fontWeight: "900",
+    color: 'white',
+    fontWeight: '900',
   },
 });

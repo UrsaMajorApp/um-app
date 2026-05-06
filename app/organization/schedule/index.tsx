@@ -1,20 +1,14 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
-import { useOrgSchedule } from "$hooks/useOrgData";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import { useOrgSchedule } from '$hooks/useOrgData';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
-const DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 export default function OrgScheduleScreen() {
   const router = useRouter();
@@ -31,21 +25,16 @@ export default function OrgScheduleScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: 24 }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}
-            >
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: 24 }}>
+          <SafeAreaView edges={['top']}>
+            <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 20,
                 }}
               >
@@ -55,9 +44,9 @@ export default function OrgScheduleScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: 12,
                   }}
                 >
@@ -66,8 +55,8 @@ export default function OrgScheduleScreen() {
                 <Text
                   style={{
                     fontSize: 20,
-                    fontWeight: "800",
-                    color: "white",
+                    fontWeight: '800',
+                    color: 'white',
                     flex: 1,
                   }}
                 >
@@ -78,9 +67,9 @@ export default function OrgScheduleScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="plus" size={20} color="white" />
@@ -101,27 +90,18 @@ export default function OrgScheduleScreen() {
                       width: 48,
                       height: 64,
                       borderRadius: RADIUS.md,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       borderWidth: 1,
-                      backgroundColor:
-                        selectedDay === index
-                          ? "white"
-                          : "rgba(255,255,255,0.1)",
-                      borderColor:
-                        selectedDay === index
-                          ? "white"
-                          : "rgba(255,255,255,0.2)",
+                      backgroundColor: selectedDay === index ? 'white' : 'rgba(255,255,255,0.1)',
+                      borderColor: selectedDay === index ? 'white' : 'rgba(255,255,255,0.2)',
                     }}
                   >
                     <Text
                       style={{
-                        fontWeight: "900",
+                        fontWeight: '900',
                         fontSize: 12,
-                        color:
-                          selectedDay === index
-                            ? COLORS.primary
-                            : "rgba(255,255,255,0.6)",
+                        color: selectedDay === index ? COLORS.primary : 'rgba(255,255,255,0.6)',
                       }}
                     >
                       {day}
@@ -132,10 +112,7 @@ export default function OrgScheduleScreen() {
                         width: 4,
                         height: 4,
                         borderRadius: 2,
-                        backgroundColor:
-                          selectedDay === index
-                            ? COLORS.primary
-                            : "transparent",
+                        backgroundColor: selectedDay === index ? COLORS.primary : 'transparent',
                       }}
                     />
                   </Pressable>
@@ -157,7 +134,7 @@ export default function OrgScheduleScreen() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               color: COLORS.mutedForeground,
               marginTop: 20,
             }}
@@ -167,14 +144,14 @@ export default function OrgScheduleScreen() {
         )}
 
         {!loading && items.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Feather name="calendar" size={40} color="#E5E7EB" />
             <Text
               style={{
                 marginTop: 16,
                 color: COLORS.mutedForeground,
-                fontWeight: "600",
-                textAlign: "center",
+                fontWeight: '600',
+                textAlign: 'center',
               }}
             >
               Нет занятий на этот день
@@ -190,21 +167,17 @@ export default function OrgScheduleScreen() {
               className="bg-white rounded-[32px] p-5 flex-row border border-gray-50 items-center"
             >
               <View className="pr-5 border-r border-gray-100 items-center justify-center w-20">
-                <Text className="text-gray-900 font-black text-lg">
-                  {item.time_label}
-                </Text>
+                <Text className="text-gray-900 font-black text-lg">{item.time_label}</Text>
                 <Text className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
                   START
                 </Text>
               </View>
 
               <View className="pl-5 flex-1">
-                <Text className="text-base font-black text-gray-900 mb-1">
-                  {item.subject}
-                </Text>
+                <Text className="text-base font-black text-gray-900 mb-1">{item.subject}</Text>
                 <View className="flex-row items-center gap-2 mb-2">
                   <View
-                    style={{ backgroundColor: item.color + "15" }}
+                    style={{ backgroundColor: `${item.color}15` }}
                     className="px-2 py-0.5 rounded-lg"
                   >
                     <Text
@@ -221,9 +194,7 @@ export default function OrgScheduleScreen() {
                   ) : null}
                 </View>
                 <View className="flex-row items-center gap-2">
-                  <Text className="text-xs text-gray-500 font-bold">
-                    {item.teacher_name}
-                  </Text>
+                  <Text className="text-xs text-gray-500 font-bold">{item.teacher_name}</Text>
                 </View>
               </View>
 

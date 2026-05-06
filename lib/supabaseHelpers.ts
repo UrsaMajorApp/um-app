@@ -1,4 +1,4 @@
-import { supabase } from "$lib/supabase";
+import { supabase } from '$lib/supabase';
 
 type SupabaseRowsResponse<T> = {
   data: T[] | null;
@@ -10,15 +10,13 @@ export function rowsOrEmpty<T = unknown>(res: SupabaseRowsResponse<T>): T[] {
   return res.data;
 }
 
-export async function resolveOwnedOrgId(
-  userId: string,
-): Promise<string | null> {
+export async function resolveOwnedOrgId(userId: string): Promise<string | null> {
   if (!supabase) return null;
 
   const res = await supabase
-    .from("organizations")
-    .select("id")
-    .eq("owner_user_id", userId)
+    .from('organizations')
+    .select('id')
+    .eq('owner_user_id', userId)
     .limit(1)
     .maybeSingle();
 

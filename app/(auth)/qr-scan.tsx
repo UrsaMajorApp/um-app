@@ -1,9 +1,9 @@
-import { Feather } from "@expo/vector-icons";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { MotiView } from "moti";
-import React, { useEffect, useRef, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { MotiView } from 'moti';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -13,12 +13,12 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { PressableScale } from "$components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, LAYOUT, RADIUS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function QRScanScreen() {
   const router = useRouter();
@@ -31,8 +31,8 @@ export default function QRScanScreen() {
 
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
-  const [manualCode, setManualCode] = useState("");
-  const [error, setError] = useState("");
+  const [manualCode, setManualCode] = useState('');
+  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // On web or when user prefers manual entry
@@ -42,12 +42,12 @@ export default function QRScanScreen() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [webCameraActive, setWebCameraActive] = useState(false);
-  const [webCameraError, setWebCameraError] = useState("");
+  const [webCameraError, setWebCameraError] = useState('');
 
   const handleQRData = async (data: string) => {
     if (scanned || isSubmitting) return;
     setScanned(true);
-    setError("");
+    setError('');
     await processCode(data);
   };
 
@@ -56,7 +56,7 @@ export default function QRScanScreen() {
     const token = raw.trim();
 
     if (!token) {
-      setError("Неверный QR-код");
+      setError('Неверный QR-код');
       setScanned(false);
       setIsSubmitting(false);
       return;
@@ -64,9 +64,9 @@ export default function QRScanScreen() {
 
     const result = await loginWithQR(token);
     if (result.success) {
-      router.replace("/(tabs)/home");
+      router.replace('/(tabs)/home');
     } else {
-      setError(result.error ?? "Недействительный QR-код");
+      setError(result.error ?? 'Недействительный QR-код');
       setScanned(false);
     }
     setIsSubmitting(false);
@@ -74,8 +74,8 @@ export default function QRScanScreen() {
 
   // Web camera QR scanning
   useEffect(() => {
-    if (Platform.OS !== "web" || useManual || !webCameraActive) return;
-    if (typeof navigator === "undefined" || !navigator.mediaDevices) return;
+    if (Platform.OS !== 'web' || useManual || !webCameraActive) return;
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices) return;
 
     let animationFrameId: number;
     let stream: MediaStream | null = null;
@@ -83,7 +83,7 @@ export default function QRScanScreen() {
     const startWebCamera = async () => {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
+          video: { facingMode: 'environment' },
         });
 
         if (videoRef.current) {
@@ -91,8 +91,8 @@ export default function QRScanScreen() {
           videoRef.current.play();
           scanQRCode();
         }
-      } catch (err) {
-        setWebCameraError("Не удалось получить доступ к камере");
+      } catch {
+        setWebCameraError('Не удалось получить доступ к камере');
         setWebCameraActive(false);
       }
     };
@@ -102,7 +102,7 @@ export default function QRScanScreen() {
 
       const video = videoRef.current;
       const canvas = canvasRef.current;
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext('2d');
 
       if (!context || video.readyState !== video.HAVE_ENOUGH_DATA) {
         animationFrameId = requestAnimationFrame(scanQRCode);
@@ -116,7 +116,7 @@ export default function QRScanScreen() {
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
       // Dynamically import jsQR for web only
-      import("jsqr").then(({ default: jsQR }) => {
+      import('jsqr').then(({ default: jsQR }) => {
         const code = jsQR(imageData.data, imageData.width, imageData.height);
         if (code && !scanned) {
           handleQRData(code.data);
@@ -133,21 +133,23 @@ export default function QRScanScreen() {
         cancelAnimationFrame(animationFrameId);
       }
       if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach((track) => {
+          track.stop();
+        });
       }
     };
   }, [webCameraActive, useManual, scanned]);
 
   const startWebScanning = () => {
     setWebCameraActive(true);
-    setWebCameraError("");
-    setError("");
+    setWebCameraError('');
+    setError('');
     setScanned(false);
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar style="dark" />
@@ -156,7 +158,7 @@ export default function QRScanScreen() {
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
-              alignItems: "center",
+              alignItems: 'center',
               paddingVertical: isDesktop ? 24 : 12,
             }}
             keyboardShouldPersistTaps="handled"
@@ -165,7 +167,7 @@ export default function QRScanScreen() {
             <View
               style={{
                 flex: 1,
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
                 paddingTop: 8,
@@ -175,23 +177,19 @@ export default function QRScanScreen() {
               <PressableScale
                 onPress={() => router.back()}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 32,
                 }}
                 scaleTo={0.93}
               >
-                <Feather
-                  name="arrow-left"
-                  size={20}
-                  color={COLORS.mutedForeground}
-                />
+                <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                 <Text
                   style={{
                     color: COLORS.mutedForeground,
                     marginLeft: 8,
                     fontSize: 15,
-                    fontWeight: "500",
+                    fontWeight: '500',
                   }}
                 >
                   Назад
@@ -208,7 +206,7 @@ export default function QRScanScreen() {
                 <Text
                   style={{
                     fontSize: 26,
-                    fontWeight: "700",
+                    fontWeight: '700',
                     color: COLORS.foreground,
                     marginBottom: 6,
                   }}
@@ -229,21 +227,21 @@ export default function QRScanScreen() {
               {/* Camera / manual toggle */}
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   backgroundColor: COLORS.muted,
                   borderRadius: RADIUS.md,
                   padding: 4,
                   marginBottom: 20,
                 }}
               >
-                {(["camera", "manual"] as const).map((mode) => {
-                  const active = mode === "camera" ? !useManual : useManual;
+                {(['camera', 'manual'] as const).map((mode) => {
+                  const active = mode === 'camera' ? !useManual : useManual;
                   return (
                     <PressableScale
                       key={mode}
                       onPress={() => {
-                        setUseManual(mode === "manual");
-                        setError("");
+                        setUseManual(mode === 'manual');
+                        setError('');
                         setScanned(false);
                         setWebCameraActive(false);
                       }}
@@ -251,21 +249,19 @@ export default function QRScanScreen() {
                         flex: 1,
                         paddingVertical: 10,
                         borderRadius: RADIUS.md - 2,
-                        alignItems: "center",
-                        backgroundColor: active ? COLORS.card : "transparent",
+                        alignItems: 'center',
+                        backgroundColor: active ? COLORS.card : 'transparent',
                       }}
                       scaleTo={0.94}
                     >
                       <Text
                         style={{
-                          fontWeight: "600",
+                          fontWeight: '600',
                           fontSize: 13,
-                          color: active
-                            ? COLORS.foreground
-                            : COLORS.mutedForeground,
+                          color: active ? COLORS.foreground : COLORS.mutedForeground,
                         }}
                       >
-                        {mode === "camera" ? "Сканировать" : "Ввести код"}
+                        {mode === 'camera' ? 'Сканировать' : 'Ввести код'}
                       </Text>
                     </PressableScale>
                   );
@@ -273,7 +269,7 @@ export default function QRScanScreen() {
               </View>
 
               {/* Web Camera view */}
-              {!useManual && Platform.OS === "web" && (
+              {!useManual && Platform.OS === 'web' && (
                 <MotiView
                   from={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -282,26 +278,22 @@ export default function QRScanScreen() {
                   {!webCameraActive ? (
                     <View
                       style={{
-                        alignItems: "center",
+                        alignItems: 'center',
                         paddingVertical: 40,
                         backgroundColor: COLORS.muted,
                         borderRadius: RADIUS.lg,
                         marginBottom: 16,
                       }}
                     >
-                      <Feather
-                        name="camera"
-                        size={40}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="camera" size={40} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           color: COLORS.foreground,
-                          fontWeight: "600",
+                          fontWeight: '600',
                           fontSize: 15,
                           marginTop: 12,
                           marginBottom: 8,
-                          textAlign: "center",
+                          textAlign: 'center',
                         }}
                       >
                         Сканировать QR-код
@@ -310,7 +302,7 @@ export default function QRScanScreen() {
                         style={{
                           color: COLORS.mutedForeground,
                           fontSize: 13,
-                          textAlign: "center",
+                          textAlign: 'center',
                           marginBottom: 20,
                           paddingHorizontal: 16,
                         }}
@@ -326,17 +318,15 @@ export default function QRScanScreen() {
                           borderRadius: RADIUS.md,
                         }}
                       >
-                        <Text style={{ color: "white", fontWeight: "600" }}>
-                          Включить камеру
-                        </Text>
+                        <Text style={{ color: 'white', fontWeight: '600' }}>Включить камеру</Text>
                       </PressableScale>
                       {webCameraError && (
                         <Text
                           style={{
-                            color: "#B91C1C",
+                            color: '#B91C1C',
                             fontSize: 13,
                             marginTop: 12,
-                            textAlign: "center",
+                            textAlign: 'center',
                           }}
                         >
                           {webCameraError}
@@ -347,23 +337,24 @@ export default function QRScanScreen() {
                     <View
                       style={{
                         borderRadius: RADIUS.lg,
-                        overflow: "hidden",
+                        overflow: 'hidden',
                         aspectRatio: 1,
                         marginBottom: 16,
-                        position: "relative",
+                        position: 'relative',
                         backgroundColor: COLORS.muted,
                       }}
                     >
+                      {/* biome-ignore lint/a11y/useMediaCaption: Camera preview has no audio track. */}
                       <video
                         ref={videoRef}
                         style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
                         }}
                         playsInline
                       />
-                      <canvas ref={canvasRef} style={{ display: "none" }} />
+                      <canvas ref={canvasRef} style={{ display: 'none' }} />
                       {/* Corner guides */}
                       {(
                         [
@@ -397,10 +388,10 @@ export default function QRScanScreen() {
                           key={i}
                           style={[
                             {
-                              position: "absolute",
+                              position: 'absolute',
                               width: 28,
                               height: 28,
-                              borderColor: "white",
+                              borderColor: 'white',
                             },
                             style,
                           ]}
@@ -409,14 +400,14 @@ export default function QRScanScreen() {
                       {isSubmitting && (
                         <View
                           style={{
-                            position: "absolute",
+                            position: 'absolute',
                             top: 0,
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
                           <ActivityIndicator size="large" color="white" />
@@ -428,7 +419,7 @@ export default function QRScanScreen() {
               )}
 
               {/* Camera view */}
-              {!useManual && Platform.OS !== "web" && (
+              {!useManual && Platform.OS !== 'web' && (
                 <MotiView
                   from={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -437,26 +428,22 @@ export default function QRScanScreen() {
                   {!permission?.granted ? (
                     <View
                       style={{
-                        alignItems: "center",
+                        alignItems: 'center',
                         paddingVertical: 40,
                         backgroundColor: COLORS.muted,
                         borderRadius: RADIUS.lg,
                         marginBottom: 16,
                       }}
                     >
-                      <Feather
-                        name="camera-off"
-                        size={40}
-                        color={COLORS.mutedForeground}
-                      />
+                      <Feather name="camera-off" size={40} color={COLORS.mutedForeground} />
                       <Text
                         style={{
                           color: COLORS.foreground,
-                          fontWeight: "600",
+                          fontWeight: '600',
                           fontSize: 15,
                           marginTop: 12,
                           marginBottom: 8,
-                          textAlign: "center",
+                          textAlign: 'center',
                         }}
                       >
                         Нужен доступ к камере
@@ -465,7 +452,7 @@ export default function QRScanScreen() {
                         style={{
                           color: COLORS.mutedForeground,
                           fontSize: 13,
-                          textAlign: "center",
+                          textAlign: 'center',
                           marginBottom: 20,
                           paddingHorizontal: 16,
                         }}
@@ -481,25 +468,23 @@ export default function QRScanScreen() {
                           borderRadius: RADIUS.md,
                         }}
                       >
-                        <Text style={{ color: "white", fontWeight: "600" }}>
-                          Разрешить камеру
-                        </Text>
+                        <Text style={{ color: 'white', fontWeight: '600' }}>Разрешить камеру</Text>
                       </PressableScale>
                     </View>
                   ) : (
                     <View
                       style={{
                         borderRadius: RADIUS.lg,
-                        overflow: "hidden",
+                        overflow: 'hidden',
                         aspectRatio: 1,
                         marginBottom: 16,
-                        position: "relative",
+                        position: 'relative',
                       }}
                     >
                       <CameraView
                         style={{ flex: 1 }}
                         facing="back"
-                        barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+                        barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
                         onBarcodeScanned={({ data }) => handleQRData(data)}
                       />
                       {/* Corner guides */}
@@ -535,10 +520,10 @@ export default function QRScanScreen() {
                           key={i}
                           style={[
                             {
-                              position: "absolute",
+                              position: 'absolute',
                               width: 28,
                               height: 28,
-                              borderColor: "white",
+                              borderColor: 'white',
                             },
                             style,
                           ]}
@@ -548,9 +533,9 @@ export default function QRScanScreen() {
                         <View
                           style={{
                             ...StyleSheet.absoluteFillObject,
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
                           <ActivityIndicator size="large" color="white" />
@@ -570,7 +555,7 @@ export default function QRScanScreen() {
                 >
                   <View
                     style={{
-                      alignItems: "center",
+                      alignItems: 'center',
                       padding: 32,
                       backgroundColor: COLORS.muted,
                       borderRadius: RADIUS.lg,
@@ -583,7 +568,7 @@ export default function QRScanScreen() {
                         color: COLORS.mutedForeground,
                         fontSize: 13,
                         marginTop: 12,
-                        textAlign: "center",
+                        textAlign: 'center',
                       }}
                     >
                       Введите 6-значный код
@@ -593,7 +578,7 @@ export default function QRScanScreen() {
                   <Text
                     style={{
                       fontSize: 14,
-                      fontWeight: "500",
+                      fontWeight: '500',
                       color: COLORS.foreground,
                       marginBottom: 8,
                     }}
@@ -604,7 +589,7 @@ export default function QRScanScreen() {
                     value={manualCode}
                     onChangeText={(text) => {
                       // Only allow digits and max 6 characters
-                      const filtered = text.replace(/[^0-9]/g, "").slice(0, 6);
+                      const filtered = text.replace(/[^0-9]/g, '').slice(0, 6);
                       setManualCode(filtered);
                     }}
                     placeholder="000000"
@@ -612,7 +597,7 @@ export default function QRScanScreen() {
                     keyboardType="number-pad"
                     maxLength={6}
                     style={{
-                      width: "100%",
+                      width: '100%',
                       paddingHorizontal: 16,
                       paddingVertical: 14,
                       backgroundColor: COLORS.muted,
@@ -620,10 +605,10 @@ export default function QRScanScreen() {
                       borderWidth: 2,
                       borderColor: COLORS.border,
                       fontSize: 24,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                       marginBottom: 16,
-                      textAlign: "center",
+                      textAlign: 'center',
                       letterSpacing: 8,
                     }}
                   />
@@ -632,30 +617,22 @@ export default function QRScanScreen() {
                     onPress={() => processCode(manualCode)}
                     disabled={manualCode.length !== 6 || isSubmitting}
                     style={{
-                      width: "100%",
+                      width: '100%',
                       paddingVertical: 16,
                       borderRadius: RADIUS.md,
-                      alignItems: "center",
+                      alignItems: 'center',
                       backgroundColor:
-                        manualCode.length !== 6 || isSubmitting
-                          ? COLORS.muted
-                          : COLORS.primary,
+                        manualCode.length !== 6 || isSubmitting ? COLORS.muted : COLORS.primary,
                     }}
                   >
                     {isSubmitting ? (
-                      <ActivityIndicator
-                        size="small"
-                        color={COLORS.mutedForeground}
-                      />
+                      <ActivityIndicator size="small" color={COLORS.mutedForeground} />
                     ) : (
                       <Text
                         style={{
                           fontSize: 16,
-                          fontWeight: "600",
-                          color:
-                            manualCode.length !== 6
-                              ? COLORS.mutedForeground
-                              : "white",
+                          fontWeight: '600',
+                          color: manualCode.length !== 6 ? COLORS.mutedForeground : 'white',
                         }}
                       >
                         Войти
@@ -672,13 +649,13 @@ export default function QRScanScreen() {
                     marginTop: 16,
                     padding: 12,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "#FEE2E2",
+                    backgroundColor: '#FEE2E2',
                   }}
                 >
                   <Text
                     style={{
-                      color: "#B91C1C",
-                      fontWeight: "500",
+                      color: '#B91C1C',
+                      fontWeight: '500',
                       fontSize: 13,
                     }}
                   >

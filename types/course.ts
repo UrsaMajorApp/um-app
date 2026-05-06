@@ -18,5 +18,5 @@ export interface Course {
   duration?: string;
   price: number | string;
   skills?: string | CourseSkill[];
-  status?: "active" | "draft" | "archived" | string;
+  status?: 'active' | 'draft' | 'archived' | string;
 }

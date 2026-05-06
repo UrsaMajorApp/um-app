@@ -1,43 +1,28 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgApplications } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MotiView } from 'moti';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgApplications } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgApplicationsScreen() {
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { apps, approve, reject: rejectApp } = useOrgApplications();
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "paid":
+      case 'paid':
         return (
           <View
             style={{
               paddingHorizontal: 8,
               paddingVertical: 4,
               borderRadius: RADIUS.md,
-              backgroundColor: "rgba(52, 199, 89, 0.1)",
+              backgroundColor: 'rgba(52, 199, 89, 0.1)',
             }}
           >
             <Text
@@ -51,42 +36,42 @@ export default function OrgApplicationsScreen() {
             </Text>
           </View>
         );
-      case "awaiting_payment":
+      case 'awaiting_payment':
         return (
           <View
             style={{
               paddingHorizontal: 8,
               paddingVertical: 4,
               borderRadius: RADIUS.md,
-              backgroundColor: "rgba(245, 158, 11, 0.1)",
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
             }}
           >
             <Text
               style={{
                 fontSize: 10,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                color: "#F59E0B",
+                color: '#F59E0B',
               }}
             >
               ОЖИДАЕТ
             </Text>
           </View>
         );
-      case "activated":
+      case 'activated':
         return (
           <View
             style={{
               paddingHorizontal: 8,
               paddingVertical: 4,
               borderRadius: RADIUS.md,
-              backgroundColor: "rgba(59, 130, 246, 0.1)",
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
             }}
           >
             <Text
               style={{
                 fontSize: 10,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                color: "#3B82F6",
+                color: '#3B82F6',
               }}
             >
               АКТИВЕН
@@ -98,8 +83,8 @@ export default function OrgApplicationsScreen() {
     }
   };
 
-  const handleAction = (id: string, action: "approve" | "reject") => {
-    if (action === "approve") {
+  const handleAction = (id: string, action: 'approve' | 'reject') => {
+    if (action === 'approve') {
       approve(id);
     } else {
       rejectApp(id);
@@ -114,7 +99,7 @@ export default function OrgApplicationsScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
         <LinearGradient
@@ -123,12 +108,12 @@ export default function OrgApplicationsScreen() {
           end={{ x: 1, y: 1 }}
           style={{ paddingBottom: SPACING.xl }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 paddingHorizontal: paddingX,
                 paddingTop: SPACING.md,
               }}
@@ -138,14 +123,14 @@ export default function OrgApplicationsScreen() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xxl,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Заявки
                 </Text>
                 <Text
                   style={{
-                    color: "rgba(255,255,255,0.7)",
+                    color: 'rgba(255,255,255,0.7)',
                     fontSize: TYPOGRAPHY.size.sm,
                     fontWeight: TYPOGRAPHY.weight.medium,
                     marginTop: 2,
@@ -159,9 +144,9 @@ export default function OrgApplicationsScreen() {
                   width: 52,
                   height: 52,
                   borderRadius: RADIUS.md,
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Feather name="filter" size={24} color="white" />
@@ -186,14 +171,14 @@ export default function OrgApplicationsScreen() {
             backgroundColor: COLORS.white,
             borderRadius: RADIUS.xxl,
             padding: SPACING.xl,
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             marginBottom: SPACING.xxl,
             borderWidth: 1,
             borderColor: COLORS.border,
           }}
         >
-          <View style={{ alignItems: "center", flex: 1 }}>
+          <View style={{ alignItems: 'center', flex: 1 }}>
             <Text
               style={{
                 fontSize: TYPOGRAPHY.size.xxxl,
@@ -208,17 +193,15 @@ export default function OrgApplicationsScreen() {
                 fontSize: 10,
                 color: COLORS.mutedForeground,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                textTransform: "uppercase",
+                textTransform: 'uppercase',
                 letterSpacing: 1,
               }}
             >
               Заявок
             </Text>
           </View>
-          <View
-            style={{ width: 1, height: "100%", backgroundColor: COLORS.border }}
-          />
-          <View style={{ alignItems: "center", flex: 1 }}>
+          <View style={{ width: 1, height: '100%', backgroundColor: COLORS.border }} />
+          <View style={{ alignItems: 'center', flex: 1 }}>
             <Text
               style={{
                 fontSize: TYPOGRAPHY.size.xxxl,
@@ -226,39 +209,37 @@ export default function OrgApplicationsScreen() {
                 color: COLORS.success,
               }}
             >
-              {apps.filter((a) => a.status === "paid").length}
+              {apps.filter((a) => a.status === 'paid').length}
             </Text>
             <Text
               style={{
                 fontSize: 10,
                 color: COLORS.mutedForeground,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                textTransform: "uppercase",
+                textTransform: 'uppercase',
                 letterSpacing: 1,
               }}
             >
               Оплачено
             </Text>
           </View>
-          <View
-            style={{ width: 1, height: "100%", backgroundColor: COLORS.border }}
-          />
-          <View style={{ alignItems: "center", flex: 1 }}>
+          <View style={{ width: 1, height: '100%', backgroundColor: COLORS.border }} />
+          <View style={{ alignItems: 'center', flex: 1 }}>
             <Text
               style={{
                 fontSize: TYPOGRAPHY.size.xxxl,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                color: "#F59E0B",
+                color: '#F59E0B',
               }}
             >
-              {apps.filter((a) => a.status === "awaiting_payment").length}
+              {apps.filter((a) => a.status === 'awaiting_payment').length}
             </Text>
             <Text
               style={{
                 fontSize: 10,
                 color: COLORS.mutedForeground,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                textTransform: "uppercase",
+                textTransform: 'uppercase',
                 letterSpacing: 1,
               }}
             >
@@ -274,8 +255,8 @@ export default function OrgApplicationsScreen() {
               backgroundColor: COLORS.white,
               borderRadius: RADIUS.xxl,
               padding: 40,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               borderWidth: 1,
               borderColor: COLORS.border,
             }}
@@ -286,16 +267,12 @@ export default function OrgApplicationsScreen() {
                 height: 80,
                 backgroundColor: COLORS.background,
                 borderRadius: RADIUS.full,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: SPACING.xl,
               }}
             >
-              <Feather
-                name="check-circle"
-                size={32}
-                color={COLORS.mutedForeground}
-              />
+              <Feather name="check-circle" size={32} color={COLORS.mutedForeground} />
             </View>
             <Text
               style={{
@@ -328,8 +305,8 @@ export default function OrgApplicationsScreen() {
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: SPACING.xl,
                       marginBottom: SPACING.xl,
                     }}
@@ -340,14 +317,14 @@ export default function OrgApplicationsScreen() {
                         height: 64,
                         borderRadius: RADIUS.full,
                         backgroundColor: `${COLORS.primary}10`,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 24,
-                          fontWeight: "700",
+                          fontWeight: '700',
                           color: COLORS.primary,
                         }}
                       >
@@ -357,9 +334,9 @@ export default function OrgApplicationsScreen() {
                     <View style={{ flex: 1 }}>
                       <View
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
                           marginBottom: 2,
                         }}
                       >
@@ -388,7 +365,7 @@ export default function OrgApplicationsScreen() {
 
                   <View
                     style={{
-                      backgroundColor: "rgba(108, 92, 231, 0.05)",
+                      backgroundColor: 'rgba(108, 92, 231, 0.05)',
                       padding: 16,
                       borderRadius: RADIUS.lg,
                       marginBottom: SPACING.xl,
@@ -396,21 +373,17 @@ export default function OrgApplicationsScreen() {
                   >
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 10,
                         marginBottom: 4,
                       }}
                     >
-                      <Feather
-                        name="book-open"
-                        size={14}
-                        color={COLORS.primary}
-                      />
+                      <Feather name="book-open" size={14} color={COLORS.primary} />
                       <Text
                         style={{
                           fontSize: 13,
-                          fontWeight: "700",
+                          fontWeight: '700',
                           color: COLORS.foreground,
                         }}
                       >
@@ -428,16 +401,16 @@ export default function OrgApplicationsScreen() {
                     </Text>
                   </View>
 
-                  <View style={{ flexDirection: "row", gap: SPACING.md }}>
+                  <View style={{ flexDirection: 'row', gap: SPACING.md }}>
                     <TouchableOpacity
-                      onPress={() => handleAction(app.id, "reject")}
+                      onPress={() => handleAction(app.id, 'reject')}
                       style={{
                         flex: 1,
                         height: 48,
                         backgroundColor: COLORS.background,
                         borderRadius: RADIUS.lg,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       <Text
@@ -451,22 +424,22 @@ export default function OrgApplicationsScreen() {
                       </Text>
                     </TouchableOpacity>
 
-                    {app.status === "paid" ? (
+                    {app.status === 'paid' ? (
                       <TouchableOpacity
-                        onPress={() => handleAction(app.id, "approve")}
+                        onPress={() => handleAction(app.id, 'approve')}
                         style={{
                           flex: 1.5,
                           height: 48,
                           backgroundColor: COLORS.success,
                           borderRadius: RADIUS.lg,
-                          alignItems: "center",
-                          justifyContent: "center",
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           ...SHADOWS.md,
                         }}
                       >
                         <Text
                           style={{
-                            color: "white",
+                            color: 'white',
                             fontWeight: TYPOGRAPHY.weight.bold,
                             fontSize: 14,
                           }}
@@ -481,8 +454,8 @@ export default function OrgApplicationsScreen() {
                           height: 48,
                           backgroundColor: COLORS.border,
                           borderRadius: RADIUS.lg,
-                          alignItems: "center",
-                          justifyContent: "center",
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                         disabled={true}
                       >

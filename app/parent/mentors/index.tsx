@@ -1,39 +1,24 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { usePublicMentors } from "$hooks/usePublicMentors";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { usePublicMentors } from '$hooks/usePublicMentors';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentMentorsScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { mentors: rawMentors, loading } = usePublicMentors();
   // Map to UI shape
   const mentors = rawMentors.map((m) => ({
     id: m.id,
-    name: m.name ?? "—",
-    specialization: m.specialization ?? "",
+    name: m.name ?? '—',
+    specialization: m.specialization ?? '',
     rating: m.rating ?? 0,
     students: m.sessions ?? 0,
     tags: [] as string[],
@@ -46,21 +31,16 @@ export default function ParentMentorsScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
+            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 20,
                 }}
               >
@@ -70,9 +50,9 @@ export default function ParentMentorsScreen() {
                     width: 40,
                     height: 40,
                     borderRadius: 20,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: 16,
                   }}
                 >
@@ -82,7 +62,7 @@ export default function ParentMentorsScreen() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xxl,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Выбор Ментора
@@ -90,13 +70,13 @@ export default function ParentMentorsScreen() {
               </View>
               <Text
                 style={{
-                  color: "rgba(255,255,255,0.8)",
+                  color: 'rgba(255,255,255,0.8)',
                   fontSize: 13,
                   lineHeight: 20,
                 }}
               >
-                Выберите наставника-сопровождающего, который поможет раскрыть
-                потенциал вашего ребенка и будет отслеживать его прогресс.
+                Выберите наставника-сопровождающего, который поможет раскрыть потенциал вашего
+                ребенка и будет отслеживать его прогресс.
               </Text>
             </View>
           </SafeAreaView>
@@ -114,7 +94,7 @@ export default function ParentMentorsScreen() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               marginTop: 40,
               color: COLORS.mutedForeground,
             }}
@@ -140,34 +120,32 @@ export default function ParentMentorsScreen() {
                   borderColor: COLORS.border,
                 }}
               >
-                <View
-                  style={{ flexDirection: "row", gap: 16, marginBottom: 16 }}
-                >
+                <View style={{ flexDirection: 'row', gap: 16, marginBottom: 16 }}>
                   <View
                     style={{
                       width: 80,
                       height: 80,
                       borderRadius: 24,
                       backgroundColor: `${COLORS.primary}10`,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 30,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.primary,
                       }}
                     >
                       {mentor.name.charAt(0)}
                     </Text>
                   </View>
-                  <View style={{ flex: 1, justifyContent: "center" }}>
+                  <View style={{ flex: 1, justifyContent: 'center' }}>
                     <Text
                       style={{
                         fontSize: 18,
-                        fontWeight: "800",
+                        fontWeight: '800',
                         color: COLORS.foreground,
                         marginBottom: 4,
                       }}
@@ -178,7 +156,7 @@ export default function ParentMentorsScreen() {
                       style={{
                         fontSize: 12,
                         color: COLORS.mutedForeground,
-                        fontWeight: "600",
+                        fontWeight: '600',
                         marginBottom: 8,
                       }}
                     >
@@ -186,15 +164,15 @@ export default function ParentMentorsScreen() {
                     </Text>
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         gap: 12,
                       }}
                     >
                       <View
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: 4,
                         }}
                       >
@@ -202,7 +180,7 @@ export default function ParentMentorsScreen() {
                         <Text
                           style={{
                             fontSize: 12,
-                            fontWeight: "bold",
+                            fontWeight: 'bold',
                             color: COLORS.foreground,
                           }}
                         >
@@ -211,20 +189,16 @@ export default function ParentMentorsScreen() {
                       </View>
                       <View
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: 4,
                         }}
                       >
-                        <Feather
-                          name="users"
-                          size={12}
-                          color={COLORS.mutedForeground}
-                        />
+                        <Feather name="users" size={12} color={COLORS.mutedForeground} />
                         <Text
                           style={{
                             fontSize: 12,
-                            fontWeight: "bold",
+                            fontWeight: 'bold',
                             color: COLORS.foreground,
                           }}
                         >
@@ -237,8 +211,8 @@ export default function ParentMentorsScreen() {
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    flexWrap: "wrap",
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
                     gap: 8,
                     marginBottom: 20,
                   }}
@@ -247,7 +221,7 @@ export default function ParentMentorsScreen() {
                     <View
                       key={tag}
                       style={{
-                        backgroundColor: "rgba(108, 92, 231, 0.08)",
+                        backgroundColor: 'rgba(108, 92, 231, 0.08)',
                         paddingHorizontal: 12,
                         paddingVertical: 6,
                         borderRadius: 12,
@@ -257,8 +231,8 @@ export default function ParentMentorsScreen() {
                         style={{
                           color: COLORS.primary,
                           fontSize: 10,
-                          fontWeight: "800",
-                          textTransform: "uppercase",
+                          fontWeight: '800',
+                          textTransform: 'uppercase',
                         }}
                       >
                         #{tag}
@@ -267,15 +241,15 @@ export default function ParentMentorsScreen() {
                   ))}
                 </View>
 
-                <View style={{ flexDirection: "row", gap: 12 }}>
+                <View style={{ flexDirection: 'row', gap: 12 }}>
                   <TouchableOpacity
                     style={{
                       flex: 1,
                       height: 48,
                       backgroundColor: COLORS.background,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       borderWidth: 1,
                       borderColor: COLORS.border,
                     }}
@@ -296,14 +270,14 @@ export default function ParentMentorsScreen() {
                       height: 48,
                       backgroundColor: COLORS.primary,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       ...SHADOWS.md,
                     }}
                   >
                     <Text
                       style={{
-                        color: "white",
+                        color: 'white',
                         fontWeight: TYPOGRAPHY.weight.bold,
                         fontSize: 13,
                       }}

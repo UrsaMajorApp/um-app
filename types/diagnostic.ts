@@ -1,4 +1,4 @@
-import type { JsonObject } from "$types/index";
+import type { JsonObject } from '$types/index';
 
 export interface Diagnostic {
   childId: string;
@@ -6,7 +6,7 @@ export interface Diagnostic {
   summary: string;
   recommendedConstellation: string;
   timestamp?: string;
-  tier?: "basic" | "pro";
+  tier?: 'basic' | 'pro';
   ageGroup?: string;
   intellectType?: string;
   personalityBehavior?: string;
@@ -20,14 +20,14 @@ export interface Diagnostic {
 export type DiagnosticAiResponse = Partial<
   Pick<
     Diagnostic,
-    | "scores"
-    | "summary"
-    | "recommendedConstellation"
-    | "intellectType"
-    | "personalityBehavior"
-    | "careerArchetypes"
-    | "parentAdvice"
-    | "topStrengths"
-    | "developmentAreas"
+    | 'scores'
+    | 'summary'
+    | 'recommendedConstellation'
+    | 'intellectType'
+    | 'personalityBehavior'
+    | 'careerArchetypes'
+    | 'parentAdvice'
+    | 'topStrengths'
+    | 'developmentAreas'
   >
 >;

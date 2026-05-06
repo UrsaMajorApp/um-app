@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "$contexts/AuthContext";
-import { useDevDataVersion } from "$lib/devDataEvents";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { resolveOwnedOrgId, rowsOrEmpty } from "$lib/supabaseHelpers";
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '$contexts/AuthContext';
+import { useDevDataVersion } from '$lib/devDataEvents';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { resolveOwnedOrgId, rowsOrEmpty } from '$lib/supabaseHelpers';
 
 export interface OrgStaffMember {
   id: string;
@@ -12,7 +12,7 @@ export interface OrgStaffMember {
   email: string | null;
   specialization: string | null;
   rating: number;
-  status: "active" | "invited" | "inactive";
+  status: 'active' | 'invited' | 'inactive';
   created_at: string;
 }
 
@@ -21,11 +21,11 @@ export interface OrgCourse {
   org_id: string;
   title: string;
   description: string | null;
-  level: "beginner" | "intermediate" | "advanced";
+  level: 'beginner' | 'intermediate' | 'advanced';
   price: number;
   icon: string;
   skills: string[];
-  status: "draft" | "active" | "archived";
+  status: 'draft' | 'active' | 'archived';
   age_min: number | null;
   age_max: number | null;
   created_at: string;
@@ -53,7 +53,7 @@ export interface OrgApplication {
   parent_name: string | null;
   club: string | null;
   applied_date: string | null;
-  status: "paid" | "awaiting_payment" | "activated" | "completed" | "rejected";
+  status: 'paid' | 'awaiting_payment' | 'activated' | 'completed' | 'rejected';
   created_at: string;
 }
 
@@ -90,10 +90,10 @@ export function useOrgStaff() {
       return;
     }
     const res = await supabase
-      .from("org_staff")
-      .select("*")
-      .eq("org_id", orgId)
-      .order("created_at", { ascending: true });
+      .from('org_staff')
+      .select('*')
+      .eq('org_id', orgId)
+      .order('created_at', { ascending: true });
     setStaff(rowsOrEmpty<OrgStaffMember>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -126,10 +126,10 @@ export function useOrgGroups() {
       return;
     }
     const res = await supabase
-      .from("org_groups")
-      .select("*")
-      .eq("org_id", orgId)
-      .order("created_at", { ascending: true });
+      .from('org_groups')
+      .select('*')
+      .eq('org_id', orgId)
+      .order('created_at', { ascending: true });
     setGroups(rowsOrEmpty<OrgGroup>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -162,10 +162,10 @@ export function useOrgApplications() {
       return;
     }
     const res = await supabase
-      .from("org_applications")
-      .select("*")
-      .eq("org_id", orgId)
-      .order("created_at", { ascending: false });
+      .from('org_applications')
+      .select('*')
+      .eq('org_id', orgId)
+      .order('created_at', { ascending: false });
     setApps(rowsOrEmpty<OrgApplication>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -176,19 +176,13 @@ export function useOrgApplications() {
 
   const approve = async (id: string) => {
     if (!supabase) return;
-    await supabase
-      .from("org_applications")
-      .update({ status: "activated" })
-      .eq("id", id);
+    await supabase.from('org_applications').update({ status: 'activated' }).eq('id', id);
     refresh();
   };
 
   const reject = async (id: string) => {
     if (!supabase) return;
-    await supabase
-      .from("org_applications")
-      .update({ status: "rejected" })
-      .eq("id", id);
+    await supabase.from('org_applications').update({ status: 'rejected' }).eq('id', id);
     refresh();
   };
 
@@ -216,10 +210,10 @@ export function useOrgTasks() {
       return;
     }
     const res = await supabase
-      .from("org_tasks")
-      .select("*")
-      .eq("org_id", orgId)
-      .order("created_at", { ascending: false });
+      .from('org_tasks')
+      .select('*')
+      .eq('org_id', orgId)
+      .order('created_at', { ascending: false });
     setTasks(rowsOrEmpty<OrgTask>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -232,12 +226,7 @@ export function useOrgTasks() {
 }
 
 // ─── useOrgProfile ────────────────────────────────────────────
-export type OrgStatus =
-  | "new"
-  | "ready_for_review"
-  | "verified"
-  | "rejected"
-  | "pending";
+export type OrgStatus = 'new' | 'ready_for_review' | 'verified' | 'rejected' | 'pending';
 
 export function useOrgProfile() {
   const { user } = useAuth();
@@ -252,9 +241,9 @@ export function useOrgProfile() {
     registration_url: string | null;
   }>({
     id: null,
-    name: "",
-    status: "new",
-    bin: "",
+    name: '',
+    status: 'new',
+    bin: '',
     license_url: null,
     registration_url: null,
   });
@@ -266,18 +255,18 @@ export function useOrgProfile() {
     }
     setLoading(true);
     const { data } = await supabase
-      .from("organizations")
-      .select("id, name, status, bin, license_url, registration_url")
-      .eq("owner_user_id", user.id)
+      .from('organizations')
+      .select('id, name, status, bin, license_url, registration_url')
+      .eq('owner_user_id', user.id)
       .limit(1)
       .maybeSingle();
 
     if (data) {
       setProfile({
         id: data.id,
-        name: data.name ?? "",
-        status: data.status || "new",
-        bin: data.bin || "",
+        name: data.name ?? '',
+        status: data.status || 'new',
+        bin: data.bin || '',
         license_url: data.license_url,
         registration_url: data.registration_url,
       });
@@ -302,7 +291,7 @@ export interface OrgStats {
 
 type OrgStatsApplicationRow = {
   id: string;
-  status: OrgApplication["status"];
+  status: OrgApplication['status'];
 };
 
 export function useOrgStats() {
@@ -329,28 +318,22 @@ export function useOrgStats() {
     }
     const [groups, apps, staff] = await Promise.all([
       supabase
-        .from("org_groups")
-        .select("id", { count: "exact", head: true })
-        .eq("org_id", orgId)
-        .eq("active", true),
+        .from('org_groups')
+        .select('id', { count: 'exact', head: true })
+        .eq('org_id', orgId)
+        .eq('active', true),
+      supabase.from('org_applications').select('id, status').eq('org_id', orgId),
       supabase
-        .from("org_applications")
-        .select("id, status")
-        .eq("org_id", orgId),
-      supabase
-        .from("org_staff")
-        .select("id", { count: "exact", head: true })
-        .eq("org_id", orgId)
-        .eq("status", "active"),
+        .from('org_staff')
+        .select('id', { count: 'exact', head: true })
+        .eq('org_id', orgId)
+        .eq('status', 'active'),
     ]);
     const allApps = rowsOrEmpty<OrgStatsApplicationRow>(apps);
     setStats({
       groupCount: groups.count ?? 0,
-      studentCount: allApps.filter((a) =>
-        ["paid", "activated"].includes(a.status),
-      ).length,
-      pendingCount: allApps.filter((a) => a.status === "awaiting_payment")
-        .length,
+      studentCount: allApps.filter((a) => ['paid', 'activated'].includes(a.status)).length,
+      pendingCount: allApps.filter((a) => a.status === 'awaiting_payment').length,
       staffCount: staff.count ?? 0,
     });
     setLoading(false);
@@ -375,9 +358,9 @@ export function useOrgGroupById(id: string | undefined) {
       return;
     }
     supabase
-      .from("org_groups")
-      .select("*")
-      .eq("id", id)
+      .from('org_groups')
+      .select('*')
+      .eq('id', id)
       .maybeSingle()
       .then((res) => {
         setGroup(res.data ?? null);
@@ -400,9 +383,9 @@ export function useOrgStaffById(id: string | undefined) {
       return;
     }
     supabase
-      .from("org_staff")
-      .select("*")
-      .eq("id", id)
+      .from('org_staff')
+      .select('*')
+      .eq('id', id)
       .maybeSingle()
       .then((res) => {
         setMember(res.data ?? null);
@@ -457,10 +440,10 @@ export function useOrgCourses() {
       return;
     }
     const res = await supabase
-      .from("org_courses")
-      .select("*")
-      .eq("org_id", orgId)
-      .order("created_at", { ascending: true });
+      .from('org_courses')
+      .select('*')
+      .eq('org_id', orgId)
+      .order('created_at', { ascending: true });
     setCourses(rowsOrEmpty<OrgCourse>(res));
     setLoading(false);
   }, [user?.id, devDataVersion]);
@@ -470,15 +453,13 @@ export function useOrgCourses() {
   }, [refresh]);
 
   const createCourse = useCallback(
-    async (
-      data: CourseInput,
-    ): Promise<{ data: OrgCourse | null; error: string | null }> => {
+    async (data: CourseInput): Promise<{ data: OrgCourse | null; error: string | null }> => {
       if (!supabase || !isSupabaseConfigured || !user?.id)
-        return { data: null, error: "Not configured" };
+        return { data: null, error: 'Not configured' };
       const orgId = await resolveOwnedOrgId(user.id);
-      if (!orgId) return { data: null, error: "Organisation not found" };
+      if (!orgId) return { data: null, error: 'Organisation not found' };
       const res = await supabase
-        .from("org_courses")
+        .from('org_courses')
         .insert({ ...data, org_id: orgId })
         .select()
         .single();
@@ -490,15 +471,12 @@ export function useOrgCourses() {
   );
 
   const updateCourse = useCallback(
-    async (
-      id: string,
-      data: Partial<CourseInput>,
-    ): Promise<{ error: string | null }> => {
-      if (!supabase) return { error: "Not configured" };
+    async (id: string, data: Partial<CourseInput>): Promise<{ error: string | null }> => {
+      if (!supabase) return { error: 'Not configured' };
       const res = await supabase
-        .from("org_courses")
+        .from('org_courses')
         .update({ ...data, updated_at: new Date().toISOString() })
-        .eq("id", id);
+        .eq('id', id);
       if (res.error) return { error: res.error.message };
       refresh();
       return { error: null };
@@ -508,8 +486,8 @@ export function useOrgCourses() {
 
   const deleteCourse = useCallback(
     async (id: string): Promise<{ error: string | null }> => {
-      if (!supabase) return { error: "Not configured" };
-      const res = await supabase.from("org_courses").delete().eq("id", id);
+      if (!supabase) return { error: 'Not configured' };
+      const res = await supabase.from('org_courses').delete().eq('id', id);
       if (res.error) return { error: res.error.message };
       refresh();
       return { error: null };
@@ -539,9 +517,9 @@ export function useOrgCourseById(id: string | undefined) {
       return;
     }
     supabase
-      .from("org_courses")
-      .select("*")
-      .eq("id", id)
+      .from('org_courses')
+      .select('*')
+      .eq('id', id)
       .maybeSingle()
       .then((res) => {
         setCourse(res.data ?? null);
@@ -577,11 +555,11 @@ export function useOrgSchedule(dayOfWeek?: number) {
       return;
     }
     let q = supabase
-      .from("org_schedule_items")
-      .select("*")
-      .eq("org_id", orgId)
-      .order("time_label", { ascending: true });
-    if (dayOfWeek !== undefined) q = q.eq("day_of_week", dayOfWeek);
+      .from('org_schedule_items')
+      .select('*')
+      .eq('org_id', orgId)
+      .order('time_label', { ascending: true });
+    if (dayOfWeek !== undefined) q = q.eq('day_of_week', dayOfWeek);
     const res = await q;
     setItems(rowsOrEmpty<OrgScheduleItem>(res));
     setLoading(false);

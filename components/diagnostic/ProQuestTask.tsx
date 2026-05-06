@@ -3,13 +3,13 @@
  *
  * Cosmic-themed card with answer options, stealth timer, and mascot audio.
  */
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SHADOWS } from "$constants/theme";
-import type { ProTask } from "$data/diagnosticData";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SHADOWS } from '$constants/theme';
+import type { ProTask } from '$data/diagnosticData';
 
 interface Props {
   task: ProTask;
@@ -44,12 +44,12 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
       from={{ opacity: 0, translateX: 60 }}
       animate={{ opacity: 1, translateX: 0 }}
       exit={{ opacity: 0, translateX: -60 }}
-      transition={{ type: "timing", duration: 350 }}
+      transition={{ type: 'timing', duration: 350 }}
       style={styles.wrapper}
     >
       {/* Cosmic card */}
       <LinearGradient
-        colors={["#1A1040", "#2D1B69"]}
+        colors={['#1A1040', '#2D1B69']}
         style={styles.card}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -101,14 +101,9 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
           {task.options.map((opt) => {
             const isSelected = selected === opt.id;
             const isCorrectFeedback =
-              confirmed &&
-              isSelected &&
-              (task.correctIndex === -1 || opt.id === task.correctIndex);
+              confirmed && isSelected && (task.correctIndex === -1 || opt.id === task.correctIndex);
             const isWrongFeedback =
-              confirmed &&
-              isSelected &&
-              task.correctIndex !== -1 &&
-              opt.id !== task.correctIndex;
+              confirmed && isSelected && task.correctIndex !== -1 && opt.id !== task.correctIndex;
 
             return (
               <TouchableOpacity
@@ -123,12 +118,7 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
                 ]}
               >
                 <Text style={styles.optionEmoji}>{opt.emoji}</Text>
-                <Text
-                  style={[
-                    styles.optionLabel,
-                    isSelected && styles.optionLabelSelected,
-                  ]}
-                >
+                <Text style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
                   {opt.label}
                 </Text>
               </TouchableOpacity>
@@ -141,14 +131,9 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
           onPress={handleConfirm}
           disabled={selected === null || confirmed}
           activeOpacity={0.8}
-          style={[
-            styles.confirmButton,
-            (selected === null || confirmed) && styles.confirmDisabled,
-          ]}
+          style={[styles.confirmButton, (selected === null || confirmed) && styles.confirmDisabled]}
         >
-          <Text style={styles.confirmText}>
-            {confirmed ? "✓" : "Ответить!"}
-          </Text>
+          <Text style={styles.confirmText}>{confirmed ? '✓' : 'Ответить!'}</Text>
         </TouchableOpacity>
       </LinearGradient>
     </MotiView>
@@ -157,124 +142,124 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   card: {
-    width: "100%",
+    width: '100%',
     borderRadius: 32,
     padding: 24,
-    overflow: "hidden",
+    overflow: 'hidden',
     ...SHADOWS.lg,
   },
   starsContainer: {
     ...StyleSheet.absoluteFillObject,
   },
   star: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: 100,
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   stepRow: {
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     marginBottom: 16,
   },
   stepBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: 'rgba(255,255,255,0.1)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
   stepText: {
-    color: "rgba(255,255,255,0.8)",
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   hintContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 16,
   },
   hintText: {
     fontSize: 32,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 44,
   },
   questionBubble: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
-    backgroundColor: "rgba(255,255,255,0.12)",
+    backgroundColor: 'rgba(255,255,255,0.12)',
     paddingHorizontal: 18,
     paddingVertical: 14,
     borderRadius: 22,
     marginBottom: 24,
   },
   questionText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     flex: 1,
     lineHeight: 22,
   },
   optionsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
-    justifyContent: "center",
+    justifyContent: 'center',
     marginBottom: 20,
   },
   optionButton: {
-    minWidth: "28%",
+    minWidth: '28%',
     flexGrow: 1,
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: 22,
     paddingVertical: 18,
     paddingHorizontal: 14,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 2,
-    borderColor: "transparent",
+    borderColor: 'transparent',
   },
   optionSelected: {
-    borderColor: "#A78BFA",
-    backgroundColor: "rgba(167,139,250,0.2)",
+    borderColor: '#A78BFA',
+    backgroundColor: 'rgba(167,139,250,0.2)',
   },
   optionCorrect: {
-    borderColor: "#34C759",
-    backgroundColor: "rgba(52,199,89,0.25)",
+    borderColor: '#34C759',
+    backgroundColor: 'rgba(52,199,89,0.25)',
   },
   optionWrong: {
-    borderColor: "#FF3B30",
-    backgroundColor: "rgba(255,59,48,0.2)",
+    borderColor: '#FF3B30',
+    backgroundColor: 'rgba(255,59,48,0.2)',
   },
   optionEmoji: {
     fontSize: 36,
     marginBottom: 6,
   },
   optionLabel: {
-    color: "rgba(255,255,255,0.8)",
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 13,
-    fontWeight: "700",
-    textAlign: "center",
+    fontWeight: '700',
+    textAlign: 'center',
   },
   optionLabelSelected: {
-    color: "white",
+    color: 'white',
   },
   confirmButton: {
-    backgroundColor: "#A78BFA",
+    backgroundColor: '#A78BFA',
     paddingVertical: 16,
     borderRadius: 22,
-    alignItems: "center",
+    alignItems: 'center',
     ...SHADOWS.sm,
   },
   confirmDisabled: {
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   confirmText: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: '900',
   },
 });

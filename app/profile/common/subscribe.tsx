@@ -1,25 +1,18 @@
-import { Feather } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useEffect, useState } from "react";
-import {
-    Dimensions,
-    Image,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
-import { useSubscriptionPlans } from "$hooks/usePlatformData";
-import { formatKZT } from "$lib/formatCurrency";
-import { isWebMinWidth } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useEffect, useState } from 'react';
+import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useSubscriptionPlans } from '$hooks/usePlatformData';
+import { formatKZT } from '$lib/formatCurrency';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const IS_DESKTOP = isWebMinWidth(width, 900);
 
-type Role = "parent" | "youth" | "child" | "young-adult" | "org" | "mentor";
+type Role = 'parent' | 'youth' | 'child' | 'young-adult' | 'org' | 'mentor';
 
 function planKey(role: Role) {
   return `subscription_plan_${role}`;
@@ -32,9 +25,7 @@ export default function SubscribeScreen() {
   const { plans, loading } = useSubscriptionPlans(role);
 
   useEffect(() => {
-    AsyncStorage.getItem("user_role").then((v) =>
-      setRole((v as Role) || "parent"),
-    );
+    AsyncStorage.getItem('user_role').then((v) => setRole((v as Role) || 'parent'));
   }, []);
 
   useEffect(() => {
@@ -46,43 +37,43 @@ export default function SubscribeScreen() {
     if (!role) return;
     await AsyncStorage.setItem(planKey(role), title);
     setSelected(title);
-    router.replace("/(tabs)/home"); // после выбора подписки отправляем на home (первый таб)
+    router.replace('/(tabs)/home'); // после выбора подписки отправляем на home (первый таб)
   }
 
   function formatPrice(priceKzt: number, billingPeriod: string) {
-    const period = billingPeriod === "month" ? "мес" : billingPeriod;
+    const period = billingPeriod === 'month' ? 'мес' : billingPeriod;
     return `${formatKZT(priceKzt)} / ${period}`;
   }
 
   return (
-    <LinearGradient colors={["#6C5CE7", "#ECEBFF"]} style={{ flex: 1 }}>
+    <LinearGradient colors={['#6C5CE7', '#ECEBFF']} style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
           paddingTop: 60,
           paddingBottom: 120,
           paddingHorizontal: 20,
-          alignItems: IS_DESKTOP ? "center" : "stretch",
+          alignItems: IS_DESKTOP ? 'center' : 'stretch',
         }}
       >
-        <View style={{ width: IS_DESKTOP ? "50%" : "100%" }}>
+        <View style={{ width: IS_DESKTOP ? '50%' : '100%' }}>
           <MotiView
             from={{ opacity: 0, translateY: -10 }}
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 400 }}
-            style={{ alignItems: "center", marginBottom: 10 }}
+            style={{ alignItems: 'center', marginBottom: 10 }}
           >
             <Image
-              source={require("../../../assets/logo/logo_white.png")}
-              style={{ width: 160, height: 120, resizeMode: "contain" }}
+              source={require('../../../assets/logo/logo_white.png')}
+              style={{ width: 160, height: 120, resizeMode: 'contain' }}
             />
           </MotiView>
 
           <Text
             style={{
               fontSize: 28,
-              fontWeight: "800",
-              textAlign: "center",
-              color: "white",
+              fontWeight: '800',
+              textAlign: 'center',
+              color: 'white',
               marginBottom: 10,
             }}
           >
@@ -91,10 +82,10 @@ export default function SubscribeScreen() {
 
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               fontSize: 14,
               opacity: 0.8,
-              color: "white",
+              color: 'white',
               marginBottom: 28,
             }}
           >
@@ -104,10 +95,10 @@ export default function SubscribeScreen() {
           {!loading && plans.length === 0 && (
             <View
               style={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 borderRadius: 24,
                 padding: 24,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <Feather name="credit-card" size={28} color="#A1A1AA" />
@@ -115,8 +106,8 @@ export default function SubscribeScreen() {
                 style={{
                   marginTop: 12,
                   fontSize: 15,
-                  color: "#71717A",
-                  textAlign: "center",
+                  color: '#71717A',
+                  textAlign: 'center',
                 }}
               >
                 Для этой роли пока нет активных тарифов.
@@ -135,38 +126,36 @@ export default function SubscribeScreen() {
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ duration: 350, delay: i * 120 }}
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: 26,
                   padding: 22,
                   marginBottom: 24,
                   borderWidth: isPopular || isSelected ? 2 : 1,
                   borderColor: isSelected
-                    ? "#6C5CE7"
+                    ? '#6C5CE7'
                     : isPopular
-                      ? "#6C5CE7"
-                      : "rgba(15, 23, 42, 0.08)",
+                      ? '#6C5CE7'
+                      : 'rgba(15, 23, 42, 0.08)',
                 }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
                   {isPopular ? (
                     <View
                       style={{
-                        backgroundColor: "#6C5CE7",
+                        backgroundColor: '#6C5CE7',
                         paddingVertical: 4,
                         paddingHorizontal: 10,
                         borderRadius: 10,
                         marginBottom: 10,
                       }}
                     >
-                      <Text style={{ color: "white", fontSize: 12 }}>
-                        популярный
-                      </Text>
+                      <Text style={{ color: 'white', fontSize: 12 }}>популярный</Text>
                     </View>
                   ) : (
                     <View />
@@ -175,35 +164,31 @@ export default function SubscribeScreen() {
                   {isSelected ? (
                     <View
                       style={{
-                        backgroundColor: "#6C5CE7",
+                        backgroundColor: '#6C5CE7',
                         paddingVertical: 4,
                         paddingHorizontal: 10,
                         borderRadius: 10,
                         marginBottom: 10,
-                        flexDirection: "row",
+                        flexDirection: 'row',
                         gap: 6,
-                        alignItems: "center",
+                        alignItems: 'center',
                       }}
                     >
                       <Feather name="check" size={14} color="white" />
-                      <Text style={{ color: "white", fontSize: 12 }}>
-                        выбран
-                      </Text>
+                      <Text style={{ color: 'white', fontSize: 12 }}>выбран</Text>
                     </View>
                   ) : null}
                 </View>
 
-                <Text
-                  style={{ fontSize: 22, fontWeight: "700", marginBottom: 6 }}
-                >
+                <Text style={{ fontSize: 22, fontWeight: '700', marginBottom: 6 }}>
                   {plan.title}
                 </Text>
 
                 <Text
                   style={{
                     fontSize: 18,
-                    fontWeight: "800",
-                    color: "#6C5CE7",
+                    fontWeight: '800',
+                    color: '#6C5CE7',
                     marginBottom: 16,
                   }}
                 >
@@ -214,8 +199,8 @@ export default function SubscribeScreen() {
                   <View
                     key={idx}
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       marginBottom: 8,
                     }}
                   >
@@ -227,7 +212,7 @@ export default function SubscribeScreen() {
                 <TouchableOpacity
                   onPress={() => choosePlan(plan.title)}
                   style={{
-                    backgroundColor: isSelected ? "#6C5CE7" : "#6C5CE7",
+                    backgroundColor: isSelected ? '#6C5CE7' : '#6C5CE7',
                     marginTop: 20,
                     paddingVertical: 14,
                     borderRadius: 999,
@@ -235,13 +220,13 @@ export default function SubscribeScreen() {
                 >
                   <Text
                     style={{
-                      textAlign: "center",
-                      color: "white",
+                      textAlign: 'center',
+                      color: 'white',
                       fontSize: 16,
-                      fontWeight: "700",
+                      fontWeight: '700',
                     }}
                   >
-                    {isSelected ? "оставить выбранным" : "выбрать"}
+                    {isSelected ? 'оставить выбранным' : 'выбрать'}
                   </Text>
                 </TouchableOpacity>
               </MotiView>

@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useRef, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,10 +12,10 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
-} from "react-native";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useChatMessages } from "$hooks/useChats";
-import { isWebMinWidth } from "$lib/useIsDesktop";
+} from 'react-native';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useChatMessages } from '$hooks/useChats';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 
 export default function ChatModal() {
   const router = useRouter();
@@ -24,13 +24,13 @@ export default function ChatModal() {
   const IS_DESKTOP = isWebMinWidth(width, 900);
 
   const { messages, loading, sendMessage } = useChatMessages(id ?? null);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const scrollRef = useRef<ScrollView>(null);
 
   const handleSend = async () => {
     if (!input.trim()) return;
     const text = input;
-    setInput("");
+    setInput('');
     await sendMessage(text);
     scrollRef.current?.scrollToEnd({ animated: true });
   };
@@ -39,14 +39,14 @@ export default function ChatModal() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View
           style={{
             flex: 1,
-            alignSelf: "center",
-            width: IS_DESKTOP ? "50%" : "100%",
-            backgroundColor: "white",
+            alignSelf: 'center',
+            width: IS_DESKTOP ? '50%' : '100%',
+            backgroundColor: 'white',
             ...SHADOWS.lg,
           }}
         >
@@ -63,30 +63,26 @@ export default function ChatModal() {
           >
             <View
               style={{
-                paddingTop: Platform.OS === "ios" ? 54 : 32,
+                paddingTop: Platform.OS === 'ios' ? 54 : 32,
                 paddingHorizontal: 20,
               }}
             >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity
                   onPress={() => router.back()}
                   style={{
                     width: 40,
                     height: 40,
                     borderRadius: 20,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: 12,
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
                 </TouchableOpacity>
-                <Text
-                  style={{ fontSize: 20, fontWeight: "800", color: "white" }}
-                >
-                  {name}
-                </Text>
+                <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>{name}</Text>
               </View>
             </View>
           </LinearGradient>
@@ -95,15 +91,13 @@ export default function ChatModal() {
           <ScrollView
             ref={scrollRef}
             contentContainerStyle={{ padding: 16, paddingBottom: 16 }}
-            onContentSizeChange={() =>
-              scrollRef.current?.scrollToEnd({ animated: false })
-            }
+            onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
           >
             {loading && (
               <Text
                 style={{
-                  textAlign: "center",
-                  color: "#9CA3AF",
+                  textAlign: 'center',
+                  color: '#9CA3AF',
                   marginVertical: 16,
                 }}
               >
@@ -113,8 +107,8 @@ export default function ChatModal() {
             {!loading && messages.length === 0 && (
               <Text
                 style={{
-                  textAlign: "center",
-                  color: "#9CA3AF",
+                  textAlign: 'center',
+                  color: '#9CA3AF',
                   marginVertical: 32,
                 }}
               >
@@ -128,18 +122,18 @@ export default function ChatModal() {
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ duration: 250 }}
                 style={{
-                  alignSelf: msg.is_mine ? "flex-end" : "flex-start",
-                  backgroundColor: msg.is_mine ? COLORS.primary : "#F1F1F1",
+                  alignSelf: msg.is_mine ? 'flex-end' : 'flex-start',
+                  backgroundColor: msg.is_mine ? COLORS.primary : '#F1F1F1',
                   paddingVertical: 10,
                   paddingHorizontal: 14,
                   borderRadius: 20,
                   marginBottom: 10,
-                  maxWidth: "80%",
+                  maxWidth: '80%',
                 }}
               >
                 <Text
                   style={{
-                    color: msg.is_mine ? "white" : "black",
+                    color: msg.is_mine ? 'white' : 'black',
                     fontSize: 15,
                   }}
                 >
@@ -152,13 +146,13 @@ export default function ChatModal() {
           {/* Input */}
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               padding: 12,
               borderTopWidth: 1,
-              borderColor: "#eee",
-              backgroundColor: "white",
-              paddingBottom: Platform.OS === "ios" ? 32 : 12,
+              borderColor: '#eee',
+              backgroundColor: 'white',
+              paddingBottom: Platform.OS === 'ios' ? 32 : 12,
             }}
           >
             <TextInput
@@ -167,7 +161,7 @@ export default function ChatModal() {
               placeholder="Введите сообщение..."
               style={{
                 flex: 1,
-                backgroundColor: "#F3F4F6",
+                backgroundColor: '#F3F4F6',
                 borderRadius: 20,
                 paddingHorizontal: 16,
                 paddingVertical: 12,
@@ -181,7 +175,7 @@ export default function ChatModal() {
             <TouchableOpacity
               onPress={handleSend}
               style={{
-                backgroundColor: input.trim() ? COLORS.primary : "#E5E7EB",
+                backgroundColor: input.trim() ? COLORS.primary : '#E5E7EB',
                 paddingHorizontal: 18,
                 paddingVertical: 12,
                 borderRadius: 20,
@@ -189,8 +183,8 @@ export default function ChatModal() {
             >
               <Text
                 style={{
-                  color: input.trim() ? "white" : "#9CA3AF",
-                  fontWeight: "700",
+                  color: input.trim() ? 'white' : '#9CA3AF',
+                  fontWeight: '700',
                 }}
               >
                 Отпр.

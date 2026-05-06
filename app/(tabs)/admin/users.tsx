@@ -1,35 +1,23 @@
-import { AdminHeader } from "$components/admin/AdminHeader";
-import { EmptyState } from "$components/admin/EmptyState";
-import { SegmentTabs } from "$components/admin/SegmentTabs";
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { EmptyState } from '$components/admin/EmptyState';
+import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { ensureConversation, formatAdminDate, useAdminLayout } from '$components/admin/adminUtils';
+import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from '$constants/admin';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import {
-  ensureConversation,
-  formatAdminDate,
-  useAdminLayout,
-} from "$components/admin/adminUtils";
-import { ROLE_COLORS, ROLE_LABELS, USER_ROLES } from "$constants/admin";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import {
-  MentorApp,
+  type MentorApp,
   useAdminStats,
   useAllUsers,
   useFamilies,
   useMentorApps,
-} from "$hooks/useAdminData";
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import {
-  Alert,
-  Modal,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+} from '$hooks/useAdminData';
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-type UsersTab = "mentors" | "active_mentors" | "users" | "families";
+type UsersTab = 'mentors' | 'active_mentors' | 'users' | 'families';
 
 export default function AdminUsersScreen() {
   const router = useRouter();
@@ -39,64 +27,53 @@ export default function AdminUsersScreen() {
   const users = useAllUsers();
   const families = useFamilies();
   const stats = useAdminStats(mentorApps.data, [], families.data);
-  const [tab, setTab] = useState<UsersTab>("mentors");
-  const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
+  const [tab, setTab] = useState<UsersTab>('mentors');
+  const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
   const [selectedMentorId, setSelectedMentorId] = useState<string | null>(null);
   const [rejecting, setRejecting] = useState<MentorApp | null>(null);
-  const [rejectReason, setRejectReason] = useState("");
+  const [rejectReason, setRejectReason] = useState('');
 
   const selectedMentor =
     mentorApps.data.find((m) => m.id === selectedMentorId) ??
-    mentorApps.data.find((m) => m.status === "pending") ??
+    mentorApps.data.find((m) => m.status === 'pending') ??
     null;
   const filteredMentors = mentorApps.data.filter((m) => {
-    const matchesStatus =
-      tab === "active_mentors" ? m.status === "approved" : true;
+    const matchesStatus = tab === 'active_mentors' ? m.status === 'approved' : true;
     return (
-      matchesStatus &&
-      (search.trim() === "" ||
-        m.name.toLowerCase().includes(search.toLowerCase()))
+      matchesStatus && (search.trim() === '' || m.name.toLowerCase().includes(search.toLowerCase()))
     );
   });
   const filteredUsers = users.data.filter((u) => {
-    const matchesRole = roleFilter === "all" || u.role === roleFilter;
-    const fullName = `${u.first_name ?? ""} ${u.last_name ?? ""}`.toLowerCase();
+    const matchesRole = roleFilter === 'all' || u.role === roleFilter;
+    const fullName = `${u.first_name ?? ''} ${u.last_name ?? ''}`.toLowerCase();
     return (
       matchesRole &&
-      (search.trim() === "" ||
+      (search.trim() === '' ||
         fullName.includes(search.toLowerCase()) ||
-        (u.phone ?? "").includes(search))
+        (u.phone ?? '').includes(search))
     );
   });
 
   const openMentorChat = async (mentor: MentorApp) => {
     if (!user?.id || !mentor.user_id) {
-      Alert.alert("Чат недоступен", "У ментора нет привязанного аккаунта.");
+      Alert.alert('Чат недоступен', 'У ментора нет привязанного аккаунта.');
       return;
     }
-    const { id, error } = await ensureConversation(
-      user.id,
-      mentor.user_id,
-      mentor.name,
-      "user",
-    );
+    const { id, error } = await ensureConversation(user.id, mentor.user_id, mentor.name, 'user');
     if (!id) {
-      Alert.alert("Ошибка", error ?? "Не удалось создать чат");
+      Alert.alert('Ошибка', error ?? 'Не удалось создать чат');
       return;
     }
     router.push({
-      pathname: "/(tabs)/chats/[id]",
+      pathname: '/(tabs)/chats/[id]',
       params: { id, name: mentor.name },
     });
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <AdminHeader
-        title="Пользователи"
-        subtitle="Аккаунты, семьи и заявки менторов"
-      />
+      <AdminHeader title="Пользователи" subtitle="Аккаунты, семьи и заявки менторов" />
       <View
         style={{
           padding: paddingX,
@@ -107,8 +84,8 @@ export default function AdminUsersScreen() {
       >
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             backgroundColor: COLORS.background,
             borderRadius: RADIUS.md,
             paddingHorizontal: SPACING.md,
@@ -135,18 +112,18 @@ export default function AdminUsersScreen() {
         onChange={setTab}
         tabs={[
           {
-            key: "mentors",
-            label: `Заявки${stats.pendingMentors > 0 ? ` (${stats.pendingMentors})` : ""}`,
+            key: 'mentors',
+            label: `Заявки${stats.pendingMentors > 0 ? ` (${stats.pendingMentors})` : ''}`,
           },
           {
-            key: "active_mentors",
-            label: `Менторы (${mentorApps.data.filter((m) => m.status === "approved").length})`,
+            key: 'active_mentors',
+            label: `Менторы (${mentorApps.data.filter((m) => m.status === 'approved').length})`,
           },
-          { key: "users", label: "Все пользователи" },
-          { key: "families", label: "Семьи" },
+          { key: 'users', label: 'Все пользователи' },
+          { key: 'families', label: 'Семьи' },
         ]}
       />
-      {tab === "users" ? (
+      {tab === 'users' ? (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -164,16 +141,14 @@ export default function AdminUsersScreen() {
                 paddingVertical: 5,
                 paddingHorizontal: 12,
                 marginRight: 6,
-                backgroundColor:
-                  roleFilter === role ? COLORS.foreground : COLORS.muted,
+                backgroundColor: roleFilter === role ? COLORS.foreground : COLORS.muted,
                 borderRadius: RADIUS.full,
               }}
             >
               <Text
                 style={{
-                  color:
-                    roleFilter === role ? COLORS.white : COLORS.mutedForeground,
-                  fontWeight: "700",
+                  color: roleFilter === role ? COLORS.white : COLORS.mutedForeground,
+                  fontWeight: '700',
                   fontSize: 12,
                 }}
               >
@@ -183,33 +158,28 @@ export default function AdminUsersScreen() {
           ))}
         </ScrollView>
       ) : null}
-      <View style={{ flex: 1, flexDirection: isTablet ? "row" : "column" }}>
+      <View style={{ flex: 1, flexDirection: isTablet ? 'row' : 'column' }}>
         <ScrollView style={{ flex: 1, backgroundColor: COLORS.background }}>
-          {(tab === "mentors" || tab === "active_mentors") &&
-          mentorApps.loading ? (
-            <Text
-              style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}
-            >
-              Загрузка...
-            </Text>
+          {(tab === 'mentors' || tab === 'active_mentors') && mentorApps.loading ? (
+            <Text style={{ padding: SPACING.lg, color: COLORS.mutedForeground }}>Загрузка...</Text>
           ) : null}
-          {(tab === "mentors" || tab === "active_mentors") &&
+          {(tab === 'mentors' || tab === 'active_mentors') &&
           !mentorApps.loading &&
           filteredMentors.length === 0 ? (
             <EmptyState title="Менторов не найдено" />
           ) : null}
-          {(tab === "mentors" || tab === "active_mentors") &&
+          {(tab === 'mentors' || tab === 'active_mentors') &&
             filteredMentors.map((mentor) => {
               const statusLabel =
-                mentor.status === "pending"
-                  ? "В ожидании"
-                  : mentor.status === "approved"
-                    ? "Одобрен"
-                    : "Отклонен";
+                mentor.status === 'pending'
+                  ? 'В ожидании'
+                  : mentor.status === 'approved'
+                    ? 'Одобрен'
+                    : 'Отклонен';
               const statusColor =
-                mentor.status === "pending"
-                  ? "#854D0E"
-                  : mentor.status === "approved"
+                mentor.status === 'pending'
+                  ? '#854D0E'
+                  : mentor.status === 'approved'
                     ? COLORS.success
                     : COLORS.destructive;
               return (
@@ -221,11 +191,9 @@ export default function AdminUsersScreen() {
                     borderBottomWidth: 1,
                     borderColor: COLORS.border,
                     backgroundColor:
-                      selectedMentor?.id === mentor.id
-                        ? COLORS.primary + "05"
-                        : COLORS.surface,
-                    flexDirection: "row",
-                    alignItems: "center",
+                      selectedMentor?.id === mentor.id ? `${COLORS.primary}05` : COLORS.surface,
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: SPACING.md,
                   }}
                 >
@@ -234,9 +202,9 @@ export default function AdminUsersScreen() {
                       width: 48,
                       height: 48,
                       borderRadius: RADIUS.full,
-                      backgroundColor: COLORS.primary + "15",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: `${COLORS.primary}15`,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text style={{ fontSize: 24 }}>{mentor.photo_emoji}</Text>
@@ -245,7 +213,7 @@ export default function AdminUsersScreen() {
                     <Text
                       style={{
                         fontSize: TYPOGRAPHY.size.md,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.foreground,
                       }}
                     >
@@ -258,15 +226,15 @@ export default function AdminUsersScreen() {
                         marginTop: 2,
                       }}
                     >
-                      {mentor.specialization ?? "—"}
+                      {mentor.specialization ?? '—'}
                     </Text>
                   </View>
                   <Text
                     style={{
                       color: statusColor,
                       fontSize: 10,
-                      fontWeight: "900",
-                      textTransform: "uppercase",
+                      fontWeight: '900',
+                      textTransform: 'uppercase',
                     }}
                   >
                     {statusLabel}
@@ -274,14 +242,13 @@ export default function AdminUsersScreen() {
                 </TouchableOpacity>
               );
             })}
-          {tab === "users" &&
+          {tab === 'users' &&
             filteredUsers.map((row) => {
               const rc = ROLE_COLORS[row.role] ?? {
-                bg: "#F3F4F6",
-                color: "#374151",
+                bg: '#F3F4F6',
+                color: '#374151',
               };
-              const name =
-                `${row.first_name ?? ""} ${row.last_name ?? ""}`.trim() || "—";
+              const name = `${row.first_name ?? ''} ${row.last_name ?? ''}`.trim() || '—';
               return (
                 <View
                   key={row.id}
@@ -290,8 +257,8 @@ export default function AdminUsersScreen() {
                     borderBottomWidth: 1,
                     borderColor: COLORS.border,
                     backgroundColor: COLORS.surface,
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: SPACING.md,
                   }}
                 >
@@ -301,25 +268,25 @@ export default function AdminUsersScreen() {
                       height: 44,
                       borderRadius: RADIUS.full,
                       backgroundColor: rc.bg,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 18,
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         color: rc.color,
                       }}
                     >
-                      {(row.first_name ?? "?").charAt(0).toUpperCase()}
+                      {(row.first_name ?? '?').charAt(0).toUpperCase()}
                     </Text>
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
                         fontSize: TYPOGRAPHY.size.md,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.foreground,
                       }}
                     >
@@ -332,7 +299,7 @@ export default function AdminUsersScreen() {
                         marginTop: 1,
                       }}
                     >
-                      {row.phone ?? "—"} • {formatAdminDate(row.updated_at)}
+                      {row.phone ?? '—'} • {formatAdminDate(row.updated_at)}
                     </Text>
                   </View>
                   <View
@@ -346,9 +313,9 @@ export default function AdminUsersScreen() {
                     <Text
                       style={{
                         fontSize: 10,
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         color: rc.color,
-                        textTransform: "uppercase",
+                        textTransform: 'uppercase',
                       }}
                     >
                       {ROLE_LABELS[row.role] ?? row.role}
@@ -357,7 +324,7 @@ export default function AdminUsersScreen() {
                 </View>
               );
             })}
-          {tab === "families" &&
+          {tab === 'families' &&
             families.data.map((family) => (
               <View
                 key={family.id}
@@ -366,21 +333,17 @@ export default function AdminUsersScreen() {
                   borderBottomWidth: 1,
                   borderColor: COLORS.border,
                   backgroundColor: COLORS.surface,
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: SPACING.md,
                 }}
               >
-                <Feather
-                  name="users"
-                  size={24}
-                  color={COLORS.mutedForeground}
-                />
+                <Feather name="users" size={24} color={COLORS.mutedForeground} />
                 <View style={{ flex: 1 }}>
                   <Text
                     style={{
                       fontSize: TYPOGRAPHY.size.md,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                     }}
                   >
@@ -398,11 +361,8 @@ export default function AdminUsersScreen() {
                 </View>
                 <Text
                   style={{
-                    color:
-                      family.plan === "Pro"
-                        ? COLORS.primary
-                        : COLORS.mutedForeground,
-                    fontWeight: "900",
+                    color: family.plan === 'Pro' ? COLORS.primary : COLORS.mutedForeground,
+                    fontWeight: '900',
                   }}
                 >
                   {family.plan}
@@ -410,10 +370,10 @@ export default function AdminUsersScreen() {
               </View>
             ))}
         </ScrollView>
-        {tab === "mentors" && selectedMentor ? (
+        {tab === 'mentors' && selectedMentor ? (
           <View
             style={{
-              width: isTablet ? 320 : "100%",
+              width: isTablet ? 320 : '100%',
               backgroundColor: COLORS.surface,
               borderLeftWidth: 1,
               borderColor: COLORS.border,
@@ -421,15 +381,15 @@ export default function AdminUsersScreen() {
             }}
           >
             <ScrollView showsVerticalScrollIndicator={false}>
-              <Text style={{ fontSize: 40, textAlign: "center" }}>
+              <Text style={{ fontSize: 40, textAlign: 'center' }}>
                 {selectedMentor.photo_emoji}
               </Text>
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.lg,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.foreground,
-                  textAlign: "center",
+                  textAlign: 'center',
                   marginTop: SPACING.sm,
                 }}
               >
@@ -439,10 +399,10 @@ export default function AdminUsersScreen() {
                 style={{
                   fontSize: TYPOGRAPHY.size.sm,
                   color: COLORS.mutedForeground,
-                  textAlign: "center",
+                  textAlign: 'center',
                 }}
               >
-                {selectedMentor.specialization ?? "—"}
+                {selectedMentor.specialization ?? '—'}
               </Text>
               {selectedMentor.bio ? (
                 <Text
@@ -459,9 +419,9 @@ export default function AdminUsersScreen() {
               <TouchableOpacity
                 onPress={() => openMentorChat(selectedMentor)}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   gap: SPACING.sm,
                   padding: SPACING.md,
                   borderRadius: RADIUS.lg,
@@ -470,16 +430,12 @@ export default function AdminUsersScreen() {
                   marginBottom: SPACING.sm,
                 }}
               >
-                <Feather
-                  name="message-circle"
-                  size={16}
-                  color={COLORS.foreground}
-                />
-                <Text style={{ fontWeight: "700", color: COLORS.foreground }}>
+                <Feather name="message-circle" size={16} color={COLORS.foreground} />
+                <Text style={{ fontWeight: '700', color: COLORS.foreground }}>
                   Написать ментору
                 </Text>
               </TouchableOpacity>
-              {selectedMentor.status === "pending" ? (
+              {selectedMentor.status === 'pending' ? (
                 <View style={{ gap: SPACING.sm }}>
                   <TouchableOpacity
                     onPress={() => mentorApps.approve(selectedMentor.id)}
@@ -487,28 +443,24 @@ export default function AdminUsersScreen() {
                       backgroundColor: COLORS.success,
                       padding: SPACING.md,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
+                      alignItems: 'center',
                     }}
                   >
-                    <Text style={{ color: COLORS.white, fontWeight: "900" }}>
-                      Одобрить
-                    </Text>
+                    <Text style={{ color: COLORS.white, fontWeight: '900' }}>Одобрить</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
                       setRejecting(selectedMentor);
-                      setRejectReason("");
+                      setRejectReason('');
                     }}
                     style={{
                       backgroundColor: COLORS.destructive,
                       padding: SPACING.md,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
+                      alignItems: 'center',
                     }}
                   >
-                    <Text style={{ color: COLORS.white, fontWeight: "900" }}>
-                      Отклонить
-                    </Text>
+                    <Text style={{ color: COLORS.white, fontWeight: '900' }}>Отклонить</Text>
                   </TouchableOpacity>
                 </View>
               ) : null}
@@ -525,15 +477,15 @@ export default function AdminUsersScreen() {
         <View
           style={{
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
             padding: SPACING.xl,
           }}
         >
           <View
             style={{
-              width: "100%",
+              width: '100%',
               maxWidth: 480,
               backgroundColor: COLORS.surface,
               borderRadius: RADIUS.xl,
@@ -544,7 +496,7 @@ export default function AdminUsersScreen() {
             <Text
               style={{
                 fontSize: TYPOGRAPHY.size.lg,
-                fontWeight: "900",
+                fontWeight: '900',
                 color: COLORS.foreground,
               }}
             >
@@ -567,22 +519,17 @@ export default function AdminUsersScreen() {
             <TouchableOpacity
               onPress={async () => {
                 if (rejecting)
-                  await mentorApps.reject(
-                    rejecting.id,
-                    rejectReason.trim() || undefined,
-                  );
+                  await mentorApps.reject(rejecting.id, rejectReason.trim() || undefined);
                 setRejecting(null);
               }}
               style={{
                 padding: SPACING.md,
                 borderRadius: RADIUS.lg,
                 backgroundColor: COLORS.destructive,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
-              <Text style={{ color: COLORS.white, fontWeight: "900" }}>
-                Отклонить
-              </Text>
+              <Text style={{ color: COLORS.white, fontWeight: '900' }}>Отклонить</Text>
             </TouchableOpacity>
           </View>
         </View>

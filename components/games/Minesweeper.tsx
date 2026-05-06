@@ -1,20 +1,17 @@
-import { Feather } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { useCallback, useEffect, useState } from 'react';
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    UIManager,
-    useWindowDimensions,
-    View
-} from "react-native";
-import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  UIManager,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -31,16 +28,10 @@ type Cell = {
   neighborMines: number;
 };
 
-export default function Minesweeper({
-  onFinish,
-}: {
-  onFinish: (score: number) => void;
-}) {
+export default function Minesweeper({ onFinish }: { onFinish: (score: number) => void }) {
   const { width } = useWindowDimensions();
   const [grid, setGrid] = useState<Cell[][]>([]);
-  const [gameOver, setGameOver] = useState<"playing" | "won" | "lost">(
-    "playing",
-  );
+  const [gameOver, setGameOver] = useState<'playing' | 'won' | 'lost'>('playing');
   const [minesLeft, setMinesLeft] = useState(MINES_COUNT);
   const [firstClick, setFirstClick] = useState(true);
 
@@ -61,7 +52,7 @@ export default function Minesweeper({
       newGrid.push(row);
     }
     setGrid(newGrid);
-    setGameOver("playing");
+    setGameOver('playing');
     setMinesLeft(MINES_COUNT);
     setFirstClick(true);
   }, []);
@@ -74,11 +65,7 @@ export default function Minesweeper({
   const cellSize = Math.floor((boardSize - 4 - GRID_SIZE * 2) / GRID_SIZE);
   const numberSize = Math.max(14, Math.min(18, cellSize * 0.32));
 
-  const placeMines = (
-    startR: number,
-    startC: number,
-    currentGrid: Cell[][],
-  ) => {
+  const placeMines = (startR: number, startC: number, currentGrid: Cell[][]) => {
     let placed = 0;
     const newGrid = currentGrid.map((row) => row.map((cell) => ({ ...cell })));
 
@@ -103,13 +90,7 @@ export default function Minesweeper({
           for (let dc = -1; dc <= 1; dc++) {
             const nr = r + dr;
             const nc = c + dc;
-            if (
-              nr >= 0 &&
-              nr < GRID_SIZE &&
-              nc >= 0 &&
-              nc < GRID_SIZE &&
-              newGrid[nr][nc].hasMine
-            ) {
+            if (nr >= 0 && nr < GRID_SIZE && nc >= 0 && nc < GRID_SIZE && newGrid[nr][nc].hasMine) {
               count++;
             }
           }
@@ -121,8 +102,7 @@ export default function Minesweeper({
   };
 
   const revealCell = (r: number, c: number) => {
-    if (gameOver !== "playing" || grid[r][c].isRevealed || grid[r][c].isFlagged)
-      return;
+    if (gameOver !== 'playing' || grid[r][c].isRevealed || grid[r][c].isFlagged) return;
 
     let newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
 
@@ -133,13 +113,13 @@ export default function Minesweeper({
 
     if (newGrid[r][c].hasMine) {
       // Hit mine - reveal all mines
-      newGrid.forEach((row) =>
+      newGrid.forEach((row) => {
         row.forEach((cell) => {
           if (cell.hasMine) cell.isRevealed = true;
-        }),
-      );
+        });
+      });
       setGrid(newGrid);
-      setGameOver("lost");
+      setGameOver('lost');
       return;
     }
 
@@ -170,7 +150,7 @@ export default function Minesweeper({
   };
 
   const toggleFlag = (r: number, c: number) => {
-    if (gameOver !== "playing" || grid[r][c].isRevealed) return;
+    if (gameOver !== 'playing' || grid[r][c].isRevealed) return;
 
     const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
     const wasFlagged = newGrid[r][c].isFlagged;
@@ -181,14 +161,14 @@ export default function Minesweeper({
 
   const checkWin = (currentGrid: Cell[][]) => {
     let revealedCount = 0;
-    currentGrid.forEach((row) =>
+    currentGrid.forEach((row) => {
       row.forEach((cell) => {
         if (cell.isRevealed) revealedCount++;
-      }),
-    );
+      });
+    });
 
     if (revealedCount === GRID_SIZE * GRID_SIZE - MINES_COUNT) {
-      setGameOver("won");
+      setGameOver('won');
       onFinish(100); // 100 points for win
     }
   };
@@ -202,13 +182,7 @@ export default function Minesweeper({
         </View>
         <TouchableOpacity onPress={initGrid} style={styles.resetBtn}>
           <Feather
-            name={
-              gameOver === "won"
-                ? "smile"
-                : gameOver === "lost"
-                  ? "frown"
-                  : "refresh-cw"
-            }
+            name={gameOver === 'won' ? 'smile' : gameOver === 'lost' ? 'frown' : 'refresh-cw'}
             size={24}
             color="white"
           />
@@ -237,9 +211,7 @@ export default function Minesweeper({
                     r === 0 && c === 0 && styles.cellTopLeft,
                     r === 0 && c === GRID_SIZE - 1 && styles.cellTopRight,
                     r === GRID_SIZE - 1 && c === 0 && styles.cellBottomLeft,
-                    r === GRID_SIZE - 1 &&
-                      c === GRID_SIZE - 1 &&
-                      styles.cellBottomRight,
+                    r === GRID_SIZE - 1 && c === GRID_SIZE - 1 && styles.cellBottomRight,
                   ]}
                 >
                   {cell.isRevealed ? (
@@ -270,11 +242,9 @@ export default function Minesweeper({
 
       <View style={styles.footer}>
         <Text style={styles.hint}>Длинное нажатие — поставить флаг</Text>
-        {gameOver !== "playing" && (
+        {gameOver !== 'playing' && (
           <View style={styles.overlay}>
-            <Text style={styles.resultText}>
-              {gameOver === "won" ? "Победа!" : "Бум! Майна!"}
-            </Text>
+            <Text style={styles.resultText}>{gameOver === 'won' ? 'Победа!' : 'Бум! Майна!'}</Text>
             <TouchableOpacity onPress={initGrid} style={styles.retryBtn}>
               <Text style={styles.retryText}>Еще раз</Text>
             </TouchableOpacity>
@@ -286,32 +256,32 @@ export default function Minesweeper({
 }
 
 const NUMBER_COLORS: Record<number, string> = {
-  1: "#3B82F6",
-  2: "#10B981",
-  3: "#EF4444",
-  4: "#6366F1",
-  5: "#8B5CF6",
-  6: "#EC4899",
-  7: "#F59E0B",
-  8: "#1F2937",
+  1: '#3B82F6',
+  2: '#10B981',
+  3: '#EF4444',
+  4: '#6366F1',
+  5: '#8B5CF6',
+  6: '#EC4899',
+  7: '#F59E0B',
+  8: '#1F2937',
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: 24,
-    width: "100%",
+    width: '100%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 24,
   },
   statBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: RADIUS.md,
@@ -319,7 +289,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   statText: {
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
   },
   resetBtn: {
@@ -327,30 +297,30 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     backgroundColor: COLORS.primary,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.md,
   },
   board: {
-    backgroundColor: "#D1D5DB",
+    backgroundColor: '#D1D5DB',
     padding: 2,
     borderRadius: RADIUS.lg,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   boardInner: {
-    backgroundColor: "#D1D5DB",
+    backgroundColor: '#D1D5DB',
     borderRadius: RADIUS.lg,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   cell: {
-    backgroundColor: "#E5E7EB",
+    backgroundColor: '#E5E7EB',
     margin: 1,
     borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cellTopLeft: {
     borderTopLeftRadius: RADIUS.lg,
@@ -365,31 +335,31 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: RADIUS.lg,
   },
   cellRevealed: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   cellMine: {
-    backgroundColor: "#EF4444",
+    backgroundColor: '#EF4444',
   },
   number: {
-    fontWeight: "900",
+    fontWeight: '900',
   },
   footer: {
     marginTop: 24,
-    alignItems: "center",
+    alignItems: 'center',
   },
   hint: {
     color: COLORS.mutedForeground,
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     opacity: 0.6,
   },
   overlay: {
     marginTop: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   resultText: {
     fontSize: 32,
-    fontWeight: "900",
+    fontWeight: '900',
     color: COLORS.foreground,
     marginBottom: 12,
   },
@@ -400,7 +370,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.md,
   },
   retryText: {
-    color: "white",
-    fontWeight: "900",
+    color: 'white',
+    fontWeight: '900',
   },
 });

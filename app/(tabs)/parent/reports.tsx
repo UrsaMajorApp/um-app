@@ -1,21 +1,14 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
-import {
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useParentData } from "$contexts/ParentDataContext";
-import { useChildReports } from "$hooks/useParentReports";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
-import type { FeatherIconName } from "$types/icons";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useParentData } from '$contexts/ParentDataContext';
+import { useChildReports } from '$hooks/useParentReports';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { FeatherIconName } from '$types/icons';
 
 type ReportStat = {
   label: string;
@@ -31,17 +24,15 @@ export default function ParentReports() {
 
   const { childrenProfile, setActiveChildId } = useParentData();
   const children = childrenProfile.map((c) => c.name).filter(Boolean);
-  const [selectedChild, setSelectedChild] = useState<string>("");
+  const [selectedChild, setSelectedChild] = useState<string>('');
 
   useEffect(() => {
     if (children.length > 0 && !children.includes(selectedChild)) {
       setSelectedChild(children[0]);
     }
-  }, [children.join(",")]);
+  }, [children.join(',')]);
 
-  const selectedChildProfile = childrenProfile.find(
-    (c) => c.name === selectedChild,
-  );
+  const selectedChildProfile = childrenProfile.find((c) => c.name === selectedChild);
   const hasChildren = childrenProfile.length > 0;
 
   const { report, loading } = useChildReports(selectedChild || null);
@@ -51,14 +42,14 @@ export default function ParentReports() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: horizontalPadding,
@@ -68,16 +59,12 @@ export default function ParentReports() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 20,
                 }}
               >
-                <Text
-                  style={{ fontSize: 20, fontWeight: "800", color: "white" }}
-                >
-                  Отчеты
-                </Text>
+                <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Отчеты</Text>
               </View>
 
               {children.length > 0 && (
@@ -90,11 +77,9 @@ export default function ParentReports() {
                     <Pressable
                       key={child}
                       onPress={() => setSelectedChild(child)}
-                      className={`mr-3 px-6 py-2.5 rounded-full border ${selectedChild === child ? "bg-white/20 border-white/40" : "bg-transparent border-white/20"}`}
+                      className={`mr-3 px-6 py-2.5 rounded-full border ${selectedChild === child ? 'bg-white/20 border-white/40' : 'bg-transparent border-white/20'}`}
                     >
-                      <Text className="font-bold text-sm text-white">
-                        {child}
-                      </Text>
+                      <Text className="font-bold text-sm text-white">{child}</Text>
                     </Pressable>
                   ))}
                 </ScrollView>
@@ -114,9 +99,7 @@ export default function ParentReports() {
       >
         {!hasChildren && (
           <TouchableOpacity
-            onPress={() =>
-              router.push("/profile/youth/create-profile-child")
-            }
+            onPress={() => router.push('/profile/youth/create-profile-child')}
             activeOpacity={0.8}
             style={SHADOWS.sm}
             className="bg-white rounded-[32px] p-6 border border-gray-50 items-center mb-8"
@@ -124,12 +107,9 @@ export default function ParentReports() {
             <View className="w-12 h-12 rounded-2xl bg-purple-50 items-center justify-center mb-4">
               <Feather name="user-plus" size={22} color="#6C5CE7" />
             </View>
-            <Text className="text-lg font-black text-gray-900 mb-2">
-              Добавьте профиль ребёнка
-            </Text>
+            <Text className="text-lg font-black text-gray-900 mb-2">Добавьте профиль ребёнка</Text>
             <Text className="text-sm text-gray-400 text-center leading-5">
-              Отчёты, посещаемость и диагностика появятся после создания
-              детского профиля.
+              Отчёты, посещаемость и диагностика появятся после создания детского профиля.
             </Text>
           </TouchableOpacity>
         )}
@@ -137,7 +117,7 @@ export default function ParentReports() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               color: COLORS.mutedForeground,
               marginBottom: 20,
             }}
@@ -149,34 +129,34 @@ export default function ParentReports() {
         {/* Stats Row */}
         {hasChildren && (
           <View className="flex-row gap-4 mb-8">
-            {([
-              {
-                label: "Занятий",
-                value: String(report.totalClasses || "—"),
-                icon: "calendar",
-                color: "#6C5CE7",
-              },
-              {
-                label: "Посещаемость",
-                value: report.avgAttendance ? `${report.avgAttendance}%` : "—",
-                icon: "check-circle",
-                color: "#10B981",
-              },
-            ] satisfies ReportStat[]).map((stat) => (
+            {(
+              [
+                {
+                  label: 'Занятий',
+                  value: String(report.totalClasses || '—'),
+                  icon: 'calendar',
+                  color: '#6C5CE7',
+                },
+                {
+                  label: 'Посещаемость',
+                  value: report.avgAttendance ? `${report.avgAttendance}%` : '—',
+                  icon: 'check-circle',
+                  color: '#10B981',
+                },
+              ] satisfies ReportStat[]
+            ).map((stat) => (
               <View
                 key={stat.label}
                 style={SHADOWS.sm}
                 className="flex-1 bg-white p-5 rounded-[32px] border border-gray-50 items-center"
               >
                 <View
-                  style={{ backgroundColor: stat.color + "10" }}
+                  style={{ backgroundColor: `${stat.color}10` }}
                   className="w-10 h-10 rounded-xl items-center justify-center mb-3"
                 >
                   <Feather name={stat.icon} size={20} color={stat.color} />
                 </View>
-                <Text className="text-2xl font-black text-gray-900">
-                  {stat.value}
-                </Text>
+                <Text className="text-2xl font-black text-gray-900">{stat.value}</Text>
                 <Text className="text-[10px] text-gray-400 font-bold uppercase mt-1 text-center">
                   {stat.label}
                 </Text>
@@ -195,9 +175,7 @@ export default function ParentReports() {
               <Text className="text-lg font-black text-gray-900">Навыки</Text>
               <View className="bg-green-50 px-3 py-1.5 rounded-full border border-green-100 flex-row items-center gap-1.5">
                 <Feather name="trending-up" size={12} color="#10B981" />
-                <Text className="text-[10px] font-black text-green-600">
-                  ПРОГРЕСС
-                </Text>
+                <Text className="text-[10px] font-black text-green-600">ПРОГРЕСС</Text>
               </View>
             </View>
 
@@ -205,12 +183,8 @@ export default function ParentReports() {
               {report.skills.map((skill) => (
                 <View key={skill.skill_label}>
                   <View className="flex-row justify-between items-end mb-2">
-                    <Text className="text-sm font-bold text-gray-800">
-                      {skill.skill_label}
-                    </Text>
-                    <Text className="text-sm font-black text-gray-900">
-                      {skill.current_value}%
-                    </Text>
+                    <Text className="text-sm font-bold text-gray-800">{skill.skill_label}</Text>
+                    <Text className="text-sm font-black text-gray-900">{skill.current_value}%</Text>
                   </View>
                   <View className="h-2 bg-gray-50 rounded-full overflow-hidden flex-row">
                     <View
@@ -233,37 +207,30 @@ export default function ParentReports() {
             style={SHADOWS.md}
             className="bg-white rounded-[40px] p-6 mb-8 border border-gray-50"
           >
-            <Text className="text-lg font-black text-gray-900 mb-6">
-              Посещаемость по месяцам
-            </Text>
+            <Text className="text-lg font-black text-gray-900 mb-6">Посещаемость по месяцам</Text>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "flex-end",
+                flexDirection: 'row',
+                alignItems: 'flex-end',
                 gap: 8,
                 height: 80,
               }}
             >
               {report.attendance.map((a) => (
-                <View
-                  key={a.month_label}
-                  style={{ flex: 1, alignItems: "center" }}
-                >
+                <View key={a.month_label} style={{ flex: 1, alignItems: 'center' }}>
                   <View
                     style={{
-                      width: "100%",
-                      height: Math.round(
-                        (a.attendance_pct / maxAttendance) * 64,
-                      ),
-                      backgroundColor: "#6C5CE7",
+                      width: '100%',
+                      height: Math.round((a.attendance_pct / maxAttendance) * 64),
+                      backgroundColor: '#6C5CE7',
                       borderRadius: 6,
                     }}
                   />
                   <Text
                     style={{
                       fontSize: 9,
-                      color: "#9CA3AF",
-                      fontWeight: "700",
+                      color: '#9CA3AF',
+                      fontWeight: '700',
                       marginTop: 4,
                     }}
                   >
@@ -288,7 +255,7 @@ export default function ParentReports() {
               <Text
                 style={{
                   fontSize: 18,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.foreground,
                 }}
               >
@@ -308,7 +275,7 @@ export default function ParentReports() {
             <TouchableOpacity
               onPress={() => {
                 setActiveChildId(selectedChildProfile.id);
-                router.push("/profile/youth/results");
+                router.push('/profile/youth/results');
               }}
               className="bg-primary/10 py-4 rounded-2xl items-center justify-center"
             >
@@ -318,14 +285,11 @@ export default function ParentReports() {
             </TouchableOpacity>
           </View>
         ) : hasChildren ? (
-          <View
-            style={SHADOWS.md}
-            className="bg-gray-900 rounded-[40px] p-8 mb-8 overflow-hidden"
-          >
+          <View style={SHADOWS.md} className="bg-gray-900 rounded-[40px] p-8 mb-8 overflow-hidden">
             <LinearGradient
-              colors={["rgba(255,255,255,0.1)", "rgba(255,255,255,0)"]}
+              colors={['rgba(255,255,255,0.1)', 'rgba(255,255,255,0)']}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: 0,
                 left: 0,
                 right: 0,
@@ -336,20 +300,18 @@ export default function ParentReports() {
               <View className="w-10 h-10 bg-white/20 rounded-2xl items-center justify-center">
                 <Feather name="zap" size={20} color="white" />
               </View>
-              <Text className="text-white text-lg font-black">
-                AI Диагностика
-              </Text>
+              <Text className="text-white text-lg font-black">AI Диагностика</Text>
             </View>
             <Text className="text-white/60 text-sm leading-6 mb-6">
-              У {selectedChild || "этого ребенка"} еще нет результатов
-              диагностики. Пройдите тест, чтобы узнать сильные стороны.
+              У {selectedChild || 'этого ребенка'} еще нет результатов диагностики. Пройдите тест,
+              чтобы узнать сильные стороны.
             </Text>
             <TouchableOpacity
               onPress={() => {
                 if (selectedChildProfile) {
                   setActiveChildId(selectedChildProfile.id);
                   router.push({
-                    pathname: "/profile/youth/testing",
+                    pathname: '/profile/youth/testing',
                     params: { childId: selectedChildProfile.id },
                   });
                 }
@@ -367,9 +329,9 @@ export default function ParentReports() {
         {hasChildren && selectedChildProfile?.talentProfile?.summary && (
           <View className="bg-purple-600 rounded-[40px] p-8 overflow-hidden">
             <LinearGradient
-              colors={["rgba(255,255,255,0.1)", "rgba(255,255,255,0)"]}
+              colors={['rgba(255,255,255,0.1)', 'rgba(255,255,255,0)']}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: 0,
                 left: 0,
                 right: 0,
@@ -380,9 +342,7 @@ export default function ParentReports() {
               <View className="w-10 h-10 bg-white/20 rounded-2xl items-center justify-center">
                 <Feather name="cpu" size={20} color="white" />
               </View>
-              <Text className="text-white text-lg font-black">
-                AI Аналитика
-              </Text>
+              <Text className="text-white text-lg font-black">AI Аналитика</Text>
             </View>
             <Text className="text-white/80 text-sm leading-6 font-medium">
               {selectedChildProfile.talentProfile.summary}

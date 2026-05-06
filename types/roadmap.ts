@@ -3,7 +3,7 @@ export interface RoadmapItem {
   childId: string;
   title: string;
   description: string;
-  status: "locked" | "available" | "completed";
-  type: "skill" | "activity" | "milestone";
+  status: 'locked' | 'available' | 'completed';
+  type: 'skill' | 'activity' | 'milestone';
   order: number;
 }

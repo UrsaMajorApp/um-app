@@ -1,58 +1,41 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  TYPOGRAPHY
-} from "$constants/theme";
-import {
-  useOrgProfile,
-  useOrgSchedule,
-  useOrgStats,
-} from "$hooks/useOrgData";
-import { useWalletData } from "$hooks/usePlatformData";
-import { formatKZT } from "$lib/formatCurrency";
-import { featherIconName } from "$lib/icons";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { useOrgProfile, useOrgSchedule, useOrgStats } from '$hooks/useOrgData';
+import { useWalletData } from '$hooks/usePlatformData';
+import { formatKZT } from '$lib/formatCurrency';
+import { featherIconName } from '$lib/icons';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 const QUICK_ACTIONS = [
   {
-    label: "Заявки",
-    icon: "clipboard",
-    route: "/organization/applications",
-    color: "#F59E0B",
+    label: 'Заявки',
+    icon: 'clipboard',
+    route: '/organization/applications',
+    color: '#F59E0B',
   },
   {
-    label: "Курсы",
-    icon: "book",
-    route: "/organization/courses",
+    label: 'Курсы',
+    icon: 'book',
+    route: '/organization/courses',
     color: COLORS.primary,
   },
   {
-    label: "Учителя",
-    icon: "users",
-    route: "/organization/staff",
-    color: "#6366F1",
+    label: 'Учителя',
+    icon: 'users',
+    route: '/organization/staff',
+    color: '#6366F1',
   },
   {
-    label: "Группы",
-    icon: "layers",
-    route: "/organization/groups",
-    color: "#10B981",
+    label: 'Группы',
+    icon: 'layers',
+    route: '/organization/groups',
+    color: '#10B981',
   },
 ];
 
@@ -61,37 +44,37 @@ export default function OrgHome() {
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const { status: orgStatus, name: orgName } = useOrgProfile();
-  const isVerified = orgStatus === "verified";
+  const isVerified = orgStatus === 'verified';
   const { stats } = useOrgStats();
-  const { summary: walletSummary } = useWalletData("org");
+  const { summary: walletSummary } = useWalletData('org');
   const todayDow = (new Date().getDay() + 6) % 7; // Mon=0
   const { items: todaySchedule } = useOrgSchedule(todayDow);
   const firstClass = todaySchedule[0] ?? null;
 
   const STATS_TILES = [
     {
-      label: "Кружков",
+      label: 'Кружков',
       value: String(stats.groupCount),
-      icon: "book-open" as const,
+      icon: 'book-open' as const,
       color: COLORS.primary,
     },
     {
-      label: "Учеников",
+      label: 'Учеников',
       value: String(stats.studentCount),
-      icon: "users" as const,
-      color: "#10B981",
+      icon: 'users' as const,
+      color: '#10B981',
     },
     {
-      label: "Заявок",
+      label: 'Заявок',
       value: String(stats.pendingCount),
-      icon: "clipboard" as const,
-      color: "#F59E0B",
+      icon: 'clipboard' as const,
+      color: '#F59E0B',
     },
     {
-      label: "Учителей",
+      label: 'Учителей',
       value: String(stats.staffCount),
-      icon: "user-check" as const,
-      color: "#6366F1",
+      icon: 'user-check' as const,
+      color: '#6366F1',
     },
   ];
 
@@ -104,14 +87,14 @@ export default function OrgHome() {
         }}
       >
         {/* Header - Premium Purple Aesthetic */}
-        <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+        <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
           <LinearGradient
             colors={COLORS.gradients.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+            style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
           >
-            <SafeAreaView edges={["top"]}>
+            <SafeAreaView edges={['top']}>
               <MotiView
                 from={{ opacity: 0, translateY: -10 }}
                 animate={{ opacity: 1, translateY: 0 }}
@@ -123,9 +106,9 @@ export default function OrgHome() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     marginBottom: 20,
                   }}
                 >
@@ -134,7 +117,7 @@ export default function OrgHome() {
                       style={{
                         fontSize: TYPOGRAPHY.size.xxl,
                         fontWeight: TYPOGRAPHY.weight.light,
-                        color: "white",
+                        color: 'white',
                         opacity: 0.8,
                       }}
                     >
@@ -144,24 +127,24 @@ export default function OrgHome() {
                       style={{
                         fontSize: TYPOGRAPHY.size.xxxl,
                         fontWeight: TYPOGRAPHY.weight.bold,
-                        color: "white",
+                        color: 'white',
                         letterSpacing: -0.5,
                       }}
                     >
-                      {orgName || "Моя организация"}
+                      {orgName || 'Моя организация'}
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => router.push("/(tabs)/profile")}
+                    onPress={() => router.push('/(tabs)/profile')}
                     style={{
                       width: 52,
                       height: 52,
                       borderRadius: RADIUS.lg,
-                      backgroundColor: "rgba(255,255,255,0.15)",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: 'rgba(255,255,255,0.15)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       borderWidth: 1,
-                      borderColor: "rgba(255,255,255,0.1)",
+                      borderColor: 'rgba(255,255,255,0.1)',
                     }}
                   >
                     <Feather name="settings" size={22} color="white" />
@@ -171,29 +154,29 @@ export default function OrgHome() {
                 {/* Sub-header Context Chips */}
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     marginTop: 4,
                   }}
                 >
                   <View
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.1)",
+                      backgroundColor: 'rgba(255,255,255,0.1)',
                       paddingHorizontal: 16,
                       paddingVertical: 8,
                       borderRadius: 999,
                       borderWidth: 1,
-                      borderColor: "rgba(255,255,255,0.2)",
+                      borderColor: 'rgba(255,255,255,0.2)',
                     }}
                   >
                     <Text
                       style={{
-                        color: "white",
+                        color: 'white',
                         fontSize: 10,
-                        fontWeight: "800",
+                        fontWeight: '800',
                         letterSpacing: 1,
-                        textTransform: "uppercase",
+                        textTransform: 'uppercase',
                       }}
                     >
                       Сеть: 1 филиал
@@ -201,22 +184,22 @@ export default function OrgHome() {
                   </View>
                   <View
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.1)",
+                      backgroundColor: 'rgba(255,255,255,0.1)',
                       paddingHorizontal: 12,
                       paddingVertical: 6,
                       borderRadius: 999,
                       borderWidth: 1,
-                      borderColor: "rgba(255,255,255,0.2)",
-                      flexDirection: "row",
-                      alignItems: "center",
+                      borderColor: 'rgba(255,255,255,0.2)',
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: 8,
                     }}
                   >
                     <Feather name="trending-up" size={14} color="white" />
                     <Text
                       style={{
-                        color: "white",
-                        fontWeight: "700",
+                        color: 'white',
+                        fontWeight: '700',
                         fontSize: 12,
                       }}
                     >
@@ -230,7 +213,7 @@ export default function OrgHome() {
         </View>
 
         {/* Verification status banner */}
-        {(orgStatus === "new" || orgStatus === null) && (
+        {(orgStatus === 'new' || orgStatus === null) && (
           <MotiView
             from={{ opacity: 0, translateY: -8 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -241,19 +224,19 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push("/organization/verification")}
+              onPress={() => router.push('/organization/verification')}
               activeOpacity={0.92}
               style={{
-                backgroundColor: "#6C5CE7",
+                backgroundColor: '#6C5CE7',
                 borderRadius: RADIUS.xl,
                 padding: 20,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <LinearGradient
-                colors={["rgba(255,255,255,0.12)", "rgba(255,255,255,0)"]}
+                colors={['rgba(255,255,255,0.12)', 'rgba(255,255,255,0)']}
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   top: 0,
                   left: 0,
                   right: 0,
@@ -262,8 +245,8 @@ export default function OrgHome() {
               />
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "flex-start",
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
                   gap: 14,
                 }}
               >
@@ -272,9 +255,9 @@ export default function OrgHome() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="shield" size={22} color="white" />
@@ -283,8 +266,8 @@ export default function OrgHome() {
                   <Text
                     style={{
                       fontSize: 15,
-                      fontWeight: "800",
-                      color: "white",
+                      fontWeight: '800',
+                      color: 'white',
                       marginBottom: 4,
                     }}
                   >
@@ -293,17 +276,16 @@ export default function OrgHome() {
                   <Text
                     style={{
                       fontSize: 13,
-                      color: "rgba(255,255,255,0.8)",
+                      color: 'rgba(255,255,255,0.8)',
                       lineHeight: 18,
                     }}
                   >
-                    Чтобы принимать оплаты и появиться в поиске — загрузите
-                    документы
+                    Чтобы принимать оплаты и появиться в поиске — загрузите документы
                   </Text>
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: 6,
                       marginTop: 12,
                     }}
@@ -311,8 +293,8 @@ export default function OrgHome() {
                     <Text
                       style={{
                         fontSize: 13,
-                        fontWeight: "700",
-                        color: "white",
+                        fontWeight: '700',
+                        color: 'white',
                       }}
                     >
                       Перейти к верификации
@@ -325,7 +307,7 @@ export default function OrgHome() {
           </MotiView>
         )}
 
-        {orgStatus === "ready_for_review" && (
+        {orgStatus === 'ready_for_review' && (
           <MotiView
             from={{ opacity: 0, translateY: -8 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -336,16 +318,16 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push("/profile/organization")}
+              onPress={() => router.push('/profile/organization')}
               activeOpacity={0.9}
               style={{
-                backgroundColor: "#FFFBEB",
+                backgroundColor: '#FFFBEB',
                 borderRadius: RADIUS.xl,
                 padding: 20,
                 borderWidth: 1,
-                borderColor: "#FDE047",
-                flexDirection: "row",
-                alignItems: "center",
+                borderColor: '#FDE047',
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: 16,
                 ...SHADOWS.sm,
               }}
@@ -355,22 +337,19 @@ export default function OrgHome() {
                   width: 48,
                   height: 48,
                   borderRadius: RADIUS.lg,
-                  backgroundColor: "#FEF08A",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: '#FEF08A',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Feather name="shield" size={24} color="#854D0E" />
               </View>
               <View style={{ flex: 1 }}>
-                <Text
-                  style={{ fontSize: 14, fontWeight: "700", color: "#1C1C1E" }}
-                >
+                <Text style={{ fontSize: 14, fontWeight: '700', color: '#1C1C1E' }}>
                   Документы на проверке
                 </Text>
-                <Text style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>
-                  Администратор проверяет ваши документы. Обычно это занимает до
-                  24 часов.
+                <Text style={{ fontSize: 12, color: '#6B7280', marginTop: 2 }}>
+                  Администратор проверяет ваши документы. Обычно это занимает до 24 часов.
                 </Text>
               </View>
               <Feather name="chevron-right" size={20} color="#854D0E" />
@@ -378,7 +357,7 @@ export default function OrgHome() {
           </MotiView>
         )}
 
-        {orgStatus === "rejected" && (
+        {orgStatus === 'rejected' && (
           <MotiView
             from={{ opacity: 0, translateY: -8 }}
             animate={{ opacity: 1, translateY: 0 }}
@@ -389,16 +368,16 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push("/organization/verification")}
+              onPress={() => router.push('/organization/verification')}
               activeOpacity={0.92}
               style={{
-                backgroundColor: "#FEE2E2",
+                backgroundColor: '#FEE2E2',
                 borderRadius: RADIUS.lg,
                 padding: 16,
                 borderWidth: 1,
-                borderColor: "#FCA5A5",
-                flexDirection: "row",
-                alignItems: "center",
+                borderColor: '#FCA5A5',
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: 12,
               }}
             >
@@ -407,20 +386,18 @@ export default function OrgHome() {
                   width: 40,
                   height: 40,
                   borderRadius: RADIUS.md,
-                  backgroundColor: "#FCA5A530",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: '#FCA5A530',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Feather name="x-circle" size={20} color="#B91C1C" />
               </View>
               <View style={{ flex: 1 }}>
-                <Text
-                  style={{ fontSize: 14, fontWeight: "700", color: "#B91C1C" }}
-                >
+                <Text style={{ fontSize: 14, fontWeight: '700', color: '#B91C1C' }}>
                   Верификация отклонена
                 </Text>
-                <Text style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>
+                <Text style={{ fontSize: 12, color: '#6B7280', marginTop: 2 }}>
                   Нажмите, чтобы повторно отправить документы
                 </Text>
               </View>
@@ -431,7 +408,7 @@ export default function OrgHome() {
 
         {/* Stats Grid - Horizon Premium style */}
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 32 }}>
-          <View style={{ flexDirection: "row", gap: 16, marginBottom: 16 }}>
+          <View style={{ flexDirection: 'row', gap: 16, marginBottom: 16 }}>
             {STATS_TILES.slice(0, 2).map((stat, idx) => (
               <MotiView
                 key={stat.label}
@@ -450,12 +427,12 @@ export default function OrgHome() {
               >
                 <View
                   style={{
-                    backgroundColor: stat.color + "10",
+                    backgroundColor: `${stat.color}10`,
                     width: 40,
                     height: 40,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginBottom: 12,
                   }}
                 >
@@ -464,7 +441,7 @@ export default function OrgHome() {
                 <Text
                   style={{
                     fontSize: 24,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                   }}
                 >
@@ -473,9 +450,9 @@ export default function OrgHome() {
                 <Text
                   style={{
                     fontSize: 10,
-                    fontWeight: "700",
+                    fontWeight: '700',
                     color: COLORS.mutedForeground,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                     marginTop: 4,
                   }}
                 >
@@ -503,12 +480,12 @@ export default function OrgHome() {
               >
                 <View
                   style={{
-                    backgroundColor: stat.color + "10",
+                    backgroundColor: `${stat.color}10`,
                     width: 40,
                     height: 40,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginBottom: 12,
                   }}
                 >
@@ -517,7 +494,7 @@ export default function OrgHome() {
                 <Text
                   style={{
                     fontSize: 24,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                   }}
                 >
@@ -526,9 +503,9 @@ export default function OrgHome() {
                 <Text
                   style={{
                     fontSize: 10,
-                    fontWeight: "700",
+                    fontWeight: '700',
                     color: COLORS.mutedForeground,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                     marginTop: 4,
                   }}
                 >
@@ -559,14 +536,14 @@ export default function OrgHome() {
           </Text>
           <View
             style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
+              flexDirection: 'row',
+              flexWrap: 'wrap',
               gap: 16,
               marginBottom: 32,
             }}
           >
             {QUICK_ACTIONS.map((item, idx) => {
-              const badge = item.label === "Заявки" ? stats.pendingCount : 0;
+              const badge = item.label === 'Заявки' ? stats.pendingCount : 0;
               return (
                 <MotiView
                   key={item.label}
@@ -575,7 +552,7 @@ export default function OrgHome() {
                   transition={{ delay: 300 + idx * 50 }}
                   style={{
                     ...SHADOWS.strict,
-                    flexBasis: isDesktop ? "22%" : "47%",
+                    flexBasis: isDesktop ? '22%' : '47%',
                     flexGrow: 1,
                     backgroundColor: COLORS.surface,
                     padding: 24,
@@ -587,17 +564,17 @@ export default function OrgHome() {
                   <Pressable onPress={() => router.push(appHref(item.route))}>
                     <View
                       style={{
-                        backgroundColor: item.color + "10",
+                        backgroundColor: `${item.color}10`,
                         width: 48,
                         height: 48,
                         borderRadius: RADIUS.lg,
-                        alignItems: "center",
-                        justifyContent: "center",
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         marginBottom: 16,
                       }}
                     >
                       <Feather
-                        name={featherIconName(item.icon, "circle")}
+                        name={featherIconName(item.icon, 'circle')}
                         size={22}
                         color={item.color}
                       />
@@ -605,7 +582,7 @@ export default function OrgHome() {
                     <Text
                       style={{
                         fontSize: 16,
-                        fontWeight: "700",
+                        fontWeight: '700',
                         color: COLORS.foreground,
                       }}
                     >
@@ -614,23 +591,21 @@ export default function OrgHome() {
                     {badge > 0 && (
                       <View
                         style={{
-                          position: "absolute",
+                          position: 'absolute',
                           top: -8,
                           right: -8,
                           backgroundColor: COLORS.destructive,
                           borderRadius: 12,
                           minWidth: 24,
                           height: 24,
-                          alignItems: "center",
-                          justifyContent: "center",
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           borderWidth: 2,
-                          borderColor: "white",
+                          borderColor: 'white',
                           ...SHADOWS.sm,
                         }}
                       >
-                        <Text className="text-[10px] font-black text-white">
-                          {badge}
-                        </Text>
+                        <Text className="text-[10px] font-black text-white">{badge}</Text>
                       </View>
                     )}
                   </Pressable>
@@ -659,8 +634,8 @@ export default function OrgHome() {
               padding: 20,
               borderWidth: 1,
               borderColor: COLORS.border,
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               marginBottom: 32,
             }}
           >
@@ -670,8 +645,8 @@ export default function OrgHome() {
                 height: 56,
                 backgroundColor: COLORS.muted,
                 borderRadius: RADIUS.xl,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginRight: 16,
               }}
             >
@@ -682,7 +657,7 @@ export default function OrgHome() {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "800",
+                    fontWeight: '800',
                     color: COLORS.foreground,
                   }}
                 >
@@ -706,7 +681,7 @@ export default function OrgHome() {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "800",
+                    fontWeight: '800',
                     color: COLORS.foreground,
                   }}
                 >
@@ -723,14 +698,8 @@ export default function OrgHome() {
                 </Text>
               </View>
             )}
-            <TouchableOpacity
-              onPress={() => router.push("/organization/schedule")}
-            >
-              <Feather
-                name="chevron-right"
-                size={20}
-                color={COLORS.mutedForeground}
-              />
+            <TouchableOpacity onPress={() => router.push('/organization/schedule')}>
+              <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
             </TouchableOpacity>
           </View>
         </View>
@@ -738,7 +707,7 @@ export default function OrgHome() {
         <View style={{ paddingHorizontal: horizontalPadding }} className="mb-8">
           <View className="flex-row justify-between items-center mb-4 px-1">
             <View className="flex-row items-center gap-2">
-              <Feather name="dollar-sign" size={20} color={"#10B981"} />
+              <Feather name="dollar-sign" size={20} color={'#10B981'} />
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.lg,
@@ -767,7 +736,7 @@ export default function OrgHome() {
               borderWidth: 1,
               borderColor: COLORS.border,
               borderLeftWidth: 6,
-              borderLeftColor: "#10B981",
+              borderLeftColor: '#10B981',
             }}
           >
             <View className="flex-row justify-between items-start mb-6">
@@ -786,8 +755,8 @@ export default function OrgHome() {
                   style={{
                     fontSize: 12,
                     color: COLORS.mutedForeground,
-                    fontWeight: "700",
-                    textTransform: "uppercase",
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
                     marginTop: 4,
                   }}
                 >
@@ -795,11 +764,7 @@ export default function OrgHome() {
                 </Text>
               </View>
               <TouchableOpacity className="w-12 h-12 bg-gray-50 rounded-full items-center justify-center border border-gray-100">
-                <Feather
-                  name="external-link"
-                  size={18}
-                  color={COLORS.mutedForeground}
-                />
+                <Feather name="external-link" size={18} color={COLORS.mutedForeground} />
               </TouchableOpacity>
             </View>
 
@@ -807,9 +772,7 @@ export default function OrgHome() {
               <View className="flex-row justify-between items-center mb-3">
                 <View className="flex-row items-center gap-2">
                   <View className="w-2 h-2 rounded-full bg-green-500" />
-                  <Text className="text-sm font-bold text-gray-700">
-                    Ваша доля (90%)
-                  </Text>
+                  <Text className="text-sm font-bold text-gray-700">Ваша доля (90%)</Text>
                 </View>
                 <Text className="text-sm font-black text-gray-900">
                   {formatKZT(walletSummary.availableBalance)}
@@ -818,9 +781,7 @@ export default function OrgHome() {
               <View className="flex-row justify-between items-center opacity-40">
                 <View className="flex-row items-center gap-2">
                   <View className="w-2 h-2 rounded-full bg-gray-400" />
-                  <Text className="text-sm font-medium text-gray-700">
-                    Комиссия (10%)
-                  </Text>
+                  <Text className="text-sm font-medium text-gray-700">Комиссия (10%)</Text>
                 </View>
                 <Text className="text-sm font-bold text-gray-900">
                   -{formatKZT(walletSummary.commission)}
@@ -829,7 +790,7 @@ export default function OrgHome() {
             </View>
 
             <TouchableOpacity
-              onPress={() => router.push("/(tabs)/organization/wallet")}
+              onPress={() => router.push('/(tabs)/organization/wallet')}
               className="bg-gray-900 py-4 rounded-2xl items-center shadow-sm"
             >
               <Text className="text-white font-bold uppercase tracking-widest text-xs">
@@ -854,7 +815,7 @@ export default function OrgHome() {
           </Text>
           <View className="flex-row gap-4">
             <TouchableOpacity
-              onPress={() => router.push("/organization/course/create")}
+              onPress={() => router.push('/organization/course/create')}
               activeOpacity={0.9}
               style={{
                 ...SHADOWS.md,
@@ -863,13 +824,13 @@ export default function OrgHome() {
                 backgroundColor: COLORS.primary,
                 borderRadius: RADIUS.xxl,
                 padding: 24,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <LinearGradient
-                colors={["rgba(255,255,255,0.15)", "rgba(255,255,255,0)"]}
+                colors={['rgba(255,255,255,0.15)', 'rgba(255,255,255,0)']}
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   top: 0,
                   left: 0,
                   right: 0,
@@ -879,31 +840,29 @@ export default function OrgHome() {
               <View className="w-10 h-10 bg-white/20 rounded-xl items-center justify-center mb-auto border border-white/20">
                 <Feather name="plus-circle" size={24} color="white" />
               </View>
-              <Text className="text-white font-black text-xl leading-6">
-                Новый курс
-              </Text>
+              <Text className="text-white font-black text-xl leading-6">Новый курс</Text>
               <Text className="text-white/60 text-[10px] font-bold uppercase mt-1 tracking-wider">
                 Программа
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push("/organization/staff/add")}
+              onPress={() => router.push('/organization/staff/add')}
               activeOpacity={0.9}
               style={{
                 ...SHADOWS.md,
                 flex: 1,
                 height: 160,
-                backgroundColor: "#8B5CF6",
+                backgroundColor: '#8B5CF6',
                 borderRadius: RADIUS.xxl,
                 padding: 24,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <LinearGradient
-                colors={["rgba(255,255,255,0.15)", "rgba(255,255,255,0)"]}
+                colors={['rgba(255,255,255,0.15)', 'rgba(255,255,255,0)']}
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   top: 0,
                   left: 0,
                   right: 0,
@@ -913,9 +872,7 @@ export default function OrgHome() {
               <View className="w-10 h-10 bg-white/20 rounded-xl items-center justify-center mb-auto border border-white/20">
                 <Feather name="user-plus" size={24} color="white" />
               </View>
-              <Text className="text-white font-black text-xl leading-6">
-                Учитель
-              </Text>
+              <Text className="text-white font-black text-xl leading-6">Учитель</Text>
               <Text className="text-white/60 text-[10px] font-bold uppercase mt-1 tracking-wider">
                 Доступ
               </Text>

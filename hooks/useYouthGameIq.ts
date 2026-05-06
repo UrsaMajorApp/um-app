@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useState } from "react";
-import type { GameId } from "$components/games/gameCatalog";
-import { useAuth } from "$contexts/AuthContext";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect, useState } from 'react';
+import type { GameId } from '$components/games/gameCatalog';
+import { useAuth } from '$contexts/AuthContext';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
 
 type GameIqResult = {
   game_id: GameId;
@@ -41,11 +41,8 @@ async function hasSupabaseSession() {
   return Boolean(data.session);
 }
 
-function sumIq(results: Pick<GameIqResult, "iq_points">[]) {
-  return results.reduce(
-    (sum, result) => sum + Number(result.iq_points || 0),
-    0,
-  );
+function sumIq(results: Pick<GameIqResult, 'iq_points'>[]) {
+  return results.reduce((sum, result) => sum + Number(result.iq_points || 0), 0);
 }
 
 export function useYouthGameIq() {
@@ -64,9 +61,9 @@ export function useYouthGameIq() {
 
     if (await hasSupabaseSession()) {
       const { data, error } = await supabase!
-        .from("youth_game_results")
-        .select("iq_points")
-        .eq("user_id", user.id);
+        .from('youth_game_results')
+        .select('iq_points')
+        .eq('user_id', user.id);
 
       setTotalIq(error || !data ? 0 : sumIq(data));
       setLoading(false);
@@ -89,7 +86,7 @@ export function useYouthGameIq() {
       const completedAt = new Date().toISOString();
 
       if (await hasSupabaseSession()) {
-        const { error } = await supabase!.from("youth_game_results").insert({
+        const { error } = await supabase!.from('youth_game_results').insert({
           user_id: user.id,
           game_id: gameId,
           iq_points: iqPoints,
@@ -98,7 +95,7 @@ export function useYouthGameIq() {
         });
 
         if (error) {
-          console.warn("Failed to save youth game IQ result", error);
+          console.warn('Failed to save youth game IQ result', error);
           return { success: false, error };
         }
       } else {

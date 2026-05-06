@@ -1,7 +1,7 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,11 +10,11 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { LAYOUT } from "$constants/theme";
-import { formatPhone } from "$lib/formatPhone";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LAYOUT } from '$constants/theme';
+import { formatPhone } from '$lib/formatPhone';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CreateProfileYoungAdult() {
   const router = useRouter();
@@ -23,20 +23,20 @@ export default function CreateProfileYoungAdult() {
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    age: "",
-    gender: "male",
-    email: "",
-    phone: "",
-    education: "",
-    profession: "",
-    experience: "",
-    goals: "",
+    firstName: '',
+    lastName: '',
+    age: '',
+    gender: 'male',
+    email: '',
+    phone: '',
+    education: '',
+    profession: '',
+    experience: '',
+    goals: '',
   });
 
   const handleSubmit = () => {
-    router.push("/profile/youth/testing");
+    router.push('/profile/youth/testing');
   };
 
   const handleBack = () => {
@@ -45,37 +45,35 @@ export default function CreateProfileYoungAdult() {
       return;
     }
 
-    router.replace("/register");
+    router.replace('/register');
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <LinearGradient colors={["#F0FDF4", "#F0F9FF"]} style={{ flex: 1 }}>
+      <LinearGradient colors={['#F0FDF4', '#F0F9FF']} style={{ flex: 1 }}>
         {/* Header */}
         <LinearGradient
-          colors={["#22C55E", "#16A34A"]}
+          colors={['#22C55E', '#16A34A']}
           className="pt-12 pb-4 shadow-sm z-10 rounded-b-3xl"
         >
           <SafeAreaView
-            edges={["top"]}
+            edges={['top']}
             style={{
-              width: "100%",
+              width: '100%',
               maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined,
-              alignSelf: "center",
-              flexDirection: "row",
-              alignItems: "center",
+              alignSelf: 'center',
+              flexDirection: 'row',
+              alignItems: 'center',
               paddingHorizontal: horizontalPadding,
             }}
           >
             <TouchableOpacity onPress={handleBack} className="p-2 mr-2">
               <Feather name="arrow-left" size={24} color="white" />
             </TouchableOpacity>
-            <Text className="text-xl font-bold text-white">
-              Профиль студента
-            </Text>
+            <Text className="text-xl font-bold text-white">Профиль студента</Text>
           </SafeAreaView>
         </LinearGradient>
 
@@ -84,13 +82,13 @@ export default function CreateProfileYoungAdult() {
             paddingHorizontal: horizontalPadding,
             paddingTop: 16,
             paddingBottom: 60,
-            alignItems: "center",
+            alignItems: 'center',
           }}
           showsVerticalScrollIndicator={false}
         >
           <View
             style={{
-              width: "100%",
+              width: '100%',
               maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined,
             }}
           >
@@ -98,35 +96,25 @@ export default function CreateProfileYoungAdult() {
             <View className="bg-white rounded-2xl p-6 shadow-sm mb-6 border border-green-50">
               <View className="flex-row items-center mb-4">
                 <Feather name="user" size={20} color="#16A34A" />
-                <Text className="text-lg font-semibold text-gray-900 ml-2">
-                  Личная информация
-                </Text>
+                <Text className="text-lg font-semibold text-gray-900 ml-2">Личная информация</Text>
               </View>
 
               <View className="space-y-4">
                 <View className="flex-row justify-between mb-2">
                   <View className="flex-1 mr-2">
-                    <Text className="text-sm font-medium text-gray-700 mb-1">
-                      Имя
-                    </Text>
+                    <Text className="text-sm font-medium text-gray-700 mb-1">Имя</Text>
                     <TextInput
                       value={formData.firstName}
-                      onChangeText={(text) =>
-                        setFormData({ ...formData, firstName: text })
-                      }
+                      onChangeText={(text) => setFormData({ ...formData, firstName: text })}
                       placeholder="Имя"
                       className="w-full px-4 py-3 bg-gray-50 rounded-xl border border-gray-200"
                     />
                   </View>
                   <View className="flex-1 ml-2">
-                    <Text className="text-sm font-medium text-gray-700 mb-1">
-                      Фамилия
-                    </Text>
+                    <Text className="text-sm font-medium text-gray-700 mb-1">Фамилия</Text>
                     <TextInput
                       value={formData.lastName}
-                      onChangeText={(text) =>
-                        setFormData({ ...formData, lastName: text })
-                      }
+                      onChangeText={(text) => setFormData({ ...formData, lastName: text })}
                       placeholder="Фамилия"
                       className="w-full px-4 py-3 bg-gray-50 rounded-xl border border-gray-200"
                     />
@@ -135,51 +123,39 @@ export default function CreateProfileYoungAdult() {
 
                 <View className="flex-row justify-between mb-2">
                   <View className="flex-1 mr-2">
-                    <Text className="text-sm font-medium text-gray-700 mb-1">
-                      Возраст
-                    </Text>
+                    <Text className="text-sm font-medium text-gray-700 mb-1">Возраст</Text>
                     <TextInput
                       value={formData.age}
-                      onChangeText={(text) =>
-                        setFormData({ ...formData, age: text })
-                      }
+                      onChangeText={(text) => setFormData({ ...formData, age: text })}
                       placeholder="Напр. 19"
                       keyboardType="numeric"
                       className="w-full px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 text-center"
                     />
                   </View>
                   <View className="flex-1 ml-2">
-                    <Text className="text-sm font-medium text-gray-700 mb-1">
-                      Пол
-                    </Text>
+                    <Text className="text-sm font-medium text-gray-700 mb-1">Пол</Text>
                     <View className="flex-row rounded-xl overflow-hidden border border-gray-200 bg-gray-50 h-[50px]">
                       <TouchableOpacity
-                        onPress={() =>
-                          setFormData({ ...formData, gender: "male" })
-                        }
-                        className={`flex-1 justify-center items-center ${formData.gender === "male" ? "bg-green-500" : ""}`}
+                        onPress={() => setFormData({ ...formData, gender: 'male' })}
+                        className={`flex-1 justify-center items-center ${formData.gender === 'male' ? 'bg-green-500' : ''}`}
                       >
                         <Text
                           className={
-                            formData.gender === "male"
-                              ? "text-white font-medium"
-                              : "text-gray-500"
+                            formData.gender === 'male' ? 'text-white font-medium' : 'text-gray-500'
                           }
                         >
                           М
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={() =>
-                          setFormData({ ...formData, gender: "female" })
-                        }
-                        className={`flex-1 justify-center items-center ${formData.gender === "female" ? "bg-green-500" : ""}`}
+                        onPress={() => setFormData({ ...formData, gender: 'female' })}
+                        className={`flex-1 justify-center items-center ${formData.gender === 'female' ? 'bg-green-500' : ''}`}
                       >
                         <Text
                           className={
-                            formData.gender === "female"
-                              ? "text-white font-medium"
-                              : "text-gray-500"
+                            formData.gender === 'female'
+                              ? 'text-white font-medium'
+                              : 'text-gray-500'
                           }
                         >
                           Ж
@@ -195,34 +171,24 @@ export default function CreateProfileYoungAdult() {
             <View className="bg-white rounded-2xl p-6 shadow-sm mb-6 border border-green-50">
               <View className="flex-row items-center mb-4">
                 <Feather name="mail" size={20} color="#16A34A" />
-                <Text className="text-lg font-semibold text-gray-900 ml-2">
-                  Контакты
-                </Text>
+                <Text className="text-lg font-semibold text-gray-900 ml-2">Контакты</Text>
               </View>
               <View className="space-y-4">
                 <View>
-                  <Text className="text-sm font-medium text-gray-700 mb-1">
-                    Email
-                  </Text>
+                  <Text className="text-sm font-medium text-gray-700 mb-1">Email</Text>
                   <TextInput
                     value={formData.email}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, email: text })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, email: text })}
                     placeholder="your@email.com"
                     keyboardType="email-address"
                     className="w-full px-4 py-3 bg-gray-50 rounded-xl border border-gray-200"
                   />
                 </View>
                 <View>
-                  <Text className="text-sm font-medium text-gray-700 mb-1">
-                    Телефон
-                  </Text>
+                  <Text className="text-sm font-medium text-gray-700 mb-1">Телефон</Text>
                   <TextInput
                     value={formData.phone}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, phone: formatPhone(text) })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, phone: formatPhone(text) })}
                     placeholder="+7 777 777 7777"
                     keyboardType="phone-pad"
                     className="w-full px-4 py-3 bg-gray-50 rounded-xl border border-gray-200"
@@ -234,14 +200,8 @@ export default function CreateProfileYoungAdult() {
             {/* Education Info */}
             <View className="bg-white rounded-2xl p-6 shadow-sm mb-6 border border-green-50">
               <View className="flex-row items-center mb-4">
-                <MaterialCommunityIcons
-                  name="school"
-                  size={20}
-                  color="#16A34A"
-                />
-                <Text className="text-lg font-semibold text-gray-900 ml-2">
-                  Образование
-                </Text>
+                <MaterialCommunityIcons name="school" size={20} color="#16A34A" />
+                <Text className="text-lg font-semibold text-gray-900 ml-2">Образование</Text>
               </View>
               <View>
                 <Text className="text-sm font-medium text-gray-700 mb-1">
@@ -249,9 +209,7 @@ export default function CreateProfileYoungAdult() {
                 </Text>
                 <TextInput
                   value={formData.education}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, education: text })
-                  }
+                  onChangeText={(text) => setFormData({ ...formData, education: text })}
                   placeholder="Университет, колледж, специальность"
                   className="w-full px-4 py-3 bg-gray-50 rounded-xl border border-gray-200"
                 />
@@ -273,9 +231,7 @@ export default function CreateProfileYoungAdult() {
                   </Text>
                   <TextInput
                     value={formData.profession}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, profession: text })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, profession: text })}
                     placeholder="Какая сфера деятельности вас интересует?"
                     multiline
                     numberOfLines={3}
@@ -284,14 +240,10 @@ export default function CreateProfileYoungAdult() {
                   />
                 </View>
                 <View>
-                  <Text className="text-sm font-medium text-gray-700 mb-1">
-                    Опыт
-                  </Text>
+                  <Text className="text-sm font-medium text-gray-700 mb-1">Опыт</Text>
                   <TextInput
                     value={formData.experience}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, experience: text })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, experience: text })}
                     placeholder="Опишите ваш опыт работы или проектов"
                     multiline
                     numberOfLines={3}
@@ -306,18 +258,14 @@ export default function CreateProfileYoungAdult() {
             <View className="bg-white rounded-2xl p-6 shadow-sm mb-6 border border-green-50">
               <View className="flex-row items-center mb-4">
                 <Feather name="target" size={20} color="#16A34A" />
-                <Text className="text-lg font-semibold text-gray-900 ml-2">
-                  Цели
-                </Text>
+                <Text className="text-lg font-semibold text-gray-900 ml-2">Цели</Text>
               </View>
               <Text className="text-sm font-medium text-gray-700 mb-1">
                 Профессиональные и личные цели
               </Text>
               <TextInput
                 value={formData.goals}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, goals: text })
-                }
+                onChangeText={(text) => setFormData({ ...formData, goals: text })}
                 placeholder="Чего вы хотите достичь в ближайшее время?"
                 multiline
                 numberOfLines={3}
@@ -331,12 +279,10 @@ export default function CreateProfileYoungAdult() {
               className="w-full rounded-xl overflow-hidden shadow-md mt-2"
             >
               <LinearGradient
-                colors={["#22C55E", "#16A34A"]}
+                colors={['#22C55E', '#16A34A']}
                 className="w-full py-4 items-center justify-center"
               >
-                <Text className="text-white font-bold text-lg">
-                  Создать профиль
-                </Text>
+                <Text className="text-white font-bold text-lg">Создать профиль</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>

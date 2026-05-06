@@ -1,38 +1,23 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { useState } from "react";
-import {
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { EnrollmentRequestModal } from "$components/home/youth/EnrollmentRequestModal";
-import { YouthPassModal } from "$components/home/youth/YouthPassModal";
-import { useAuth } from "$contexts/AuthContext";
-import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { useState } from 'react';
+import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
+import { YouthPassModal } from '$components/home/youth/YouthPassModal';
+import { useAuth } from '$contexts/AuthContext';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
-import { useDevSettings } from "$contexts/DevSettingsContext";
-import { useParentData } from "$contexts/ParentDataContext";
-import { courseGradient, usePublicCourses } from "$hooks/usePublicData";
-import {
-  useStudentTasks,
-  useYouthAchievements,
-} from "$hooks/useStudentData";
-import { useYouthEnrollmentRequests } from "$hooks/useYouthEnrollmentRequests";
-import { featherIconName } from "$lib/icons";
-import type { FeatherIconName } from "$types/icons";
+import { useDevSettings } from '$contexts/DevSettingsContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
+import { useStudentTasks, useYouthAchievements } from '$hooks/useStudentData';
+import { useYouthEnrollmentRequests } from '$hooks/useYouthEnrollmentRequests';
+import { featherIconName } from '$lib/icons';
+import type { FeatherIconName } from '$types/icons';
 
 type QuickAction = {
   label: string;
@@ -50,33 +35,32 @@ export default function YouthHome() {
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   // Find active child data (relevant for all roles: parent, youth, etc.)
-  const activeChild =
-    childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
-  const firstName = activeChild?.name || user?.firstName || "Пользователь";
+  const activeChild = childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
+  const firstName = activeChild?.name || user?.firstName || 'Пользователь';
   const diagnostic = activeChild?.talentProfile;
 
   const currentSkills = diagnostic
     ? [
         {
-          label: "Коммуникация",
+          label: 'Коммуникация',
           value: diagnostic.scores.social,
-          color: "#6C5CE7",
+          color: '#6C5CE7',
         },
         {
-          label: "Креативность",
+          label: 'Креативность',
           value: diagnostic.scores.creative,
-          color: "#A78BFA",
+          color: '#A78BFA',
         },
-        { label: "Логика", value: diagnostic.scores.logical, color: "#3B82F6" },
+        { label: 'Логика', value: diagnostic.scores.logical, color: '#3B82F6' },
         {
-          label: "Дисциплина",
+          label: 'Дисциплина',
           value: diagnostic.scores.physical,
-          color: "#10B981",
+          color: '#10B981',
         },
         {
-          label: "Лингвистика",
+          label: 'Лингвистика',
           value: diagnostic.scores.linguistic,
-          color: "#EC4899",
+          color: '#EC4899',
         },
       ]
     : [];
@@ -86,20 +70,20 @@ export default function YouthHome() {
   const { devYouthAge } = useDevSettings();
 
   const isIndependent = devYouthAge >= 14; // "Подросток сам принимает решения"
-  const isPro = parentProfile?.tariff === "pro"; // PRO тариф
+  const isPro = parentProfile?.tariff === 'pro'; // PRO тариф
   const [passVisible, setPassVisible] = useState(false);
   const enrollmentRequests = useYouthEnrollmentRequests({ user, activeChild });
 
   // QR payload: stable string per user
-  const qrValue = `um:pass:${user?.id ?? "guest"}:${user?.firstName ?? ""}`;
+  const qrValue = `um:pass:${user?.id ?? 'guest'}:${user?.firstName ?? ''}`;
 
   const quickActions: QuickAction[] = [
-    { label: "Мой пропуск", icon: "maximize", color: "#EC4899", route: "#qr" },
+    { label: 'Мой пропуск', icon: 'maximize', color: '#EC4899', route: '#qr' },
     {
-      label: "Расписание",
-      icon: "calendar",
-      color: "#3B82F6",
-      route: "/(tabs)/parent/calendar",
+      label: 'Расписание',
+      icon: 'calendar',
+      color: '#3B82F6',
+      route: '/(tabs)/parent/calendar',
     },
   ];
   const openTasks = tasks.filter((task) => !task.done).length;
@@ -110,14 +94,14 @@ export default function YouthHome() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Header - Restored Violet Aesthetic */}
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: horizontalPadding,
@@ -139,18 +123,18 @@ export default function YouthHome() {
                   </Text>
                   <Text
                     style={{
-                      color: "rgba(255,255,255,0.7)",
+                      color: 'rgba(255,255,255,0.7)',
                       fontSize: 13,
-                      fontWeight: "600",
+                      fontWeight: '600',
                       marginTop: 2,
                     }}
                   >
-                    {diagnostic?.recommendedConstellation || "Профиль"} •{" "}
-                    {diagnostic ? "Профиль готов" : "Диагностика не пройдена"}
+                    {diagnostic?.recommendedConstellation || 'Профиль'} •{' '}
+                    {diagnostic ? 'Профиль готов' : 'Диагностика не пройдена'}
                   </Text>
                 </View>
                 <Pressable
-                  onPress={() => router.push("/profile")}
+                  onPress={() => router.push('/profile')}
                   className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
                 >
                   <View className="w-full h-full bg-white/20 items-center justify-center">
@@ -167,9 +151,7 @@ export default function YouthHome() {
                   <Text className="text-white text-xs font-bold uppercase tracking-wider">
                     Энергия обучения
                   </Text>
-                  <Text className="text-white text-xs font-black">
-                    {learningEnergy}%
-                  </Text>
+                  <Text className="text-white text-xs font-black">{learningEnergy}%</Text>
                 </View>
                 <View className="h-2.5 bg-white/20 rounded-full overflow-hidden">
                   <View
@@ -196,15 +178,13 @@ export default function YouthHome() {
             <Pressable
               key={idx}
               onPress={() =>
-                action.route === "#qr"
-                  ? setPassVisible(true)
-                  : router.push(appHref(action.route))
+                action.route === '#qr' ? setPassVisible(true) : router.push(appHref(action.route))
               }
               style={SHADOWS.sm}
               className="flex-1 bg-white p-4 rounded-3xl border border-gray-50 items-center transition-all active:scale-95"
             >
               <View
-                style={{ backgroundColor: action.color + "15" }}
+                style={{ backgroundColor: `${action.color}15` }}
                 className="w-12 h-12 rounded-2xl items-center justify-center mb-2"
               >
                 <Feather name={action.icon} size={22} color={action.color} />
@@ -234,13 +214,10 @@ export default function YouthHome() {
                   AI Ассистент UM:
                 </Text>
                 <Text className="text-blue-700 text-xs leading-4">
-                  Я проанализировал твой тест. У тебя высокий потенциал в{" "}
-                  {currentSkills[0].label}. Хочешь знать больше?
+                  Я проанализировал твой тест. У тебя высокий потенциал в {currentSkills[0].label}.
+                  Хочешь знать больше?
                 </Text>
-                <Pressable
-                  onPress={() => router.push("/parent/subscription")}
-                  className="mt-3"
-                >
+                <Pressable onPress={() => router.push('/parent/subscription')} className="mt-3">
                   <Text className="text-blue-600 font-black text-[10px] uppercase underline">
                     открыть про аналитику
                   </Text>
@@ -260,15 +237,11 @@ export default function YouthHome() {
               <Text className="text-xs font-bold text-blue-500 uppercase mb-1">
                 Следующее задание
               </Text>
-              <Text
-                className="text-lg font-black text-blue-900 mb-1"
-                numberOfLines={1}
-              >
+              <Text className="text-lg font-black text-blue-900 mb-1" numberOfLines={1}>
                 {tasks.find((t) => !t.done)?.title ?? tasks[0].title}
               </Text>
               <Text className="text-sm font-semibold text-blue-700">
-                +{tasks.find((t) => !t.done)?.xp_reward ?? tasks[0].xp_reward}{" "}
-                XP
+                +{tasks.find((t) => !t.done)?.xp_reward ?? tasks[0].xp_reward} XP
               </Text>
             </View>
             <View className="w-12 h-12 rounded-2xl bg-blue-500 items-center justify-center">
@@ -285,17 +258,11 @@ export default function YouthHome() {
           <View className="flex-row justify-between items-center mb-6">
             <View className="flex-row items-center gap-2">
               <Feather name="trending-up" size={18} color={COLORS.primary} />
-              <Text className="text-lg font-bold text-gray-900">
-                Мои результаты
-              </Text>
+              <Text className="text-lg font-bold text-gray-900">Мои результаты</Text>
             </View>
             {diagnostic && (
-              <Pressable
-                onPress={() => router.push("/profile/youth/results")}
-              >
-                <Text className="text-primary font-bold text-xs">
-                  Все детали
-                </Text>
+              <Pressable onPress={() => router.push('/profile/youth/results')}>
+                <Text className="text-primary font-bold text-xs">Все детали</Text>
               </Pressable>
             )}
           </View>
@@ -309,12 +276,8 @@ export default function YouthHome() {
             {currentSkills.map((skill) => (
               <View key={skill.label}>
                 <View className="flex-row justify-between mb-1.5">
-                  <Text className="text-xs font-bold text-gray-600">
-                    {skill.label}
-                  </Text>
-                  <Text className="text-xs font-black text-primary">
-                    {skill.value}%
-                  </Text>
+                  <Text className="text-xs font-bold text-gray-600">{skill.label}</Text>
+                  <Text className="text-xs font-black text-primary">{skill.value}%</Text>
                 </View>
                 <View className="h-2 bg-gray-50 rounded-full overflow-hidden">
                   <View
@@ -335,39 +298,27 @@ export default function YouthHome() {
               <Pressable
                 onPress={() => {
                   router.push({
-                    pathname: "/profile/youth/testing",
-                    params: activeChild?.id
-                      ? { childId: activeChild.id }
-                      : undefined,
+                    pathname: '/profile/youth/testing',
+                    params: activeChild?.id ? { childId: activeChild.id } : undefined,
                   });
                 }}
                 className="bg-purple-600 p-4 rounded-2xl items-center flex-row justify-center gap-2"
               >
                 <Feather name="zap" size={18} color="white" />
-                <Text className="text-white font-bold">
-                  Пройти Большое Исследование
-                </Text>
+                <Text className="text-white font-bold">Пройти Большое Исследование</Text>
               </Pressable>
             ) : (
               <View className="bg-gray-50 p-4 rounded-2xl border border-gray-200">
                 <View className="flex-row items-center gap-2 mb-2">
-                  <Feather
-                    name="lock"
-                    size={16}
-                    color={COLORS.mutedForeground}
-                  />
-                  <Text className="font-bold text-gray-600 text-xs uppercase">
-                    Только в PRO
-                  </Text>
+                  <Feather name="lock" size={16} color={COLORS.mutedForeground} />
+                  <Text className="font-bold text-gray-600 text-xs uppercase">Только в PRO</Text>
                 </View>
                 <Text className="text-xs text-gray-500 font-medium mb-3">
-                  Хочешь узнать свою суперсилу и скрытые таланты? Попроси
-                  родителей активировать PRO-доступ!
+                  Хочешь узнать свою суперсилу и скрытые таланты? Попроси родителей активировать
+                  PRO-доступ!
                 </Text>
                 <Pressable className="bg-white py-2 px-4 rounded-xl self-start border border-gray-200">
-                  <Text className="text-gray-700 font-bold text-xs">
-                    Подробнее о PRO
-                  </Text>
+                  <Text className="text-gray-700 font-bold text-xs">Подробнее о PRO</Text>
                 </Pressable>
               </View>
             )}
@@ -376,9 +327,7 @@ export default function YouthHome() {
 
         {/* AI Recommendations */}
         <View className="mb-8">
-          <Text className="text-lg font-bold text-gray-900 mb-4 px-1">
-            Рекомендации от ИИ
-          </Text>
+          <Text className="text-lg font-bold text-gray-900 mb-4 px-1">Рекомендации от ИИ</Text>
           <Text className="text-xs text-gray-400 font-medium mb-4 px-1">
             Тебе может быть интересно
           </Text>
@@ -391,24 +340,24 @@ export default function YouthHome() {
               <View
                 style={{
                   width: 240,
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: '#F9FAFB',
                   borderRadius: 28,
                   padding: 24,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 16,
                   borderWidth: 1,
-                  borderColor: "#F3F4F6",
+                  borderColor: '#F3F4F6',
                 }}
               >
                 <Feather name="inbox" size={28} color="#D1D5DB" />
                 <Text
                   style={{
-                    color: "#9CA3AF",
-                    fontWeight: "700",
+                    color: '#9CA3AF',
+                    fontWeight: '700',
                     fontSize: 12,
                     marginTop: 10,
-                    textAlign: "center",
+                    textAlign: 'center',
                   }}
                 >
                   Курсы скоро появятся
@@ -424,11 +373,11 @@ export default function YouthHome() {
                       SHADOWS.sm,
                       {
                         width: 220,
-                        backgroundColor: "white",
+                        backgroundColor: 'white',
                         borderRadius: 28,
-                        overflow: "hidden",
+                        overflow: 'hidden',
                         borderWidth: 1,
-                        borderColor: "#F9FAFB",
+                        borderColor: '#F9FAFB',
                         marginRight: 16,
                         paddingBottom: 16,
                       },
@@ -437,22 +386,18 @@ export default function YouthHome() {
                     <View
                       style={{
                         height: 120,
-                        backgroundColor: c1 + "15",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        backgroundColor: `${c1}15`,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <Feather
-                        name={featherIconName(rec.icon, "book-open")}
-                        size={32}
-                        color={c1}
-                      />
+                      <Feather name={featherIconName(rec.icon, 'book-open')} size={32} color={c1} />
                     </View>
                     <View style={{ padding: 14 }}>
                       <Text
                         style={{
-                          fontWeight: "800",
-                          color: "#111827",
+                          fontWeight: '800',
+                          color: '#111827',
                           marginBottom: 2,
                         }}
                         numberOfLines={1}
@@ -463,8 +408,8 @@ export default function YouthHome() {
                         <Text
                           style={{
                             fontSize: 11,
-                            color: "#9CA3AF",
-                            fontWeight: "600",
+                            color: '#9CA3AF',
+                            fontWeight: '600',
                             marginBottom: 8,
                           }}
                           numberOfLines={1}
@@ -473,25 +418,23 @@ export default function YouthHome() {
                         </Text>
                       ) : null}
                       <Pressable
-                        onPress={() =>
-                          router.push(appHref(`/parent/club/${rec.id}`))
-                        }
+                        onPress={() => router.push(appHref(`/parent/club/${rec.id}`))}
                         style={{
-                          backgroundColor: "#EDE9FE",
+                          backgroundColor: '#EDE9FE',
                           paddingVertical: 10,
                           borderRadius: 14,
-                          alignItems: "center",
+                          alignItems: 'center',
                         }}
                       >
                         <Text
                           style={{
-                            color: "#6C5CE7",
-                            fontWeight: "800",
+                            color: '#6C5CE7',
+                            fontWeight: '800',
                             fontSize: 11,
-                            textTransform: "uppercase",
+                            textTransform: 'uppercase',
                           }}
                         >
-                          {isIndependent ? "Записаться" : "Хочу сюда"}
+                          {isIndependent ? 'Записаться' : 'Хочу сюда'}
                         </Text>
                       </Pressable>
                     </View>
@@ -507,25 +450,19 @@ export default function YouthHome() {
           <View className="mb-8">
             <View className="flex-row items-center gap-2 mb-4 px-1">
               <Feather name="video" size={20} color="#F59E0B" />
-              <Text className="text-lg font-bold text-gray-900">
-                Встреча с ментором
-              </Text>
+              <Text className="text-lg font-bold text-gray-900">Встреча с ментором</Text>
             </View>
             <View
               style={SHADOWS.sm}
               className="bg-white rounded-[24px] p-5 border border-gray-100 flex-row items-center justify-between"
             >
               <View className="flex-1 pr-4">
-                <Text className="font-bold text-gray-900 mb-1">
-                  Раз в месяц
-                </Text>
+                <Text className="font-bold text-gray-900 mb-1">Раз в месяц</Text>
                 <Text className="text-xs text-gray-500 mb-3" leading-4>
                   Обсудите результаты тестирования и план развития на звонке.
                 </Text>
                 <TouchableOpacity className="bg-amber-50 py-2.5 px-4 rounded-xl self-start">
-                  <Text className="text-amber-700 font-bold text-xs uppercase">
-                    Записаться
-                  </Text>
+                  <Text className="text-amber-700 font-bold text-xs uppercase">Записаться</Text>
                 </TouchableOpacity>
               </View>
               <View className="w-16 h-16 bg-amber-50 rounded-2xl items-center justify-center border border-amber-100">
@@ -538,16 +475,14 @@ export default function YouthHome() {
         {/* Mentor Tasks */}
         {isPro && (
           <View className="mb-8">
-            <Text className="text-lg font-bold text-gray-900 mb-4 px-1">
-              Задания от ментора
-            </Text>
+            <Text className="text-lg font-bold text-gray-900 mb-4 px-1">Задания от ментора</Text>
             <View className="gap-3">
               {tasks.map((item) => (
                 <TouchableOpacity
                   key={item.id}
                   onPress={() => toggleTask(item.id)}
                   style={SHADOWS.sm}
-                  className={`p-4 rounded-2xl flex-row items-center gap-4 border ${item.done ? "bg-green-50 border-green-100" : "bg-white border-gray-50"}`}
+                  className={`p-4 rounded-2xl flex-row items-center gap-4 border ${item.done ? 'bg-green-50 border-green-100' : 'bg-white border-gray-50'}`}
                 >
                   <View
                     style={{
@@ -556,16 +491,12 @@ export default function YouthHome() {
                       borderRadius: 8,
                       borderWidth: item.done ? 0 : 2,
                       borderColor: COLORS.mutedForeground,
-                      backgroundColor: item.done
-                        ? COLORS.success
-                        : "transparent",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: item.done ? COLORS.success : 'transparent',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {item.done && (
-                      <Feather name="check" size={14} color="white" />
-                    )}
+                    {item.done && <Feather name="check" size={14} color="white" />}
                   </View>
                   <View className="flex-1">
                     <Text
@@ -573,20 +504,20 @@ export default function YouthHome() {
                         fontSize: TYPOGRAPHY.size.md,
                         fontWeight: TYPOGRAPHY.weight.bold,
                         color: item.done ? COLORS.success : COLORS.foreground,
-                        textDecorationLine: item.done ? "line-through" : "none",
+                        textDecorationLine: item.done ? 'line-through' : 'none',
                       }}
                     >
                       {item.title}
                     </Text>
                   </View>
                   <View
-                    className={`px-2 py-1 rounded-md ${item.done ? "bg-green-200" : "bg-yellow-100"}`}
+                    className={`px-2 py-1 rounded-md ${item.done ? 'bg-green-200' : 'bg-yellow-100'}`}
                   >
                     <Text
                       style={{
                         fontSize: 10,
                         fontWeight: TYPOGRAPHY.weight.bold,
-                        color: item.done ? "#166534" : "#854D0E",
+                        color: item.done ? '#166534' : '#854D0E',
                       }}
                     >
                       +{item.xp_reward} XP
@@ -600,25 +531,23 @@ export default function YouthHome() {
 
         {/* Achievements */}
         <View className="mb-8">
-          <Text className="text-lg font-bold text-gray-900 mb-4 px-1">
-            Твои ачивки
-          </Text>
+          <Text className="text-lg font-bold text-gray-900 mb-4 px-1">Твои ачивки</Text>
           {achievements.length === 0 ? (
             <View
               style={{
-                backgroundColor: "#F9FAFB",
+                backgroundColor: '#F9FAFB',
                 borderRadius: 24,
                 padding: 24,
-                alignItems: "center",
+                alignItems: 'center',
                 borderWidth: 1,
-                borderColor: "#F3F4F6",
+                borderColor: '#F3F4F6',
               }}
             >
               <Feather name="award" size={28} color="#D1D5DB" />
               <Text
                 style={{
-                  color: "#9CA3AF",
-                  fontWeight: "700",
+                  color: '#9CA3AF',
+                  fontWeight: '700',
                   fontSize: 13,
                   marginTop: 10,
                 }}
@@ -643,24 +572,16 @@ export default function YouthHome() {
                       width: 56,
                       height: 56,
                       borderRadius: RADIUS.full,
-                      backgroundColor: ach.unlocked
-                        ? COLORS.primary + "15"
-                        : COLORS.muted,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: ach.unlocked ? `${COLORS.primary}15` : COLORS.muted,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       marginBottom: 12,
                     }}
                   >
                     <Feather
-                      name={
-                        ach.unlocked
-                          ? featherIconName(ach.icon_name, "award")
-                          : "lock"
-                      }
+                      name={ach.unlocked ? featherIconName(ach.icon_name, 'award') : 'lock'}
                       size={24}
-                      color={
-                        ach.unlocked ? COLORS.primary : COLORS.mutedForeground
-                      }
+                      color={ach.unlocked ? COLORS.primary : COLORS.mutedForeground}
                     />
                   </View>
                   <Text
@@ -668,7 +589,7 @@ export default function YouthHome() {
                       fontSize: TYPOGRAPHY.size.sm,
                       fontWeight: TYPOGRAPHY.weight.bold,
                       color: COLORS.foreground,
-                      textAlign: "center",
+                      textAlign: 'center',
                       marginBottom: 4,
                     }}
                   >
@@ -678,10 +599,10 @@ export default function YouthHome() {
                     style={{
                       fontSize: 10,
                       color: COLORS.mutedForeground,
-                      textAlign: "center",
+                      textAlign: 'center',
                     }}
                   >
-                    {ach.description ?? ""}
+                    {ach.description ?? ''}
                   </Text>
                 </View>
               ))}
@@ -693,9 +614,9 @@ export default function YouthHome() {
         <View style={{ marginBottom: 32 }}>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: 16,
               paddingHorizontal: 4,
             }}
@@ -703,19 +624,17 @@ export default function YouthHome() {
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: "800",
+                fontWeight: '800',
                 color: COLORS.foreground,
               }}
             >
               Интересные кружки
             </Text>
-            <TouchableOpacity
-              onPress={() => router.push("/(tabs)/parent/clubs")}
-            >
+            <TouchableOpacity onPress={() => router.push('/(tabs)/parent/clubs')}>
               <Text
                 style={{
                   fontSize: 13,
-                  fontWeight: "700",
+                  fontWeight: '700',
                   color: COLORS.primary,
                 }}
               >
@@ -726,19 +645,19 @@ export default function YouthHome() {
           {courses.length === 0 ? (
             <View
               style={{
-                backgroundColor: "#F9FAFB",
+                backgroundColor: '#F9FAFB',
                 borderRadius: 24,
                 padding: 24,
-                alignItems: "center",
+                alignItems: 'center',
                 borderWidth: 1,
-                borderColor: "#F3F4F6",
+                borderColor: '#F3F4F6',
               }}
             >
               <Feather name="inbox" size={28} color="#D1D5DB" />
               <Text
                 style={{
-                  color: "#9CA3AF",
-                  fontWeight: "700",
+                  color: '#9CA3AF',
+                  fontWeight: '700',
                   fontSize: 13,
                   marginTop: 10,
                 }}
@@ -753,15 +672,12 @@ export default function YouthHome() {
               style={{ marginHorizontal: -4 }}
             >
               {courses.slice(0, 4).map((course, idx) => {
-                const isRequested =
-                  enrollmentRequests.enrollmentRequested.includes(course.id);
+                const isRequested = enrollmentRequests.enrollmentRequested.includes(course.id);
                 const gradient = courseGradient(idx);
                 return (
                   <TouchableOpacity
                     key={course.id}
-                    onPress={() =>
-                      enrollmentRequests.openEnrollmentModal(course)
-                    }
+                    onPress={() => enrollmentRequests.openEnrollmentModal(course)}
                     style={{
                       width: 180,
                       marginRight: 14,
@@ -775,7 +691,7 @@ export default function YouthHome() {
                         borderRadius: 20,
                         padding: 16,
                         height: 140,
-                        justifyContent: "space-between",
+                        justifyContent: 'space-between',
                       }}
                     >
                       <View
@@ -783,13 +699,13 @@ export default function YouthHome() {
                           width: 40,
                           height: 40,
                           borderRadius: 12,
-                          backgroundColor: "rgba(255,255,255,0.25)",
-                          alignItems: "center",
-                          justifyContent: "center",
+                          backgroundColor: 'rgba(255,255,255,0.25)',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
                         <Feather
-                          name={featherIconName(course.icon, "book-open")}
+                          name={featherIconName(course.icon, 'book-open')}
                           size={20}
                           color="white"
                         />
@@ -798,8 +714,8 @@ export default function YouthHome() {
                         <Text
                           style={{
                             fontSize: 15,
-                            fontWeight: "800",
-                            color: "white",
+                            fontWeight: '800',
+                            color: 'white',
                             marginBottom: 4,
                           }}
                           numberOfLines={1}
@@ -809,7 +725,7 @@ export default function YouthHome() {
                         <Text
                           style={{
                             fontSize: 11,
-                            color: "rgba(255,255,255,0.8)",
+                            color: 'rgba(255,255,255,0.8)',
                           }}
                         >
                           {course.age_min}-{course.age_max} лет
@@ -819,10 +735,10 @@ export default function YouthHome() {
                     {isRequested && (
                       <View
                         style={{
-                          position: "absolute",
+                          position: 'absolute',
                           top: 8,
                           right: 8,
-                          backgroundColor: "#FEF3C7",
+                          backgroundColor: '#FEF3C7',
                           paddingHorizontal: 8,
                           paddingVertical: 4,
                           borderRadius: 8,
@@ -831,8 +747,8 @@ export default function YouthHome() {
                         <Text
                           style={{
                             fontSize: 10,
-                            fontWeight: "700",
-                            color: "#B45309",
+                            fontWeight: '700',
+                            color: '#B45309',
                           }}
                         >
                           Запрошен
@@ -850,10 +766,7 @@ export default function YouthHome() {
       <YouthPassModal
         visible={passVisible}
         qrValue={qrValue}
-        userName={
-          [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-          "Пользователь"
-        }
+        userName={[user?.firstName, user?.lastName].filter(Boolean).join(' ') || 'Пользователь'}
         onClose={() => setPassVisible(false)}
       />
 

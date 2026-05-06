@@ -1,7 +1,7 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,14 +11,14 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
-const ROLE_COLOR = "#3B82F6";
-const ROLE_GRADIENT: [string, string] = ["#3B82F6", "#60A5FA"];
+const ROLE_COLOR = '#3B82F6';
+const ROLE_GRADIENT: [string, string] = ['#3B82F6', '#60A5FA'];
 
 export default function CreateProfileTeen() {
   const router = useRouter();
@@ -30,25 +30,25 @@ export default function CreateProfileTeen() {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    age: "",
-    gender: "male",
-    otherInterest: "",
-    goals: "",
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    age: '',
+    gender: 'male',
+    otherInterest: '',
+    goals: '',
   });
 
   const [interests, setInterests] = useState<string[]>([]);
 
   const availableInterests = [
-    "Рисование",
-    "Музыка",
-    "Спорт",
-    "Программирование",
-    "Фото/Видео",
-    "Чтение",
-    "Танцы",
-    "Дизайн",
+    'Рисование',
+    'Музыка',
+    'Спорт',
+    'Программирование',
+    'Фото/Видео',
+    'Чтение',
+    'Танцы',
+    'Дизайн',
   ];
 
   const toggleInterest = (interest: string) => {
@@ -60,9 +60,9 @@ export default function CreateProfileTeen() {
   };
 
   const addOtherInterest = () => {
-    if (formData.otherInterest.trim() !== "") {
+    if (formData.otherInterest.trim() !== '') {
       setInterests([...interests, formData.otherInterest.trim()]);
-      setFormData({ ...formData, otherInterest: "" });
+      setFormData({ ...formData, otherInterest: '' });
     }
   };
 
@@ -72,20 +72,20 @@ export default function CreateProfileTeen() {
       return;
     }
 
-    router.replace("/register");
+    router.replace('/register');
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <View style={{ flex: 1 }}>
         {/* Background blobs */}
-        <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+        <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -50,
               right: -50,
               width: 200,
@@ -96,8 +96,8 @@ export default function CreateProfileTeen() {
           />
           <View
             style={{
-              position: "absolute",
-              bottom: "20%",
+              position: 'absolute',
+              bottom: '20%',
               left: -80,
               width: 250,
               height: 250,
@@ -111,7 +111,7 @@ export default function CreateProfileTeen() {
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
-              alignItems: "center",
+              alignItems: 'center',
               paddingVertical: isDesktop ? 24 : 12,
             }}
             keyboardShouldPersistTaps="handled"
@@ -120,7 +120,7 @@ export default function CreateProfileTeen() {
             <View
               style={{
                 flex: 1,
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
                 paddingTop: 8,
@@ -129,27 +129,23 @@ export default function CreateProfileTeen() {
               {/* Header Nav */}
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 24,
                 }}
               >
                 <TouchableOpacity
                   onPress={handleBack}
-                  style={{ flexDirection: "row", alignItems: "center" }}
+                  style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
-                  <Feather
-                    name="arrow-left"
-                    size={20}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       color: COLORS.mutedForeground,
                       marginLeft: 8,
                       fontSize: 15,
-                      fontWeight: "500",
+                      fontWeight: '500',
                     }}
                   >
                     Назад
@@ -157,7 +153,7 @@ export default function CreateProfileTeen() {
                 </TouchableOpacity>
 
                 {/* Step dots */}
-                <View style={{ flexDirection: "row", gap: 6 }}>
+                <View style={{ flexDirection: 'row', gap: 6 }}>
                   {[0, 1, 2, 3].map((i) => (
                     <View
                       key={i}
@@ -177,7 +173,7 @@ export default function CreateProfileTeen() {
                 <Text
                   style={{
                     fontSize: 32,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                     marginBottom: 8,
                     letterSpacing: -0.5,
@@ -199,7 +195,7 @@ export default function CreateProfileTeen() {
               {/* Personal Info Card */}
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: RADIUS.xxl,
                   padding: 24,
                   ...SHADOWS.md,
@@ -208,8 +204,8 @@ export default function CreateProfileTeen() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     marginBottom: 20,
                   }}
                 >
@@ -217,7 +213,7 @@ export default function CreateProfileTeen() {
                   <Text
                     style={{
                       fontSize: 17,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                       marginLeft: 10,
                     }}
@@ -230,9 +226,7 @@ export default function CreateProfileTeen() {
                   <Text style={styles.fieldLabel}>Имя</Text>
                   <TextInput
                     value={formData.firstName}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, firstName: text })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, firstName: text })}
                     placeholder="Введите имя"
                     placeholderTextColor={COLORS.mutedForeground}
                     style={styles.input}
@@ -243,16 +237,14 @@ export default function CreateProfileTeen() {
                   <Text style={styles.fieldLabel}>Фамилия</Text>
                   <TextInput
                     value={formData.lastName}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, lastName: text })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, lastName: text })}
                     placeholder="Введите фамилию"
                     placeholderTextColor={COLORS.mutedForeground}
                     style={styles.input}
                   />
                 </View>
 
-                <View style={{ flexDirection: "row", gap: 12 }}>
+                <View style={{ flexDirection: 'row', gap: 12 }}>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.fieldLabel}>Возраст</Text>
                     <TextInput
@@ -260,7 +252,7 @@ export default function CreateProfileTeen() {
                       onChangeText={(text) =>
                         setFormData({
                           ...formData,
-                          age: text.replace(/\D/g, ""),
+                          age: text.replace(/\D/g, ''),
                         })
                       }
                       placeholder="14"
@@ -269,27 +261,25 @@ export default function CreateProfileTeen() {
                       keyboardType="numeric"
                       style={[
                         styles.input,
-                        { textAlign: "center" },
+                        { textAlign: 'center' },
                         formData.age.length > 0 &&
-                        (parseInt(formData.age, 10) < 6 ||
-                          parseInt(formData.age, 10) > 17)
+                        (parseInt(formData.age, 10) < 6 || parseInt(formData.age, 10) > 17)
                           ? {
-                              borderColor: "#EF4444",
-                              backgroundColor: "#FEF2F2",
+                              borderColor: '#EF4444',
+                              backgroundColor: '#FEF2F2',
                             }
                           : {},
                       ]}
                     />
                     {formData.age.length > 0 &&
-                      (parseInt(formData.age, 10) < 6 ||
-                        parseInt(formData.age, 10) > 17) && (
+                      (parseInt(formData.age, 10) < 6 || parseInt(formData.age, 10) > 17) && (
                         <Text
                           style={{
-                            color: "#EF4444",
+                            color: '#EF4444',
                             fontSize: 10,
                             marginTop: 4,
-                            textAlign: "center",
-                            fontWeight: "bold",
+                            textAlign: 'center',
+                            fontWeight: 'bold',
                           }}
                         >
                           От 6 до 17 лет
@@ -300,61 +290,45 @@ export default function CreateProfileTeen() {
                     <Text style={styles.fieldLabel}>Пол</Text>
                     <View
                       style={{
-                        flexDirection: "row",
+                        flexDirection: 'row',
                         borderRadius: RADIUS.md,
-                        overflow: "hidden",
+                        overflow: 'hidden',
                         borderWidth: 1,
                         borderColor: COLORS.border,
                         height: 50,
                       }}
                     >
                       <TouchableOpacity
-                        onPress={() =>
-                          setFormData({ ...formData, gender: "male" })
-                        }
+                        onPress={() => setFormData({ ...formData, gender: 'male' })}
                         style={{
                           flex: 1,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          backgroundColor:
-                            formData.gender === "male"
-                              ? ROLE_COLOR
-                              : COLORS.muted,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          backgroundColor: formData.gender === 'male' ? ROLE_COLOR : COLORS.muted,
                         }}
                       >
                         <Text
                           style={{
-                            fontWeight: "600",
-                            color:
-                              formData.gender === "male"
-                                ? "white"
-                                : COLORS.mutedForeground,
+                            fontWeight: '600',
+                            color: formData.gender === 'male' ? 'white' : COLORS.mutedForeground,
                           }}
                         >
                           М
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={() =>
-                          setFormData({ ...formData, gender: "female" })
-                        }
+                        onPress={() => setFormData({ ...formData, gender: 'female' })}
                         style={{
                           flex: 1,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          backgroundColor:
-                            formData.gender === "female"
-                              ? "#EC4899"
-                              : COLORS.muted,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          backgroundColor: formData.gender === 'female' ? '#EC4899' : COLORS.muted,
                         }}
                       >
                         <Text
                           style={{
-                            fontWeight: "600",
-                            color:
-                              formData.gender === "female"
-                                ? "white"
-                                : COLORS.mutedForeground,
+                            fontWeight: '600',
+                            color: formData.gender === 'female' ? 'white' : COLORS.mutedForeground,
                           }}
                         >
                           Ж
@@ -368,7 +342,7 @@ export default function CreateProfileTeen() {
               {/* Interests Card */}
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: RADIUS.xxl,
                   padding: 24,
                   ...SHADOWS.md,
@@ -377,8 +351,8 @@ export default function CreateProfileTeen() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     marginBottom: 20,
                   }}
                 >
@@ -390,7 +364,7 @@ export default function CreateProfileTeen() {
                   <Text
                     style={{
                       fontSize: 17,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                       marginLeft: 10,
                     }}
@@ -399,14 +373,12 @@ export default function CreateProfileTeen() {
                   </Text>
                 </View>
 
-                <Text style={[styles.fieldLabel, { marginBottom: 12 }]}>
-                  Что тебе интересно?
-                </Text>
+                <Text style={[styles.fieldLabel, { marginBottom: 12 }]}>Что тебе интересно?</Text>
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    flexWrap: "wrap",
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
                     gap: 8,
                     marginBottom: 16,
                   }}
@@ -423,17 +395,13 @@ export default function CreateProfileTeen() {
                           borderRadius: RADIUS.xl,
                           borderWidth: 2,
                           borderColor: isSelected ? ROLE_COLOR : COLORS.border,
-                          backgroundColor: isSelected
-                            ? `${ROLE_COLOR}10`
-                            : COLORS.muted,
+                          backgroundColor: isSelected ? `${ROLE_COLOR}10` : COLORS.muted,
                         }}
                       >
                         <Text
                           style={{
-                            fontWeight: "600",
-                            color: isSelected
-                              ? ROLE_COLOR
-                              : COLORS.mutedForeground,
+                            fontWeight: '600',
+                            color: isSelected ? ROLE_COLOR : COLORS.mutedForeground,
                           }}
                         >
                           {interest}
@@ -443,15 +411,11 @@ export default function CreateProfileTeen() {
                   })}
                 </View>
 
-                <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>
-                  Другое:
-                </Text>
-                <View style={{ flexDirection: "row", gap: 10 }}>
+                <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>Другое:</Text>
+                <View style={{ flexDirection: 'row', gap: 10 }}>
                   <TextInput
                     value={formData.otherInterest}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, otherInterest: text })
-                    }
+                    onChangeText={(text) => setFormData({ ...formData, otherInterest: text })}
                     placeholder="Введите свой интерес"
                     placeholderTextColor={COLORS.mutedForeground}
                     style={[styles.input, { flex: 1 }]}
@@ -463,8 +427,8 @@ export default function CreateProfileTeen() {
                       height: 50,
                       backgroundColor: ROLE_COLOR,
                       borderRadius: RADIUS.md,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       ...SHADOWS.sm,
                     }}
                   >
@@ -473,12 +437,11 @@ export default function CreateProfileTeen() {
                 </View>
 
                 {/* Selected custom interests */}
-                {interests.filter((i) => !availableInterests.includes(i))
-                  .length > 0 && (
+                {interests.filter((i) => !availableInterests.includes(i)).length > 0 && (
                   <View
                     style={{
-                      flexDirection: "row",
-                      flexWrap: "wrap",
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
                       gap: 8,
                       marginTop: 12,
                     }}
@@ -489,8 +452,8 @@ export default function CreateProfileTeen() {
                         <View
                           key={interest}
                           style={{
-                            flexDirection: "row",
-                            alignItems: "center",
+                            flexDirection: 'row',
+                            alignItems: 'center',
                             backgroundColor: `${ROLE_COLOR}15`,
                             borderRadius: RADIUS.full,
                             paddingHorizontal: 12,
@@ -501,15 +464,13 @@ export default function CreateProfileTeen() {
                             style={{
                               color: ROLE_COLOR,
                               fontSize: 13,
-                              fontWeight: "600",
+                              fontWeight: '600',
                               marginRight: 6,
                             }}
                           >
                             {interest}
                           </Text>
-                          <TouchableOpacity
-                            onPress={() => toggleInterest(interest)}
-                          >
+                          <TouchableOpacity onPress={() => toggleInterest(interest)}>
                             <Feather name="x" size={13} color={ROLE_COLOR} />
                           </TouchableOpacity>
                         </View>
@@ -521,7 +482,7 @@ export default function CreateProfileTeen() {
               {/* Goals Card */}
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: RADIUS.xxl,
                   padding: 24,
                   ...SHADOWS.md,
@@ -530,8 +491,8 @@ export default function CreateProfileTeen() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     marginBottom: 20,
                   }}
                 >
@@ -539,7 +500,7 @@ export default function CreateProfileTeen() {
                   <Text
                     style={{
                       fontSize: 17,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                       marginLeft: 10,
                     }}
@@ -552,17 +513,12 @@ export default function CreateProfileTeen() {
                 </Text>
                 <TextInput
                   value={formData.goals}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, goals: text })
-                  }
+                  onChangeText={(text) => setFormData({ ...formData, goals: text })}
                   placeholder="Опишите свои цели и стремления"
                   placeholderTextColor={COLORS.mutedForeground}
                   multiline
                   numberOfLines={4}
-                  style={[
-                    styles.input,
-                    { height: 100, textAlignVertical: "top", paddingTop: 14 },
-                  ]}
+                  style={[styles.input, { height: 100, textAlignVertical: 'top', paddingTop: 14 }]}
                 />
               </View>
 
@@ -575,7 +531,7 @@ export default function CreateProfileTeen() {
                     parseInt(formData.age, 10) <= 17
                   )
                 }
-                onPress={() => router.push("/profile/youth/testing")}
+                onPress={() => router.push('/profile/youth/testing')}
                 style={{ marginTop: 8, marginBottom: 40 }}
                 activeOpacity={0.8}
               >
@@ -590,20 +546,20 @@ export default function CreateProfileTeen() {
                   style={{
                     paddingVertical: 18,
                     borderRadius: RADIUS.xl,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     ...SHADOWS.md,
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 18,
-                      fontWeight: "800",
+                      fontWeight: '800',
                       color:
                         formData.firstName.trim().length > 0 &&
                         parseInt(formData.age, 10) >= 6 &&
                         parseInt(formData.age, 10) <= 17
-                          ? "white"
+                          ? 'white'
                           : COLORS.mutedForeground,
                     }}
                   >
@@ -622,10 +578,10 @@ export default function CreateProfileTeen() {
 const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
     opacity: 0.7,
   },
@@ -635,7 +591,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
     color: COLORS.foreground,
     borderWidth: 1,
     borderColor: COLORS.border,

@@ -1,9 +1,9 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS } from "$constants/theme";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import type React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS } from '$constants/theme';
 
 interface ScreenHeaderProps {
   title: string;
@@ -11,7 +11,7 @@ interface ScreenHeaderProps {
   horizontalPadding: number;
   maxWidth?: number;
   withSafeArea?: boolean;
-  variant?: "gradient" | "surface";
+  variant?: 'gradient' | 'surface';
   rightSlot?: React.ReactNode;
 }
 
@@ -21,19 +21,19 @@ export default function ScreenHeader({
   horizontalPadding,
   maxWidth,
   withSafeArea = true,
-  variant = "gradient",
+  variant = 'gradient',
   rightSlot,
 }: ScreenHeaderProps) {
-  const isSurface = variant === "surface";
+  const isSurface = variant === 'surface';
 
   const content = (
     <View
       style={{
-        width: "100%",
+        width: '100%',
         maxWidth,
-        alignSelf: "center",
-        flexDirection: "row",
-        alignItems: "center",
+        alignSelf: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
         minHeight: 52,
         paddingHorizontal: horizontalPadding,
         paddingTop: 6,
@@ -47,18 +47,16 @@ export default function ScreenHeader({
             width: 42,
             height: 42,
             borderRadius: isSurface ? 21 : 16,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: isSurface
-              ? COLORS.muted
-              : "rgba(255,255,255,0.16)",
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isSurface ? COLORS.muted : 'rgba(255,255,255,0.16)',
             marginRight: 10,
           }}
         >
           <Feather
             name="arrow-left"
             size={isSurface ? 26 : 22}
-            color={isSurface ? COLORS.foreground : "white"}
+            color={isSurface ? COLORS.foreground : 'white'}
           />
         </Pressable>
       ) : null}
@@ -66,8 +64,8 @@ export default function ScreenHeader({
         style={{
           flex: 1,
           fontSize: 18,
-          fontWeight: "800",
-          color: isSurface ? COLORS.foreground : "white",
+          fontWeight: '800',
+          color: isSurface ? COLORS.foreground : 'white',
         }}
       >
         {title}
@@ -79,7 +77,7 @@ export default function ScreenHeader({
 
   if (isSurface) {
     const surfaceContent = withSafeArea ? (
-      <SafeAreaView edges={["top"]}>{content}</SafeAreaView>
+      <SafeAreaView edges={['top']}>{content}</SafeAreaView>
     ) : (
       content
     );
@@ -108,11 +106,7 @@ export default function ScreenHeader({
         borderBottomRightRadius: RADIUS.xl,
       }}
     >
-      {withSafeArea ? (
-        <SafeAreaView edges={["top"]}>{content}</SafeAreaView>
-      ) : (
-        content
-      )}
+      {withSafeArea ? <SafeAreaView edges={['top']}>{content}</SafeAreaView> : content}
     </LinearGradient>
   );
 }

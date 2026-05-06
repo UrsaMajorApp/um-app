@@ -1,16 +1,16 @@
-import { Feather } from "@expo/vector-icons";
-import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { formatKZT } from "$lib/formatCurrency";
-import type { PublicCourse, TrialLessonSlot } from "$hooks/usePublicData";
-import type { Child } from "$types/child";
+import { Feather } from '@expo/vector-icons';
+import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { formatKZT } from '$lib/formatCurrency';
+import type { PublicCourse, TrialLessonSlot } from '$hooks/usePublicData';
+import type { Child } from '$types/child';
 
 type EnrollmentChoiceModalProps = {
   visible: boolean;
-  course: Pick<PublicCourse, "price">;
-  activeChild: Pick<Child, "name"> | null;
+  course: Pick<PublicCourse, 'price'>;
+  activeChild: Pick<Child, 'name'> | null;
   trialSlots: TrialLessonSlot[];
-  enrollmentType: "trial" | "full" | null;
+  enrollmentType: 'trial' | 'full' | null;
   selectedTimeSlot: string | null;
   applying: boolean;
   onClose: () => void;
@@ -41,13 +41,13 @@ export function EnrollmentChoiceModal({
       <View
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          justifyContent: "flex-end",
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'flex-end',
         }}
       >
         <View
           style={{
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
             padding: 24,
@@ -57,16 +57,16 @@ export function EnrollmentChoiceModal({
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: 20,
             }}
           >
             <Text
               style={{
                 fontSize: 22,
-                fontWeight: "900",
+                fontWeight: '900',
                 color: COLORS.foreground,
               }}
             >
@@ -77,8 +77,8 @@ export function EnrollmentChoiceModal({
               style={{
                 width: 36,
                 height: 36,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Feather name="x" size={22} color={COLORS.mutedForeground} />
@@ -88,11 +88,11 @@ export function EnrollmentChoiceModal({
           {activeChild && (
             <View
               style={{
-                backgroundColor: COLORS.primary + "10",
+                backgroundColor: `${COLORS.primary}10`,
                 padding: 14,
                 borderRadius: 18,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginBottom: 20,
               }}
             >
@@ -102,12 +102,12 @@ export function EnrollmentChoiceModal({
                   height: 44,
                   borderRadius: 22,
                   backgroundColor: COLORS.primary,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: 14,
                 }}
               >
-                <Text style={{ color: "white", fontSize: 18, fontWeight: "900" }}>
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: '900' }}>
                   {activeChild.name.charAt(0).toUpperCase()}
                 </Text>
               </View>
@@ -116,8 +116,8 @@ export function EnrollmentChoiceModal({
                   style={{
                     fontSize: 11,
                     color: COLORS.mutedForeground,
-                    fontWeight: "700",
-                    textTransform: "uppercase",
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
                   }}
                 >
                   Ребёнок
@@ -125,7 +125,7 @@ export function EnrollmentChoiceModal({
                 <Text
                   style={{
                     fontSize: 17,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                   }}
                 >
@@ -143,14 +143,14 @@ export function EnrollmentChoiceModal({
                   padding: 20,
                   borderRadius: 20,
                   borderWidth: 2,
-                  borderColor: "#10B981",
-                  backgroundColor: "#ECFDF5",
+                  borderColor: '#10B981',
+                  backgroundColor: '#ECFDF5',
                 }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     marginBottom: 8,
                   }}
                 >
@@ -159,9 +159,9 @@ export function EnrollmentChoiceModal({
                       width: 40,
                       height: 40,
                       borderRadius: 20,
-                      backgroundColor: "#10B981",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: '#10B981',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       marginRight: 12,
                     }}
                   >
@@ -171,8 +171,8 @@ export function EnrollmentChoiceModal({
                     <Text
                       style={{
                         fontSize: 17,
-                        fontWeight: "900",
-                        color: "#065F46",
+                        fontWeight: '900',
+                        color: '#065F46',
                       }}
                     >
                       Пробный урок
@@ -180,8 +180,8 @@ export function EnrollmentChoiceModal({
                     <Text
                       style={{
                         fontSize: 13,
-                        color: "#059669",
-                        fontWeight: "600",
+                        color: '#059669',
+                        fontWeight: '600',
                       }}
                     >
                       Бесплатно
@@ -189,9 +189,8 @@ export function EnrollmentChoiceModal({
                   </View>
                   <Feather name="chevron-right" size={22} color="#10B981" />
                 </View>
-                <Text style={{ fontSize: 13, color: "#047857", lineHeight: 18 }}>
-                  Посетите одно занятие бесплатно, чтобы познакомиться с
-                  педагогом и программой
+                <Text style={{ fontSize: 13, color: '#047857', lineHeight: 18 }}>
+                  Посетите одно занятие бесплатно, чтобы познакомиться с педагогом и программой
                 </Text>
               </Pressable>
 
@@ -202,13 +201,13 @@ export function EnrollmentChoiceModal({
                   borderRadius: 20,
                   borderWidth: 2,
                   borderColor: COLORS.primary,
-                  backgroundColor: COLORS.primary + "08",
+                  backgroundColor: `${COLORS.primary}08`,
                 }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     marginBottom: 8,
                   }}
                 >
@@ -218,8 +217,8 @@ export function EnrollmentChoiceModal({
                       height: 40,
                       borderRadius: 20,
                       backgroundColor: COLORS.primary,
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       marginRight: 12,
                     }}
                   >
@@ -229,8 +228,8 @@ export function EnrollmentChoiceModal({
                     <Text
                       style={{
                         fontSize: 17,
-                        fontWeight: "900",
-                        color: "#4C1D95",
+                        fontWeight: '900',
+                        color: '#4C1D95',
                       }}
                     >
                       Полный курс
@@ -239,7 +238,7 @@ export function EnrollmentChoiceModal({
                       style={{
                         fontSize: 13,
                         color: COLORS.primary,
-                        fontWeight: "600",
+                        fontWeight: '600',
                       }}
                     >
                       {formatKZT(course.price)}/мес
@@ -247,19 +246,19 @@ export function EnrollmentChoiceModal({
                   </View>
                   <Feather name="chevron-right" size={22} color={COLORS.primary} />
                 </View>
-                <Text style={{ fontSize: 13, color: "#6B21A8", lineHeight: 18 }}>
+                <Text style={{ fontSize: 13, color: '#6B21A8', lineHeight: 18 }}>
                   Запишитесь на полный курс занятий с регулярным расписанием
                 </Text>
               </Pressable>
             </View>
           )}
 
-          {enrollmentType === "trial" && (
+          {enrollmentType === 'trial' && (
             <View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 16,
                 }}
               >
@@ -269,7 +268,7 @@ export function EnrollmentChoiceModal({
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "800",
+                    fontWeight: '800',
                     color: COLORS.foreground,
                   }}
                 >
@@ -278,7 +277,7 @@ export function EnrollmentChoiceModal({
               </View>
 
               <ScrollView style={{ maxHeight: 240 }} showsVerticalScrollIndicator={false}>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                   {trialSlots.length === 0 && (
                     <Text
                       style={{
@@ -300,17 +299,17 @@ export function EnrollmentChoiceModal({
                           paddingVertical: 14,
                           borderRadius: 16,
                           borderWidth: 2,
-                          borderColor: isSelected ? "#10B981" : "#E5E7EB",
-                          backgroundColor: isSelected ? "#ECFDF5" : "white",
+                          borderColor: isSelected ? '#10B981' : '#E5E7EB',
+                          backgroundColor: isSelected ? '#ECFDF5' : 'white',
                           minWidth: 90,
-                          alignItems: "center",
+                          alignItems: 'center',
                         }}
                       >
                         <Text
                           style={{
                             fontSize: 14,
-                            fontWeight: "800",
-                            color: isSelected ? "#065F46" : COLORS.foreground,
+                            fontWeight: '800',
+                            color: isSelected ? '#065F46' : COLORS.foreground,
                           }}
                         >
                           {slot.day_label}
@@ -318,8 +317,8 @@ export function EnrollmentChoiceModal({
                         <Text
                           style={{
                             fontSize: 13,
-                            fontWeight: "600",
-                            color: isSelected ? "#059669" : COLORS.mutedForeground,
+                            fontWeight: '600',
+                            color: isSelected ? '#059669' : COLORS.mutedForeground,
                             marginTop: 2,
                           }}
                         >
@@ -335,22 +334,21 @@ export function EnrollmentChoiceModal({
                 disabled={applying || !selectedTimeSlot}
                 onPress={onConfirmTrial}
                 style={{
-                  backgroundColor:
-                    applying || !selectedTimeSlot ? "#E5E7EB" : "#10B981",
+                  backgroundColor: applying || !selectedTimeSlot ? '#E5E7EB' : '#10B981',
                   paddingVertical: 18,
                   borderRadius: 22,
-                  alignItems: "center",
+                  alignItems: 'center',
                   marginTop: 20,
                 }}
               >
                 <Text
                   style={{
-                    color: applying || !selectedTimeSlot ? "#9CA3AF" : "white",
+                    color: applying || !selectedTimeSlot ? '#9CA3AF' : 'white',
                     fontSize: 16,
-                    fontWeight: "900",
+                    fontWeight: '900',
                   }}
                 >
-                  {applying ? "Бронирование..." : "Забронировать пробный урок"}
+                  {applying ? 'Бронирование...' : 'Забронировать пробный урок'}
                 </Text>
               </TouchableOpacity>
             </View>

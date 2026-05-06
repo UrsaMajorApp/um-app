@@ -1,16 +1,7 @@
-import { AdminCard } from "$components/admin/AdminCard";
-import { AdminHeader } from "$components/admin/AdminHeader";
-import {
-  useAdminLayout,
-  useAdminNavigation,
-} from "$components/admin/adminUtils";
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
+import { AdminCard } from '$components/admin/AdminCard';
+import { AdminHeader } from '$components/admin/AdminHeader';
+import { useAdminLayout, useAdminNavigation } from '$components/admin/adminUtils';
+import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import {
   useAdminCourses,
   useAdminEnrollments,
@@ -21,12 +12,11 @@ import {
   useOrganizations,
   useTickets,
   useTransactions,
-} from "$hooks/useAdminData";
-import { formatKZT } from "$lib/formatCurrency";
-import { Feather } from "@expo/vector-icons";
-import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import type { FeatherIconName } from "$types/icons";
+} from '$hooks/useAdminData';
+import { formatKZT } from '$lib/formatCurrency';
+import { Feather } from '@expo/vector-icons';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import type { FeatherIconName } from '$types/icons';
 
 type AdminQueueItem = {
   title: string;
@@ -59,101 +49,91 @@ export default function AdminOverviewScreen() {
   const enrollments = useAdminEnrollments();
   const stats = useAdminStats(mentorApps.data, txs.data, families.data);
 
-  const draftCourses = courses.data.filter((c) => c.status === "draft").length;
-  const activeCourses = courses.data.filter(
-    (c) => c.status === "active",
-  ).length;
+  const draftCourses = courses.data.filter((c) => c.status === 'draft').length;
+  const activeCourses = courses.data.filter((c) => c.status === 'active').length;
   const orgsNeedingAction = orgs.data.filter(
-    (o) => o.status === "pending" || o.status === "ready_for_review",
+    (o) => o.status === 'pending' || o.status === 'ready_for_review',
   ).length;
-  const verifiedOrgs = orgs.data.filter((o) => o.status === "verified").length;
-  const pendingEnrollments = enrollments.data.filter(
-    (e) => e.status === "awaiting_payment",
-  ).length;
-  const unresolvedTickets = tickets.data.filter(
-    (t) => t.status !== "resolved",
-  ).length;
-  const totalPending =
-    stats.pendingMentors +
-    orgsNeedingAction +
-    draftCourses +
-    pendingEnrollments;
+  const verifiedOrgs = orgs.data.filter((o) => o.status === 'verified').length;
+  const pendingEnrollments = enrollments.data.filter((e) => e.status === 'awaiting_payment').length;
+  const unresolvedTickets = tickets.data.filter((t) => t.status !== 'resolved').length;
+  const totalPending = stats.pendingMentors + orgsNeedingAction + draftCourses + pendingEnrollments;
 
   const queue: AdminQueueItem[] = [
     {
-      title: "Заявки менторов",
+      title: 'Заявки менторов',
       count: stats.pendingMentors,
-      description: "Проверьте профиль, специализацию и описание",
-      icon: "user-check",
+      description: 'Проверьте профиль, специализацию и описание',
+      icon: 'user-check',
       color: COLORS.primary,
-      action: () => goAdmin("users"),
+      action: () => goAdmin('users'),
     },
     {
-      title: "Проверка организаций",
+      title: 'Проверка организаций',
       count: orgsNeedingAction,
-      description: "Активируйте или отклоните центры на проверке",
-      icon: "briefcase",
-      color: "#2563EB",
-      action: () => goAdmin("organizations"),
+      description: 'Активируйте или отклоните центры на проверке',
+      icon: 'briefcase',
+      color: '#2563EB',
+      action: () => goAdmin('organizations'),
     },
     {
-      title: "Модерация курсов",
+      title: 'Модерация курсов',
       count: draftCourses,
-      description: "Опубликуйте курс или верните с причиной отказа",
-      icon: "book-open",
-      color: "#CA8A04",
-      action: () => goAdmin("organizations"),
+      description: 'Опубликуйте курс или верните с причиной отказа',
+      icon: 'book-open',
+      color: '#CA8A04',
+      action: () => goAdmin('organizations'),
     },
     {
-      title: "Оплаты записей",
+      title: 'Оплаты записей',
       count: pendingEnrollments,
-      description: "Отметьте оплату, активируйте запись или отклоните",
-      icon: "credit-card",
+      description: 'Отметьте оплату, активируйте запись или отклоните',
+      icon: 'credit-card',
       color: COLORS.destructive,
-      action: () => goAdmin("organizations"),
+      action: () => goAdmin('organizations'),
     },
   ];
   const visibleQueue = queue.filter((item) => item.count > 0);
   const metrics: AdminMetricItem[] = [
     {
-      label: "Пользователи",
+      label: 'Пользователи',
       value: users.data.length,
       detail: `${families.data.length} семей`,
-      icon: "users",
+      icon: 'users',
       color: COLORS.primary,
-      action: () => goAdmin("users"),
+      action: () => goAdmin('users'),
     },
     {
-      label: "Проверенные орг.",
+      label: 'Проверенные орг.',
       value: verifiedOrgs,
       detail: `${orgs.data.length} всего`,
-      icon: "briefcase",
-      color: "#2563EB",
-      action: () => goAdmin("organizations"),
+      icon: 'briefcase',
+      color: '#2563EB',
+      action: () => goAdmin('organizations'),
     },
     {
-      label: "Активные курсы",
+      label: 'Активные курсы',
       value: activeCourses,
       detail: `${draftCourses} на проверке`,
-      icon: "book-open",
+      icon: 'book-open',
       color: COLORS.success,
-      action: () => goAdmin("organizations"),
+      action: () => goAdmin('organizations'),
     },
     {
-      label: "Поддержка",
+      label: 'Поддержка',
       value: unresolvedTickets,
-      detail: "открытых обращений",
-      icon: "shield",
+      detail: 'открытых обращений',
+      icon: 'shield',
       color: COLORS.destructive,
-      action: () => goAdmin("support"),
+      action: () => goAdmin('support'),
     },
     {
-      label: "Доход",
+      label: 'Доход',
       value: formatKZT(stats.revenue),
       detail: `${formatKZT(stats.gmv)} оборот`,
-      icon: "dollar-sign",
-      color: "#CA8A04",
-      action: () => goAdmin("billing"),
+      icon: 'dollar-sign',
+      color: '#CA8A04',
+      action: () => goAdmin('billing'),
     },
   ];
 
@@ -175,22 +155,22 @@ export default function AdminOverviewScreen() {
               tickets.refresh();
             }}
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: SPACING.sm,
               paddingHorizontal: SPACING.md,
               height: 38,
               borderRadius: RADIUS.md,
-              backgroundColor: "rgba(255,255,255,0.16)",
+              backgroundColor: 'rgba(255,255,255,0.16)',
               borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.24)",
+              borderColor: 'rgba(255,255,255,0.24)',
             }}
           >
             <Feather name="refresh-cw" size={15} color={COLORS.white} />
             <Text
               style={{
                 color: COLORS.white,
-                fontWeight: "800",
+                fontWeight: '800',
                 fontSize: TYPOGRAPHY.size.sm,
               }}
             >
@@ -202,26 +182,26 @@ export default function AdminOverviewScreen() {
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: 1180,
-            alignSelf: "center",
+            alignSelf: 'center',
             padding: paddingX,
             gap: SPACING.lg,
           }}
         >
           <View
             style={{
-              flexDirection: isTablet ? "row" : "column",
-              alignItems: "flex-start",
+              flexDirection: isTablet ? 'row' : 'column',
+              alignItems: 'flex-start',
               gap: SPACING.md,
             }}
           >
             <AdminCard
               style={{
-                width: isTablet ? undefined : "100%",
+                width: isTablet ? undefined : '100%',
                 flex: isTablet ? 1.5 : undefined,
                 minHeight: isTablet ? 312 : undefined,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <View
@@ -229,8 +209,8 @@ export default function AdminOverviewScreen() {
                   padding: SPACING.lg,
                   borderBottomWidth: 1,
                   borderColor: COLORS.border,
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: SPACING.sm,
                 }}
               >
@@ -243,7 +223,7 @@ export default function AdminOverviewScreen() {
                   <Text
                     style={{
                       fontSize: TYPOGRAPHY.size.md,
-                      fontWeight: "900",
+                      fontWeight: '900',
                       color: COLORS.foreground,
                     }}
                   >
@@ -256,9 +236,7 @@ export default function AdminOverviewScreen() {
                       marginTop: 2,
                     }}
                   >
-                    {totalPending > 0
-                      ? `${totalPending} открытых задач`
-                      : "Срочных задач нет"}
+                    {totalPending > 0 ? `${totalPending} открытых задач` : 'Срочных задач нет'}
                   </Text>
                 </View>
               </View>
@@ -269,8 +247,8 @@ export default function AdminOverviewScreen() {
                     onPress={item.action}
                     activeOpacity={0.75}
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: SPACING.md,
                       padding: SPACING.lg,
                       borderTopWidth: index > 0 ? 1 : 0,
@@ -282,22 +260,18 @@ export default function AdminOverviewScreen() {
                         width: 42,
                         height: 42,
                         borderRadius: RADIUS.md,
-                        backgroundColor: item.color + "15",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        backgroundColor: `${item.color}15`,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <Feather
-                        name={item.icon}
-                        size={18}
-                        color={item.color}
-                      />
+                      <Feather name={item.icon} size={18} color={item.color} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.size.sm,
-                          fontWeight: "800",
+                          fontWeight: '800',
                           color: COLORS.foreground,
                         }}
                       >
@@ -316,17 +290,13 @@ export default function AdminOverviewScreen() {
                     <Text
                       style={{
                         fontSize: TYPOGRAPHY.size.xl,
-                        fontWeight: "900",
+                        fontWeight: '900',
                         color: item.color,
                       }}
                     >
                       {item.count}
                     </Text>
-                    <Feather
-                      name="chevron-right"
-                      size={18}
-                      color={COLORS.mutedForeground}
-                    />
+                    <Feather name="chevron-right" size={18} color={COLORS.mutedForeground} />
                   </TouchableOpacity>
                 ))
               ) : (
@@ -335,8 +305,8 @@ export default function AdminOverviewScreen() {
                     flex: isTablet ? 1 : undefined,
                     minHeight: isTablet ? 232 : 170,
                     padding: SPACING.xl,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <View
@@ -344,23 +314,19 @@ export default function AdminOverviewScreen() {
                       width: 48,
                       height: 48,
                       borderRadius: RADIUS.lg,
-                      backgroundColor: COLORS.success + "15",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      backgroundColor: `${COLORS.success}15`,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       marginBottom: SPACING.sm,
                     }}
                   >
-                    <Feather
-                      name="check-circle"
-                      size={22}
-                      color={COLORS.success}
-                    />
+                    <Feather name="check-circle" size={22} color={COLORS.success} />
                   </View>
                   <Text
                     style={{
                       color: COLORS.foreground,
-                      fontWeight: "800",
-                      textAlign: "center",
+                      fontWeight: '800',
+                      textAlign: 'center',
                     }}
                   >
                     Очередь пуста
@@ -371,7 +337,7 @@ export default function AdminOverviewScreen() {
                       color: COLORS.mutedForeground,
                       fontSize: TYPOGRAPHY.size.xs,
                       marginTop: 4,
-                      textAlign: "center",
+                      textAlign: 'center',
                     }}
                   >
                     Новые задачи модерации и поддержки появятся здесь.
@@ -381,7 +347,7 @@ export default function AdminOverviewScreen() {
             </AdminCard>
             <AdminCard
               style={{
-                width: isTablet ? undefined : "100%",
+                width: isTablet ? undefined : '100%',
                 flex: isTablet ? 1 : undefined,
                 minHeight: isTablet ? 312 : undefined,
                 padding: SPACING.lg,
@@ -390,7 +356,7 @@ export default function AdminOverviewScreen() {
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.md,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.foreground,
                   marginBottom: SPACING.md,
                 }}
@@ -404,8 +370,8 @@ export default function AdminOverviewScreen() {
                     onPress={metric.action}
                     activeOpacity={0.75}
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: SPACING.md,
                     }}
                   >
@@ -414,24 +380,20 @@ export default function AdminOverviewScreen() {
                         width: 34,
                         height: 34,
                         borderRadius: RADIUS.md,
-                        backgroundColor: metric.color + "15",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        backgroundColor: `${metric.color}15`,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <Feather
-                        name={metric.icon}
-                        size={15}
-                        color={metric.color}
-                      />
+                      <Feather name={metric.icon} size={15} color={metric.color} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.size.xs,
                           color: COLORS.mutedForeground,
-                          fontWeight: "700",
-                          textTransform: "uppercase",
+                          fontWeight: '700',
+                          textTransform: 'uppercase',
                         }}
                       >
                         {metric.label}
@@ -439,7 +401,7 @@ export default function AdminOverviewScreen() {
                       <Text
                         style={{
                           color: COLORS.foreground,
-                          fontWeight: "900",
+                          fontWeight: '900',
                           marginTop: 1,
                         }}
                       >
@@ -461,11 +423,11 @@ export default function AdminOverviewScreen() {
           </View>
 
           <TouchableOpacity
-            onPress={() => goAdmin("support")}
+            onPress={() => goAdmin('support')}
             activeOpacity={0.75}
             style={{
-              flexDirection: isTablet ? "row" : "column",
-              alignItems: isTablet ? "center" : "flex-start",
+              flexDirection: isTablet ? 'row' : 'column',
+              alignItems: isTablet ? 'center' : 'flex-start',
               gap: SPACING.md,
               backgroundColor: COLORS.surface,
               borderRadius: RADIUS.lg,
@@ -480,9 +442,9 @@ export default function AdminOverviewScreen() {
                 width: 42,
                 height: 42,
                 borderRadius: RADIUS.md,
-                backgroundColor: COLORS.destructive + "12",
-                alignItems: "center",
-                justifyContent: "center",
+                backgroundColor: `${COLORS.destructive}12`,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Feather name="shield" size={18} color={COLORS.destructive} />
@@ -491,7 +453,7 @@ export default function AdminOverviewScreen() {
               <Text
                 style={{
                   color: COLORS.foreground,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   fontSize: TYPOGRAPHY.size.md,
                 }}
               >
@@ -506,20 +468,20 @@ export default function AdminOverviewScreen() {
               >
                 {unresolvedTickets > 0
                   ? `${unresolvedTickets} обращений ждут обработки`
-                  : "Открытых обращений нет. Журнал качества доступен в разделе поддержки."}
+                  : 'Открытых обращений нет. Журнал качества доступен в разделе поддержки.'}
               </Text>
             </View>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: SPACING.xs,
               }}
             >
               <Text
                 style={{
                   color: COLORS.primary,
-                  fontWeight: "800",
+                  fontWeight: '800',
                   fontSize: TYPOGRAPHY.size.sm,
                 }}
               >
@@ -533,7 +495,7 @@ export default function AdminOverviewScreen() {
             <Text
               style={{
                 fontSize: TYPOGRAPHY.size.md,
-                fontWeight: "900",
+                fontWeight: '900',
                 color: COLORS.foreground,
                 marginBottom: SPACING.md,
               }}
@@ -542,7 +504,7 @@ export default function AdminOverviewScreen() {
             </Text>
             <View
               style={{
-                flexDirection: isTablet ? "row" : "column",
+                flexDirection: isTablet ? 'row' : 'column',
                 gap: SPACING.md,
               }}
             >
@@ -559,13 +521,13 @@ export default function AdminOverviewScreen() {
                     borderRadius: RADIUS.md,
                     backgroundColor: COLORS.background,
                     padding: SPACING.md,
-                    justifyContent: "space-between",
+                    justifyContent: 'space-between',
                   }}
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: SPACING.sm,
                     }}
                   >
@@ -574,22 +536,18 @@ export default function AdminOverviewScreen() {
                         width: 32,
                         height: 32,
                         borderRadius: RADIUS.md,
-                        backgroundColor: item.color + "15",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        backgroundColor: `${item.color}15`,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <Feather
-                        name={item.icon}
-                        size={15}
-                        color={item.color}
-                      />
+                      <Feather name={item.icon} size={15} color={item.color} />
                     </View>
                     <Text
                       style={{
                         flex: 1,
                         color: COLORS.foreground,
-                        fontWeight: "800",
+                        fontWeight: '800',
                         fontSize: TYPOGRAPHY.size.sm,
                       }}
                       numberOfLines={1}
@@ -599,9 +557,9 @@ export default function AdminOverviewScreen() {
                   </View>
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "flex-end",
-                      justifyContent: "space-between",
+                      flexDirection: 'row',
+                      alignItems: 'flex-end',
+                      justifyContent: 'space-between',
                       gap: SPACING.sm,
                     }}
                   >
@@ -619,7 +577,7 @@ export default function AdminOverviewScreen() {
                       style={{
                         color: item.color,
                         fontSize: TYPOGRAPHY.size.xl,
-                        fontWeight: "900",
+                        fontWeight: '900',
                       }}
                     >
                       {item.count}

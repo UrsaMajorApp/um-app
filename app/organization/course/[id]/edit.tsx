@@ -1,7 +1,7 @@
-import { Feather } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -11,13 +11,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import {
-  FormCard,
-  LabeledTextInput,
-  PrimaryActionButton,
-} from "$components/ui/FormControls";
-import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
+} from 'react-native';
+import { FormCard, LabeledTextInput, PrimaryActionButton } from '$components/ui/FormControls';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import {
   ICON_OPTIONS,
   LEVEL_OPTIONS,
@@ -25,34 +21,26 @@ import {
   STATUS_OPTIONS,
   type CourseLevel as Level,
   type CourseStatus as Status,
-} from "$constants/courseOptions";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgCourseById, useOrgCourses } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from '$constants/courseOptions';
+import { COLORS, LAYOUT, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgCourseById, useOrgCourses } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CourseEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { course, loading: courseLoading } = useOrgCourseById(id);
   const { updateCourse, deleteCourse } = useOrgCourses();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [level, setLevel] = useState<Level>("beginner");
-  const [status, setStatus] = useState<Status>("draft");
-  const [icon, setIcon] = useState("book");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [level, setLevel] = useState<Level>('beginner');
+  const [status, setStatus] = useState<Status>('draft');
+  const [icon, setIcon] = useState('book');
   const [skills, setSkills] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
@@ -60,7 +48,7 @@ export default function CourseEditScreen() {
   useEffect(() => {
     if (!course) return;
     setTitle(course.title);
-    setDescription(course.description ?? "");
+    setDescription(course.description ?? '');
     setPrice(String(course.price));
     setLevel(course.level);
     setStatus(course.status);
@@ -69,9 +57,7 @@ export default function CourseEditScreen() {
   }, [course]);
 
   const toggleSkill = (s: string) =>
-    setSkills((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
-    );
+    setSkills((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
 
   const handleSave = async () => {
     if (!title.trim() || !id) return;
@@ -87,7 +73,7 @@ export default function CourseEditScreen() {
     });
     setSaving(false);
     if (result.error) {
-      Alert.alert("Ошибка", result.error);
+      Alert.alert('Ошибка', result.error);
       return;
     }
     router.back();
@@ -95,18 +81,18 @@ export default function CourseEditScreen() {
 
   const handleDelete = () => {
     Alert.alert(
-      "Удалить курс?",
+      'Удалить курс?',
       `Курс «${title}» будет удалён навсегда. Это действие нельзя отменить.`,
       [
-        { text: "Отмена", style: "cancel" },
+        { text: 'Отмена', style: 'cancel' },
         {
-          text: "Удалить",
-          style: "destructive",
+          text: 'Удалить',
+          style: 'destructive',
           onPress: async () => {
             if (!id) return;
             const result = await deleteCourse(id);
             if (result.error) {
-              Alert.alert("Ошибка", result.error);
+              Alert.alert('Ошибка', result.error);
             } else {
               router.back();
               router.back(); // pop both detail + edit
@@ -123,8 +109,8 @@ export default function CourseEditScreen() {
         style={{
           flex: 1,
           backgroundColor: COLORS.background,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -141,7 +127,7 @@ export default function CourseEditScreen() {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <ScrollView
@@ -153,10 +139,7 @@ export default function CourseEditScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <MotiView
-            from={{ opacity: 0, translateY: 20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-          >
+          <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
             {/* Main fields */}
             <FormCard style={{ gap: SPACING.xl }}>
               <LabeledTextInput
@@ -196,7 +179,7 @@ export default function CourseEditScreen() {
                 <Text style={labelStyle}>Уровень</Text>
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     gap: SPACING.sm,
                     marginTop: 8,
                   }}
@@ -209,24 +192,17 @@ export default function CourseEditScreen() {
                         flex: 1,
                         paddingVertical: 10,
                         borderRadius: RADIUS.lg,
-                        alignItems: "center",
-                        backgroundColor:
-                          level === opt.value
-                            ? COLORS.primary
-                            : COLORS.background,
+                        alignItems: 'center',
+                        backgroundColor: level === opt.value ? COLORS.primary : COLORS.background,
                         borderWidth: 1,
-                        borderColor:
-                          level === opt.value ? COLORS.primary : COLORS.border,
+                        borderColor: level === opt.value ? COLORS.primary : COLORS.border,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 10,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          color:
-                            level === opt.value
-                              ? "white"
-                              : COLORS.mutedForeground,
+                          color: level === opt.value ? 'white' : COLORS.mutedForeground,
                         }}
                       >
                         {opt.label.toUpperCase()}
@@ -240,7 +216,7 @@ export default function CourseEditScreen() {
                 <Text style={labelStyle}>Статус</Text>
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     gap: SPACING.sm,
                     marginTop: 8,
                   }}
@@ -253,24 +229,18 @@ export default function CourseEditScreen() {
                         flex: 1,
                         paddingVertical: 10,
                         borderRadius: RADIUS.lg,
-                        alignItems: "center",
+                        alignItems: 'center',
                         backgroundColor:
-                          status === opt.value
-                            ? opt.color + "20"
-                            : COLORS.background,
+                          status === opt.value ? `${opt.color}20` : COLORS.background,
                         borderWidth: 1.5,
-                        borderColor:
-                          status === opt.value ? opt.color : COLORS.border,
+                        borderColor: status === opt.value ? opt.color : COLORS.border,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 10,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          color:
-                            status === opt.value
-                              ? opt.color
-                              : COLORS.mutedForeground,
+                          color: status === opt.value ? opt.color : COLORS.mutedForeground,
                         }}
                       >
                         {opt.label.toUpperCase()}
@@ -286,8 +256,8 @@ export default function CourseEditScreen() {
               <Text style={labelStyle}>Иконка курса</Text>
               <View
                 style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
                   gap: SPACING.sm,
                   marginTop: 8,
                 }}
@@ -300,12 +270,9 @@ export default function CourseEditScreen() {
                       width: 48,
                       height: 48,
                       borderRadius: RADIUS.lg,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor:
-                        icon === ic
-                          ? "rgba(108,92,231,0.1)"
-                          : COLORS.background,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: icon === ic ? 'rgba(108,92,231,0.1)' : COLORS.background,
                       borderWidth: 2,
                       borderColor: icon === ic ? COLORS.primary : COLORS.border,
                     }}
@@ -313,9 +280,7 @@ export default function CourseEditScreen() {
                     <Feather
                       name={ic}
                       size={20}
-                      color={
-                        icon === ic ? COLORS.primary : COLORS.mutedForeground
-                      }
+                      color={icon === ic ? COLORS.primary : COLORS.mutedForeground}
                     />
                   </TouchableOpacity>
                 ))}
@@ -327,8 +292,8 @@ export default function CourseEditScreen() {
               <Text style={labelStyle}>Развиваемые навыки</Text>
               <View
                 style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
                   gap: SPACING.sm,
                   marginTop: 8,
                 }}
@@ -345,16 +310,14 @@ export default function CourseEditScreen() {
                         borderRadius: RADIUS.full,
                         borderWidth: 1,
                         borderColor: selected ? COLORS.primary : COLORS.border,
-                        backgroundColor: selected
-                          ? COLORS.primary
-                          : COLORS.white,
+                        backgroundColor: selected ? COLORS.primary : COLORS.white,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 11,
                           fontWeight: TYPOGRAPHY.weight.bold,
-                          color: selected ? "white" : COLORS.mutedForeground,
+                          color: selected ? 'white' : COLORS.mutedForeground,
                         }}
                       >
                         {skill.toUpperCase()}
@@ -366,11 +329,8 @@ export default function CourseEditScreen() {
             </FormCard>
 
             {/* Save */}
-            <PrimaryActionButton
-              onPress={handleSave}
-              disabled={saving || !title.trim()}
-            >
-              {saving ? "СОХРАНЕНИЕ..." : "СОХРАНИТЬ ИЗМЕНЕНИЯ"}
+            <PrimaryActionButton onPress={handleSave} disabled={saving || !title.trim()}>
+              {saving ? 'СОХРАНЕНИЕ...' : 'СОХРАНИТЬ ИЗМЕНЕНИЯ'}
             </PrimaryActionButton>
 
             {/* Delete */}
@@ -379,8 +339,8 @@ export default function CourseEditScreen() {
               style={{
                 height: 56,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginTop: SPACING.md,
               }}
             >
@@ -405,7 +365,7 @@ const labelStyle = {
   fontSize: 10,
   fontWeight: TYPOGRAPHY.weight.bold,
   color: COLORS.mutedForeground,
-  textTransform: "uppercase" as const,
+  textTransform: 'uppercase' as const,
   letterSpacing: 1,
   marginBottom: 8,
   marginLeft: 4,

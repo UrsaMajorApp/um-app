@@ -1,23 +1,17 @@
-import { Feather } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useMemo, useState } from "react";
-import {
-    Platform,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Game2048 from "$components/games/Game2048";
-import { getGameById } from "$components/games/gameCatalog";
-import MemoryGame from "$components/games/MemoryGame";
-import Minesweeper from "$components/games/Minesweeper";
-import Sudoku from "$components/games/Sudoku";
-import { COLORS, SHADOWS } from "$constants/theme";
-import { useYouthGameIq } from "$hooks/useYouthGameIq";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useMemo, useState } from 'react';
+import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Game2048 from '$components/games/Game2048';
+import { getGameById } from '$components/games/gameCatalog';
+import MemoryGame from '$components/games/MemoryGame';
+import Minesweeper from '$components/games/Minesweeper';
+import Sudoku from '$components/games/Sudoku';
+import { COLORS, SHADOWS } from '$constants/theme';
+import { useYouthGameIq } from '$hooks/useYouthGameIq';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function YouthGamePage() {
   const router = useRouter();
@@ -28,14 +22,10 @@ export default function YouthGamePage() {
   const game = useMemo(() => getGameById(id), [id]);
   const isDesktop = useIsDesktop();
   const gameShellMaxWidth =
-    game?.id === "minesweeper"
-      ? 720
-      : game?.id === "sudoku" || game?.id === "memory"
-        ? 660
-        : 620;
+    game?.id === 'minesweeper' ? 720 : game?.id === 'sudoku' || game?.id === 'memory' ? 660 : 620;
 
   const goBack = () => {
-    router.replace("/youth/games");
+    router.replace('/youth/games');
   };
 
   const handleFinishGame = async (gameScore: number) => {
@@ -50,13 +40,13 @@ export default function YouthGamePage() {
   };
 
   const gameContent =
-    game?.id === "memory" ? (
+    game?.id === 'memory' ? (
       <MemoryGame onFinish={handleFinishGame} />
-    ) : game?.id === "2048" ? (
+    ) : game?.id === '2048' ? (
       <Game2048 onFinish={handleFinishGame} />
-    ) : game?.id === "minesweeper" ? (
+    ) : game?.id === 'minesweeper' ? (
       <Minesweeper onFinish={handleFinishGame} />
-    ) : game?.id === "sudoku" ? (
+    ) : game?.id === 'sudoku' ? (
       <Sudoku onFinish={handleFinishGame} />
     ) : null;
 
@@ -66,15 +56,15 @@ export default function YouthGamePage() {
         style={{
           flex: 1,
           backgroundColor: COLORS.background,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           padding: 24,
         }}
       >
         <Text
           style={{
             fontSize: 22,
-            fontWeight: "900",
+            fontWeight: '900',
             color: COLORS.foreground,
             marginBottom: 8,
           }}
@@ -84,7 +74,7 @@ export default function YouthGamePage() {
         <Text
           style={{
             color: COLORS.mutedForeground,
-            fontWeight: "600",
+            fontWeight: '600',
             marginBottom: 20,
           }}
         >
@@ -99,7 +89,7 @@ export default function YouthGamePage() {
             borderRadius: 16,
           }}
         >
-          <Text style={{ color: "white", fontWeight: "900" }}>К играм</Text>
+          <Text style={{ color: 'white', fontWeight: '900' }}>К играм</Text>
         </TouchableOpacity>
       </View>
     );
@@ -109,27 +99,27 @@ export default function YouthGamePage() {
     <GestureHandlerRootView
       style={{
         flex: 1,
-        backgroundColor: isDesktop ? "#F8FAFC" : COLORS.background,
+        backgroundColor: isDesktop ? '#F8FAFC' : COLORS.background,
       }}
     >
-      <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <ScrollView
           contentContainerStyle={{
-            alignItems: "center",
+            alignItems: 'center',
             paddingHorizontal: isDesktop ? 40 : 0,
-            paddingTop: Platform.OS === "android" ? 20 : 0,
+            paddingTop: Platform.OS === 'android' ? 20 : 0,
             paddingBottom: isDesktop ? 48 : 0,
           }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={{ width: "100%", maxWidth: gameShellMaxWidth }}>
+          <View style={{ width: '100%', maxWidth: gameShellMaxWidth }}>
             <View
               style={{
                 paddingHorizontal: isDesktop ? 0 : 24,
                 paddingVertical: isDesktop ? 20 : 24,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
               <TouchableOpacity
@@ -140,25 +130,21 @@ export default function YouthGamePage() {
                   width: 44,
                   height: 44,
                   borderRadius: 14,
-                  backgroundColor: "white",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: 'white',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderWidth: 1,
                   borderColor: COLORS.border,
                   ...SHADOWS.sm,
                 }}
               >
-                <Feather
-                  name="chevron-left"
-                  size={28}
-                  color={COLORS.foreground}
-                />
+                <Feather name="chevron-left" size={28} color={COLORS.foreground} />
               </TouchableOpacity>
-              <View style={{ alignItems: "center", flex: 1 }}>
+              <View style={{ alignItems: 'center', flex: 1 }}>
                 <Text
                   style={{
                     fontSize: 22,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                   }}
                 >
@@ -169,7 +155,7 @@ export default function YouthGamePage() {
                     style={{
                       color: COLORS.success,
                       fontSize: 12,
-                      fontWeight: "900",
+                      fontWeight: '900',
                       marginTop: 4,
                     }}
                   >
@@ -181,8 +167,8 @@ export default function YouthGamePage() {
             </View>
             <View
               style={{
-                width: "100%",
-                backgroundColor: isDesktop ? "white" : COLORS.background,
+                width: '100%',
+                backgroundColor: isDesktop ? 'white' : COLORS.background,
                 borderRadius: isDesktop ? 28 : 0,
                 borderWidth: isDesktop ? 1 : 0,
                 borderColor: COLORS.border,

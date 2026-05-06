@@ -1,7 +1,7 @@
-import type { ViewStyle } from "react-native";
+import type { ViewStyle } from 'react-native';
 
-export type WebViewStyle = Omit<ViewStyle, "position"> & {
+export type WebViewStyle = Omit<ViewStyle, 'position'> & {
   backdropFilter?: string;
   cursor?: string;
-  position?: ViewStyle["position"] | "fixed";
+  position?: ViewStyle['position'] | 'fixed';
 };

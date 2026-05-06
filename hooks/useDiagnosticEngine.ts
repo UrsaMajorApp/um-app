@@ -14,7 +14,7 @@
  * ────────────────────────────────────────────────────────────────────────
  */
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 import {
   BASIC_CARDS,
   PRO_TASKS,
@@ -23,14 +23,14 @@ import {
   type BasicCard,
   type ProTask,
   type SkillCategory,
-  type StealthEvent
-} from "$data/diagnosticData";
-import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
-import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
+  type StealthEvent,
+} from '$data/diagnosticData';
+import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';
+import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
-export type DiagnosticPhase = "intro" | "basic" | "pro" | "processing" | "done";
+export type DiagnosticPhase = 'intro' | 'basic' | 'pro' | 'processing' | 'done';
 
 export interface EngineState {
   phase: DiagnosticPhase;
@@ -63,7 +63,7 @@ export function useDiagnosticEngine(opts: {
 }) {
   const { childId, isPro, onComplete } = opts;
 
-  const [phase, setPhase] = useState<DiagnosticPhase>("intro");
+  const [phase, setPhase] = useState<DiagnosticPhase>('intro');
   const [basicIndex, setBasicIndex] = useState(0);
   const [proIndex, setProIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -79,11 +79,11 @@ export function useDiagnosticEngine(opts: {
 
   const totalSteps = BASIC_CARDS.length + (isPro ? PRO_TASKS.length : 0);
   const currentStep =
-    phase === "basic"
+    phase === 'basic'
       ? basicIndex
-      : phase === "pro"
+      : phase === 'pro'
         ? BASIC_CARDS.length + proIndex
-        : phase === "processing" || phase === "done"
+        : phase === 'processing' || phase === 'done'
           ? totalSteps
           : 0;
   const progress = totalSteps > 0 ? currentStep / totalSteps : 0;
@@ -91,14 +91,14 @@ export function useDiagnosticEngine(opts: {
   // ── Phase helpers ────────────────────────────────────────────────────
 
   const startBasic = useCallback(() => {
-    setPhase("basic");
+    setPhase('basic');
     setBasicIndex(0);
     taskEnteredAt.current = Date.now();
   }, []);
 
   const advanceToPro = useCallback(() => {
     if (isPro) {
-      setPhase("pro");
+      setPhase('pro');
       setProIndex(0);
       taskEnteredAt.current = Date.now();
       taskAttempts.current = 0;
@@ -170,7 +170,7 @@ export function useDiagnosticEngine(opts: {
   // ── Scoring ──────────────────────────────────────────────────────────
 
   const computeResults = useCallback((): {
-    scores: Diagnostic["scores"];
+    scores: Diagnostic['scores'];
     topCategories: { category: SkillCategory; count: number }[];
     stealthProfile: string;
     rawScoreMap: Record<string, number>;
@@ -189,9 +189,7 @@ export function useDiagnosticEngine(opts: {
       if (card) categoryCounts[card.category]++;
     }
 
-    const topCategories = (
-      Object.entries(categoryCounts) as [SkillCategory, number][]
-    )
+    const topCategories = (Object.entries(categoryCounts) as [SkillCategory, number][])
       .sort((a, b) => b[1] - a[1])
       .map(([category, count]) => ({ category, count }));
 
@@ -214,7 +212,7 @@ export function useDiagnosticEngine(opts: {
     };
 
     // 4) Stealth personality profile
-    let patternCounts: Record<string, number> = {};
+    const patternCounts: Record<string, number> = {};
     for (const ev of stealthEvents.current) {
       for (const p of STEALTH_PATTERNS) {
         if (p.match(ev)) {
@@ -223,11 +221,9 @@ export function useDiagnosticEngine(opts: {
       }
     }
     const dominantPattern =
-      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
-      "balanced";
+      Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'balanced';
     const stealthLabel =
-      STEALTH_PATTERNS.find((p) => p.id === dominantPattern)?.label ||
-      "Сбалансированный";
+      STEALTH_PATTERNS.find((p) => p.id === dominantPattern)?.label || 'Сбалансированный';
 
     return {
       scores,
@@ -247,7 +243,7 @@ export function useDiagnosticEngine(opts: {
           const vec = SKILL_VECTORS[c.category];
           return `${vec.primary} (${c.count} likes)`;
         })
-        .join(", ");
+        .join(', ');
 
       const prompt = `You are an expert child psychologist. Analyze this diagnostic data for a 6-8 year old child.
 
@@ -256,10 +252,10 @@ ${
   isPro
     ? `PRO test scores: ${JSON.stringify(computed.rawScoreMap)}.
 Stealth personality profile: ${computed.stealthProfile}.`
-    : ""
+    : ''
 }
 
-Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" : "Include only base fields"}:
+Generate a JSON object (RAW JSON, no markdown). ${isPro ? 'Include ALL fields' : 'Include only base fields'}:
 {
   "summary": "One short, plain Russian sentence, max 110 characters. No long clauses.",
   "recommendedConstellation": "Creative 1-2 word title for talent type in Russian (e.g. 'Техно-энтузиаст')"
@@ -272,7 +268,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
   "parentAdvice": "1-2 sentences of personalized advice for parents in Russian",
   "topStrengths": ["top 2-3 strengths in Russian"],
   "developmentAreas": ["1-2 areas for development in Russian"]`
-      : ""
+      : ''
   }
 }`;
 
@@ -284,7 +280,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
   // ── Finish ───────────────────────────────────────────────────────────
 
   const finishDiagnostic = useCallback(async () => {
-    setPhase("processing");
+    setPhase('processing');
     setIsProcessing(true);
 
     const computed = computeResults();
@@ -293,26 +289,22 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
     try {
       aiData = await processWithAI(computed);
     } catch (e) {
-      console.error("AI report error:", e);
+      console.error('AI report error:', e);
       // Fallback
       aiData = {
-        summary: "Сильная сторона ребёнка — любопытство и творческий подход.",
-        recommendedConstellation: "Творческий исследователь",
+        summary: 'Сильная сторона ребёнка — любопытство и творческий подход.',
+        recommendedConstellation: 'Творческий исследователь',
         ...(isPro
           ? {
-              intellectType: "Многогранный (смешанный тип)",
+              intellectType: 'Многогранный (смешанный тип)',
               personalityBehavior: computed.stealthProfile,
-              careerArchetypes: [
-                "Инженер-изобретатель",
-                "Исследователь",
-                "Дизайнер",
-              ],
+              careerArchetypes: ['Инженер-изобретатель', 'Исследователь', 'Дизайнер'],
               parentAdvice:
-                "Поддерживайте интересы ребёнка и предоставляйте разнообразные активности.",
+                'Поддерживайте интересы ребёнка и предоставляйте разнообразные активности.',
               topStrengths: computed.topCategories
                 .slice(0, 2)
                 .map((c) => SKILL_VECTORS[c.category].primary),
-              developmentAreas: ["Скорость принятия решений"],
+              developmentAreas: ['Скорость принятия решений'],
             }
           : {}),
       };
@@ -321,12 +313,11 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
     const diagnostic: Diagnostic = {
       childId,
       scores: computed.scores,
-      summary: aiData.summary || "Отличный потенциал!",
-      recommendedConstellation:
-        aiData.recommendedConstellation || "Исследователь",
+      summary: aiData.summary || 'Отличный потенциал!',
+      recommendedConstellation: aiData.recommendedConstellation || 'Исследователь',
       timestamp: new Date().toISOString(),
-      tier: isPro ? "pro" : "basic",
-      ageGroup: "6-8",
+      tier: isPro ? 'pro' : 'basic',
+      ageGroup: '6-8',
       rawMetadata: {
         stealthProfile: computed.stealthProfile,
       },
@@ -347,23 +338,22 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
     try {
       await onComplete(diagnostic);
     } catch (e) {
-      console.error("Failed to save diagnostic:", e);
+      console.error('Failed to save diagnostic:', e);
     }
 
     setIsProcessing(false);
-    setPhase("done");
+    setPhase('done');
   }, [childId, isPro, computeResults, processWithAI, onComplete]);
 
   // ── Public API ───────────────────────────────────────────────────────
 
-  const currentCard =
-    phase === "basic" ? (BASIC_CARDS[basicIndex] ?? null) : null;
-  const currentTask = phase === "pro" ? (PRO_TASKS[proIndex] ?? null) : null;
+  const currentCard = phase === 'basic' ? (BASIC_CARDS[basicIndex] ?? null) : null;
+  const currentTask = phase === 'pro' ? (PRO_TASKS[proIndex] ?? null) : null;
 
   return {
     // State
     phase,
-    currentIndex: phase === "basic" ? basicIndex : proIndex,
+    currentIndex: phase === 'basic' ? basicIndex : proIndex,
     progress,
     currentCard,
     currentTask,

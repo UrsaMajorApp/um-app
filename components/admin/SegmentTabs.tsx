@@ -1,6 +1,6 @@
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
-import { Text, TouchableOpacity, View } from "react-native";
-import { useAdminLayout } from "$components/admin/adminUtils";
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { useAdminLayout } from '$components/admin/adminUtils';
 
 export function SegmentTabs<T extends string>({
   value,
@@ -22,7 +22,7 @@ export function SegmentTabs<T extends string>({
         backgroundColor: COLORS.surface,
       }}
     >
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: SPACING.sm }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm }}>
         {tabs.map((tab) => {
           const active = tab.key === value;
           return (
@@ -39,7 +39,7 @@ export function SegmentTabs<T extends string>({
               <Text
                 style={{
                   color: active ? COLORS.white : COLORS.foreground,
-                  fontWeight: "700",
+                  fontWeight: '700',
                   fontSize: TYPOGRAPHY.size.sm,
                 }}
               >

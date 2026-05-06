@@ -1,13 +1,13 @@
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { useIsDesktop } from '$lib/useIsDesktop';
 /**
  * DiagnosticArchitects.tsx
  * Main orchestrator for 15-17 Architects diagnostic.
  */
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useCallback, useEffect } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useCallback, useEffect } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -15,14 +15,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useParentData } from "$contexts/ParentDataContext";
-import { useDiagnosticEngine1517 } from "$hooks/useDiagnosticEngine1517";
-import CareerSwipeCard from "$components/diagnostic/architects/CareerSwipeCard";
-import OsTask from "$components/diagnostic/architects/OsTask";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { useDiagnosticEngine1517 } from '$hooks/useDiagnosticEngine1517';
+import CareerSwipeCard from '$components/diagnostic/architects/CareerSwipeCard';
+import OsTask from '$components/diagnostic/architects/OsTask';
 
 interface Props {
   childId?: string | null;
@@ -31,23 +31,19 @@ interface Props {
 export default function DiagnosticArchitects({ childId }: Props) {
   const router = useRouter();
   const { user } = useAuth();
-  const {
-    activeChildId,
-    updateChildDiagnostic,
-    parentProfile,
-  } = useParentData();
+  const { activeChildId, updateChildDiagnostic, parentProfile } = useParentData();
   const isDesktop = useIsDesktop();
   const hPad = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
     : LAYOUT.profileHorizontalPaddingMobile;
 
-  const isPro = parentProfile?.tariff === "pro";
+  const isPro = parentProfile?.tariff === 'pro';
   const targetChildId = childId || activeChildId;
-  const engineChildId = targetChildId || user?.id || "unknown";
+  const engineChildId = targetChildId || user?.id || 'unknown';
 
   const engine = useDiagnosticEngine1517({
     childId: engineChildId,
-    userId: user?.id || "unknown",
+    userId: user?.id || 'unknown',
     isPro,
     onComplete: async (diagnostic) => {
       if (targetChildId) await updateChildDiagnostic(targetChildId, diagnostic);
@@ -55,9 +51,9 @@ export default function DiagnosticArchitects({ childId }: Props) {
   });
 
   useEffect(() => {
-    if (engine.phase === "done") {
+    if (engine.phase === 'done') {
       router.push({
-        pathname: "/profile/youth/results",
+        pathname: '/profile/youth/results',
         params: targetChildId ? { childId: targetChildId } : undefined,
       });
     }
@@ -67,12 +63,9 @@ export default function DiagnosticArchitects({ childId }: Props) {
     router.back();
   }, [router]);
 
-  if (engine.isProcessing || engine.phase === "processing") {
+  if (engine.isProcessing || engine.phase === 'processing') {
     return (
-      <LinearGradient
-        colors={["#0F0A2A", "#1A1040", "#2D1B69"]}
-        style={styles.fullScreen}
-      >
+      <LinearGradient colors={['#0F0A2A', '#1A1040', '#2D1B69']} style={styles.fullScreen}>
         <SafeAreaView style={styles.centered}>
           <ActivityIndicator size="large" color="#A78BFA" />
           <Text style={styles.processingTitle}>Анализ профиля...</Text>
@@ -81,29 +74,20 @@ export default function DiagnosticArchitects({ childId }: Props) {
     );
   }
 
-  if (engine.phase === "intro") {
+  if (engine.phase === 'intro') {
     return (
-      <LinearGradient
-        colors={["#5B21B6", "#7C3AED", "#A78BFA"]}
-        style={styles.fullScreen}
-      >
+      <LinearGradient colors={['#5B21B6', '#7C3AED', '#A78BFA']} style={styles.fullScreen}>
         <SafeAreaView style={styles.centered}>
           <Text style={{ fontSize: 80, marginBottom: 20 }}>🎓</Text>
           <Text style={styles.introTitle}>Привет, Архитектор!</Text>
           <Text style={styles.introSubtitle}>
-            Узнай свои карьерные драйверы и{"\n"}подходящий профиль ЕНТ 🚀
+            Узнай свои карьерные драйверы и{'\n'}подходящий профиль ЕНТ 🚀
           </Text>
-          <View style={{ width: "100%", paddingHorizontal: 32, marginTop: 40 }}>
-            <TouchableOpacity
-              onPress={engine.startBasic}
-              style={styles.startBtn}
-            >
+          <View style={{ width: '100%', paddingHorizontal: 32, marginTop: 40 }}>
+            <TouchableOpacity onPress={engine.startBasic} style={styles.startBtn}>
               <Text style={styles.startBtnText}>Начать</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleSkip}
-              style={{ alignItems: "center", marginTop: 20 }}
-            >
+            <TouchableOpacity onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
               <Text style={styles.skipText}>Пропустить</Text>
             </TouchableOpacity>
           </View>
@@ -112,33 +96,24 @@ export default function DiagnosticArchitects({ childId }: Props) {
     );
   }
 
-  const isProPhase = engine.phase === "pro";
+  const isProPhase = engine.phase === 'pro';
   const progressPct = Math.round(engine.progress * 100);
 
   return (
     <View style={[styles.screen, isProPhase && styles.screenDark]}>
-      <SafeAreaView edges={["top"]} style={{ zIndex: 20 }}>
+      <SafeAreaView edges={['top']} style={{ zIndex: 20 }}>
         <View style={[styles.header, { paddingHorizontal: hPad }]}>
           <TouchableOpacity
             onPress={() => router.back()}
             style={[styles.backBtn, isProPhase && styles.backBtnDark]}
           >
-            <Feather
-              name="arrow-left"
-              size={20}
-              color={isProPhase ? "white" : COLORS.foreground}
-            />
+            <Feather name="arrow-left" size={20} color={isProPhase ? 'white' : COLORS.foreground} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, isProPhase && { color: "white" }]}>
-            {isProPhase ? "💻 День Стажера" : "🎯 Карьерный Мэтч"}
+          <Text style={[styles.headerTitle, isProPhase && { color: 'white' }]}>
+            {isProPhase ? '💻 День Стажера' : '🎯 Карьерный Мэтч'}
           </Text>
           <TouchableOpacity onPress={handleSkip}>
-            <Text
-              style={[
-                styles.skipHeader,
-                isProPhase && { color: "rgba(255,255,255,0.5)" },
-              ]}
-            >
+            <Text style={[styles.skipHeader, isProPhase && { color: 'rgba(255,255,255,0.5)' }]}>
               Скип
             </Text>
           </TouchableOpacity>
@@ -154,7 +129,7 @@ export default function DiagnosticArchitects({ childId }: Props) {
       >
         <MotiView
           animate={{ width: `${progressPct}%` }}
-          transition={{ type: "timing", duration: 300 }}
+          transition={{ type: 'timing', duration: 300 }}
           style={[styles.progressFill, isProPhase && styles.progressFillPro]}
         />
       </View>
@@ -164,11 +139,11 @@ export default function DiagnosticArchitects({ childId }: Props) {
           paddingHorizontal: hPad,
           paddingTop: 16,
           paddingBottom: 80,
-          alignItems: "center",
+          alignItems: 'center',
         }}
       >
-        <View style={{ width: "100%", maxWidth: isDesktop ? 560 : undefined }}>
-          {engine.phase === "basic" && engine.currentCard && (
+        <View style={{ width: '100%', maxWidth: isDesktop ? 560 : undefined }}>
+          {engine.phase === 'basic' && engine.currentCard && (
             <CareerSwipeCard
               card={engine.currentCard}
               index={engine.currentIndex}
@@ -176,7 +151,7 @@ export default function DiagnosticArchitects({ childId }: Props) {
               onSwipe={engine.handleCareerSwipe}
             />
           )}
-          {engine.phase === "pro" && engine.currentTask && (
+          {engine.phase === 'pro' && engine.currentTask && (
             <OsTask
               task={engine.currentTask}
               index={engine.currentIndex}
@@ -194,75 +169,75 @@ const styles = StyleSheet.create({
   fullScreen: { flex: 1 },
   centered: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 32,
   },
   screen: { flex: 1, backgroundColor: COLORS.background },
-  screenDark: { backgroundColor: "#0A0718" }, // Using dark violet
+  screenDark: { backgroundColor: '#0A0718' }, // Using dark violet
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 12,
   },
   backBtn: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
     ...SHADOWS.sm,
   },
-  backBtnDark: { backgroundColor: "rgba(255,255,255,0.1)" },
-  headerTitle: { fontSize: 18, fontWeight: "900", color: COLORS.foreground },
+  backBtnDark: { backgroundColor: 'rgba(255,255,255,0.1)' },
+  headerTitle: { fontSize: 18, fontWeight: '900', color: COLORS.foreground },
   skipHeader: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.mutedForeground,
   },
   progressTrack: {
     height: 6,
     backgroundColor: COLORS.muted,
     borderRadius: 3,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginBottom: 16,
   },
-  progressTrackDark: { backgroundColor: "rgba(255,255,255,0.1)" },
+  progressTrackDark: { backgroundColor: 'rgba(255,255,255,0.1)' },
   progressFill: {
-    height: "100%",
+    height: '100%',
     backgroundColor: COLORS.primary,
     borderRadius: 3,
   },
-  progressFillPro: { backgroundColor: "#A78BFA" },
+  progressFillPro: { backgroundColor: '#A78BFA' },
   introTitle: {
     fontSize: 32,
-    fontWeight: "900",
-    color: "white",
-    textAlign: "center",
+    fontWeight: '900',
+    color: 'white',
+    textAlign: 'center',
     marginBottom: 12,
   },
   introSubtitle: {
     fontSize: 16,
-    color: "rgba(255,255,255,0.7)",
-    textAlign: "center",
+    color: 'rgba(255,255,255,0.7)',
+    textAlign: 'center',
     lineHeight: 24,
   },
   startBtn: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     paddingVertical: 20,
     borderRadius: RADIUS.lg,
-    alignItems: "center",
+    alignItems: 'center',
     ...SHADOWS.lg,
   },
-  startBtnText: { fontSize: 18, fontWeight: "900", color: "#7C3AED" },
-  skipText: { color: "rgba(255,255,255,0.5)", fontSize: 14, fontWeight: "600" },
+  startBtnText: { fontSize: 18, fontWeight: '900', color: '#7C3AED' },
+  skipText: { color: 'rgba(255,255,255,0.5)', fontSize: 14, fontWeight: '600' },
   processingTitle: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 20,
   },
 });

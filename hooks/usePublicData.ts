@@ -5,12 +5,12 @@
  * an authenticated session (public-read RLS policy on both tables).
  * Run COURSES_MIGRATION.sql first to enable those policies.
  */
-import { useCallback, useEffect, useState } from "react";
-import { useDevDataVersion } from "$lib/devDataEvents";
-import { isUuid } from "$lib/idUtils";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { rowsOrEmpty } from "$lib/supabaseHelpers";
-import type { OrgCourse, OrgGroup } from "$hooks/useOrgData";
+import { useCallback, useEffect, useState } from 'react';
+import { useDevDataVersion } from '$lib/devDataEvents';
+import { isUuid } from '$lib/idUtils';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { rowsOrEmpty } from '$lib/supabaseHelpers';
+import type { OrgCourse, OrgGroup } from '$hooks/useOrgData';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -27,14 +27,14 @@ type PublicCourseRow = OrgCourse & {
 
 // Gradient palette indexed by position so cards look varied but consistent
 const GRADIENTS: [string, string][] = [
-  ["#6C5CE7", "#8B7FE8"],
-  ["#00B4DB", "#0083B0"],
-  ["#11998e", "#38ef7d"],
-  ["#f7971e", "#ffd200"],
-  ["#f953c6", "#b91d73"],
-  ["#4facfe", "#00f2fe"],
-  ["#43e97b", "#38f9d7"],
-  ["#fa709a", "#fee140"],
+  ['#6C5CE7', '#8B7FE8'],
+  ['#00B4DB', '#0083B0'],
+  ['#11998e', '#38ef7d'],
+  ['#f7971e', '#ffd200'],
+  ['#f953c6', '#b91d73'],
+  ['#4facfe', '#00f2fe'],
+  ['#43e97b', '#38f9d7'],
+  ['#fa709a', '#fee140'],
 ];
 
 export function courseGradient(index: number): [string, string] {
@@ -43,11 +43,11 @@ export function courseGradient(index: number): [string, string] {
 
 // Maps talent-score dimensions → skills stored in org_courses.skills[]
 export const SCORE_TO_SKILLS: Record<string, string[]> = {
-  logical: ["Логика", "Код", "Математика", "Крит. мышление"],
-  creative: ["Креативность", "Дизайн"],
-  social: ["Команда", "Коммуникация", "Лидерство"],
-  physical: ["Команда"],
-  linguistic: ["Языки", "Коммуникация"],
+  logical: ['Логика', 'Код', 'Математика', 'Крит. мышление'],
+  creative: ['Креативность', 'Дизайн'],
+  social: ['Команда', 'Коммуникация', 'Лидерство'],
+  physical: ['Команда'],
+  linguistic: ['Языки', 'Коммуникация'],
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ function mapRow(row: PublicCourseRow): PublicCourse {
   const { organizations, ...course } = row;
   return {
     ...course,
-    org_name: organizations?.name ?? "",
+    org_name: organizations?.name ?? '',
   };
 }
 
@@ -75,10 +75,10 @@ export function usePublicCourses() {
     }
     setLoading(true);
     const res = await supabase
-      .from("org_courses")
-      .select("*, organizations(name)")
-      .eq("status", "active")
-      .order("created_at", { ascending: false });
+      .from('org_courses')
+      .select('*, organizations(name)')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
 
     if (res.error || !res.data) {
       setCourses([]);
@@ -113,28 +113,20 @@ export function usePublicCourseById(id: string | undefined) {
     }
 
     Promise.all([
+      supabase.from('org_courses').select('*, organizations(name)').eq('id', id).maybeSingle(),
+      supabase.from('org_groups').select('*').eq('course_id', id).eq('active', true),
       supabase
-        .from("org_courses")
-        .select("*, organizations(name)")
-        .eq("id", id)
-        .maybeSingle(),
+        .from('course_reviews')
+        .select('id, course_id, author_display_name, rating, body, created_at')
+        .eq('course_id', id)
+        .eq('status', 'published')
+        .order('created_at', { ascending: false }),
       supabase
-        .from("org_groups")
-        .select("*")
-        .eq("course_id", id)
-        .eq("active", true),
-      supabase
-        .from("course_reviews")
-        .select("id, course_id, author_display_name, rating, body, created_at")
-        .eq("course_id", id)
-        .eq("status", "published")
-        .order("created_at", { ascending: false }),
-      supabase
-        .from("trial_lesson_slots")
-        .select("id, course_id, day_label, time_label, display_order")
-        .eq("course_id", id)
-        .eq("active", true)
-        .order("display_order", { ascending: true }),
+        .from('trial_lesson_slots')
+        .select('id, course_id, day_label, time_label, display_order')
+        .eq('course_id', id)
+        .eq('active', true)
+        .order('display_order', { ascending: true }),
     ]).then(([courseRes, groupsRes, reviewsRes, slotsRes]) => {
       setCourse(courseRes.data ? mapRow(courseRes.data) : null);
       setGroups(rowsOrEmpty<OrgGroup>(groupsRes));
@@ -178,11 +170,9 @@ export async function applyToCourse(params: {
   groupName?: string | null;
   groupSchedule?: string | null;
 }): Promise<{ error: string | null }> {
-  if (!supabase || !isSupabaseConfigured) return { error: "Not configured" };
-  const childProfileId = isUuid(params.childProfileId)
-    ? params.childProfileId
-    : null;
-  const res = await supabase.from("org_applications").insert({
+  if (!supabase || !isSupabaseConfigured) return { error: 'Not configured' };
+  const childProfileId = isUuid(params.childProfileId) ? params.childProfileId : null;
+  const res = await supabase.from('org_applications').insert({
     org_id: params.orgId,
     parent_user_id: params.parentUserId ?? null,
     child_profile_id: childProfileId,
@@ -193,8 +183,8 @@ export async function applyToCourse(params: {
     child_name: params.childName,
     child_age: params.childAge ?? null,
     parent_name: params.parentName ?? null,
-    applied_date: new Date().toISOString().split("T")[0],
-    status: "awaiting_payment",
+    applied_date: new Date().toISOString().split('T')[0],
+    status: 'awaiting_payment',
   });
   return { error: res.error?.message ?? null };
 }
@@ -210,19 +200,19 @@ export async function checkEnrollment(params: {
   if (!supabase || !isSupabaseConfigured) return { enrolled: false };
 
   let query = supabase
-    .from("org_applications")
-    .select("id")
-    .eq("child_name", params.childName)
-    .eq("club", params.courseTitle)
-    .neq("status", "rejected")
+    .from('org_applications')
+    .select('id')
+    .eq('child_name', params.childName)
+    .eq('club', params.courseTitle)
+    .neq('status', 'rejected')
     .limit(1);
 
   if (isUuid(params.childProfileId)) {
-    query = query.eq("child_profile_id", params.childProfileId);
+    query = query.eq('child_profile_id', params.childProfileId);
   }
 
   if (params.parentUserId) {
-    query = query.eq("parent_user_id", params.parentUserId);
+    query = query.eq('parent_user_id', params.parentUserId);
   }
 
   const res = await query;
@@ -244,10 +234,10 @@ export async function applyToTrialLesson(params: {
   requestedSlots: Array<{ day: string; time: string }>;
   selectedSlot: { day: string; time: string };
 }): Promise<{ error: string | null }> {
-  if (!supabase || !isSupabaseConfigured) return { error: "Not configured" };
+  if (!supabase || !isSupabaseConfigured) return { error: 'Not configured' };
   const childId = isUuid(params.childId) ? params.childId : null;
 
-  const res = await supabase.from("trial_lesson_requests").insert({
+  const res = await supabase.from('trial_lesson_requests').insert({
     child_id: childId,
     child_name: params.childName,
     child_age: params.childAge ?? null,
@@ -258,7 +248,7 @@ export async function applyToTrialLesson(params: {
     course_title: params.courseTitle,
     requested_slots: params.requestedSlots,
     confirmed_slot: params.selectedSlot,
-    status: "pending",
+    status: 'pending',
   });
 
   return { error: res.error?.message ?? null };

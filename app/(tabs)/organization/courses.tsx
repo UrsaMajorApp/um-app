@@ -1,9 +1,9 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React, { useMemo, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -12,32 +12,23 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgCourses, useOrgGroups } from "$hooks/useOrgData";
-import { featherIconName } from "$lib/icons";
-import { formatKZT } from "$lib/formatCurrency";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgCourses, useOrgGroups } from '$hooks/useOrgData';
+import { featherIconName } from '$lib/icons';
+import { formatKZT } from '$lib/formatCurrency';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgCourses() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { courses, loading } = useOrgCourses();
   const { groups } = useOrgGroups();
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   // Compute student count per course from groups linked by course_id
   const studentCountByCourse = useMemo(() => {
@@ -51,10 +42,7 @@ export default function OrgCourses() {
   }, [groups]);
 
   const filtered = useMemo(
-    () =>
-      courses.filter((c) =>
-        c.title.toLowerCase().includes(search.toLowerCase()),
-      ),
+    () => courses.filter((c) => c.title.toLowerCase().includes(search.toLowerCase())),
     [courses, search],
   );
 
@@ -66,14 +54,14 @@ export default function OrgCourses() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Header */}
-      <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
+      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
         <LinearGradient
           colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
+          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
         >
-          <SafeAreaView edges={["top"]}>
+          <SafeAreaView edges={['top']}>
             <View
               style={{
                 paddingHorizontal: paddingX,
@@ -83,8 +71,8 @@ export default function OrgCourses() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -92,28 +80,26 @@ export default function OrgCourses() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                     flex: 1,
                   }}
                 >
                   Курсы
                 </Text>
                 <TouchableOpacity
-                  onPress={() =>
-                    router.push("/organization/course/create")
-                  }
+                  onPress={() => router.push('/organization/course/create')}
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.2)",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
                     paddingHorizontal: SPACING.lg,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text
                     style={{
-                      color: "white",
+                      color: 'white',
                       fontWeight: TYPOGRAPHY.weight.bold,
                       fontSize: 13,
                     }}
@@ -125,14 +111,14 @@ export default function OrgCourses() {
 
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "rgba(255,255,255,0.15)",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
                   borderRadius: RADIUS.lg,
                   paddingHorizontal: SPACING.lg,
                   height: 52,
                   borderWidth: 1,
-                  borderColor: "rgba(255,255,255,0.2)",
+                  borderColor: 'rgba(255,255,255,0.2)',
                 }}
               >
                 <Feather
@@ -147,7 +133,7 @@ export default function OrgCourses() {
                   placeholder="Поиск курса..."
                   placeholderTextColor="rgba(255,255,255,0.5)"
                   style={{
-                    color: "white",
+                    color: 'white',
                     flex: 1,
                     fontSize: 16,
                     fontWeight: TYPOGRAPHY.weight.medium,
@@ -170,7 +156,7 @@ export default function OrgCourses() {
         {/* Summary tiles */}
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: SPACING.md,
             marginBottom: SPACING.xxl,
           }}
@@ -200,7 +186,7 @@ export default function OrgCourses() {
                 fontSize: 10,
                 color: COLORS.mutedForeground,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                textTransform: "uppercase",
+                textTransform: 'uppercase',
                 letterSpacing: 1,
                 marginTop: 4,
               }}
@@ -233,7 +219,7 @@ export default function OrgCourses() {
                 fontSize: 10,
                 color: COLORS.mutedForeground,
                 fontWeight: TYPOGRAPHY.weight.bold,
-                textTransform: "uppercase",
+                textTransform: 'uppercase',
                 letterSpacing: 1,
                 marginTop: 4,
               }}
@@ -245,32 +231,24 @@ export default function OrgCourses() {
 
         {/* Loading */}
         {loading && (
-          <ActivityIndicator
-            size="small"
-            color={COLORS.primary}
-            style={{ marginVertical: 40 }}
-          />
+          <ActivityIndicator size="small" color={COLORS.primary} style={{ marginVertical: 40 }} />
         )}
 
         {/* Empty state */}
         {!loading && courses.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 60 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 60 }}>
             <View
               style={{
                 width: 72,
                 height: 72,
                 borderRadius: 36,
                 backgroundColor: COLORS.muted,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: 16,
               }}
             >
-              <Feather
-                name="book-open"
-                size={32}
-                color={COLORS.mutedForeground}
-              />
+              <Feather name="book-open" size={32} color={COLORS.mutedForeground} />
             </View>
             <Text
               style={{
@@ -286,14 +264,14 @@ export default function OrgCourses() {
               style={{
                 fontSize: 14,
                 color: COLORS.mutedForeground,
-                textAlign: "center",
+                textAlign: 'center',
                 marginBottom: 24,
               }}
             >
               Создайте первый курс, чтобы начать набор учеников
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/organization/course/create")}
+              onPress={() => router.push('/organization/course/create')}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 28,
@@ -302,9 +280,7 @@ export default function OrgCourses() {
                 ...SHADOWS.md,
               }}
             >
-              <Text
-                style={{ color: "white", fontWeight: TYPOGRAPHY.weight.bold }}
-              >
+              <Text style={{ color: 'white', fontWeight: TYPOGRAPHY.weight.bold }}>
                 Создать курс
               </Text>
             </TouchableOpacity>
@@ -324,9 +300,7 @@ export default function OrgCourses() {
                   transition={{ delay: idx * 80 }}
                 >
                   <TouchableOpacity
-                    onPress={() =>
-                      router.push(appHref(`/organization/course/${course.id}`))
-                    }
+                    onPress={() => router.push(appHref(`/organization/course/${course.id}`))}
                     style={{
                       ...SHADOWS.strict,
                       backgroundColor: COLORS.white,
@@ -334,21 +308,21 @@ export default function OrgCourses() {
                       padding: SPACING.xl,
                       borderWidth: 1,
                       borderColor: COLORS.border,
-                      overflow: "hidden",
+                      overflow: 'hidden',
                     }}
                   >
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                         marginBottom: SPACING.xl,
                       }}
                     >
                       <View
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: SPACING.lg,
                           flex: 1,
                         }}
@@ -358,13 +332,13 @@ export default function OrgCourses() {
                             width: 56,
                             height: 56,
                             borderRadius: RADIUS.xl,
-                            backgroundColor: "rgba(108, 92, 231, 0.05)",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            backgroundColor: 'rgba(108, 92, 231, 0.05)',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
                           <Feather
-                            name={featherIconName(course.icon, "book-open")}
+                            name={featherIconName(course.icon, 'book-open')}
                             size={28}
                             color={COLORS.primary}
                           />
@@ -387,7 +361,7 @@ export default function OrgCourses() {
                                 fontWeight: TYPOGRAPHY.weight.medium,
                               }}
                             >
-                              {course.age_min ?? ""}–{course.age_max ?? ""} лет
+                              {course.age_min ?? ''}–{course.age_max ?? ''} лет
                             </Text>
                           ) : null}
                         </View>
@@ -398,8 +372,8 @@ export default function OrgCourses() {
                           paddingVertical: 6,
                           borderRadius: RADIUS.lg,
                           backgroundColor:
-                            course.status === "active"
-                              ? "rgba(52, 199, 89, 0.1)"
+                            course.status === 'active'
+                              ? 'rgba(52, 199, 89, 0.1)'
                               : COLORS.background,
                         }}
                       >
@@ -407,44 +381,38 @@ export default function OrgCourses() {
                           style={{
                             fontSize: 10,
                             fontWeight: TYPOGRAPHY.weight.bold,
-                            textTransform: "uppercase",
+                            textTransform: 'uppercase',
                             letterSpacing: 1,
                             color:
-                              course.status === "active"
-                                ? COLORS.success
-                                : COLORS.mutedForeground,
+                              course.status === 'active' ? COLORS.success : COLORS.mutedForeground,
                           }}
                         >
-                          {course.status === "active"
-                            ? "Активен"
-                            : course.status === "draft"
-                              ? "На модерации"
-                              : "Архив"}
+                          {course.status === 'active'
+                            ? 'Активен'
+                            : course.status === 'draft'
+                              ? 'На модерации'
+                              : 'Архив'}
                         </Text>
                       </View>
                     </View>
 
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "flex-end",
-                        justifyContent: "space-between",
+                        flexDirection: 'row',
+                        alignItems: 'flex-end',
+                        justifyContent: 'space-between',
                       }}
                     >
                       <View>
                         <View
                           style={{
-                            flexDirection: "row",
-                            alignItems: "center",
+                            flexDirection: 'row',
+                            alignItems: 'center',
                             gap: 6,
                             marginBottom: 4,
                           }}
                         >
-                          <Feather
-                            name="users"
-                            size={14}
-                            color={COLORS.mutedForeground}
-                          />
+                          <Feather name="users" size={14} color={COLORS.mutedForeground} />
                           <Text
                             style={{
                               fontSize: TYPOGRAPHY.size.xs,
@@ -466,27 +434,21 @@ export default function OrgCourses() {
                         </Text>
                       </View>
 
-                      <View style={{ flexDirection: "row", gap: SPACING.sm }}>
+                      <View style={{ flexDirection: 'row', gap: SPACING.sm }}>
                         <TouchableOpacity
                           onPress={() =>
-                            router.push(
-                              appHref(`/organization/course/${course.id}/edit`),
-                            )
+                            router.push(appHref(`/organization/course/${course.id}/edit`))
                           }
                           style={{
                             width: 44,
                             height: 44,
                             backgroundColor: COLORS.background,
                             borderRadius: RADIUS.lg,
-                            alignItems: "center",
-                            justifyContent: "center",
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
-                          <Feather
-                            name="edit-2"
-                            size={16}
-                            color={COLORS.mutedForeground}
-                          />
+                          <Feather name="edit-2" size={16} color={COLORS.mutedForeground} />
                         </TouchableOpacity>
                         <View
                           style={{
@@ -494,16 +456,12 @@ export default function OrgCourses() {
                             height: 44,
                             backgroundColor: COLORS.primary,
                             borderRadius: RADIUS.lg,
-                            alignItems: "center",
-                            justifyContent: "center",
+                            alignItems: 'center',
+                            justifyContent: 'center',
                             ...SHADOWS.md,
                           }}
                         >
-                          <Feather
-                            name="chevron-right"
-                            size={20}
-                            color="white"
-                          />
+                          <Feather name="chevron-right" size={20} color="white" />
                         </View>
                       </View>
                     </View>
@@ -516,7 +474,7 @@ export default function OrgCourses() {
 
         {/* No search results */}
         {!loading && courses.length > 0 && filtered.length === 0 && (
-          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+          <View style={{ alignItems: 'center', paddingVertical: 40 }}>
             <Text
               style={{
                 color: COLORS.mutedForeground,

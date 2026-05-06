@@ -1,22 +1,11 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-   Text,
-   TouchableOpacity,
-   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-   COLORS,
-   LAYOUT,
-   RADIUS,
-   SHADOWS,
-   TYPOGRAPHY,
-} from "$constants/theme";
-import { appHref } from "$lib/router";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { appHref } from '$lib/router';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorStatusPage() {
   const router = useRouter();
@@ -31,28 +20,28 @@ export default function MentorStatusPage() {
         <View
           style={{
             flex: 1,
-            width: "100%",
+            width: '100%',
             maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
-            alignSelf: "center",
+            alignSelf: 'center',
             paddingHorizontal: horizontalPadding,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <MotiView
             from={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 500 }}
-            style={{ alignItems: "center", marginBottom: 32 }}
+            style={{ alignItems: 'center', marginBottom: 32 }}
           >
             <View
               style={{
                 width: 100,
                 height: 100,
                 borderRadius: 50,
-                backgroundColor: COLORS.primary + "15",
-                alignItems: "center",
-                justifyContent: "center",
+                backgroundColor: `${COLORS.primary}15`,
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: 24,
               }}
             >
@@ -64,7 +53,7 @@ export default function MentorStatusPage() {
                 fontSize: TYPOGRAPHY.size.xxl,
                 fontWeight: TYPOGRAPHY.weight.bold,
                 color: COLORS.foreground,
-                textAlign: "center",
+                textAlign: 'center',
                 marginBottom: 16,
               }}
             >
@@ -75,25 +64,24 @@ export default function MentorStatusPage() {
               style={{
                 fontSize: TYPOGRAPHY.size.md,
                 color: COLORS.mutedForeground,
-                textAlign: "center",
+                textAlign: 'center',
                 lineHeight: 24,
                 paddingHorizontal: 20,
               }}
             >
-              Мы получили вашу анкету ментора. Администратор проверит информацию
-              и примет решение. Вы получите уведомление, когда доступ будет
-              открыт.
+              Мы получили вашу анкету ментора. Администратор проверит информацию и примет решение.
+              Вы получите уведомление, когда доступ будет открыт.
             </Text>
           </MotiView>
 
-          <View style={{ width: "100%", paddingHorizontal: 20 }}>
+          <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <View
               style={{
                 backgroundColor: COLORS.secondary,
                 padding: 16,
                 borderRadius: RADIUS.lg,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: 12,
                 marginBottom: 40,
               }}
@@ -112,31 +100,31 @@ export default function MentorStatusPage() {
 
             <Text
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 color: COLORS.mutedForeground,
                 fontSize: 12,
                 marginBottom: 12,
                 letterSpacing: 0.5,
-                fontWeight: "600",
-                textTransform: "uppercase",
+                fontWeight: '600',
+                textTransform: 'uppercase',
               }}
             >
               DEV Режим
             </Text>
             <TouchableOpacity
-              onPress={() => router.replace(appHref("/(tabs)/mentor"))}
+              onPress={() => router.replace(appHref('/(tabs)/mentor'))}
               style={{
-                width: "100%",
+                width: '100%',
                 paddingVertical: 16,
                 backgroundColor: COLORS.primary,
                 borderRadius: RADIUS.md,
-                alignItems: "center",
+                alignItems: 'center',
                 ...SHADOWS.md,
               }}
             >
               <Text
                 style={{
-                  color: "white",
+                  color: 'white',
                   fontWeight: TYPOGRAPHY.weight.bold,
                   fontSize: TYPOGRAPHY.size.md,
                 }}
@@ -146,12 +134,12 @@ export default function MentorStatusPage() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.replace("/login")}
+              onPress={() => router.replace('/login')}
               style={{
-                width: "100%",
+                width: '100%',
                 paddingVertical: 16,
                 marginTop: 16,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <Text

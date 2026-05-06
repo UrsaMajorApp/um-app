@@ -1,6 +1,6 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 const SWIPE_THRESHOLD = 90;
 const SWIPE_VELOCITY = 850;
@@ -31,8 +31,8 @@ interface Props {
 export default function SwipeableDecisionCard({
   cardKey,
   children,
-  dislikeLabel = "NOPE",
-  likeLabel = "LIKE",
+  dislikeLabel = 'NOPE',
+  likeLabel = 'LIKE',
   onSwipe,
 }: Props) {
   const translateX = useSharedValue(0);
@@ -55,15 +55,11 @@ export default function SwipeableDecisionCard({
       setIsLeaving(true);
 
       const direction = liked ? 1 : -1;
-      translateX.value = withTiming(
-        direction * EXIT_DISTANCE,
-        { duration: 240 },
-        (finished) => {
-          if (finished) {
-            runOnJS(onSwipe)(liked);
-          }
-        },
-      );
+      translateX.value = withTiming(direction * EXIT_DISTANCE, { duration: 240 }, (finished) => {
+        if (finished) {
+          runOnJS(onSwipe)(liked);
+        }
+      });
       translateY.value = withTiming(-28, { duration: 240 });
     },
     [hasSwiped, onSwipe, translateX, translateY],
@@ -114,12 +110,7 @@ export default function SwipeableDecisionCard({
   );
 
   const cardStyle = useAnimatedStyle(() => {
-    const rotate = interpolate(
-      translateX.value,
-      [-220, 0, 220],
-      [-10, 0, 10],
-      Extrapolation.CLAMP,
-    );
+    const rotate = interpolate(translateX.value, [-220, 0, 220], [-10, 0, 10], Extrapolation.CLAMP);
     const scale = interpolate(
       Math.abs(translateX.value),
       [0, SWIPE_THRESHOLD],
@@ -138,23 +129,13 @@ export default function SwipeableDecisionCard({
   });
 
   const likeBadgeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(
-      translateX.value,
-      [20, SWIPE_THRESHOLD],
-      [0, 1],
-      Extrapolation.CLAMP,
-    ),
-    transform: [{ rotateZ: "-8deg" }],
+    opacity: interpolate(translateX.value, [20, SWIPE_THRESHOLD], [0, 1], Extrapolation.CLAMP),
+    transform: [{ rotateZ: '-8deg' }],
   }));
 
   const dislikeBadgeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(
-      translateX.value,
-      [-SWIPE_THRESHOLD, -20],
-      [1, 0],
-      Extrapolation.CLAMP,
-    ),
-    transform: [{ rotateZ: "8deg" }],
+    opacity: interpolate(translateX.value, [-SWIPE_THRESHOLD, -20], [1, 0], Extrapolation.CLAMP),
+    transform: [{ rotateZ: '8deg' }],
   }));
 
   return (
@@ -163,15 +144,10 @@ export default function SwipeableDecisionCard({
         <Animated.Text style={[styles.badge, styles.likeBadge, likeBadgeStyle]}>
           {likeLabel}
         </Animated.Text>
-        <Animated.Text
-          style={[styles.badge, styles.dislikeBadge, dislikeBadgeStyle]}
-        >
+        <Animated.Text style={[styles.badge, styles.dislikeBadge, dislikeBadgeStyle]}>
           {dislikeLabel}
         </Animated.Text>
-        <View
-          pointerEvents={isLeaving ? "none" : "auto"}
-          style={styles.content}
-        >
+        <View pointerEvents={isLeaving ? 'none' : 'auto'} style={styles.content}>
           {children({ isLeaving, swipe })}
         </View>
       </Animated.View>
@@ -181,13 +157,13 @@ export default function SwipeableDecisionCard({
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
   },
   content: {
-    width: "100%",
+    width: '100%',
   },
   badge: {
-    position: "absolute",
+    position: 'absolute',
     top: 34,
     zIndex: 10,
     borderWidth: 4,
@@ -195,18 +171,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     fontSize: 26,
-    fontWeight: "900",
+    fontWeight: '900',
     letterSpacing: 1,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   likeBadge: {
     left: 26,
-    borderColor: "#34C759",
-    color: "#34C759",
+    borderColor: '#34C759',
+    color: '#34C759',
   },
   dislikeBadge: {
     right: 26,
-    borderColor: "#FF3B30",
-    color: "#FF3B30",
+    borderColor: '#FF3B30',
+    color: '#FF3B30',
   },
 });

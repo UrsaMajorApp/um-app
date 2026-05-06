@@ -1,6 +1,6 @@
-import { Redirect, useLocalSearchParams } from "expo-router";
-import { PROFILE_SETUP_ROUTES } from "$constants/profileRoutes";
-import { useAuth } from "$contexts/AuthContext";
+import { Redirect, useLocalSearchParams } from 'expo-router';
+import { PROFILE_SETUP_ROUTES } from '$constants/profileRoutes';
+import { useAuth } from '$contexts/AuthContext';
 
 export default function Index() {
   const { user, isLoading } = useAuth();
@@ -22,7 +22,7 @@ export default function Index() {
       if (user.hasSelectedRole === false) {
         return <Redirect href="/auth/complete-profile" />;
       }
-      return <Redirect href={PROFILE_SETUP_ROUTES[user.role] ?? "/(tabs)/home"} />;
+      return <Redirect href={PROFILE_SETUP_ROUTES[user.role] ?? '/(tabs)/home'} />;
     }
     return <Redirect href="/(tabs)/home" />;
   }

@@ -1,37 +1,22 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React, { useMemo } from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { LEVEL_LABELS } from "$constants/courseOptions";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgCourseById, useOrgGroups } from "$hooks/useOrgData";
-import { formatKZT } from "$lib/formatCurrency";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { useMemo } from 'react';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LEVEL_LABELS } from '$constants/courseOptions';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgCourseById, useOrgGroups } from '$hooks/useOrgData';
+import { formatKZT } from '$lib/formatCurrency';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { course, loading } = useOrgCourseById(id);
   const { groups } = useOrgGroups();
@@ -40,9 +25,7 @@ export default function CourseDetailScreen() {
   const courseGroups = useMemo(() => {
     if (!course) return [];
     return groups.filter(
-      (g) =>
-        g.course_id === course.id ||
-        (g.course_id == null && g.course === course.title),
+      (g) => g.course_id === course.id || (g.course_id == null && g.course === course.title),
     );
   }, [groups, course]);
 
@@ -52,8 +35,8 @@ export default function CourseDetailScreen() {
         style={{
           flex: 1,
           backgroundColor: COLORS.background,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -67,8 +50,8 @@ export default function CourseDetailScreen() {
         style={{
           flex: 1,
           backgroundColor: COLORS.background,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           padding: 32,
         }}
       >
@@ -78,15 +61,12 @@ export default function CourseDetailScreen() {
             marginTop: 16,
             fontSize: 16,
             color: COLORS.mutedForeground,
-            textAlign: "center",
+            textAlign: 'center',
           }}
         >
           Курс не найден
         </Text>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{ marginTop: 20 }}
-        >
+        <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 20 }}>
           <Text
             style={{
               color: COLORS.primary,
@@ -108,14 +88,11 @@ export default function CourseDetailScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
             <MotiView
               from={{ opacity: 0, translateY: -10 }}
               animate={{ opacity: 1, translateY: 0 }}
@@ -123,8 +100,8 @@ export default function CourseDetailScreen() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -134,9 +111,9 @@ export default function CourseDetailScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: SPACING.md,
                   }}
                 >
@@ -147,22 +124,20 @@ export default function CourseDetailScreen() {
                     flex: 1,
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Детали курса
                 </Text>
                 <TouchableOpacity
-                  onPress={() =>
-                    router.push(appHref(`/organization/course/${id}/edit`))
-                  }
+                  onPress={() => router.push(appHref(`/organization/course/${id}/edit`))}
                   style={{
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="edit-2" size={18} color="white" />
@@ -174,7 +149,7 @@ export default function CourseDetailScreen() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xxxl,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    color: "white",
+                    color: 'white',
                     marginBottom: 8,
                   }}
                 >
@@ -182,14 +157,14 @@ export default function CourseDetailScreen() {
                 </Text>
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     gap: SPACING.sm,
-                    flexWrap: "wrap",
+                    flexWrap: 'wrap',
                   }}
                 >
                   <View
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.2)",
+                      backgroundColor: 'rgba(255,255,255,0.2)',
                       paddingHorizontal: SPACING.lg,
                       paddingVertical: 4,
                       borderRadius: RADIUS.md,
@@ -197,19 +172,17 @@ export default function CourseDetailScreen() {
                   >
                     <Text
                       style={{
-                        color: "white",
+                        color: 'white',
                         fontSize: 11,
                         fontWeight: TYPOGRAPHY.weight.bold,
                       }}
                     >
-                      {(
-                        LEVEL_LABELS[course.level] ?? course.level
-                      ).toUpperCase()}
+                      {(LEVEL_LABELS[course.level] ?? course.level).toUpperCase()}
                     </Text>
                   </View>
                   <View
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.2)",
+                      backgroundColor: 'rgba(255,255,255,0.2)',
                       paddingHorizontal: SPACING.lg,
                       paddingVertical: 4,
                       borderRadius: RADIUS.md,
@@ -217,7 +190,7 @@ export default function CourseDetailScreen() {
                   >
                     <Text
                       style={{
-                        color: "white",
+                        color: 'white',
                         fontSize: 11,
                         fontWeight: TYPOGRAPHY.weight.bold,
                       }}
@@ -225,10 +198,10 @@ export default function CourseDetailScreen() {
                       {formatKZT(course.price)} / МЕС
                     </Text>
                   </View>
-                  {course.status !== "active" && (
+                  {course.status !== 'active' && (
                     <View
                       style={{
-                        backgroundColor: "rgba(255,100,100,0.35)",
+                        backgroundColor: 'rgba(255,100,100,0.35)',
                         paddingHorizontal: SPACING.lg,
                         paddingVertical: 4,
                         borderRadius: RADIUS.md,
@@ -236,12 +209,12 @@ export default function CourseDetailScreen() {
                     >
                       <Text
                         style={{
-                          color: "white",
+                          color: 'white',
                           fontSize: 11,
                           fontWeight: TYPOGRAPHY.weight.bold,
                         }}
                       >
-                        {course.status === "draft" ? "НА МОДЕРАЦИИ" : "АРХИВ"}
+                        {course.status === 'draft' ? 'НА МОДЕРАЦИИ' : 'АРХИВ'}
                       </Text>
                     </View>
                   )}
@@ -275,8 +248,8 @@ export default function CourseDetailScreen() {
           >
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: SPACING.md,
                 marginBottom: SPACING.md,
               }}
@@ -329,17 +302,17 @@ export default function CourseDetailScreen() {
             >
               Развиваемые навыки
             </Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {course.skills.map((skill, i) => (
                 <View
                   key={i}
                   style={{
-                    backgroundColor: "rgba(108, 92, 231, 0.07)",
+                    backgroundColor: 'rgba(108, 92, 231, 0.07)',
                     paddingHorizontal: 14,
                     paddingVertical: 8,
                     borderRadius: RADIUS.lg,
                     borderWidth: 1,
-                    borderColor: "rgba(108, 92, 231, 0.15)",
+                    borderColor: 'rgba(108, 92, 231, 0.15)',
                   }}
                 >
                   <Text
@@ -361,9 +334,9 @@ export default function CourseDetailScreen() {
         <View
           style={{
             marginBottom: SPACING.md,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
           <Text
@@ -376,9 +349,7 @@ export default function CourseDetailScreen() {
             Группы курса
           </Text>
           <TouchableOpacity
-            onPress={() =>
-              router.push(appHref(`/organization/group/create?courseId=${id}`))
-            }
+            onPress={() => router.push(appHref(`/organization/group/create?courseId=${id}`))}
           >
             <Text
               style={{
@@ -394,7 +365,7 @@ export default function CourseDetailScreen() {
         {courseGroups.length === 0 ? (
           <View
             style={{
-              alignItems: "center",
+              alignItems: 'center',
               paddingVertical: 32,
               backgroundColor: COLORS.white,
               borderRadius: RADIUS.xxl,
@@ -408,7 +379,7 @@ export default function CourseDetailScreen() {
                 marginTop: 10,
                 color: COLORS.mutedForeground,
                 fontWeight: TYPOGRAPHY.weight.semibold,
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
               Нет групп для этого курса
@@ -419,9 +390,7 @@ export default function CourseDetailScreen() {
             {courseGroups.map((group) => (
               <TouchableOpacity
                 key={group.id}
-                onPress={() =>
-                  router.push(appHref(`/organization/group/${group.id}`))
-                }
+                onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
                 style={{
                   ...SHADOWS.sm,
                   backgroundColor: COLORS.white,
@@ -433,9 +402,9 @@ export default function CourseDetailScreen() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
                     marginBottom: SPACING.md,
                   }}
                 >
@@ -453,16 +422,12 @@ export default function CourseDetailScreen() {
                     {group.schedule ? (
                       <View
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: 6,
                         }}
                       >
-                        <Feather
-                          name="clock"
-                          size={12}
-                          color={COLORS.mutedForeground}
-                        />
+                        <Feather name="clock" size={12} color={COLORS.mutedForeground} />
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.size.xs,
@@ -481,8 +446,8 @@ export default function CourseDetailScreen() {
                       paddingHorizontal: SPACING.md,
                       paddingVertical: 4,
                       borderRadius: RADIUS.lg,
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: 6,
                     }}
                   >

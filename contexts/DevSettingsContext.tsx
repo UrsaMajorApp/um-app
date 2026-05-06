@@ -6,10 +6,11 @@
  * so DevRoleSwitcher never renders and these values are always the
  * "approved" defaults.
  */
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import type React from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-const USE_REAL_OTP_KEY = "um_dev_use_real_otp";
+const USE_REAL_OTP_KEY = 'um_dev_use_real_otp';
 
 interface DevSettings {
   mentorApproved: boolean;
@@ -35,11 +36,7 @@ const DevSettingsContext = createContext<DevSettings>({
   setDevYouthAge: () => {},
 });
 
-export function DevSettingsProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function DevSettingsProvider({ children }: { children: React.ReactNode }) {
   const [mentorApproved, setMentorApproved] = useState(false);
   const [orgVerified, setOrgVerified] = useState(false);
   const [useRealOtp, setUseRealOtpState] = useState(false);
@@ -48,13 +45,13 @@ export function DevSettingsProvider({
   // Hydrate persisted value on mount
   useEffect(() => {
     AsyncStorage.getItem(USE_REAL_OTP_KEY).then((v) => {
-      if (v !== null) setUseRealOtpState(v === "true");
+      if (v !== null) setUseRealOtpState(v === 'true');
     });
   }, []);
 
   const setUseRealOtp = async (v: boolean) => {
     setUseRealOtpState(v);
-    await AsyncStorage.setItem(USE_REAL_OTP_KEY, v ? "true" : "false");
+    await AsyncStorage.setItem(USE_REAL_OTP_KEY, v ? 'true' : 'false');
   };
 
   return (
@@ -82,5 +79,5 @@ export function useDevSettings(): DevSettings {
 /** Read the persisted real-OTP flag outside of React (used in AuthContext hooks). */
 export async function getUseRealOtpSetting(): Promise<boolean> {
   const v = await AsyncStorage.getItem(USE_REAL_OTP_KEY);
-  return v === "true";
+  return v === 'true';
 }

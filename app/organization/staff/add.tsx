@@ -1,55 +1,38 @@
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
-import {
-  FormCard,
-  LabeledTextInput,
-  PrimaryActionButton,
-} from "$components/ui/FormControls";
-import { GradientScreenHeader } from "$components/ui/GradientScreenHeader";
-import { PressableScale } from "$components/ui/PressableScale";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { formatPhone } from "$lib/formatPhone";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import { FormCard, LabeledTextInput, PrimaryActionButton } from '$components/ui/FormControls';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
+import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { formatPhone } from '$lib/formatPhone';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function StaffAddScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const [formData, setFormData] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    specialization: "",
+    fullName: '',
+    phone: '',
+    email: '',
+    specialization: '',
   });
   const [loading, setLoading] = useState(false);
   const [showCredentials, setShowCredentials] = useState(false);
-  const [credentials, setCredentials] = useState({ login: "", password: "" });
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const [credentials, setCredentials] = useState({ login: '', password: '' });
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const handleSubmit = () => {
     setLoading(true);
     // Simulate generation of credentials
-    const login = formData.phone.replace(/\D/g, "");
+    const login = formData.phone.replace(/\D/g, '');
     const password = Math.random().toString(36).slice(-8).toUpperCase();
 
     setTimeout(() => {
       setLoading(false);
-      setCredentials({ login: login || "user_777", password });
+      setCredentials({ login: login || 'user_777', password });
       setShowCredentials(true);
     }, 1200);
   };
@@ -71,22 +54,19 @@ export default function StaffAddScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-        >
+        <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
           {/* Info Banner */}
           <View
             style={{
-              backgroundColor: "rgba(108, 92, 231, 0.05)",
+              backgroundColor: 'rgba(108, 92, 231, 0.05)',
               padding: SPACING.xl,
               borderRadius: RADIUS.xxl,
               marginBottom: SPACING.xxl,
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: SPACING.lg,
               borderWidth: 1,
-              borderColor: "rgba(108, 92, 231, 0.1)",
+              borderColor: 'rgba(108, 92, 231, 0.1)',
             }}
           >
             <View
@@ -95,8 +75,8 @@ export default function StaffAddScreen() {
                 height: 48,
                 backgroundColor: COLORS.white,
                 borderRadius: RADIUS.lg,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 ...SHADOWS.sm,
               }}
             >
@@ -120,8 +100,7 @@ export default function StaffAddScreen() {
                   lineHeight: 16,
                 }}
               >
-                После добавления учитель получит СМС-приглашение в личный
-                кабинет.
+                После добавления учитель получит СМС-приглашение в личный кабинет.
               </Text>
             </View>
           </View>
@@ -139,18 +118,14 @@ export default function StaffAddScreen() {
               placeholder="+7 777 777 7777"
               keyboardType="phone-pad"
               value={formData.phone}
-              onChangeText={(v) =>
-                setFormData({ ...formData, phone: formatPhone(v) })
-              }
+              onChangeText={(v) => setFormData({ ...formData, phone: formatPhone(v) })}
             />
 
             <LabeledTextInput
               label="Специализация"
               placeholder="Напр. Робототехника"
               value={formData.specialization}
-              onChangeText={(v) =>
-                setFormData({ ...formData, specialization: v })
-              }
+              onChangeText={(v) => setFormData({ ...formData, specialization: v })}
             />
           </FormCard>
 
@@ -161,7 +136,7 @@ export default function StaffAddScreen() {
               marginTop: SPACING.xxxl,
             }}
           >
-            {loading ? "ОТПРАВКА..." : "ПРИГЛАСИТЬ УЧИТЕЛЯ"}
+            {loading ? 'ОТПРАВКА...' : 'ПРИГЛАСИТЬ УЧИТЕЛЯ'}
           </PrimaryActionButton>
         </MotiView>
       </ScrollView>
@@ -170,14 +145,14 @@ export default function StaffAddScreen() {
       {showCredentials && (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            alignItems: "center",
-            justifyContent: "center",
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: 20,
           }}
         >
@@ -185,24 +160,24 @@ export default function StaffAddScreen() {
             from={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               borderRadius: 32,
               padding: 32,
-              width: "100%",
+              width: '100%',
               maxWidth: 400,
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <View
               style={{
                 width: 64,
                 height: 64,
-                backgroundColor: "#10B98115",
+                backgroundColor: '#10B98115',
                 borderRadius: 32,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginBottom: 24,
-                alignSelf: "center",
+                alignSelf: 'center',
               }}
             >
               <Feather name="check" size={32} color="#10B981" />
@@ -211,9 +186,9 @@ export default function StaffAddScreen() {
             <Text
               style={{
                 fontSize: 20,
-                fontWeight: "900",
-                color: "#111827",
-                textAlign: "center",
+                fontWeight: '900',
+                color: '#111827',
+                textAlign: 'center',
                 marginBottom: 8,
               }}
             >
@@ -222,8 +197,8 @@ export default function StaffAddScreen() {
             <Text
               style={{
                 fontSize: 13,
-                color: "#6B7280",
-                textAlign: "center",
+                color: '#6B7280',
+                textAlign: 'center',
                 marginBottom: 32,
               }}
             >
@@ -232,35 +207,27 @@ export default function StaffAddScreen() {
 
             <View className="w-full gap-4 mb-8">
               <View className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">
-                  ЛОГИН
-                </Text>
-                <Text className="text-lg font-black text-gray-900">
-                  {credentials.login}
-                </Text>
+                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">ЛОГИН</Text>
+                <Text className="text-lg font-black text-gray-900">{credentials.login}</Text>
               </View>
               <View className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">
-                  ПАРОЛЬ
-                </Text>
-                <Text className="text-lg font-black text-gray-900">
-                  {credentials.password}
-                </Text>
+                <Text className="text-[10px] text-gray-400 font-bold uppercase mb-1">ПАРОЛЬ</Text>
+                <Text className="text-lg font-black text-gray-900">{credentials.password}</Text>
               </View>
             </View>
 
             <PressableScale
               onPress={() => router.back()}
               style={{
-                width: "100%",
+                width: '100%',
                 height: 56,
-                backgroundColor: "#111827",
+                backgroundColor: '#111827',
                 borderRadius: 16,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              <Text style={{ color: "white", fontWeight: "700" }}>ГОТОВО</Text>
+              <Text style={{ color: 'white', fontWeight: '700' }}>ГОТОВО</Text>
             </PressableScale>
           </MotiView>
         </View>

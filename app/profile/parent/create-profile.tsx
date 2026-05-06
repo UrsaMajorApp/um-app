@@ -1,7 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,24 +12,24 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import QRCode from "react-native-qrcode-svg";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useParentData } from "$contexts/ParentDataContext";
-import { formatPhone } from "$lib/formatPhone";
-import { useIsDesktop } from "$lib/useIsDesktop";
+} from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { formatPhone } from '$lib/formatPhone';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
-const ROLE_COLOR = "#6C5CE7";
-const ROLE_GRADIENT: [string, string] = ["#6C5CE7", "#8B7FE8"];
+const ROLE_COLOR = '#6C5CE7';
+const ROLE_GRADIENT: [string, string] = ['#6C5CE7', '#8B7FE8'];
 
 function generateQRPin(): string {
   // Generate a 6-digit PIN (100000-999999)
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-type AgeGroup = "6-8" | "9-11" | "12-14" | "15-17";
+type AgeGroup = '6-8' | '9-11' | '12-14' | '15-17';
 
 type Child = {
   id: string;
@@ -42,10 +43,10 @@ type Child = {
 };
 
 const AGE_OPTIONS: { label: string; value: AgeGroup }[] = [
-  { label: "6-8", value: "6-8" },
-  { label: "9-11", value: "9-11" },
-  { label: "12-14", value: "12-14" },
-  { label: "15-17", value: "15-17" },
+  { label: '6-8', value: '6-8' },
+  { label: '9-11', value: '9-11' },
+  { label: '12-14', value: '12-14' },
+  { label: '15-17', value: '15-17' },
 ];
 
 function makeId() {
@@ -62,9 +63,9 @@ export default function CreateProfileParent() {
     : LAYOUT.authHorizontalPaddingMobile;
 
   const [parentData, setParentData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
+    firstName: '',
+    lastName: '',
+    phone: '',
   });
 
   useEffect(() => {
@@ -81,10 +82,10 @@ export default function CreateProfileParent() {
   const [children, setChildren] = useState<Child[]>([
     {
       id: makeId(),
-      name: "",
+      name: '',
       ageGroup: null,
       hasPhone: null,
-      phone: "",
+      phone: '',
       qrPin: null,
       qrPinExpiresAt: null,
       qrPinOneTimeUse: false,
@@ -109,7 +110,7 @@ export default function CreateProfileParent() {
       return;
     }
 
-    router.replace("/register");
+    router.replace('/register');
   }
 
   function addChild() {
@@ -117,10 +118,10 @@ export default function CreateProfileParent() {
       ...prev,
       {
         id: makeId(),
-        name: "",
+        name: '',
         ageGroup: null,
         hasPhone: null,
-        phone: "",
+        phone: '',
         qrPin: null,
         qrPinExpiresAt: null,
         qrPinOneTimeUse: false,
@@ -135,10 +136,10 @@ export default function CreateProfileParent() {
         ? [
             {
               id: makeId(),
-              name: "",
+              name: '',
               ageGroup: null,
               hasPhone: null,
-              phone: "",
+              phone: '',
               qrPin: null,
               qrPinExpiresAt: null,
               qrPinOneTimeUse: false,
@@ -149,9 +150,7 @@ export default function CreateProfileParent() {
   }
 
   function updateChild(id: string, patch: Partial<Child>) {
-    setChildren((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, ...patch } : c)),
-    );
+    setChildren((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)));
   }
 
   const handleSubmit = async () => {
@@ -163,27 +162,25 @@ export default function CreateProfileParent() {
         ageGroup: c.ageGroup,
         phone: c.hasPhone ? c.phone : undefined,
         qrPin: !c.hasPhone ? (c.qrPin ?? undefined) : undefined,
-        qrPinExpiresAt: !c.hasPhone
-          ? (c.qrPinExpiresAt ?? undefined)
-          : undefined,
+        qrPinExpiresAt: !c.hasPhone ? (c.qrPinExpiresAt ?? undefined) : undefined,
         qrPinOneTimeUse: !c.hasPhone ? c.qrPinOneTimeUse : undefined,
       })),
     );
     await finalizeRegistration();
-    router.push("/profile/common/done");
+    router.push('/profile/common/done');
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <View style={{ flex: 1 }}>
         {/* Background blobs */}
-        <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+        <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -50,
               right: -50,
               width: 200,
@@ -194,8 +191,8 @@ export default function CreateProfileParent() {
           />
           <View
             style={{
-              position: "absolute",
-              bottom: "20%",
+              position: 'absolute',
+              bottom: '20%',
               left: -80,
               width: 250,
               height: 250,
@@ -209,7 +206,7 @@ export default function CreateProfileParent() {
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
-              alignItems: "center",
+              alignItems: 'center',
               paddingVertical: isDesktop ? 24 : 12,
             }}
             keyboardShouldPersistTaps="handled"
@@ -218,7 +215,7 @@ export default function CreateProfileParent() {
             <View
               style={{
                 flex: 1,
-                width: "100%",
+                width: '100%',
                 maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
                 paddingHorizontal: horizontalPadding,
                 paddingTop: 8,
@@ -227,27 +224,23 @@ export default function CreateProfileParent() {
               {/* Header Nav */}
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 24,
                 }}
               >
                 <TouchableOpacity
                   onPress={handleBack}
-                  style={{ flexDirection: "row", alignItems: "center" }}
+                  style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
-                  <Feather
-                    name="arrow-left"
-                    size={20}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       color: COLORS.mutedForeground,
                       marginLeft: 8,
                       fontSize: 15,
-                      fontWeight: "500",
+                      fontWeight: '500',
                     }}
                   >
                     Назад
@@ -255,7 +248,7 @@ export default function CreateProfileParent() {
                 </TouchableOpacity>
 
                 {/* Step dots: 1 step, last dot is active wide */}
-                <View style={{ flexDirection: "row", gap: 6 }}>
+                <View style={{ flexDirection: 'row', gap: 6 }}>
                   {[0, 1, 2, 3].map((i) => (
                     <View
                       key={i}
@@ -275,7 +268,7 @@ export default function CreateProfileParent() {
                 <Text
                   style={{
                     fontSize: 32,
-                    fontWeight: "900",
+                    fontWeight: '900',
                     color: COLORS.foreground,
                     marginBottom: 8,
                     letterSpacing: -0.5,
@@ -297,7 +290,7 @@ export default function CreateProfileParent() {
               {/* Personal Info Card */}
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: RADIUS.xxl,
                   padding: 24,
                   ...SHADOWS.md,
@@ -306,8 +299,8 @@ export default function CreateProfileParent() {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     marginBottom: 20,
                   }}
                 >
@@ -315,7 +308,7 @@ export default function CreateProfileParent() {
                   <Text
                     style={{
                       fontSize: 17,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       color: COLORS.foreground,
                       marginLeft: 10,
                     }}
@@ -326,8 +319,8 @@ export default function CreateProfileParent() {
 
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     marginBottom: 16,
                   }}
                 >
@@ -335,9 +328,7 @@ export default function CreateProfileParent() {
                     <Text style={styles.fieldLabel}>Имя</Text>
                     <ProfileTextInput
                       value={parentData.firstName}
-                      onChangeText={(text) =>
-                        setParentData({ ...parentData, firstName: text })
-                      }
+                      onChangeText={(text) => setParentData({ ...parentData, firstName: text })}
                       placeholder="Имя"
                       style={styles.input}
                     />
@@ -346,9 +337,7 @@ export default function CreateProfileParent() {
                     <Text style={styles.fieldLabel}>Фамилия</Text>
                     <ProfileTextInput
                       value={parentData.lastName}
-                      onChangeText={(text) =>
-                        setParentData({ ...parentData, lastName: text })
-                      }
+                      onChangeText={(text) => setParentData({ ...parentData, lastName: text })}
                       placeholder="Фамилия"
                       style={styles.input}
                     />
@@ -372,9 +361,9 @@ export default function CreateProfileParent() {
               {/* Children Section Header */}
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginBottom: 12,
                   paddingHorizontal: 4,
                 }}
@@ -382,7 +371,7 @@ export default function CreateProfileParent() {
                 <Text
                   style={{
                     fontSize: 20,
-                    fontWeight: "800",
+                    fontWeight: '800',
                     color: COLORS.foreground,
                   }}
                 >
@@ -391,8 +380,8 @@ export default function CreateProfileParent() {
                 <TouchableOpacity
                   onPress={addChild}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     backgroundColor: `${ROLE_COLOR}15`,
                     paddingHorizontal: 16,
                     paddingVertical: 8,
@@ -403,7 +392,7 @@ export default function CreateProfileParent() {
                   <Text
                     style={{
                       color: ROLE_COLOR,
-                      fontWeight: "700",
+                      fontWeight: '700',
                       marginLeft: 6,
                     }}
                   >
@@ -416,7 +405,7 @@ export default function CreateProfileParent() {
                 <View
                   key={child.id}
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                     borderRadius: RADIUS.xxl,
                     padding: 24,
                     ...SHADOWS.md,
@@ -425,16 +414,16 @@ export default function CreateProfileParent() {
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                       marginBottom: 16,
                     }}
                   >
                     <Text
                       style={{
                         color: ROLE_COLOR,
-                        fontWeight: "800",
+                        fontWeight: '800',
                         fontSize: 16,
                       }}
                     >
@@ -442,11 +431,7 @@ export default function CreateProfileParent() {
                     </Text>
                     {children.length > 1 && (
                       <TouchableOpacity onPress={() => removeChild(child.id)}>
-                        <Feather
-                          name="trash-2"
-                          size={20}
-                          color={COLORS.destructive}
-                        />
+                        <Feather name="trash-2" size={20} color={COLORS.destructive} />
                       </TouchableOpacity>
                     )}
                   </View>
@@ -455,9 +440,7 @@ export default function CreateProfileParent() {
                     <Text style={styles.fieldLabel}>Имя ребенка</Text>
                     <ProfileTextInput
                       value={child.name}
-                      onChangeText={(text) =>
-                        updateChild(child.id, { name: text })
-                      }
+                      onChangeText={(text) => updateChild(child.id, { name: text })}
                       placeholder="Например, Анна"
                       style={styles.input}
                     />
@@ -470,39 +453,27 @@ export default function CreateProfileParent() {
                       return (
                         <TouchableOpacity
                           key={opt.value}
-                          onPress={() =>
-                            updateChild(child.id, { ageGroup: opt.value })
-                          }
+                          onPress={() => updateChild(child.id, { ageGroup: opt.value })}
                           style={{
                             padding: 14,
                             borderRadius: RADIUS.md,
                             borderWidth: 2,
                             borderColor: active ? ROLE_COLOR : COLORS.border,
-                            backgroundColor: active
-                              ? `${ROLE_COLOR}08`
-                              : COLORS.muted,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
+                            backgroundColor: active ? `${ROLE_COLOR}08` : COLORS.muted,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                           }}
                         >
                           <Text
                             style={{
-                              fontWeight: "600",
-                              color: active
-                                ? ROLE_COLOR
-                                : COLORS.mutedForeground,
+                              fontWeight: '600',
+                              color: active ? ROLE_COLOR : COLORS.mutedForeground,
                             }}
                           >
                             {opt.label}
                           </Text>
-                          {active && (
-                            <Feather
-                              name="check-circle"
-                              size={20}
-                              color={ROLE_COLOR}
-                            />
-                          )}
+                          {active && <Feather name="check-circle" size={20} color={ROLE_COLOR} />}
                         </TouchableOpacity>
                       );
                     })}
@@ -519,21 +490,17 @@ export default function CreateProfileParent() {
                     <Text style={[styles.fieldLabel, { marginBottom: 12 }]}>
                       Есть ли у ребёнка свой номер телефона?
                     </Text>
-                    <View
-                      style={{ flexDirection: "row", gap: 8, marginBottom: 12 }}
-                    >
-                      {(["YES", "NO"] as const).map((opt) => {
+                    <View style={{ flexDirection: 'row', gap: 8, marginBottom: 12 }}>
+                      {(['YES', 'NO'] as const).map((opt) => {
                         const active =
-                          opt === "YES"
-                            ? child.hasPhone === true
-                            : child.hasPhone === false;
+                          opt === 'YES' ? child.hasPhone === true : child.hasPhone === false;
                         return (
                           <TouchableOpacity
                             key={opt}
                             onPress={() =>
                               updateChild(child.id, {
-                                hasPhone: opt === "YES",
-                                phone: "",
+                                hasPhone: opt === 'YES',
+                                phone: '',
                                 qrPin: null,
                               })
                             }
@@ -543,21 +510,17 @@ export default function CreateProfileParent() {
                               borderRadius: RADIUS.md,
                               borderWidth: 2,
                               borderColor: active ? ROLE_COLOR : COLORS.border,
-                              backgroundColor: active
-                                ? `${ROLE_COLOR}08`
-                                : COLORS.muted,
-                              alignItems: "center",
+                              backgroundColor: active ? `${ROLE_COLOR}08` : COLORS.muted,
+                              alignItems: 'center',
                             }}
                           >
                             <Text
                               style={{
-                                fontWeight: "600",
-                                color: active
-                                  ? ROLE_COLOR
-                                  : COLORS.mutedForeground,
+                                fontWeight: '600',
+                                color: active ? ROLE_COLOR : COLORS.mutedForeground,
                               }}
                             >
-                              {opt === "YES" ? "Да" : "Нет"}
+                              {opt === 'YES' ? 'Да' : 'Нет'}
                             </Text>
                           </TouchableOpacity>
                         );
@@ -566,9 +529,7 @@ export default function CreateProfileParent() {
 
                     {child.hasPhone === true && (
                       <View>
-                        <Text style={styles.fieldLabel}>
-                          Номер телефона ребёнка
-                        </Text>
+                        <Text style={styles.fieldLabel}>Номер телефона ребёнка</Text>
                         <ProfileTextInput
                           value={child.phone}
                           onChangeText={(text) =>
@@ -582,7 +543,7 @@ export default function CreateProfileParent() {
                     )}
 
                     {child.hasPhone === false && (
-                      <View style={{ alignItems: "center" }}>
+                      <View style={{ alignItems: 'center' }}>
                         {child.qrPin ? (
                           <>
                             <View
@@ -591,14 +552,14 @@ export default function CreateProfileParent() {
                                 backgroundColor: COLORS.muted,
                                 borderRadius: RADIUS.lg,
                                 marginBottom: 12,
-                                alignItems: "center",
+                                alignItems: 'center',
                               }}
                             >
                               <QRCode value={child.qrPin} size={140} />
                               <Text
                                 style={{
                                   fontSize: 32,
-                                  fontWeight: "700",
+                                  fontWeight: '700',
                                   color: COLORS.foreground,
                                   marginTop: 16,
                                   letterSpacing: 4,
@@ -614,14 +575,12 @@ export default function CreateProfileParent() {
                                     marginTop: 8,
                                   }}
                                 >
-                                  Действителен{" "}
+                                  Действителен{' '}
                                   {Math.round(
-                                    (child.qrPinExpiresAt.getTime() -
-                                      Date.now()) /
-                                      (1000 * 60),
-                                  )}{" "}
+                                    (child.qrPinExpiresAt.getTime() - Date.now()) / (1000 * 60),
+                                  )}{' '}
                                   мин
-                                  {child.qrPinOneTimeUse && " • Одноразовый"}
+                                  {child.qrPinOneTimeUse && ' • Одноразовый'}
                                 </Text>
                               )}
                             </View>
@@ -629,7 +588,7 @@ export default function CreateProfileParent() {
                               style={{
                                 fontSize: 12,
                                 color: COLORS.mutedForeground,
-                                textAlign: "center",
+                                textAlign: 'center',
                                 marginBottom: 10,
                               }}
                             >
@@ -644,8 +603,8 @@ export default function CreateProfileParent() {
                                 })
                               }
                               style={{
-                                flexDirection: "row",
-                                alignItems: "center",
+                                flexDirection: 'row',
+                                alignItems: 'center',
                                 gap: 8,
                                 paddingVertical: 8,
                                 paddingHorizontal: 12,
@@ -660,22 +619,16 @@ export default function CreateProfileParent() {
                                   height: 20,
                                   borderRadius: 4,
                                   borderWidth: 2,
-                                  borderColor: child.qrPinOneTimeUse
-                                    ? ROLE_COLOR
-                                    : COLORS.border,
+                                  borderColor: child.qrPinOneTimeUse ? ROLE_COLOR : COLORS.border,
                                   backgroundColor: child.qrPinOneTimeUse
                                     ? ROLE_COLOR
-                                    : "transparent",
-                                  alignItems: "center",
-                                  justifyContent: "center",
+                                    : 'transparent',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
                                 }}
                               >
                                 {child.qrPinOneTimeUse && (
-                                  <Feather
-                                    name="check"
-                                    size={14}
-                                    color="white"
-                                  />
+                                  <Feather name="check" size={14} color="white" />
                                 )}
                               </View>
                               <Text
@@ -690,30 +643,24 @@ export default function CreateProfileParent() {
 
                             <TouchableOpacity
                               onPress={() => {
-                                const expiresAt = new Date(
-                                  Date.now() + 15 * 60 * 1000,
-                                );
+                                const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
                                 updateChild(child.id, {
                                   qrPin: generateQRPin(),
                                   qrPinExpiresAt: expiresAt,
                                 });
                               }}
                               style={{
-                                flexDirection: "row",
-                                alignItems: "center",
+                                flexDirection: 'row',
+                                alignItems: 'center',
                                 gap: 6,
                               }}
                             >
-                              <Feather
-                                name="refresh-cw"
-                                size={14}
-                                color={ROLE_COLOR}
-                              />
+                              <Feather name="refresh-cw" size={14} color={ROLE_COLOR} />
                               <Text
                                 style={{
                                   fontSize: 13,
                                   color: ROLE_COLOR,
-                                  fontWeight: "600",
+                                  fontWeight: '600',
                                 }}
                               >
                                 Обновить код
@@ -723,33 +670,31 @@ export default function CreateProfileParent() {
                         ) : (
                           <TouchableOpacity
                             onPress={() => {
-                              const expiresAt = new Date(
-                                Date.now() + 15 * 60 * 1000,
-                              );
+                              const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
                               updateChild(child.id, {
                                 qrPin: generateQRPin(),
                                 qrPinExpiresAt: expiresAt,
                               });
                             }}
                             style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                               gap: 8,
                               paddingVertical: 14,
                               paddingHorizontal: 20,
                               borderRadius: RADIUS.md,
                               borderWidth: 2,
                               borderColor: ROLE_COLOR,
-                              borderStyle: "dashed",
-                              width: "100%",
+                              borderStyle: 'dashed',
+                              width: '100%',
                             }}
                           >
                             <Feather name="grid" size={18} color={ROLE_COLOR} />
                             <Text
                               style={{
                                 color: ROLE_COLOR,
-                                fontWeight: "700",
+                                fontWeight: '700',
                                 fontSize: 14,
                               }}
                             >
@@ -771,22 +716,20 @@ export default function CreateProfileParent() {
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={
-                    canContinue ? ROLE_GRADIENT : [COLORS.muted, COLORS.muted]
-                  }
+                  colors={canContinue ? ROLE_GRADIENT : [COLORS.muted, COLORS.muted]}
                   style={{
                     paddingVertical: 18,
                     borderRadius: RADIUS.xl,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     ...SHADOWS.md,
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 18,
-                      fontWeight: "800",
-                      color: canContinue ? "white" : COLORS.mutedForeground,
+                      fontWeight: '800',
+                      color: canContinue ? 'white' : COLORS.mutedForeground,
                     }}
                   >
                     Продолжить
@@ -808,19 +751,19 @@ function ProfileTextInput({
   ...props
 }: React.ComponentProps<typeof TextInput>) {
   return (
-    <View style={{ position: "relative", justifyContent: "center" }}>
+    <View style={{ position: 'relative', justifyContent: 'center' }}>
       <TextInput {...props} value={value} placeholder="" style={style} />
       {!value && !!placeholder && (
         <Text
           numberOfLines={1}
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: 22,
             right: 16,
-            pointerEvents: "none",
+            pointerEvents: 'none',
             color: COLORS.mutedForeground,
             fontSize: 15,
-            fontWeight: "500",
+            fontWeight: '500',
           }}
         >
           {placeholder}
@@ -833,10 +776,10 @@ function ProfileTextInput({
 const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.foreground,
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
     opacity: 0.7,
   },
@@ -846,7 +789,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
     color: COLORS.foreground,
     borderWidth: 1,
     borderColor: COLORS.border,

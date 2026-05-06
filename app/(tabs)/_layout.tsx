@@ -1,26 +1,23 @@
-import { Tabs, useRouter, useSegments } from "expo-router";
-import { useEffect, useMemo } from "react";
-import {
-  ActivityIndicator,
-  View,
-} from "react-native";
-import { COLORS } from "$constants/theme";
-import { useAuth, type UserRole } from "$contexts/AuthContext";
-import CustomTabBar from "$components/navigation/CustomTabBar";
-import { SideNav } from "$components/navigation/SideNav";
-import { TabIcon } from "$components/navigation/TabIcon";
-import { YOUTH_ROLES } from "$constants/profileRoutes";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Tabs, useRouter, useSegments } from 'expo-router';
+import { useEffect, useMemo } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { COLORS } from '$constants/theme';
+import { useAuth, type UserRole } from '$contexts/AuthContext';
+import CustomTabBar from '$components/navigation/CustomTabBar';
+import { SideNav } from '$components/navigation/SideNav';
+import { TabIcon } from '$components/navigation/TabIcon';
+import { YOUTH_ROLES } from '$constants/profileRoutes';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 function canRenderTabSection(role: UserRole, section?: string) {
-  if (section === "admin") return role === "admin";
-  if (section === "parent") return role === "parent";
-  if (section === "youth") return YOUTH_ROLES.has(role);
-  if (section === "mentor") return role === "mentor";
-  if (section === "organization") return role === "org";
-  if (section === "teacher") return role === "teacher";
-  if (section === "chats") return role !== "child";
-  if (section === "catalog") return role !== "mentor" && role !== "org";
+  if (section === 'admin') return role === 'admin';
+  if (section === 'parent') return role === 'parent';
+  if (section === 'youth') return YOUTH_ROLES.has(role);
+  if (section === 'mentor') return role === 'mentor';
+  if (section === 'organization') return role === 'org';
+  if (section === 'teacher') return role === 'teacher';
+  if (section === 'chats') return role !== 'child';
+  if (section === 'catalog') return role !== 'mentor' && role !== 'org';
   return true;
 }
 
@@ -29,19 +26,17 @@ export default function TabsLayout() {
   const router = useRouter();
   const segments = useSegments();
 
-  const role = useMemo(() => user?.role || "parent", [user?.role]);
-  const hideForMentor = role === "mentor" || role === "org";
-  const isTabsRoute = segments[0] === "(tabs)";
+  const role = useMemo(() => user?.role || 'parent', [user?.role]);
+  const hideForMentor = role === 'mentor' || role === 'org';
+  const isTabsRoute = segments[0] === '(tabs)';
   const section = isTabsRoute ? (segments[1] as string | undefined) : undefined;
-  const shouldRedirect = Boolean(
-    isTabsRoute && user && !canRenderTabSection(user.role, section),
-  );
+  const shouldRedirect = Boolean(isTabsRoute && user && !canRenderTabSection(user.role, section));
 
   const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (shouldRedirect) {
-      router.replace("/(tabs)/home");
+      router.replace('/(tabs)/home');
     }
   }, [router, shouldRedirect]);
 
@@ -51,8 +46,8 @@ export default function TabsLayout() {
         style={{
           flex: 1,
           backgroundColor: COLORS.background,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -64,33 +59,33 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { display: "none" },
+        tabBarStyle: { display: 'none' },
       }}
     >
-      <Tabs.Screen name="home/index" options={{ href: "/home" }} />
+      <Tabs.Screen name="home/index" options={{ href: '/home' }} />
 
       <Tabs.Screen
         name="analytics/index"
         options={{
-          href: "/analytics",
+          href: '/analytics',
         }}
       />
 
       <Tabs.Screen
         name="profile/index"
         options={{
-          href: "/profile",
+          href: '/profile',
         }}
       />
 
       <Tabs.Screen
         name="chats/index"
         options={{
-          title: "Чаты",
-          href: user?.role === "child" ? null : "/chats",
+          title: 'Чаты',
+          href: user?.role === 'child' ? null : '/chats',
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              icon={focused ? "message-square" : "message-square"}
+              icon={focused ? 'message-square' : 'message-square'}
               color={color}
               focused={focused}
             />
@@ -102,7 +97,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="catalog/index"
         options={{
-          href: hideForMentor ? null : "/catalog",
+          href: hideForMentor ? null : '/catalog',
         }}
       />
 
@@ -155,7 +150,7 @@ export default function TabsLayout() {
   );
 
   return (
-    <View style={{ flex: 1, flexDirection: isDesktop ? "row" : "column" }}>
+    <View style={{ flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}>
       {isDesktop && <SideNav role={role} />}
       <View style={{ flex: 1 }}>{screens}</View>
       {!isDesktop && <CustomTabBar role={role} />}

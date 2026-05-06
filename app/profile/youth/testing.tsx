@@ -1,4 +1,4 @@
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { useIsDesktop } from '$lib/useIsDesktop';
 /**
  * testing.tsx — Age-based router for diagnostic modules.
  *
@@ -9,11 +9,11 @@ import { useIsDesktop } from "$lib/useIsDesktop";
  *
  * Falls back to devYouthAge only when no child profile is available.
  */
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import { useEffect, useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -21,26 +21,20 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import DiagnosticArchitects from "$components/diagnostic/DiagnosticArchitects";
-import DiagnosticCreators from "$components/diagnostic/DiagnosticCreators";
-import DiagnosticExplorer from "$components/diagnostic/DiagnosticExplorer";
-import DiagnosticRebels from "$components/diagnostic/DiagnosticRebels";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { useDevSettings } from "$contexts/DevSettingsContext";
-import { useParentData } from "$contexts/ParentDataContext";
-import {
-  useOnboardingQuestions,
-  type OnboardingQuestion,
-} from "$hooks/usePlatformData";
-import {
-  generateGeminiDiagnosticJson,
-  isGeminiFallbackError,
-} from "$lib/geminiDiagnostics";
-import type { AuthUser } from "$contexts/AuthContext";
-import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import DiagnosticArchitects from '$components/diagnostic/DiagnosticArchitects';
+import DiagnosticCreators from '$components/diagnostic/DiagnosticCreators';
+import DiagnosticExplorer from '$components/diagnostic/DiagnosticExplorer';
+import DiagnosticRebels from '$components/diagnostic/DiagnosticRebels';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useDevSettings } from '$contexts/DevSettingsContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { useOnboardingQuestions, type OnboardingQuestion } from '$hooks/usePlatformData';
+import { generateGeminiDiagnosticJson, isGeminiFallbackError } from '$lib/geminiDiagnostics';
+import type { AuthUser } from '$contexts/AuthContext';
+import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';
 
 type AppRouter = ReturnType<typeof useRouter>;
 
@@ -57,15 +51,11 @@ export default function YouthTesting() {
     : LAYOUT.profileHorizontalPaddingMobile;
 
   const { user, devMode } = useAuth();
-  const {
-    childrenProfile,
-    activeChildId,
-    setActiveChildId,
-    updateChildDiagnostic,
-  } = useParentData();
+  const { childrenProfile, activeChildId, setActiveChildId, updateChildDiagnostic } =
+    useParentData();
   const { devYouthAge } = useDevSettings();
   const { questions: fallbackQuestions, loading: fallbackLoading } =
-    useOnboardingQuestions("youth");
+    useOnboardingQuestions('youth');
 
   const requestedChildId = Array.isArray(childId) ? childId[0] : childId;
   const targetChild =
@@ -81,14 +71,10 @@ export default function YouthTesting() {
     }
   }, [activeChildId, setActiveChildId, targetChild?.id]);
 
-  if (childAge >= 6 && childAge <= 8)
-    return <DiagnosticExplorer childId={targetChildId} />;
-  if (childAge >= 9 && childAge <= 11)
-    return <DiagnosticCreators childId={targetChildId} />;
-  if (childAge >= 12 && childAge <= 14)
-    return <DiagnosticRebels childId={targetChildId} />;
-  if (childAge >= 15 && childAge <= 17)
-    return <DiagnosticArchitects childId={targetChildId} />;
+  if (childAge >= 6 && childAge <= 8) return <DiagnosticExplorer childId={targetChildId} />;
+  if (childAge >= 9 && childAge <= 11) return <DiagnosticCreators childId={targetChildId} />;
+  if (childAge >= 12 && childAge <= 14) return <DiagnosticRebels childId={targetChildId} />;
+  if (childAge >= 15 && childAge <= 17) return <DiagnosticArchitects childId={targetChildId} />;
 
   // FALLBACK: 18+ or unknown
   if (fallbackLoading) {
@@ -96,8 +82,8 @@ export default function YouthTesting() {
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: COLORS.background,
         }}
       >
@@ -153,10 +139,7 @@ function LegacyQuestionTest({
     setAnswers(updated);
   };
 
-  const processWithAI = async (
-    selectedAnswers: number[],
-    isSkip: boolean = false,
-  ) => {
+  const processWithAI = async (selectedAnswers: number[], isSkip: boolean = false) => {
     setIsProcessing(true);
     try {
       let prompt = `You are an expert child psychologist and talent scout. Analyze this profile.\n`;
@@ -186,11 +169,10 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
   "recommendedConstellation": "string (A creative 1-2 word title for their talent type in Russian, e.g. 'Техно-энтузиаст' or 'Творческий лидер')"
 }`;
 
-      const diagnosticData =
-        await generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
+      const diagnosticData = await generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
 
       const targetDiagnostic: Diagnostic = {
-        childId: activeChildId || user?.id || "unknown",
+        childId: activeChildId || user?.id || 'unknown',
         scores: diagnosticData.scores || {
           logical: 50,
           creative: 50,
@@ -198,9 +180,8 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
           physical: 50,
           linguistic: 50,
         },
-        summary: diagnosticData.summary || "Очень способный ученик!",
-        recommendedConstellation:
-          diagnosticData.recommendedConstellation || "Универсал",
+        summary: diagnosticData.summary || 'Очень способный ученик!',
+        recommendedConstellation: diagnosticData.recommendedConstellation || 'Универсал',
         timestamp: new Date().toISOString(),
       };
 
@@ -208,15 +189,13 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
         await updateChildDiagnostic(activeChildId, targetDiagnostic);
       }
       router.push({
-        pathname: "/profile/youth/results",
+        pathname: '/profile/youth/results',
         params: activeChildId ? { childId: activeChildId } : undefined,
       });
     } catch (e) {
       if (!isGeminiFallbackError(e)) {
-        console.error("AI processing error:", e);
-        alert(
-          "Произошла ошибка при анализе. Мы используем запасные результаты.",
-        );
+        console.error('AI processing error:', e);
+        alert('Произошла ошибка при анализе. Мы используем запасные результаты.');
       }
       if (activeChildId) {
         await updateChildDiagnostic(activeChildId, {
@@ -228,13 +207,13 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             physical: 50,
             linguistic: 65,
           },
-          summary: "Сильная сторона — творческий подход и любопытство.",
-          recommendedConstellation: "Творческий новатор",
+          summary: 'Сильная сторона — творческий подход и любопытство.',
+          recommendedConstellation: 'Творческий новатор',
           timestamp: new Date().toISOString(),
         });
       }
       router.push({
-        pathname: "/profile/youth/results",
+        pathname: '/profile/youth/results',
         params: activeChildId ? { childId: activeChildId } : undefined,
       });
     } finally {
@@ -259,8 +238,8 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: COLORS.background,
         }}
       >
@@ -270,7 +249,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             color: COLORS.foreground,
             marginTop: 20,
             fontSize: 18,
-            fontWeight: "600",
+            fontWeight: '600',
           }}
         >
           ИИ анализирует ответы...
@@ -282,10 +261,10 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Background Blobs */}
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+      <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: -100,
             right: -100,
             width: 400,
@@ -296,8 +275,8 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
         />
         <View
           style={{
-            position: "absolute",
-            top: "40%",
+            position: 'absolute',
+            top: '40%',
             left: -150,
             width: 350,
             height: 350,
@@ -307,7 +286,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
         />
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             bottom: -50,
             right: -50,
             width: 300,
@@ -318,26 +297,26 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
         />
       </View>
 
-      <SafeAreaView edges={["top"]} style={{ zIndex: 20 }}>
+      <SafeAreaView edges={['top']} style={{ zIndex: 20 }}>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             paddingHorizontal: horizontalPadding,
             paddingVertical: 12,
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity
               onPress={() => router.back()}
               style={{
                 width: 44,
                 height: 44,
                 borderRadius: 22,
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginRight: 16,
                 ...SHADOWS.sm,
               }}
@@ -347,7 +326,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             <Text
               style={{
                 fontSize: 22,
-                fontWeight: "900",
+                fontWeight: '900',
                 color: COLORS.foreground,
                 letterSpacing: -0.5,
               }}
@@ -360,7 +339,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
               style={{
                 color: COLORS.mutedForeground,
                 fontSize: 15,
-                fontWeight: "600",
+                fontWeight: '600',
               }}
             >
               Пропустить
@@ -374,29 +353,29 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
           paddingHorizontal: horizontalPadding,
           paddingTop: 8,
           paddingBottom: 120,
-          alignItems: "center",
+          alignItems: 'center',
         }}
       >
         <View
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: isDesktop ? LAYOUT.profileFormMaxWidth : undefined,
           }}
         >
           {/* PROGRESS */}
           <View
             style={{
-              backgroundColor: "rgba(0,0,0,0.05)",
+              backgroundColor: 'rgba(0,0,0,0.05)',
               height: 10,
               borderRadius: 10,
-              overflow: "hidden",
+              overflow: 'hidden',
               marginBottom: 30,
             }}
           >
             <View
               style={{
                 width: `${progress}%`,
-                height: "100%",
+                height: '100%',
                 backgroundColor: COLORS.primary,
               }}
             />
@@ -409,11 +388,11 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 400 }}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 'white',
               borderRadius: 24,
               padding: 22,
               marginBottom: 40,
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOpacity: 0.08,
               shadowRadius: 10,
             }}
@@ -421,10 +400,10 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: "700",
+                fontWeight: '700',
                 color: COLORS.mutedForeground,
                 marginBottom: 10,
-                textTransform: "uppercase",
+                textTransform: 'uppercase',
                 letterSpacing: 1,
               }}
             >
@@ -433,7 +412,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             <Text
               style={{
                 fontSize: 20,
-                fontWeight: "800",
+                fontWeight: '800',
                 color: COLORS.foreground,
                 marginBottom: 24,
               }}
@@ -447,22 +426,20 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
                   key={i}
                   onPress={() => selectAnswer(i)}
                   style={{
-                    backgroundColor: active
-                      ? `${COLORS.primary}15`
-                      : COLORS.muted,
+                    backgroundColor: active ? `${COLORS.primary}15` : COLORS.muted,
                     borderRadius: RADIUS.lg,
                     paddingVertical: 16,
                     paddingHorizontal: 20,
                     marginBottom: 12,
                     borderWidth: 2,
-                    borderColor: active ? COLORS.primary : "transparent",
+                    borderColor: active ? COLORS.primary : 'transparent',
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 16,
                       color: active ? COLORS.primary : COLORS.foreground,
-                      fontWeight: active ? "800" : "500",
+                      fontWeight: active ? '800' : '500',
                     }}
                   >
                     {text}
@@ -486,24 +463,19 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
               style={{
                 paddingVertical: 18,
                 borderRadius: RADIUS.xl,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 ...SHADOWS.md,
               }}
             >
               <Text
                 style={{
                   fontSize: 18,
-                  fontWeight: "800",
-                  color:
-                    answers[step] === undefined
-                      ? COLORS.mutedForeground
-                      : "white",
+                  fontWeight: '800',
+                  color: answers[step] === undefined ? COLORS.mutedForeground : 'white',
                 }}
               >
-                {step === QUESTIONS.length - 1
-                  ? "Завершить"
-                  : "Следующий вопрос"}
+                {step === QUESTIONS.length - 1 ? 'Завершить' : 'Следующий вопрос'}
               </Text>
             </LinearGradient>
           </TouchableOpacity>

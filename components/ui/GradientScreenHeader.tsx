@@ -1,9 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "$constants/theme";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 
 export function GradientScreenHeader({
   title,
@@ -20,7 +19,7 @@ export function GradientScreenHeader({
         backgroundColor: COLORS.primary,
         borderBottomLeftRadius: RADIUS.xxl,
         borderBottomRightRadius: RADIUS.xxl,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <LinearGradient
@@ -29,18 +28,18 @@ export function GradientScreenHeader({
         end={{ x: 1, y: 1 }}
         style={{ paddingBottom: SPACING.xl }}
       >
-        <SafeAreaView edges={["top"]}>
+        <SafeAreaView edges={['top']}>
           <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TouchableOpacity
                 onPress={onBack}
                 style={{
                   width: 44,
                   height: 44,
                   borderRadius: RADIUS.md,
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginRight: SPACING.md,
                 }}
               >
@@ -50,7 +49,7 @@ export function GradientScreenHeader({
                 style={{
                   fontSize: TYPOGRAPHY.size.xl,
                   fontWeight: TYPOGRAPHY.weight.semibold,
-                  color: "white",
+                  color: 'white',
                 }}
               >
                 {title}

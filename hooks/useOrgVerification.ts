@@ -1,10 +1,7 @@
-import { useState } from "react";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
+import { useState } from 'react';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
 
-export type OrgVerificationDocKey =
-  | "bin_doc"
-  | "registration_doc"
-  | "license_doc";
+export type OrgVerificationDocKey = 'bin_doc' | 'registration_doc' | 'license_doc';
 
 type OrgVerificationDocs = Record<OrgVerificationDocKey, boolean>;
 
@@ -13,11 +10,8 @@ type UseOrgVerificationParams = {
   refreshOrgProfile: () => Promise<void>;
 };
 
-export function useOrgVerification({
-  orgId,
-  refreshOrgProfile,
-}: UseOrgVerificationParams) {
-  const [bin, setBin] = useState("");
+export function useOrgVerification({ orgId, refreshOrgProfile }: UseOrgVerificationParams) {
+  const [bin, setBin] = useState('');
   const [docs, setDocs] = useState<OrgVerificationDocs>({
     bin_doc: false,
     registration_doc: false,
@@ -29,12 +23,11 @@ export function useOrgVerification({
   const [submitted, setSubmitted] = useState(false);
 
   const binValid = /^\d{12}$/.test(bin);
-  const allDocsUploaded =
-    docs.bin_doc && docs.registration_doc && docs.license_doc;
+  const allDocsUploaded = docs.bin_doc && docs.registration_doc && docs.license_doc;
   const canSubmit = binValid && allDocsUploaded && offerAccepted;
 
   const setFormattedBin = (value: string) => {
-    setBin(value.replace(/\D/g, "").slice(0, 12));
+    setBin(value.replace(/\D/g, '').slice(0, 12));
   };
 
   const toggleDoc = (key: OrgVerificationDocKey) => {
@@ -48,19 +41,19 @@ export function useOrgVerification({
   const submit = async () => {
     setError(null);
     if (!binValid) {
-      setError("БИН должен содержать ровно 12 цифр.");
+      setError('БИН должен содержать ровно 12 цифр.');
       return;
     }
     if (!allDocsUploaded) {
-      setError("Загрузите все три документа.");
+      setError('Загрузите все три документа.');
       return;
     }
     if (!offerAccepted) {
-      setError("Примите условия публичной оферты.");
+      setError('Примите условия публичной оферты.');
       return;
     }
     if (!orgId) {
-      setError("Профиль организации не найден.");
+      setError('Профиль организации не найден.');
       return;
     }
 
@@ -68,16 +61,16 @@ export function useOrgVerification({
     try {
       if (supabase && isSupabaseConfigured) {
         const { error: updateErr } = await supabase
-          .from("organizations")
+          .from('organizations')
           .update({
             bin,
-            bin_doc_url: "uploaded_bin.pdf",
-            registration_url: "uploaded_registration.pdf",
-            license_url: "uploaded_license.pdf",
+            bin_doc_url: 'uploaded_bin.pdf',
+            registration_url: 'uploaded_registration.pdf',
+            license_url: 'uploaded_license.pdf',
             offer_accepted: true,
-            status: "ready_for_review",
+            status: 'ready_for_review',
           })
-          .eq("id", orgId);
+          .eq('id', orgId);
 
         if (updateErr) {
           setError(updateErr.message);

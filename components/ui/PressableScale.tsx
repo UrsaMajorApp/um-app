@@ -1,21 +1,22 @@
-import React, { useRef } from "react";
+import type React from 'react';
+import { useRef } from 'react';
 import {
   Animated,
   Pressable,
-  PressableProps,
-  StyleProp,
+  type PressableProps,
+  type StyleProp,
   StyleSheet,
-  ViewStyle,
-} from "react-native";
+  type ViewStyle,
+} from 'react-native';
 
-interface PressableScaleProps extends Omit<PressableProps, "style"> {
+interface PressableScaleProps extends Omit<PressableProps, 'style'> {
   children: React.ReactNode;
   /** Scale factor when pressed. Default 0.96 */
   scaleTo?: number;
   style?: StyleProp<ViewStyle>;
 }
 
-type PressableEvent = Parameters<NonNullable<PressableProps["onPressIn"]>>[0];
+type PressableEvent = Parameters<NonNullable<PressableProps['onPressIn']>>[0];
 
 // Props that must live on the outer Pressable to work correctly:
 //   - position/inset: so the hit target is placed correctly in the parent
@@ -25,26 +26,26 @@ type PressableEvent = Parameters<NonNullable<PressableProps["onPressIn"]>>[0];
 // Everything else (width, height, padding, backgroundColor, flexDirection, etc.)
 // goes on the inner Animated.View so visuals and children layout correctly.
 const OUTER_PROPS = new Set([
-  "position",
-  "top",
-  "bottom",
-  "left",
-  "right",
-  "zIndex",
-  "flex",
-  "flexGrow",
-  "flexShrink",
-  "flexBasis",
-  "alignSelf",
-  "margin",
-  "marginTop",
-  "marginBottom",
-  "marginLeft",
-  "marginRight",
-  "marginHorizontal",
-  "marginVertical",
-  "marginStart",
-  "marginEnd",
+  'position',
+  'top',
+  'bottom',
+  'left',
+  'right',
+  'zIndex',
+  'flex',
+  'flexGrow',
+  'flexShrink',
+  'flexBasis',
+  'alignSelf',
+  'margin',
+  'marginTop',
+  'marginBottom',
+  'marginLeft',
+  'marginRight',
+  'marginHorizontal',
+  'marginVertical',
+  'marginStart',
+  'marginEnd',
 ]);
 
 function splitStyle(style: StyleProp<ViewStyle>) {

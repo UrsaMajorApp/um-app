@@ -1,25 +1,21 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { Stack, useRouter, useSegments } from "expo-router";
-import { useEffect } from "react";
-import { ActivityIndicator, useColorScheme, View } from "react-native";
-import { COLORS } from "$constants/theme";
-import { AuthProvider, useAuth } from "$contexts/AuthContext";
-import { DevSettingsProvider } from "$contexts/DevSettingsContext";
-import { ParentDataProvider } from "$contexts/ParentDataContext";
-import "../global.css";
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { useEffect } from 'react';
+import { ActivityIndicator, useColorScheme, View } from 'react-native';
+import { COLORS } from '$constants/theme';
+import { AuthProvider, useAuth } from '$contexts/AuthContext';
+import { DevSettingsProvider } from '$contexts/DevSettingsContext';
+import { ParentDataProvider } from '$contexts/ParentDataContext';
+import '../global.css';
 
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { DevRoleSwitcher } from "$components/DevRoleSwitcher";
-import type { AuthUser, UserRole } from "$contexts/AuthContext";
-import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from "$constants/profileRoutes";
-import type { AppHref } from "$types/router";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { DevRoleSwitcher } from '$components/DevRoleSwitcher';
+import type { AuthUser, UserRole } from '$contexts/AuthContext';
+import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from '$constants/profileRoutes';
+import type { AppHref } from '$types/router';
 
 function getProfileSetupRoute(role: UserRole): AppHref {
-  return PROFILE_SETUP_ROUTES[role] ?? "/(tabs)/home";
+  return PROFILE_SETUP_ROUTES[role] ?? '/(tabs)/home';
 }
 
 function isYouthRole(role: UserRole) {
@@ -27,7 +23,7 @@ function isYouthRole(role: UserRole) {
 }
 
 function canUseYouthDiagnostic(role: UserRole) {
-  return role === "parent" || isYouthRole(role);
+  return role === 'parent' || isYouthRole(role);
 }
 
 function getRoleGuardRedirect(user: AuthUser, segments: string[]) {
@@ -36,43 +32,40 @@ function getRoleGuardRedirect(user: AuthUser, segments: string[]) {
   const screen = segments[2];
   const role = user.role;
 
-  if (root === "(tabs)") {
-    if (section === "admin" && role !== "admin") return "/(tabs)/home";
-    if (section === "parent" && role !== "parent") return "/(tabs)/home";
-    if (section === "youth" && !isYouthRole(role)) return "/(tabs)/home";
-    if (section === "mentor" && role !== "mentor") return "/(tabs)/home";
-    if (section === "organization" && role !== "org") return "/(tabs)/home";
-    if (section === "teacher" && role !== "teacher") return "/(tabs)/home";
-    if (section === "chats" && role === "child") return "/(tabs)/home";
-    if (section === "catalog" && (role === "mentor" || role === "org"))
-      return "/(tabs)/home";
+  if (root === '(tabs)') {
+    if (section === 'admin' && role !== 'admin') return '/(tabs)/home';
+    if (section === 'parent' && role !== 'parent') return '/(tabs)/home';
+    if (section === 'youth' && !isYouthRole(role)) return '/(tabs)/home';
+    if (section === 'mentor' && role !== 'mentor') return '/(tabs)/home';
+    if (section === 'organization' && role !== 'org') return '/(tabs)/home';
+    if (section === 'teacher' && role !== 'teacher') return '/(tabs)/home';
+    if (section === 'chats' && role === 'child') return '/(tabs)/home';
+    if (section === 'catalog' && (role === 'mentor' || role === 'org')) return '/(tabs)/home';
     return null;
   }
 
-  if (root === "profile") {
-    if (section === "admin" && role !== "admin") return "/(tabs)/home";
-    if (section === "parent" && role !== "parent") return "/(tabs)/home";
-    if (section === "organization" && role !== "org") return "/(tabs)/home";
-    if (section === "mentor" && role !== "mentor") return "/(tabs)/home";
-    if (section === "teacher" && role !== "teacher") return "/(tabs)/home";
-    if (section === "youth") {
-      if (screen === "create-profile-child" && role !== "parent")
-        return "/(tabs)/home";
+  if (root === 'profile') {
+    if (section === 'admin' && role !== 'admin') return '/(tabs)/home';
+    if (section === 'parent' && role !== 'parent') return '/(tabs)/home';
+    if (section === 'organization' && role !== 'org') return '/(tabs)/home';
+    if (section === 'mentor' && role !== 'mentor') return '/(tabs)/home';
+    if (section === 'teacher' && role !== 'teacher') return '/(tabs)/home';
+    if (section === 'youth') {
+      if (screen === 'create-profile-child' && role !== 'parent') return '/(tabs)/home';
       if (
-        (screen === "create-profile" ||
-          screen === "create-profile-young-adult") &&
+        (screen === 'create-profile' || screen === 'create-profile-young-adult') &&
         !isYouthRole(role)
       ) {
-        return "/(tabs)/home";
+        return '/(tabs)/home';
       }
-      if (!canUseYouthDiagnostic(role)) return "/(tabs)/home";
+      if (!canUseYouthDiagnostic(role)) return '/(tabs)/home';
     }
     return null;
   }
 
-  if (root === "parent" && role !== "parent") return "/(tabs)/home";
-  if (root === "mentor" && role !== "mentor") return "/(tabs)/home";
-  if (root === "organization" && role !== "org") return "/(tabs)/home";
+  if (root === 'parent' && role !== 'parent') return '/(tabs)/home';
+  if (root === 'mentor' && role !== 'mentor') return '/(tabs)/home';
+  if (root === 'organization' && role !== 'org') return '/(tabs)/home';
 
   return null;
 }
@@ -92,61 +85,53 @@ function getRouteRedirectPath({
 
   const root = segments[0];
   const authScreen = segments[1] as string | undefined;
-  const inAuthGroup = root === "(auth)";
-  const inOAuthFlow = root === "auth";
+  const inAuthGroup = root === '(auth)';
+  const inOAuthFlow = root === 'auth';
   const isOAuthCallbackScreen =
     inOAuthFlow &&
-    (authScreen === "callback" ||
-      authScreen === "complete-profile" ||
-      authScreen === "reset-password");
+    (authScreen === 'callback' ||
+      authScreen === 'complete-profile' ||
+      authScreen === 'reset-password');
 
   if (!user && !inAuthGroup && !inOAuthFlow) {
-    return "/intro";
+    return '/intro';
   }
 
   if (user && !user.profileComplete && !devMode && !isOAuthCallbackScreen) {
     if (user.hasSelectedRole === false) {
-      return "/auth/complete-profile";
+      return '/auth/complete-profile';
     }
 
     const setupRoute = getProfileSetupRoute(user.role);
-    const setupRouteParts = setupRoute.split("/").filter(Boolean);
-    const onProfileSetupRoute = setupRouteParts.every(
-      (part, index) => segments[index] === part,
-    );
+    const setupRouteParts = setupRoute.split('/').filter(Boolean);
+    const onProfileSetupRoute = setupRouteParts.every((part, index) => segments[index] === part);
 
     if (!onProfileSetupRoute) {
       return setupRoute;
     }
   }
 
-  if (user && inAuthGroup && authScreen === "intro") {
-    return "/(tabs)/home";
+  if (user && inAuthGroup && authScreen === 'intro') {
+    return '/(tabs)/home';
   }
 
-  if (
-    user &&
-    inAuthGroup &&
-    authScreen !== "role" &&
-    authScreen !== "register" &&
-    !devMode
-  ) {
-    return "/(tabs)/home";
+  if (user && inAuthGroup && authScreen !== 'role' && authScreen !== 'register' && !devMode) {
+    return '/(tabs)/home';
   }
 
   if (user && inOAuthFlow && !isOAuthCallbackScreen && !devMode) {
-    return "/(tabs)/home";
+    return '/(tabs)/home';
   }
 
-  if (user && root === "profile" && !segments[1]) {
+  if (user && root === 'profile' && !segments[1]) {
     if (!user.profileComplete && !devMode) {
       if (user.hasSelectedRole === false) {
-        return "/auth/complete-profile";
+        return '/auth/complete-profile';
       }
       return getProfileSetupRoute(user.role);
     }
 
-    return "/(tabs)/home";
+    return '/(tabs)/home';
   }
 
   if (user) {
@@ -176,13 +161,13 @@ function RootNavigator() {
 
   if (isLoading || redirectPath) {
     return (
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <View
           style={{
             flex: 1,
             backgroundColor: COLORS.background,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <ActivityIndicator size="large" color={COLORS.primary} />
@@ -193,11 +178,11 @@ function RootNavigator() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack
         screenOptions={{
           headerShown: false,
-          animation: "fade",
+          animation: 'fade',
         }}
       >
         {/* AUTH + INTRO (показываются первыми) */}
@@ -220,10 +205,7 @@ function RootNavigator() {
               /> */}
 
         {/* TEST ROUTE */}
-        <Stack.Screen
-          name="parent/testing/index"
-          options={{ presentation: "fullScreenModal" }}
-        />
+        <Stack.Screen name="parent/testing/index" options={{ presentation: 'fullScreenModal' }} />
       </Stack>
       <DevRoleSwitcher />
     </ThemeProvider>

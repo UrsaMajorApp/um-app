@@ -1,37 +1,21 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { appHref } from "$lib/router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useMentorGroups } from "$hooks/useMentorData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { appHref } from '$lib/router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
+import { Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useMentorGroups } from '$hooks/useMentorData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorGroups() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const { groups, loading } = useMentorGroups();
 
   const filtered = groups.filter(
@@ -48,14 +32,11 @@ export default function MentorGroups() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
             <MotiView
               from={{ opacity: 0, translateY: -10 }}
               animate={{ opacity: 1, translateY: 0 }}
@@ -63,8 +44,8 @@ export default function MentorGroups() {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -74,9 +55,9 @@ export default function MentorGroups() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     marginRight: SPACING.md,
                   }}
                 >
@@ -86,7 +67,7 @@ export default function MentorGroups() {
                   style={{
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                     flex: 1,
                   }}
                 >
@@ -96,14 +77,14 @@ export default function MentorGroups() {
 
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "rgba(255,255,255,0.15)",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
                   borderRadius: RADIUS.md,
                   paddingHorizontal: SPACING.lg,
                   height: 52,
                   borderWidth: 1,
-                  borderColor: "rgba(255,255,255,0.1)",
+                  borderColor: 'rgba(255,255,255,0.1)',
                 }}
               >
                 <Feather
@@ -118,10 +99,10 @@ export default function MentorGroups() {
                   placeholder="Поиск по названию или курсу..."
                   placeholderTextColor="rgba(255,255,255,0.5)"
                   style={{
-                    color: "white",
+                    color: 'white',
                     flex: 1,
                     fontSize: 15,
-                    fontWeight: "500",
+                    fontWeight: '500',
                   }}
                 />
               </View>
@@ -141,7 +122,7 @@ export default function MentorGroups() {
         {loading && (
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               marginTop: 40,
               color: COLORS.mutedForeground,
             }}
@@ -161,7 +142,7 @@ export default function MentorGroups() {
                 padding: SPACING.xl,
                 borderWidth: 1,
                 borderColor: COLORS.border,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <View className="flex-row items-center justify-between mb-4">
@@ -171,7 +152,7 @@ export default function MentorGroups() {
                       fontSize: TYPOGRAPHY.size.xs,
                       fontWeight: TYPOGRAPHY.weight.bold,
                       color: COLORS.primary,
-                      textTransform: "uppercase",
+                      textTransform: 'uppercase',
                       letterSpacing: 1,
                       marginBottom: 4,
                     }}
@@ -193,33 +174,25 @@ export default function MentorGroups() {
                     paddingHorizontal: SPACING.md,
                     paddingVertical: SPACING.xs,
                     borderRadius: RADIUS.full,
-                    backgroundColor: group.active
-                      ? "rgba(52, 199, 89, 0.1)"
-                      : COLORS.muted,
+                    backgroundColor: group.active ? 'rgba(52, 199, 89, 0.1)' : COLORS.muted,
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 10,
                       fontWeight: TYPOGRAPHY.weight.bold,
-                      textTransform: "uppercase",
-                      color: group.active
-                        ? COLORS.success
-                        : COLORS.mutedForeground,
+                      textTransform: 'uppercase',
+                      color: group.active ? COLORS.success : COLORS.mutedForeground,
                     }}
                   >
-                    {group.active ? "Активна" : "Архив"}
+                    {group.active ? 'Активна' : 'Архив'}
                   </Text>
                 </View>
               </View>
 
               <View className="flex-row items-center gap-6 mb-6">
                 <View className="flex-row items-center gap-2">
-                  <Feather
-                    name="users"
-                    size={16}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="users" size={16} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       fontSize: TYPOGRAPHY.size.sm,
@@ -231,11 +204,7 @@ export default function MentorGroups() {
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-2">
-                  <Feather
-                    name="calendar"
-                    size={16}
-                    color={COLORS.mutedForeground}
-                  />
+                  <Feather name="calendar" size={16} color={COLORS.mutedForeground} />
                   <Text
                     style={{
                       fontSize: TYPOGRAPHY.size.sm,
@@ -253,9 +222,9 @@ export default function MentorGroups() {
                   paddingTop: SPACING.lg,
                   borderTopWidth: 1,
                   borderTopColor: COLORS.border,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <View>
@@ -264,7 +233,7 @@ export default function MentorGroups() {
                       fontSize: 10,
                       color: COLORS.mutedForeground,
                       fontWeight: TYPOGRAPHY.weight.bold,
-                      textTransform: "uppercase",
+                      textTransform: 'uppercase',
                       marginBottom: 2,
                     }}
                   >
@@ -277,7 +246,7 @@ export default function MentorGroups() {
                       color: COLORS.foreground,
                     }}
                   >
-                    {group.schedule ?? "—"}
+                    {group.schedule ?? '—'}
                   </Text>
                 </View>
                 <View
@@ -286,15 +255,11 @@ export default function MentorGroups() {
                     height: 44,
                     backgroundColor: COLORS.muted,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Feather
-                    name="chevron-right"
-                    size={20}
-                    color={COLORS.primary}
-                  />
+                  <Feather name="chevron-right" size={20} color={COLORS.primary} />
                 </View>
               </View>
             </Pressable>

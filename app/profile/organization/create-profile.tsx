@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React, { useState } from "react";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -14,20 +14,20 @@ import {
   TextInput,
   type TextInputProps,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ApprovalPendingSuccessView } from "$components/profile/ApprovalPendingSuccessView";
-import { PressableScale } from "$components/ui/PressableScale";
-import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
-import { useAuth } from "$contexts/AuthContext";
-import { formatPhone } from "$lib/formatPhone";
-import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { useIsDesktop } from "$lib/useIsDesktop";
-import type { FeatherIconName } from "$types/icons";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ApprovalPendingSuccessView } from '$components/profile/ApprovalPendingSuccessView';
+import { PressableScale } from '$components/ui/PressableScale';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { formatPhone } from '$lib/formatPhone';
+import { isSupabaseConfigured, supabase } from '$lib/supabase';
+import { useIsDesktop } from '$lib/useIsDesktop';
+import type { FeatherIconName } from '$types/icons';
 
 // Org brand colour — matches the ROLES entry in register.tsx
-const ORG_COLOR = "#10B981";
-const ORG_GRADIENT: [string, string] = ["#10B981", "#34D399"];
+const ORG_COLOR = '#10B981';
+const ORG_GRADIENT: [string, string] = ['#10B981', '#34D399'];
 
 export default function CreateProfileOrganization() {
   const router = useRouter();
@@ -37,14 +37,13 @@ export default function CreateProfileOrganization() {
     ? LAYOUT.authHorizontalPaddingDesktop
     : LAYOUT.authHorizontalPaddingMobile;
 
-  const [orgName, setOrgName] = useState("");
-  const [city, setCity] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
-  const [contactPhone, setContactPhone] = useState(user?.phone ?? "");
-  const [contactEmail, setContactEmail] = useState("");
+  const [orgName, setOrgName] = useState('');
+  const [city, setCity] = useState('');
+  const [contactPerson, setContactPerson] = useState('');
+  const [contactPhone, setContactPhone] = useState(user?.phone ?? '');
+  const [contactEmail, setContactEmail] = useState('');
 
-  const handlePhoneChange = (text: string) =>
-    setContactPhone(formatPhone(text));
+  const handlePhoneChange = (text: string) => setContactPhone(formatPhone(text));
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,46 +53,44 @@ export default function CreateProfileOrganization() {
     orgName.trim().length > 0 &&
     city.trim().length > 0 &&
     contactPerson.trim().length > 0 &&
-    contactPhone.replace(/\D/g, "").length >= 10 &&
+    contactPhone.replace(/\D/g, '').length >= 10 &&
     contactEmail.trim().length > 0;
 
   const handleSubmit = async () => {
     setError(null);
     if (!orgName.trim()) {
-      setError("Укажите название организации.");
+      setError('Укажите название организации.');
       return;
     }
     if (!city.trim()) {
-      setError("Укажите город.");
+      setError('Укажите город.');
       return;
     }
     if (!contactPerson.trim()) {
-      setError("Укажите ФИО ответственного лица.");
+      setError('Укажите ФИО ответственного лица.');
       return;
     }
-    if (contactPhone.replace(/\D/g, "").length < 10) {
-      setError("Укажите контактный телефон.");
+    if (contactPhone.replace(/\D/g, '').length < 10) {
+      setError('Укажите контактный телефон.');
       return;
     }
     if (!contactEmail.trim()) {
-      setError("Укажите email.");
+      setError('Укажите email.');
       return;
     }
 
     setSubmitting(true);
     try {
       if (supabase && isSupabaseConfigured) {
-        const { error: insertErr } = await supabase
-          .from("organizations")
-          .insert({
-            owner_user_id: user?.id ?? null,
-            name: orgName.trim(),
-            city: city.trim(),
-            contact_person: contactPerson.trim(),
-            phone: contactPhone.trim() || user?.phone || null,
-            email: contactEmail.trim() || null,
-            status: "new",
-          });
+        const { error: insertErr } = await supabase.from('organizations').insert({
+          owner_user_id: user?.id ?? null,
+          name: orgName.trim(),
+          city: city.trim(),
+          contact_person: contactPerson.trim(),
+          phone: contactPhone.trim() || user?.phone || null,
+          email: contactEmail.trim() || null,
+          status: 'new',
+        });
         if (insertErr) {
           setError(insertErr.message);
           setSubmitting(false);
@@ -103,7 +100,7 @@ export default function CreateProfileOrganization() {
       await finalizeRegistration();
       setIsSuccess(true);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Произошла ошибка");
+      setError(e instanceof Error ? e.message : 'Произошла ошибка');
     } finally {
       setSubmitting(false);
     }
@@ -115,7 +112,7 @@ export default function CreateProfileOrganization() {
       return;
     }
 
-    router.replace("/register");
+    router.replace('/register');
   };
 
   if (isSuccess) {
@@ -126,21 +123,19 @@ export default function CreateProfileOrganization() {
         title="Данные отправлены!"
         description={
           <>
-            Ваш профиль создан. В течение{" "}
-            <Text style={{ color: ORG_COLOR, fontWeight: "700" }}>
-              24 часов
-            </Text>{" "}
-            мы проверим данные и откроем доступ к кабинету.
+            Ваш профиль создан. В течение{' '}
+            <Text style={{ color: ORG_COLOR, fontWeight: '700' }}>24 часов</Text> мы проверим данные
+            и откроем доступ к кабинету.
           </>
         }
         buttonLabel="Перейти в кабинет"
-        onHome={() => router.replace("/(tabs)/home")}
+        onHome={() => router.replace('/(tabs)/home')}
         variant="steps"
         steps={[
-          { label: "Профиль создан", done: true },
-          { label: "Загрузить документы для верификации", done: false },
-          { label: "Модерация администратором", done: false },
-          { label: "Синяя галочка и выход в поиск", done: false },
+          { label: 'Профиль создан', done: true },
+          { label: 'Загрузить документы для верификации', done: false },
+          { label: 'Модерация администратором', done: false },
+          { label: 'Синяя галочка и выход в поиск', done: false },
         ]}
       />
     );
@@ -148,16 +143,16 @@ export default function CreateProfileOrganization() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: COLORS.background }}
     >
       <StatusBar barStyle="dark-content" />
 
       {/* Background blobs — same as register.tsx */}
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
+      <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: -50,
             right: -50,
             width: 200,
@@ -168,8 +163,8 @@ export default function CreateProfileOrganization() {
         />
         <View
           style={{
-            position: "absolute",
-            bottom: "20%",
+            position: 'absolute',
+            bottom: '20%',
             left: -80,
             width: 250,
             height: 250,
@@ -183,7 +178,7 @@ export default function CreateProfileOrganization() {
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
-            alignItems: "center",
+            alignItems: 'center',
             paddingVertical: isDesktop ? 24 : 12,
           }}
           keyboardShouldPersistTaps="handled"
@@ -192,7 +187,7 @@ export default function CreateProfileOrganization() {
           <View
             style={{
               flex: 1,
-              width: "100%",
+              width: '100%',
               maxWidth: isDesktop ? LAYOUT.authMaxWidth : undefined,
               paddingHorizontal: horizontalPadding,
               paddingTop: 8,
@@ -201,28 +196,24 @@ export default function CreateProfileOrganization() {
             {/* Header nav — identical structure to register.tsx */}
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: 24,
               }}
             >
               <PressableScale
                 onPress={handleBack}
-                style={{ flexDirection: "row", alignItems: "center" }}
+                style={{ flexDirection: 'row', alignItems: 'center' }}
                 scaleTo={0.93}
               >
-                <Feather
-                  name="arrow-left"
-                  size={20}
-                  color={COLORS.mutedForeground}
-                />
+                <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
                 <Text
                   style={{
                     color: COLORS.mutedForeground,
                     marginLeft: 8,
                     fontSize: 15,
-                    fontWeight: "500",
+                    fontWeight: '500',
                   }}
                 >
                   Назад
@@ -230,7 +221,7 @@ export default function CreateProfileOrganization() {
               </PressableScale>
 
               {/* 4-dot indicator — this is the 4th step after role/phone/otp/name */}
-              <View style={{ flexDirection: "row", gap: 6 }}>
+              <View style={{ flexDirection: 'row', gap: 6 }}>
                 {[0, 1, 2, 3].map((i) => (
                   <View
                     key={i}
@@ -255,7 +246,7 @@ export default function CreateProfileOrganization() {
               <Text
                 style={{
                   fontSize: 32,
-                  fontWeight: "900",
+                  fontWeight: '900',
                   color: COLORS.foreground,
                   marginBottom: 8,
                   letterSpacing: -0.5,
@@ -279,7 +270,7 @@ export default function CreateProfileOrganization() {
               from={{ opacity: 0, translateX: 10 }}
               animate={{ opacity: 1, translateX: 0 }}
               style={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 borderRadius: RADIUS.xxl,
                 padding: 24,
                 ...SHADOWS.md,
@@ -347,17 +338,17 @@ export default function CreateProfileOrganization() {
                   marginTop: 16,
                   padding: 12,
                   borderRadius: RADIUS.md,
-                  backgroundColor: "#FEE2E2",
+                  backgroundColor: '#FEE2E2',
                   borderWidth: 1,
-                  borderColor: "#FCA5A5",
+                  borderColor: '#FCA5A5',
                 }}
               >
                 <Text
                   style={{
-                    color: "#B91C1C",
-                    textAlign: "center",
+                    color: '#B91C1C',
+                    textAlign: 'center',
                     fontSize: 13,
-                    fontWeight: "600",
+                    fontWeight: '600',
                   }}
                 >
                   {error}
@@ -376,8 +367,8 @@ export default function CreateProfileOrganization() {
                 style={{
                   paddingVertical: 18,
                   borderRadius: RADIUS.xl,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   ...SHADOWS.md,
                 }}
               >
@@ -387,8 +378,8 @@ export default function CreateProfileOrganization() {
                   <Text
                     style={{
                       fontSize: 18,
-                      fontWeight: "800",
-                      color: canSubmit ? "white" : COLORS.mutedForeground,
+                      fontWeight: '800',
+                      color: canSubmit ? 'white' : COLORS.mutedForeground,
                     }}
                   >
                     Создать профиль
@@ -400,24 +391,17 @@ export default function CreateProfileOrganization() {
             {/* Login link — same as register.tsx */}
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "center",
+                flexDirection: 'row',
+                justifyContent: 'center',
                 marginTop: 24,
                 paddingBottom: 40,
               }}
             >
               <Text style={{ color: COLORS.mutedForeground, fontSize: 15 }}>
-                Уже есть аккаунт?{" "}
+                Уже есть аккаунт?{' '}
               </Text>
-              <PressableScale
-                onPress={() => router.push("/login")}
-                scaleTo={0.93}
-              >
-                <Text
-                  style={{ color: ORG_COLOR, fontWeight: "800", fontSize: 15 }}
-                >
-                  Войти
-                </Text>
+              <PressableScale onPress={() => router.push('/login')} scaleTo={0.93}>
+                <Text style={{ color: ORG_COLOR, fontWeight: '800', fontSize: 15 }}>Войти</Text>
               </PressableScale>
             </View>
           </View>
@@ -432,9 +416,9 @@ type FieldProps = {
   label: string;
   icon: FeatherIconName;
   value: string;
-  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  onChange: NonNullable<TextInputProps['onChangeText']>;
   placeholder?: string;
-  keyboardType?: TextInputProps["keyboardType"];
+  keyboardType?: TextInputProps['keyboardType'];
   autoFocus?: boolean;
   secure?: boolean;
   showToggle?: () => void;
@@ -449,7 +433,7 @@ function Field({
   value,
   onChange,
   placeholder,
-  keyboardType = "default",
+  keyboardType = 'default',
   autoFocus = false,
   secure = false,
   showToggle,
@@ -459,15 +443,13 @@ function Field({
 }: FieldProps) {
   return (
     <View style={{ marginBottom: last ? 0 : 20 }}>
-      <View
-        style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}
-      >
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
         <Text
           style={{
             fontSize: 13,
-            fontWeight: "700",
+            fontWeight: '700',
             color: COLORS.foreground,
-            textTransform: "uppercase",
+            textTransform: 'uppercase',
             letterSpacing: 0.5,
             opacity: 0.7,
           }}
@@ -478,7 +460,7 @@ function Field({
           <Text
             style={{
               fontSize: 13,
-              fontWeight: "700",
+              fontWeight: '700',
               color: ORG_COLOR,
               marginLeft: 3,
               opacity: 1,
@@ -488,12 +470,12 @@ function Field({
           </Text>
         )}
       </View>
-      <View style={{ position: "relative", justifyContent: "center" }}>
+      <View style={{ position: 'relative', justifyContent: 'center' }}>
         <Feather
           name={icon}
           size={18}
           color={COLORS.mutedForeground}
-          style={{ position: "absolute", left: 16, zIndex: 1 }}
+          style={{ position: 'absolute', left: 16, zIndex: 1 }}
         />
         <TextInput
           value={value}
@@ -503,19 +485,19 @@ function Field({
           secureTextEntry={secure && !shown}
           autoFocus={autoFocus}
           className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
-          style={{ fontSize: 15, fontWeight: "500" }}
+          style={{ fontSize: 15, fontWeight: '500' }}
         />
         {!value && !!placeholder && (
           <Text
             numberOfLines={1}
             style={{
-              position: "absolute",
+              position: 'absolute',
               left: 48,
               right: 48,
-              pointerEvents: "none",
+              pointerEvents: 'none',
               color: COLORS.mutedForeground,
               fontSize: 15,
-              fontWeight: "500",
+              fontWeight: '500',
             }}
           >
             {placeholder}
@@ -524,14 +506,10 @@ function Field({
         {secure && showToggle && (
           <PressableScale
             onPress={showToggle}
-            style={{ position: "absolute", right: 16, zIndex: 1 }}
+            style={{ position: 'absolute', right: 16, zIndex: 1 }}
             scaleTo={0.85}
           >
-            <Feather
-              name={shown ? "eye-off" : "eye"}
-              size={18}
-              color={COLORS.mutedForeground}
-            />
+            <Feather name={shown ? 'eye-off' : 'eye'} size={18} color={COLORS.mutedForeground} />
           </PressableScale>
         )}
       </View>

@@ -1,39 +1,24 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { MotiView } from "moti";
-import React from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  COLORS,
-  LAYOUT,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from "$constants/theme";
-import { useOrgApplications } from "$hooks/useOrgData";
-import { useIsDesktop } from "$lib/useIsDesktop";
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { MotiView } from 'moti';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useOrgApplications } from '$hooks/useOrgData';
+import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function StudentDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = isDesktop
-    ? LAYOUT.dashboardHorizontalPaddingDesktop
-    : SPACING.xl;
+  const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const { apps } = useOrgApplications();
   const student = apps.find((app) => app.id === id) ?? null;
 
   const getLevelLabel = (level: string) => {
-    return level || "Не указан";
+    return level || 'Не указан';
   };
 
   if (!student) {
@@ -41,8 +26,8 @@ export default function StudentDetailScreen() {
       <View
         style={{
           flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: COLORS.background,
         }}
       >
@@ -59,21 +44,16 @@ export default function StudentDetailScreen() {
           backgroundColor: COLORS.primary,
           borderBottomLeftRadius: RADIUS.xxl,
           borderBottomRightRadius: RADIUS.xxl,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={["top"]}>
-            <View
-              style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}
-            >
+        <LinearGradient colors={COLORS.gradients.header} style={{ paddingBottom: SPACING.xl }}>
+          <SafeAreaView edges={['top']}>
+            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: SPACING.xl,
                 }}
               >
@@ -83,9 +63,9 @@ export default function StudentDetailScreen() {
                     width: 44,
                     height: 44,
                     borderRadius: RADIUS.md,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
@@ -96,7 +76,7 @@ export default function StudentDetailScreen() {
                     marginLeft: SPACING.md,
                     fontSize: TYPOGRAPHY.size.xl,
                     fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: "white",
+                    color: 'white',
                   }}
                 >
                   Профиль ученика
@@ -106,25 +86,25 @@ export default function StudentDetailScreen() {
               <MotiView
                 from={{ opacity: 0, translateY: 10 }}
                 animate={{ opacity: 1, translateY: 0 }}
-                style={{ flexDirection: "row", alignItems: "center", gap: 20 }}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}
               >
                 <View
                   style={{
                     width: 80,
                     height: 80,
-                    backgroundColor: "rgba(255,255,255,0.2)",
+                    backgroundColor: 'rgba(255,255,255,0.2)',
                     borderRadius: RADIUS.full,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderWidth: 2,
-                    borderColor: "rgba(255,255,255,0.3)",
+                    borderColor: 'rgba(255,255,255,0.3)',
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 32,
                       fontWeight: TYPOGRAPHY.weight.bold,
-                      color: "white",
+                      color: 'white',
                     }}
                   >
                     {student.child_name.charAt(0)}
@@ -135,7 +115,7 @@ export default function StudentDetailScreen() {
                     style={{
                       fontSize: TYPOGRAPHY.size.xl,
                       fontWeight: TYPOGRAPHY.weight.bold,
-                      color: "white",
+                      color: 'white',
                       marginBottom: 2,
                     }}
                   >
@@ -143,24 +123,22 @@ export default function StudentDetailScreen() {
                   </Text>
                   <Text
                     style={{
-                      color: "rgba(255,255,255,0.8)",
+                      color: 'rgba(255,255,255,0.8)',
                       fontSize: 14,
                       fontWeight: TYPOGRAPHY.weight.medium,
                       marginBottom: 8,
                     }}
                   >
-                    {student.child_age
-                      ? `${student.child_age} лет`
-                      : "Возраст не указан"}{" "}
-                    • {getLevelLabel(student.status)}
+                    {student.child_age ? `${student.child_age} лет` : 'Возраст не указан'} •{' '}
+                    {getLevelLabel(student.status)}
                   </Text>
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: 6,
-                      backgroundColor: "rgba(255,255,255,0.15)",
-                      alignSelf: "flex-start",
+                      backgroundColor: 'rgba(255,255,255,0.15)',
+                      alignSelf: 'flex-start',
                       paddingHorizontal: 12,
                       paddingVertical: 4,
                       borderRadius: RADIUS.full,
@@ -169,12 +147,12 @@ export default function StudentDetailScreen() {
                     <Feather name="book-open" size={12} color="white" />
                     <Text
                       style={{
-                        color: "white",
+                        color: 'white',
                         fontSize: 11,
                         fontWeight: TYPOGRAPHY.weight.bold,
                       }}
                     >
-                      {(student.club || "Курс").toUpperCase()}
+                      {(student.club || 'Курс').toUpperCase()}
                     </Text>
                   </View>
                 </View>
@@ -192,14 +170,11 @@ export default function StudentDetailScreen() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <MotiView
-          from={{ opacity: 0, translateY: 20 }}
-          animate={{ opacity: 1, translateY: 0 }}
-        >
+        <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }}>
           {/* Stats Grid */}
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               gap: SPACING.md,
               marginBottom: SPACING.xl,
             }}
@@ -211,7 +186,7 @@ export default function StudentDetailScreen() {
                 backgroundColor: COLORS.white,
                 borderRadius: RADIUS.xxl,
                 padding: SPACING.xl,
-                alignItems: "center",
+                alignItems: 'center',
                 borderWidth: 1,
                 borderColor: COLORS.border,
               }}
@@ -220,10 +195,10 @@ export default function StudentDetailScreen() {
                 style={{
                   width: 52,
                   height: 52,
-                  backgroundColor: "rgba(59, 130, 246, 0.05)",
+                  backgroundColor: 'rgba(59, 130, 246, 0.05)',
                   borderRadius: RADIUS.lg,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginBottom: SPACING.sm,
                 }}
               >
@@ -243,7 +218,7 @@ export default function StudentDetailScreen() {
                   fontSize: 10,
                   color: COLORS.mutedForeground,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
               >
@@ -257,7 +232,7 @@ export default function StudentDetailScreen() {
                 backgroundColor: COLORS.white,
                 borderRadius: RADIUS.xxl,
                 padding: SPACING.xl,
-                alignItems: "center",
+                alignItems: 'center',
                 borderWidth: 1,
                 borderColor: COLORS.border,
               }}
@@ -266,10 +241,10 @@ export default function StudentDetailScreen() {
                 style={{
                   width: 52,
                   height: 52,
-                  backgroundColor: "rgba(16, 185, 129, 0.05)",
+                  backgroundColor: 'rgba(16, 185, 129, 0.05)',
                   borderRadius: RADIUS.lg,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   marginBottom: SPACING.sm,
                 }}
               >
@@ -289,7 +264,7 @@ export default function StudentDetailScreen() {
                   fontSize: 10,
                   color: COLORS.mutedForeground,
                   fontWeight: TYPOGRAPHY.weight.bold,
-                  textTransform: "uppercase",
+                  textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
               >
@@ -320,14 +295,14 @@ export default function StudentDetailScreen() {
             >
               Статистика посещений
             </Text>
-            <View style={{ flexDirection: "row", gap: SPACING.sm }}>
+            <View style={{ flexDirection: 'row', gap: SPACING.sm }}>
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: "rgba(52, 199, 89, 0.05)",
+                  backgroundColor: 'rgba(52, 199, 89, 0.05)',
                   padding: 16,
                   borderRadius: RADIUS.lg,
-                  alignItems: "center",
+                  alignItems: 'center',
                 }}
               >
                 <Text
@@ -344,7 +319,7 @@ export default function StudentDetailScreen() {
                     fontSize: 10,
                     color: COLORS.success,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                     marginTop: 4,
                   }}
                 >
@@ -354,10 +329,10 @@ export default function StudentDetailScreen() {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: "rgba(239, 68, 68, 0.05)",
+                  backgroundColor: 'rgba(239, 68, 68, 0.05)',
                   padding: 16,
                   borderRadius: RADIUS.lg,
-                  alignItems: "center",
+                  alignItems: 'center',
                 }}
               >
                 <Text
@@ -374,7 +349,7 @@ export default function StudentDetailScreen() {
                     fontSize: 10,
                     color: COLORS.destructive,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                     marginTop: 4,
                   }}
                 >
@@ -384,10 +359,10 @@ export default function StudentDetailScreen() {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: "rgba(255, 159, 10, 0.05)",
+                  backgroundColor: 'rgba(255, 159, 10, 0.05)',
                   padding: 16,
                   borderRadius: RADIUS.lg,
-                  alignItems: "center",
+                  alignItems: 'center',
                 }}
               >
                 <Text
@@ -404,7 +379,7 @@ export default function StudentDetailScreen() {
                     fontSize: 10,
                     color: COLORS.warning,
                     fontWeight: TYPOGRAPHY.weight.bold,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                     marginTop: 4,
                   }}
                 >
@@ -429,8 +404,8 @@ export default function StudentDetailScreen() {
             <View style={{ gap: SPACING.xl }}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: SPACING.md,
                 }}
               >
@@ -440,8 +415,8 @@ export default function StudentDetailScreen() {
                     height: 44,
                     backgroundColor: COLORS.background,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="layers" size={20} color={COLORS.primary} />
@@ -452,7 +427,7 @@ export default function StudentDetailScreen() {
                       fontSize: 10,
                       color: COLORS.mutedForeground,
                       fontWeight: TYPOGRAPHY.weight.bold,
-                      textTransform: "uppercase",
+                      textTransform: 'uppercase',
                       letterSpacing: 1,
                       marginBottom: 2,
                     }}
@@ -472,8 +447,8 @@ export default function StudentDetailScreen() {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: SPACING.md,
                 }}
               >
@@ -483,8 +458,8 @@ export default function StudentDetailScreen() {
                     height: 44,
                     backgroundColor: COLORS.background,
                     borderRadius: RADIUS.md,
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Feather name="award" size={20} color={COLORS.primary} />
@@ -495,7 +470,7 @@ export default function StudentDetailScreen() {
                       fontSize: 10,
                       color: COLORS.mutedForeground,
                       fontWeight: TYPOGRAPHY.weight.bold,
-                      textTransform: "uppercase",
+                      textTransform: 'uppercase',
                       letterSpacing: 1,
                       marginBottom: 2,
                     }}
@@ -540,9 +515,9 @@ export default function StudentDetailScreen() {
             </Text>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
               <View>
@@ -553,7 +528,7 @@ export default function StudentDetailScreen() {
                     color: COLORS.foreground,
                   }}
                 >
-                  {student.parent_name || "Не указан"}
+                  {student.parent_name || 'Не указан'}
                 </Text>
                 <Text style={{ fontSize: 14, color: COLORS.mutedForeground }}>
                   Связаться через чат
@@ -565,11 +540,11 @@ export default function StudentDetailScreen() {
                   height: 48,
                   backgroundColor: COLORS.primary,
                   borderRadius: RADIUS.md,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   ...SHADOWS.md,
                 }}
-                onPress={() => router.push("/(tabs)/chats")}
+                onPress={() => router.push('/(tabs)/chats')}
               >
                 <Feather name="message-circle" size={20} color="white" />
               </TouchableOpacity>
