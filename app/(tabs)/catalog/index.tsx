@@ -1,5 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import { useMemo, useState } from "react";
 import {
@@ -20,6 +21,7 @@ import {
   usePublicCourses,
 } from "$hooks/usePublicData";
 import { formatKZT } from "$lib/formatCurrency";
+import { featherIconName } from "$lib/icons";
 import { isWebMinWidth } from "$lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
@@ -267,7 +269,7 @@ export default function CatalogScreen() {
                         }}
                       >
                         <Feather
-                          name={(item.icon as any) || "book-open"}
+                          name={featherIconName(item.icon, "book-open")}
                           size={22}
                           color={c1}
                         />
@@ -323,7 +325,7 @@ export default function CatalogScreen() {
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
-                          router.push(`/parent/club/${item.id}` as any)
+                          router.push(appHref(`/parent/club/${item.id}`))
                         }
                         style={{
                           backgroundColor: COLORS.primary,

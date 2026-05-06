@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import {
   Alert,
   FlatList,
+  type ListRenderItem,
   Modal,
   Platform,
   StyleSheet,
@@ -16,7 +17,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "$constants/theme";
-import { useWalletData } from "$hooks/usePlatformData";
+import { type WalletTransaction, useWalletData } from "$hooks/usePlatformData";
 import { formatKZT } from "$lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
@@ -70,7 +71,7 @@ export default function OrgWalletScreen() {
     setWithdrawAmount("");
   };
 
-  const renderTransaction = ({ item: tx, index }: any) => (
+  const renderTransaction: ListRenderItem<WalletTransaction> = ({ item: tx, index }) => (
     <MotiView
       from={{ opacity: 0, translateX: -10 }}
       animate={{ opacity: 1, translateX: 0 }}

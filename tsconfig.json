@@ -26,8 +26,8 @@
       "$lib/*": [
         "./lib/*"
       ],
-      "$models/*": [
-        "./models/*"
+      "$types/*": [
+        "./types/*"
       ]
     }
   },

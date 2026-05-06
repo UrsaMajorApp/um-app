@@ -9,7 +9,8 @@ import React, {
 import { useDevDataVersion } from "$lib/devDataEvents";
 import { createClientUuid, isUuid } from "$lib/idUtils";
 import { isSupabaseConfigured, supabase } from "$lib/supabase";
-import { Child, Diagnostic } from "$models/types";
+import type { Child } from "$types/child";
+import type { Diagnostic } from "$types/diagnostic";
 import { useAuth } from "$contexts/AuthContext";
 
 const devTariffKey = (userId: string) => `um_dev_tariff_${userId}`;
@@ -21,6 +22,22 @@ interface ParentProfileData {
   phone?: string;
   tariff?: "basic" | "pro";
 }
+
+type RemoteParentProfileRow = {
+  first_name: string | null;
+  last_name: string | null;
+  phone: string | null;
+  tariff: ParentProfileData["tariff"] | null;
+};
+
+type RemoteChildProfileRow = {
+  id: string | number;
+  name: string | null;
+  age: number | string | null;
+  interests: string | string[] | null;
+  age_category: Child["ageCategory"] | null;
+  talent_profile: Diagnostic | null;
+};
 
 interface ChildDraft {
   id: string;
@@ -145,17 +162,19 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
           ]);
 
         if (!remoteParentResponse.error && remoteParentResponse.data) {
-          const d = remoteParentResponse.data;
+          const d = remoteParentResponse.data as RemoteParentProfileRow;
           nextProfile = {
             firstName: d.first_name || user.firstName,
             lastName: d.last_name || user.lastName,
             phone: d.phone || user.phone,
-            tariff: (d as any).tariff || "basic",
+            tariff: d.tariff || "basic",
           };
         }
 
         if (!remoteChildrenResponse.error && remoteChildrenResponse.data) {
-          nextChildren = remoteChildrenResponse.data.map((item: any) => {
+          nextChildren = (
+            remoteChildrenResponse.data as RemoteChildProfileRow[]
+          ).map((item) => {
             const parsedInterests =
               typeof item.interests === "string"
                 ? item.interests

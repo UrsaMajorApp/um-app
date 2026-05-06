@@ -80,7 +80,7 @@ export default function MentorStudentDetailScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header Section */}
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
@@ -209,7 +209,7 @@ export default function MentorStudentDetailScreen() {
                   <View style={styles.skillBarBg}>
                     <MotiView
                       from={{ width: 0 }}
-                      animate={{ width: `${skill.value}%` as any }}
+                      animate={{ width: `${skill.value}%` as `${number}%` }}
                       transition={{ duration: 1000, type: "timing" }}
                       style={[
                         styles.skillBarFill,

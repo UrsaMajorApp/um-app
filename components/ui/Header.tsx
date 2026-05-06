@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
@@ -10,7 +10,7 @@ export interface HeaderProps {
   avatar?: string;
   dark?: boolean;
   onNotificationClick?: () => void;
-  backPath?: string;
+  backPath?: Href;
 }
 
 export function Header({
@@ -26,7 +26,7 @@ export function Header({
 
   const handleBackClick = () => {
     if (backPath) {
-      router.push(backPath as any);
+      router.push(backPath);
     } else {
       router.back();
     }

@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React, { useMemo } from "react";
 import {
@@ -111,7 +112,7 @@ export default function CourseDetailScreen() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: SPACING.xl }}
         >
           <SafeAreaView edges={["top"]}>
@@ -153,7 +154,7 @@ export default function CourseDetailScreen() {
                 </Text>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(`/organization/course/${id}/edit` as any)
+                    router.push(appHref(`/organization/course/${id}/edit`))
                   }
                   style={{
                     width: 44,
@@ -376,7 +377,7 @@ export default function CourseDetailScreen() {
           </Text>
           <TouchableOpacity
             onPress={() =>
-              router.push(`/organization/group/create?courseId=${id}` as any)
+              router.push(appHref(`/organization/group/create?courseId=${id}`))
             }
           >
             <Text
@@ -419,7 +420,7 @@ export default function CourseDetailScreen() {
               <TouchableOpacity
                 key={group.id}
                 onPress={() =>
-                  router.push(`/organization/group/${group.id}` as any)
+                  router.push(appHref(`/organization/group/${group.id}`))
                 }
                 style={{
                   ...SHADOWS.sm,

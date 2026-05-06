@@ -35,7 +35,7 @@ export default function YouthGamePage() {
         : 620;
 
   const goBack = () => {
-    router.replace("/youth/games" as any);
+    router.replace("/youth/games");
   };
 
   const handleFinishGame = async (gameScore: number) => {

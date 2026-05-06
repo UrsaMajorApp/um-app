@@ -4,7 +4,7 @@ import type { AuthUser } from "$contexts/AuthContext";
 import type { PublicCourse } from "$hooks/usePublicData";
 import { isSupabaseConfigured, supabase } from "$lib/supabase";
 import { rowsOrEmpty } from "$lib/supabaseHelpers";
-import type { Child } from "$models/types";
+import type { Child } from "$types/child";
 
 type EnrollmentRequestRow = {
   course_id: string;
@@ -99,8 +99,13 @@ export function useYouthEnrollmentRequests({
         "Родитель получит уведомление и сможет подтвердить запись",
         [{ text: "OK" }],
       );
-    } catch (error: any) {
-      Alert.alert("Ошибка", error?.message || "Не удалось отправить запрос");
+    } catch (error: unknown) {
+      Alert.alert(
+        "Ошибка",
+        error instanceof Error
+          ? error.message
+          : "Не удалось отправить запрос",
+      );
     }
   };
 

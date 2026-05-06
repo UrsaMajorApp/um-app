@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -46,7 +47,7 @@ export default function StaffDetailScreen() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: SPACING.xl }}
         >
           <SafeAreaView edges={["top"]}>
@@ -405,7 +406,7 @@ export default function StaffDetailScreen() {
             <TouchableOpacity
               key={group.id}
               onPress={() =>
-                router.push(`/organization/group/${group.id}` as any)
+                router.push(appHref(`/organization/group/${group.id}`))
               }
               style={{
                 ...SHADOWS.sm,

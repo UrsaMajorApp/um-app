@@ -15,6 +15,14 @@ import { COLORS, SHADOWS } from "$constants/theme";
 import { useParentData } from "$contexts/ParentDataContext";
 import { useChildReports } from "$hooks/useParentReports";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
+
+type ReportStat = {
+  label: string;
+  value: string;
+  icon: FeatherIconName;
+  color: string;
+};
 
 export default function ParentReports() {
   const router = useRouter();
@@ -45,7 +53,7 @@ export default function ParentReports() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -107,7 +115,7 @@ export default function ParentReports() {
         {!hasChildren && (
           <TouchableOpacity
             onPress={() =>
-              router.push("/profile/youth/create-profile-child" as any)
+              router.push("/profile/youth/create-profile-child")
             }
             activeOpacity={0.8}
             style={SHADOWS.sm}
@@ -141,7 +149,7 @@ export default function ParentReports() {
         {/* Stats Row */}
         {hasChildren && (
           <View className="flex-row gap-4 mb-8">
-            {[
+            {([
               {
                 label: "Занятий",
                 value: String(report.totalClasses || "—"),
@@ -154,7 +162,7 @@ export default function ParentReports() {
                 icon: "check-circle",
                 color: "#10B981",
               },
-            ].map((stat) => (
+            ] satisfies ReportStat[]).map((stat) => (
               <View
                 key={stat.label}
                 style={SHADOWS.sm}
@@ -164,11 +172,7 @@ export default function ParentReports() {
                   style={{ backgroundColor: stat.color + "10" }}
                   className="w-10 h-10 rounded-xl items-center justify-center mb-3"
                 >
-                  <Feather
-                    name={stat.icon as any}
-                    size={20}
-                    color={stat.color}
-                  />
+                  <Feather name={stat.icon} size={20} color={stat.color} />
                 </View>
                 <Text className="text-2xl font-black text-gray-900">
                   {stat.value}
@@ -347,7 +351,7 @@ export default function ParentReports() {
                   router.push({
                     pathname: "/profile/youth/testing",
                     params: { childId: selectedChildProfile.id },
-                  } as any);
+                  });
                 }
               }}
               className="bg-white h-14 rounded-2xl items-center justify-center"

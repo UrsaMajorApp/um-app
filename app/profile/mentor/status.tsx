@@ -15,6 +15,7 @@ import {
    SHADOWS,
    TYPOGRAPHY,
 } from "$constants/theme";
+import { appHref } from "$lib/router";
 import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorStatusPage() {
@@ -123,7 +124,7 @@ export default function MentorStatusPage() {
               DEV Режим
             </Text>
             <TouchableOpacity
-              onPress={() => router.replace("/(tabs)/mentor" as any)}
+              onPress={() => router.replace(appHref("/(tabs)/mentor"))}
               style={{
                 width: "100%",
                 paddingVertical: 16,

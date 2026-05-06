@@ -4,7 +4,7 @@ import type { AuthUser } from "$contexts/AuthContext";
 import { formatPhone } from "$lib/formatPhone";
 import { isSupabaseConfigured, supabase } from "$lib/supabase";
 import { rowsOrEmpty } from "$lib/supabaseHelpers";
-import type { Child } from "$models/types";
+import type { Child } from "$types/child";
 
 type ParentProfile = {
   firstName?: string;

@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -20,6 +21,7 @@ import {
   usePublicCourses,
 } from "$hooks/usePublicData";
 import { formatKZT } from "$lib/formatCurrency";
+import { featherIconName } from "$lib/icons";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 // Skill-based filter chips shown in the catalog
@@ -83,7 +85,7 @@ export default function ParentClubs() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -301,7 +303,7 @@ export default function ParentClubs() {
                     <Pressable
                       key={club.id}
                       onPress={() =>
-                        router.push(`/parent/club/${club.id}` as any)
+                        router.push(appHref(`/parent/club/${club.id}`))
                       }
                       style={[
                         SHADOWS.md,
@@ -346,7 +348,7 @@ export default function ParentClubs() {
                           </Text>
                         </View>
                         <Feather
-                          name={(club.icon as any) || "star"}
+                          name={featherIconName(club.icon, "star")}
                           size={30}
                           color="rgba(255,255,255,0.8)"
                           style={{ alignSelf: "flex-end" }}
@@ -441,7 +443,7 @@ export default function ParentClubs() {
                   <Pressable
                     key={club.id}
                     onPress={() =>
-                      router.push(`/parent/club/${club.id}` as any)
+                      router.push(appHref(`/parent/club/${club.id}`))
                     }
                     style={[
                       SHADOWS.sm,
@@ -468,7 +470,7 @@ export default function ParentClubs() {
                       }}
                     >
                       <Feather
-                        name={(club.icon as any) || "book-open"}
+                        name={featherIconName(club.icon, "book-open")}
                         size={24}
                         color={color}
                       />

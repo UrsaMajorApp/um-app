@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -53,7 +54,7 @@ export default function GroupDetailScreen() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: SPACING.xl }}
         >
           <SafeAreaView edges={["top"]}>
@@ -93,7 +94,7 @@ export default function GroupDetailScreen() {
                 </Text>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(`/organization/group/${id}/edit` as any)
+                    router.push(appHref(`/organization/group/${id}/edit`))
                   }
                   style={{
                     width: 44,
@@ -268,7 +269,7 @@ export default function GroupDetailScreen() {
           </Text>
           <TouchableOpacity
             onPress={() =>
-              router.push(`/organization/group/${id}/attendance` as any)
+              router.push(appHref(`/organization/group/${id}/attendance`))
             }
             style={{
               backgroundColor: "rgba(108, 92, 231, 0.1)",
@@ -315,7 +316,7 @@ export default function GroupDetailScreen() {
             >
               <TouchableOpacity
                 onPress={() =>
-                  router.push(`/organization/student/${student.id}` as any)
+                  router.push(appHref(`/organization/student/${student.id}`))
                 }
                 style={{
                   ...SHADOWS.sm,
@@ -380,7 +381,7 @@ export default function GroupDetailScreen() {
                 <TouchableOpacity
                   onPress={() =>
                     router.push(
-                      `/organization/student/${student.id}/feedback` as any,
+                      appHref(`/organization/student/${student.id}/feedback`),
                     )
                   }
                   style={{

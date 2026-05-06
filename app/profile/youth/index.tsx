@@ -242,7 +242,7 @@ export default function YouthProfile() {
                   Мои таланты
                 </Text>
                 <Pressable
-                  onPress={() => router.push("/profile/youth/results" as any)}
+                  onPress={() => router.push("/profile/youth/results")}
                 >
                   <Text
                     style={{

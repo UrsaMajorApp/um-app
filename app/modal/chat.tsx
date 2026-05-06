@@ -52,7 +52,7 @@ export default function ChatModal() {
         >
           {/* Header */}
           <LinearGradient
-            colors={COLORS.gradients.header as any}
+            colors={COLORS.gradients.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{

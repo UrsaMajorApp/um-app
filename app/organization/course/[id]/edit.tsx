@@ -311,7 +311,7 @@ export default function CourseEditScreen() {
                     }}
                   >
                     <Feather
-                      name={ic as any}
+                      name={ic}
                       size={20}
                       color={
                         icon === ic ? COLORS.primary : COLORS.mutedForeground

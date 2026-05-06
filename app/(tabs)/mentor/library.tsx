@@ -17,6 +17,7 @@ import {
   TYPOGRAPHY,
 } from "$constants/theme";
 import { useLearningMaterials } from "$hooks/useMentorData";
+import { featherIconName } from "$lib/icons";
 import { useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorLibrary() {
@@ -121,7 +122,7 @@ export default function MentorLibrary() {
                 }}
               >
                 <Feather
-                  name={item.icon_name as any}
+                  name={featherIconName(item.icon_name, "file-text")}
                   size={22}
                   color={item.color}
                 />

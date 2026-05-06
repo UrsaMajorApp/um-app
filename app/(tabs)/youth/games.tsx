@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import React, { useEffect, useState } from "react";
 import {
     Platform,
@@ -66,14 +67,14 @@ export default function GamesLobby() {
   }, []);
 
   const openGame = (gameId: GameId) => {
-    router.push(`/youth/games/${gameId}` as any);
+    router.push(appHref(`/youth/games/${gameId}`));
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -156,7 +157,7 @@ export default function GamesLobby() {
             style={{ marginBottom: 32 }}
           >
             <LinearGradient
-              colors={dailyChallenge.colors as any}
+              colors={dailyChallenge.colors}
               style={{
                 padding: isDesktop ? 28 : 24,
                 borderRadius: isDesktop ? 24 : 32,
@@ -219,7 +220,7 @@ export default function GamesLobby() {
                   }}
                 >
                   <Feather
-                    name={dailyChallenge.icon as any}
+                    name={dailyChallenge.icon}
                     size={32}
                     color={dailyChallenge.accentColor}
                   />
@@ -280,7 +281,7 @@ export default function GamesLobby() {
                   }}
                 >
                   <Feather
-                    name={game.icon as any}
+                    name={game.icon}
                     size={24}
                     color={game.color}
                   />

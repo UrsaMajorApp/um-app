@@ -58,7 +58,7 @@ export default function Sudoku({
     ];
 
     // Shuffle rows within 3x3 blocks
-    const shuffle = (arr: any[]) => arr.sort(() => Math.random() - 0.5);
+    const shuffle = <T,>(arr: T[]) => arr.sort(() => Math.random() - 0.5);
 
     const rowBlocks = [0, 1, 2].map((i) =>
       shuffle([i * 3, i * 3 + 1, i * 3 + 2]),

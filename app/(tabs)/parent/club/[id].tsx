@@ -17,6 +17,7 @@ import { useParentData } from "$contexts/ParentDataContext";
 import { courseGradient, usePublicCourseById } from "$hooks/usePublicData";
 import { useParentCourseEnrollment } from "$hooks/useParentCourseEnrollment";
 import { formatKZT } from "$lib/formatCurrency";
+import { featherIconName } from "$lib/icons";
 import { EnrollmentChoiceModal } from "$components/parent/club/EnrollmentChoiceModal";
 import { FullCourseBookingModal } from "$components/parent/club/FullCourseBookingModal";
 
@@ -108,7 +109,7 @@ export default function ParentClubDetails() {
             }}
           >
             <Feather
-              name={(course.icon as any) || "book-open"}
+              name={featherIconName(course.icon, "book-open")}
               size={72}
               color="rgba(255,255,255,0.9)"
             />

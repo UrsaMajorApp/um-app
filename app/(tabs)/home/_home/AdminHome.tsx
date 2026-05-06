@@ -26,6 +26,25 @@ import { formatKZT } from "$lib/formatCurrency";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import type { FeatherIconName } from "$types/icons";
+
+type AdminQueueItem = {
+  title: string;
+  count: number;
+  description: string;
+  icon: FeatherIconName;
+  color: string;
+  action: () => void;
+};
+
+type AdminMetricItem = {
+  label: string;
+  value: number | string;
+  detail: string;
+  icon: FeatherIconName;
+  color: string;
+  action: () => void;
+};
 
 export default function AdminOverviewScreen() {
   const { isTablet, paddingX } = useAdminLayout();
@@ -60,7 +79,7 @@ export default function AdminOverviewScreen() {
     draftCourses +
     pendingEnrollments;
 
-  const queue = [
+  const queue: AdminQueueItem[] = [
     {
       title: "Заявки менторов",
       count: stats.pendingMentors,
@@ -95,7 +114,7 @@ export default function AdminOverviewScreen() {
     },
   ];
   const visibleQueue = queue.filter((item) => item.count > 0);
-  const metrics = [
+  const metrics: AdminMetricItem[] = [
     {
       label: "Пользователи",
       value: users.data.length,
@@ -269,7 +288,7 @@ export default function AdminOverviewScreen() {
                       }}
                     >
                       <Feather
-                        name={item.icon as any}
+                        name={item.icon}
                         size={18}
                         color={item.color}
                       />
@@ -401,7 +420,7 @@ export default function AdminOverviewScreen() {
                       }}
                     >
                       <Feather
-                        name={metric.icon as any}
+                        name={metric.icon}
                         size={15}
                         color={metric.color}
                       />
@@ -561,7 +580,7 @@ export default function AdminOverviewScreen() {
                       }}
                     >
                       <Feather
-                        name={item.icon as any}
+                        name={item.icon}
                         size={15}
                         color={item.color}
                       />

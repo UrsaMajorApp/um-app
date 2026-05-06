@@ -9,6 +9,7 @@ import {
 import { COLORS, SHADOWS } from "$constants/theme";
 import { courseGradient, type PublicCourse } from "$hooks/usePublicData";
 import { formatKZT } from "$lib/formatCurrency";
+import { featherIconName } from "$lib/icons";
 
 type EnrollmentRequestModalProps = {
   visible: boolean;
@@ -99,7 +100,7 @@ export function EnrollmentRequestModal({
                     }}
                   >
                     <Feather
-                      name={(selectedCourse.icon as any) || "book-open"}
+                      name={featherIconName(selectedCourse.icon, "book-open")}
                       size={26}
                       color="white"
                     />

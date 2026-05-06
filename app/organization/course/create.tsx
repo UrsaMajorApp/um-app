@@ -1,5 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
@@ -75,7 +76,7 @@ export default function CreateCourseScreen() {
     }
 
     if (result.data?.id) {
-      router.replace(`/organization/course/${result.data.id}` as any);
+      router.replace(appHref(`/organization/course/${result.data.id}`));
     } else {
       router.back();
     }
@@ -210,7 +211,7 @@ export default function CreateCourseScreen() {
                     }}
                   >
                     <Feather
-                      name={ic as any}
+                      name={ic}
                       size={20}
                       color={
                         icon === ic ? COLORS.primary : COLORS.mutedForeground

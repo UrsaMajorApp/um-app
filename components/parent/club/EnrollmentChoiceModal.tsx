@@ -2,12 +2,14 @@ import { Feather } from "@expo/vector-icons";
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { formatKZT } from "$lib/formatCurrency";
+import type { PublicCourse, TrialLessonSlot } from "$hooks/usePublicData";
+import type { Child } from "$types/child";
 
 type EnrollmentChoiceModalProps = {
   visible: boolean;
-  course: any;
-  activeChild: any;
-  trialSlots: any[];
+  course: Pick<PublicCourse, "price">;
+  activeChild: Pick<Child, "name"> | null;
+  trialSlots: TrialLessonSlot[];
   enrollmentType: "trial" | "full" | null;
   selectedTimeSlot: string | null;
   applying: boolean;

@@ -20,6 +20,7 @@ import {
     TYPOGRAPHY,
 } from "$constants/theme";
 import { useChats } from "$hooks/useChats";
+import { featherIconName } from "$lib/icons";
 import { useIsDesktop } from "$lib/useIsDesktop";
 
 const DEFAULT_TABS = ["все", "непрочитанные", "архив"];
@@ -69,7 +70,7 @@ export default function ChatsScreen() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -244,7 +245,7 @@ export default function ChatsScreen() {
                     }}
                   >
                     <Feather
-                      name={chat.icon_name as any}
+                      name={featherIconName(chat.icon_name, "message-circle")}
                       size={22}
                       color={COLORS.primary}
                     />

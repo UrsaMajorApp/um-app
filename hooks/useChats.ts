@@ -14,6 +14,13 @@ export interface Chat {
   archived: boolean;
 }
 
+type ConversationParticipantRow = {
+  conversation_id: string;
+  unread_count: number | null;
+};
+
+type ConversationRow = Omit<Chat, "unread_count">;
+
 export function useChats() {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
@@ -32,7 +39,7 @@ export function useChats() {
       .from("conversation_participants")
       .select("conversation_id, unread_count")
       .eq("user_id", user.id);
-    const participantRows = rowsOrEmpty<any>(partRes);
+    const participantRows = rowsOrEmpty<ConversationParticipantRow>(partRes);
     const conversationIds = participantRows
       .map((row) => row.conversation_id)
       .filter(Boolean);
@@ -53,10 +60,10 @@ export function useChats() {
       .select("id, name, icon_name, last_message, last_message_at, archived")
       .in("id", conversationIds)
       .order("last_message_at", { ascending: false });
-    const convRows = rowsOrEmpty<any>(convRes);
+    const convRows = rowsOrEmpty<ConversationRow>(convRes);
 
     setChats(
-      convRows.map((c: any) => ({
+      convRows.map((c) => ({
         id: c.id,
         name: c.name,
         icon_name: c.icon_name ?? "message-circle",
@@ -105,6 +112,8 @@ export interface ChatMessage {
   is_mine: boolean;
 }
 
+type MessageRow = Omit<ChatMessage, "is_mine">;
+
 export function useChatMessages(conversationId: string | null) {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
@@ -123,9 +132,9 @@ export function useChatMessages(conversationId: string | null) {
       .select("*")
       .eq("conversation_id", conversationId)
       .order("created_at", { ascending: true });
-    const rows = rowsOrEmpty<any>(res);
+    const rows = rowsOrEmpty<MessageRow>(res);
     setMessages(
-      rows.map((m: any) => ({
+      rows.map((m) => ({
         id: m.id,
         conversation_id: m.conversation_id,
         sender_id: m.sender_id,

@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -18,6 +19,7 @@ import {
 } from "$constants/theme";
 import { useTeacherGroups } from "$hooks/usePlatformData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { WebViewStyle } from "$types/styles";
 
 export default function TeacherGroupsScreen() {
   const router = useRouter();
@@ -30,7 +32,7 @@ export default function TeacherGroupsScreen() {
     <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -80,7 +82,7 @@ export default function TeacherGroupsScreen() {
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() =>
-                    router.push(`/teacher/group/${group.id}` as any)
+                    router.push(appHref(`/teacher/group/${group.id}`))
                   }
                   style={styles.groupCard}
                 >
@@ -158,7 +160,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#F3F4F6",
     ...Platform.select({
-      web: { backdropFilter: "blur(10px)" } as any,
+      web: { backdropFilter: "blur(10px)" } as WebViewStyle,
       ios: {},
     }),
   },

@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -79,7 +80,7 @@ export default function MentorGroupDetail() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: SPACING.xl }}
         >
           <SafeAreaView edges={["top"]}>
@@ -208,7 +209,7 @@ export default function MentorGroupDetail() {
                 <TouchableOpacity
                   key={s.id}
                   onPress={() =>
-                    router.push(`/(tabs)/mentor/student/${s.id}` as any)
+                    router.push(appHref(`/(tabs)/mentor/student/${s.id}`))
                   }
                   style={{
                     flexDirection: "row",

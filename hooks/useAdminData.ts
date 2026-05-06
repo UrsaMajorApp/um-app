@@ -84,6 +84,50 @@ export interface AdminStats {
   totalSubscribers: number;
 }
 
+type AdminParentRow = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+};
+
+type ParentTariffRow = {
+  user_id: string;
+  tariff: string | null;
+};
+
+type ChildParentRow = {
+  parent_user_id: string;
+};
+
+type UserNameRow = AdminParentRow;
+
+type OrgNameRow = {
+  id: string;
+  name: string;
+};
+
+type TransactionRow = {
+  id: string;
+  external_ref: string | null;
+  parent_user_id: string | null;
+  org_id: string | null;
+  amount: number | string;
+  org_amount: number | string;
+  platform_amount: number | string;
+  status: string;
+  created_at: string;
+};
+
+type TicketRow = {
+  id: string;
+  kind: Ticket["kind"];
+  reporter_user_id: string | null;
+  target: string | null;
+  body: string;
+  status: Ticket["status"];
+  created_at: string;
+};
+
 export function useFamilies() {
   const [data, setData] = useState<AdminFamily[]>([]);
   const [loading, setLoading] = useState(true);
@@ -103,17 +147,20 @@ export function useFamilies() {
       supabase.from("child_profiles").select("parent_user_id"),
     ]);
     const tariffMap = new Map<string, string>(
-      rowsOrEmpty<any>(tariffs).map((t) => [t.user_id, t.tariff]),
+      rowsOrEmpty<ParentTariffRow>(tariffs).map((t) => [
+        t.user_id,
+        t.tariff ?? "basic",
+      ]),
     );
     const childCount = new Map<string, number>();
-    for (const c of rowsOrEmpty<any>(children)) {
+    for (const c of rowsOrEmpty<ChildParentRow>(children)) {
       childCount.set(
         c.parent_user_id,
         (childCount.get(c.parent_user_id) ?? 0) + 1,
       );
     }
     setData(
-      rowsOrEmpty<any>(parents).map((p) => ({
+      rowsOrEmpty<AdminParentRow>(parents).map((p) => ({
         id: p.id,
         parentName: `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || "—",
         children: childCount.get(p.id) ?? 0,
@@ -246,20 +293,20 @@ export function useTransactions() {
       supabase.from("organizations").select("id, name"),
     ]);
     const parentMap = new Map<string, string>(
-      rowsOrEmpty<any>(parentsRes).map((p) => [
+      rowsOrEmpty<UserNameRow>(parentsRes).map((p) => [
         p.id,
         `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim() || "—",
       ]),
     );
     const orgMap = new Map<string, string>(
-      rowsOrEmpty<any>(orgsRes).map((o) => [o.id, o.name]),
+      rowsOrEmpty<OrgNameRow>(orgsRes).map((o) => [o.id, o.name]),
     );
     setData(
-      rowsOrEmpty<any>(txRes).map((t) => ({
+      rowsOrEmpty<TransactionRow>(txRes).map((t) => ({
         id: t.id,
         external_ref: t.external_ref,
-        parent_name: parentMap.get(t.parent_user_id) ?? "—",
-        org_name: orgMap.get(t.org_id) ?? "—",
+        parent_name: parentMap.get(t.parent_user_id ?? "") ?? "—",
+        org_name: orgMap.get(t.org_id ?? "") ?? "—",
         amount: Number(t.amount),
         org_amount: Number(t.org_amount),
         platform_amount: Number(t.platform_amount),
@@ -294,16 +341,16 @@ export function useTickets() {
       supabase.from("um_user_profiles").select("id, first_name, last_name"),
     ]);
     const userMap = new Map<string, string>(
-      rowsOrEmpty<any>(usersRes).map((u) => [
+      rowsOrEmpty<UserNameRow>(usersRes).map((u) => [
         u.id,
         `${u.first_name ?? ""} ${u.last_name ?? ""}`.trim() || "—",
       ]),
     );
     setData(
-      rowsOrEmpty<any>(ticketRes).map((t) => ({
+      rowsOrEmpty<TicketRow>(ticketRes).map((t) => ({
         id: t.id,
         kind: t.kind,
-        reporter_name: userMap.get(t.reporter_user_id) ?? "Аноним",
+        reporter_name: userMap.get(t.reporter_user_id ?? "") ?? "Аноним",
         target: t.target,
         body: t.body,
         status: t.status,
@@ -429,6 +476,8 @@ export interface AdminEnrollment {
   created_at: string;
 }
 
+type AdminEnrollmentRow = Omit<AdminEnrollment, "org_name">;
+
 export function useAdminEnrollments() {
   const [data, setData] = useState<AdminEnrollment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -448,10 +497,10 @@ export function useAdminEnrollments() {
       supabase.from("organizations").select("id, name"),
     ]);
     const orgMap = new Map<string, string>(
-      rowsOrEmpty<any>(orgsRes).map((o) => [o.id, o.name]),
+      rowsOrEmpty<OrgNameRow>(orgsRes).map((o) => [o.id, o.name]),
     );
     setData(
-      rowsOrEmpty<any>(appRes).map((a) => ({
+      rowsOrEmpty<AdminEnrollmentRow>(appRes).map((a) => ({
         id: a.id,
         org_id: a.org_id,
         org_name: orgMap.get(a.org_id) ?? "—",
@@ -568,6 +617,16 @@ export interface AdminCourse {
   created_at: string;
 }
 
+type AdminCourseRow = Omit<
+  AdminCourse,
+  "org_name" | "level" | "price" | "skills" | "status"
+> & {
+  level: string | null;
+  price: number | string | null;
+  skills: unknown;
+  status: AdminCourse["status"] | null;
+};
+
 export interface AdminUser {
   id: string;
   first_name: string | null;
@@ -595,10 +654,10 @@ export function useAdminCourses() {
       supabase.from("organizations").select("id, name"),
     ]);
     const orgMap = new Map<string, string>(
-      rowsOrEmpty<any>(orgsRes).map((o) => [o.id, o.name]),
+      rowsOrEmpty<OrgNameRow>(orgsRes).map((o) => [o.id, o.name]),
     );
     setData(
-      rowsOrEmpty<any>(coursesRes).map((c) => ({
+      rowsOrEmpty<AdminCourseRow>(coursesRes).map((c) => ({
         id: c.id,
         org_id: c.org_id,
         org_name: orgMap.get(c.org_id) ?? "—",
@@ -606,7 +665,9 @@ export function useAdminCourses() {
         description: c.description ?? null,
         level: c.level ?? "beginner",
         price: Number(c.price ?? 0),
-        skills: Array.isArray(c.skills) ? c.skills : [],
+        skills: Array.isArray(c.skills)
+          ? c.skills.filter((skill): skill is string => typeof skill === "string")
+          : [],
         status: c.status ?? "draft",
         age_min: c.age_min ?? null,
         age_max: c.age_max ?? null,

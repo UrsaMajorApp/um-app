@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import React, { useState } from "react";
 import {
   Platform,
@@ -15,6 +16,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useOrgApplications } from "$hooks/useOrgData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
+
+type StudentStat = {
+  label: string;
+  value: number;
+  ico: FeatherIconName;
+  color: string;
+};
 
 export default function OrgStudents() {
   const router = useRouter();
@@ -53,7 +62,7 @@ export default function OrgStudents() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -152,14 +161,14 @@ export default function OrgStudents() {
             marginTop: 8,
           }}
         >
-          {[
+          {([
             {
               label: "Учеников",
               value: filtered.length,
               ico: "users",
               color: COLORS.primary,
             },
-          ].map((s) => (
+          ] satisfies StudentStat[]).map((s) => (
             <View
               key={s.label}
               style={{
@@ -173,7 +182,7 @@ export default function OrgStudents() {
                 shadowRadius: 6,
               }}
             >
-              <Feather name={s.ico as any} size={18} color={s.color} />
+              <Feather name={s.ico} size={18} color={s.color} />
               <Text
                 style={{
                   fontSize: 20,
@@ -215,7 +224,7 @@ export default function OrgStudents() {
           <Pressable
             key={student.id}
             onPress={() =>
-              router.push(`/organization/student/${student.id}` as any)
+              router.push(appHref(`/organization/student/${student.id}`))
             }
             style={SHADOWS.sm}
             className="bg-white rounded-3xl p-4 mb-4 border border-gray-100"

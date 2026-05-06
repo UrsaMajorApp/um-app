@@ -17,7 +17,7 @@ module.exports = function (api) {
             "$data": "./data",
             "$hooks": "./hooks",
             "$lib": "./lib",
-            "$models": "./models",
+            "$types": "./types",
           },
         },
       ],

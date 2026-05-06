@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  type TextInputProps,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -135,8 +136,8 @@ export default function MentorCreateProfile() {
       }
       await finalizeRegistration();
       setIsSuccess(true);
-    } catch (e: any) {
-      setError(e.message || "Ошибка при отправке");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Ошибка при отправке");
     } finally {
       setSubmitting(false);
     }
@@ -812,6 +813,19 @@ export default function MentorCreateProfile() {
   );
 }
 
+type InputFieldProps = {
+  label: string;
+  value: string;
+  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  placeholder?: string;
+  keyboardType?: TextInputProps["keyboardType"];
+  multiline?: boolean;
+  height?: number;
+  suffix?: string;
+  maxLength?: number;
+  roleColor?: string;
+};
+
 function InputField({
   label,
   value,
@@ -822,7 +836,7 @@ function InputField({
   height,
   suffix,
   maxLength,
-}: any) {
+}: InputFieldProps) {
   return (
     <View style={{ marginBottom: 20 }}>
       <Text style={styles.fieldLabel}>{label}</Text>
@@ -831,7 +845,7 @@ function InputField({
           value={value}
           onChangeText={onChange}
           placeholder=""
-          keyboardType={keyboardType as any}
+          keyboardType={keyboardType}
           multiline={multiline}
           maxLength={maxLength}
           style={[

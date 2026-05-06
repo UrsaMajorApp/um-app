@@ -7,6 +7,11 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { PressableScale } from "$components/ui/PressableScale";
 import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
+import type { ComponentProps } from "react";
+
+type MaterialCommunityIconName = ComponentProps<
+  typeof MaterialCommunityIcons
+>["name"];
 
 export default function IntroScreen() {
   const router = useRouter();
@@ -166,7 +171,16 @@ function FloatingIcon({
   right,
   bottom,
   delay,
-}: any) {
+}: {
+  name: MaterialCommunityIconName;
+  color: string;
+  size: number;
+  top?: number;
+  left?: number;
+  right?: number;
+  bottom?: number;
+  delay: number;
+}) {
   return (
     <MotiView
       from={{ opacity: 0, translateY: 0 }}

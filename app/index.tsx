@@ -22,11 +22,7 @@ export default function Index() {
       if (user.hasSelectedRole === false) {
         return <Redirect href="/auth/complete-profile" />;
       }
-      return (
-        <Redirect
-          href={(PROFILE_SETUP_ROUTES[user.role] ?? "/(tabs)/home") as any}
-        />
-      );
+      return <Redirect href={PROFILE_SETUP_ROUTES[user.role] ?? "/(tabs)/home"} />;
     }
     return <Redirect href="/(tabs)/home" />;
   }

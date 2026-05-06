@@ -1,12 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import { View } from "react-native";
+import type { FeatherIconName } from "$types/icons";
 
 export function TabIcon({
   icon,
   color,
   focused,
 }: {
-  icon: any;
+  icon: FeatherIconName;
   color: string;
   focused: boolean;
 }) {

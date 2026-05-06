@@ -63,7 +63,7 @@ export default function StudentDetailScreen() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: SPACING.xl }}
         >
           <SafeAreaView edges={["top"]}>
@@ -569,7 +569,7 @@ export default function StudentDetailScreen() {
                   justifyContent: "center",
                   ...SHADOWS.md,
                 }}
-                onPress={() => router.push("/(tabs)/chats" as any)}
+                onPress={() => router.push("/(tabs)/chats")}
               >
                 <Feather name="message-circle" size={20} color="white" />
               </TouchableOpacity>

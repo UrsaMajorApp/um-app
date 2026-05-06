@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  type TextInputProps,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,6 +23,7 @@ import { useAuth } from "$contexts/AuthContext";
 import { formatPhone } from "$lib/formatPhone";
 import { isSupabaseConfigured, supabase } from "$lib/supabase";
 import { useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
 
 // Org brand colour — matches the ROLES entry in register.tsx
 const ORG_COLOR = "#10B981";
@@ -100,8 +102,8 @@ export default function CreateProfileOrganization() {
       }
       await finalizeRegistration();
       setIsSuccess(true);
-    } catch (e: any) {
-      setError(e.message || "Произошла ошибка");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Произошла ошибка");
     } finally {
       setSubmitting(false);
     }
@@ -426,6 +428,21 @@ export default function CreateProfileOrganization() {
 }
 
 // Field component — same as the one in register.tsx
+type FieldProps = {
+  label: string;
+  icon: FeatherIconName;
+  value: string;
+  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  placeholder?: string;
+  keyboardType?: TextInputProps["keyboardType"];
+  autoFocus?: boolean;
+  secure?: boolean;
+  showToggle?: () => void;
+  shown?: boolean;
+  last?: boolean;
+  required?: boolean;
+};
+
 function Field({
   label,
   icon,
@@ -439,7 +456,7 @@ function Field({
   shown,
   last = false,
   required = false,
-}: any) {
+}: FieldProps) {
   return (
     <View style={{ marginBottom: last ? 0 : 20 }}>
       <View

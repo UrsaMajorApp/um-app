@@ -100,7 +100,14 @@ export default function AnalyticsScreen() {
     // For marking the calendar, we use a separate "all items" set — see note below.
     // Since useOrgSchedule filters by dayOfWeek, we can't know which OTHER days have events.
     // Instead, mark the selected date and trust the user to explore.
-    const marked: any = {};
+    const marked: Record<
+      string,
+      {
+        selected: boolean;
+        selectedColor: string;
+        selectedTextColor: string;
+      }
+    > = {};
     marked[selectedDate] = {
       selected: true,
       selectedColor: COLORS.primary,

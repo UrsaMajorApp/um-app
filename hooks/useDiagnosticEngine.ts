@@ -26,7 +26,7 @@ import {
   type StealthEvent
 } from "$data/diagnosticData";
 import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
-import { Diagnostic } from "$models/types";
+import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
@@ -276,7 +276,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
   }
 }`;
 
-      return generateGeminiDiagnosticJson(prompt);
+      return generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
     },
     [isPro],
   );
@@ -289,7 +289,7 @@ Generate a JSON object (RAW JSON, no markdown). ${isPro ? "Include ALL fields" :
 
     const computed = computeResults();
 
-    let aiData: Record<string, any> = {};
+    let aiData: DiagnosticAiResponse = {};
     try {
       aiData = await processWithAI(computed);
     } catch (e) {

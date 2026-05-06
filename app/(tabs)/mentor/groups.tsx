@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
@@ -51,7 +52,7 @@ export default function MentorGroups() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: SPACING.xl }}
         >
           <SafeAreaView edges={["top"]}>
@@ -152,7 +153,7 @@ export default function MentorGroups() {
           {filtered.map((group) => (
             <Pressable
               key={group.id}
-              onPress={() => router.push(`/mentor/group/${group.id}` as any)}
+              onPress={() => router.push(appHref(`/mentor/group/${group.id}`))}
               style={{
                 ...SHADOWS.strict,
                 backgroundColor: COLORS.white,

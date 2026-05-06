@@ -15,7 +15,7 @@ import {
   type StealthEvent1214
 } from "$data/diagnosticData1214";
 import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
-import type { Diagnostic } from "$models/types";
+import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
 
 export type Phase1214 = "intro" | "basic" | "pro" | "processing" | "done";
 
@@ -203,7 +203,7 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
   }
 }`;
 
-      return generateGeminiDiagnosticJson(prompt);
+      return generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
     },
     [isPro],
   );
@@ -213,7 +213,7 @@ Generate RAW JSON only. ${isPro ? "Include ALL fields" : "Include only base fiel
     setIsProcessing(true);
     const computed = computeResults();
 
-    let aiData: any = {};
+    let aiData: DiagnosticAiResponse = {};
     try {
       aiData = await processWithAI(computed);
     } catch (e) {

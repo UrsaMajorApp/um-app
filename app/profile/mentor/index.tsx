@@ -24,6 +24,7 @@ import {
   useMentorProfileStats,
 } from "$hooks/useMentorData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
 
 export default function MentorProfile() {
   const { logout, user } = useAuth();
@@ -89,7 +90,7 @@ export default function MentorProfile() {
     <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
       <View style={{ zIndex: 10 }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
@@ -368,11 +369,11 @@ export default function MentorProfile() {
   );
 }
 
-function InfoRow({ icon, label }: { icon: string; label: string }) {
+function InfoRow({ icon, label }: { icon: FeatherIconName; label: string }) {
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
       <View style={styles.iconCircle}>
-        <Feather name={icon as any} size={16} color={COLORS.primary} />
+        <Feather name={icon} size={16} color={COLORS.primary} />
       </View>
       <Text
         style={{ fontSize: 15, color: COLORS.foreground, fontWeight: "500" }}

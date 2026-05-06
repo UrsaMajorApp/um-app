@@ -9,9 +9,13 @@ import {
 } from "react-native";
 import { COLORS, SHADOWS } from "$constants/theme";
 
+type QRScanResult = {
+  id: string;
+};
+
 interface QRScannerProps {
   onClose: () => void;
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: QRScanResult) => void;
   visible: boolean;
 }
 

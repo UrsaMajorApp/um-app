@@ -1,4 +1,4 @@
-import { useRouter, useSegments } from "expo-router";
+import { useRouter, useSegments, type Href } from "expo-router";
 import {
   DEFAULT_TABS,
   TABS_BY_ROLE,
@@ -13,10 +13,11 @@ export function useTabNav(role: Role | string | null) {
   const tabs = role ? TABS_BY_ROLE[role] || DEFAULT_TABS : DEFAULT_TABS;
 
   const go = (route: string) => {
+    const href = `/(tabs)/${route}` as Href;
     if (route.includes("/")) {
-      router.push(`/(tabs)/${route}` as any);
+      router.push(href);
     } else {
-      router.replace(`/(tabs)/${route}` as any);
+      router.replace(href);
     }
   };
 

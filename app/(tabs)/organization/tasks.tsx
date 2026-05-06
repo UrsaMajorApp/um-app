@@ -58,7 +58,7 @@ export default function OrgTasks() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingBottom: SPACING.xl }}
@@ -100,7 +100,7 @@ export default function OrgTasks() {
                 </Text>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push("/organization/task/create" as any)
+                    router.push("/organization/task/create")
                   }
                   style={{
                     backgroundColor: "rgba(255,255,255,0.2)",

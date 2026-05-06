@@ -554,7 +554,7 @@ export default function YouthResults() {
                 рекомендации.
               </Text>
               <TouchableOpacity
-                onPress={() => router.push("/parent/subscription" as any)}
+                onPress={() => router.push("/parent/subscription")}
                 style={{
                   backgroundColor: "white",
                   paddingVertical: 14,

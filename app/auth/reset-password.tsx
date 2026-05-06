@@ -13,6 +13,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  type TextInputProps,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -210,7 +211,21 @@ export default function ResetPasswordScreen() {
   );
 }
 
-function PasswordField({ label, value, onChange, shown, onToggle }: any) {
+type PasswordFieldProps = {
+  label: string;
+  value: string;
+  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  shown: boolean;
+  onToggle: () => void;
+};
+
+function PasswordField({
+  label,
+  value,
+  onChange,
+  shown,
+  onToggle,
+}: PasswordFieldProps) {
   return (
     <View style={{ marginBottom: 20 }}>
       <Text style={styles.label}>{label}</Text>

@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React, { useMemo, useState } from "react";
 import {
@@ -22,6 +23,7 @@ import {
   TYPOGRAPHY,
 } from "$constants/theme";
 import { useOrgCourses, useOrgGroups } from "$hooks/useOrgData";
+import { featherIconName } from "$lib/icons";
 import { formatKZT } from "$lib/formatCurrency";
 import { useIsDesktop } from "$lib/useIsDesktop";
 
@@ -66,7 +68,7 @@ export default function OrgCourses() {
       {/* Header */}
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -98,7 +100,7 @@ export default function OrgCourses() {
                 </Text>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push("/organization/course/create" as any)
+                    router.push("/organization/course/create")
                   }
                   style={{
                     backgroundColor: "rgba(255,255,255,0.2)",
@@ -291,7 +293,7 @@ export default function OrgCourses() {
               Создайте первый курс, чтобы начать набор учеников
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/organization/course/create" as any)}
+              onPress={() => router.push("/organization/course/create")}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 28,
@@ -323,7 +325,7 @@ export default function OrgCourses() {
                 >
                   <TouchableOpacity
                     onPress={() =>
-                      router.push(`/organization/course/${course.id}` as any)
+                      router.push(appHref(`/organization/course/${course.id}`))
                     }
                     style={{
                       ...SHADOWS.strict,
@@ -362,7 +364,7 @@ export default function OrgCourses() {
                           }}
                         >
                           <Feather
-                            name={course.icon as any}
+                            name={featherIconName(course.icon, "book-open")}
                             size={28}
                             color={COLORS.primary}
                           />
@@ -468,7 +470,7 @@ export default function OrgCourses() {
                         <TouchableOpacity
                           onPress={() =>
                             router.push(
-                              `/organization/course/${course.id}/edit` as any,
+                              appHref(`/organization/course/${course.id}/edit`),
                             )
                           }
                           style={{

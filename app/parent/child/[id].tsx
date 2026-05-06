@@ -44,7 +44,7 @@ export default function ParentChildDetails() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <LinearGradient
-        colors={COLORS.gradients.header as any}
+        colors={COLORS.gradients.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
@@ -69,7 +69,7 @@ export default function ParentChildDetails() {
                   if (router.canGoBack()) {
                     router.back();
                   } else {
-                    router.replace("/" as any);
+                    router.replace("/");
                   }
                 }}
                 style={{
@@ -210,7 +210,7 @@ export default function ParentChildDetails() {
                     router.push({
                       pathname: "/profile/youth/testing",
                       params: { childId: child.id },
-                    } as any);
+                    });
                   }}
                   className="bg-blue-50 py-3 px-5 rounded-2xl self-start"
                 >
@@ -343,7 +343,7 @@ export default function ParentChildDetails() {
                 router.push({
                   pathname: "/profile/youth/testing",
                   params: { childId: child.id },
-                } as any);
+                    });
               }}
               className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
             >
@@ -384,7 +384,7 @@ export default function ParentChildDetails() {
               трекинг с ментором и детальная аналитика.
             </Text>
             <Pressable
-              onPress={() => router.push("/parent/subscription" as any)}
+              onPress={() => router.push("/parent/subscription")}
               className="bg-purple-500 h-14 rounded-2xl items-center justify-center active:bg-purple-600"
             >
               <Text className="text-white font-black text-sm uppercase tracking-wide">

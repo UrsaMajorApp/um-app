@@ -19,6 +19,13 @@ import {
   useMentorTrialRequests,
 } from "$hooks/useMentorTrialRequests";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
+
+type OutcomeConfig = {
+  color: string;
+  label: string;
+  icon: FeatherIconName;
+};
 
 export default function MentorSessionsScreen() {
   const isDesktop = useIsDesktop();
@@ -141,7 +148,10 @@ export default function MentorSessionsScreen() {
     item: MentorTrialRequest;
     index: number;
   }) => {
-    const outcomeConfig = {
+    const outcomeConfig: Record<
+      NonNullable<MentorTrialRequest["outcome"]>,
+      OutcomeConfig
+    > = {
       enrolled: { color: "#10B981", label: "Записался", icon: "user-check" },
       declined_by_parent: {
         color: "#F59E0B",
@@ -183,7 +193,7 @@ export default function MentorSessionsScreen() {
               ]}
             >
               <Feather
-                name={outcome.icon as any}
+                name={outcome.icon}
                 size={14}
                 color={outcome.color}
               />
@@ -211,7 +221,7 @@ export default function MentorSessionsScreen() {
     <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}

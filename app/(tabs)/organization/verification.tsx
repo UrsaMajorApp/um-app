@@ -20,6 +20,7 @@ import {
   useOrgVerification,
 } from "$hooks/useOrgVerification";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
 
 export default function OrgVerificationScreen() {
   const router = useRouter();
@@ -125,7 +126,7 @@ export default function OrgVerificationScreen() {
     key: OrgVerificationDocKey;
     label: string;
     hint: string;
-    icon: string;
+    icon: FeatherIconName;
   }[] = [
     {
       key: "bin_doc",
@@ -358,7 +359,7 @@ export default function OrgVerificationScreen() {
                     }}
                   >
                     <Feather
-                      name={uploaded ? "check" : (slot.icon as any)}
+                      name={uploaded ? "check" : slot.icon}
                       size={20}
                       color={uploaded ? "#10B981" : "#6C5CE7"}
                     />

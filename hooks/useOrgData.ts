@@ -300,6 +300,11 @@ export interface OrgStats {
   staffCount: number;
 }
 
+type OrgStatsApplicationRow = {
+  id: string;
+  status: OrgApplication["status"];
+};
+
 export function useOrgStats() {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
@@ -338,13 +343,13 @@ export function useOrgStats() {
         .eq("org_id", orgId)
         .eq("status", "active"),
     ]);
-    const allApps = rowsOrEmpty<any>(apps);
+    const allApps = rowsOrEmpty<OrgStatsApplicationRow>(apps);
     setStats({
       groupCount: groups.count ?? 0,
-      studentCount: allApps.filter((a: any) =>
+      studentCount: allApps.filter((a) =>
         ["paid", "activated"].includes(a.status),
       ).length,
-      pendingCount: allApps.filter((a: any) => a.status === "awaiting_payment")
+      pendingCount: allApps.filter((a) => a.status === "awaiting_payment")
         .length,
       staffCount: staff.count ?? 0,
     });

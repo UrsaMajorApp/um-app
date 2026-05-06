@@ -20,7 +20,7 @@ const ALIASES = {
   $data: path.resolve(__dirname, "data"),
   $hooks: path.resolve(__dirname, "hooks"),
   $lib: path.resolve(__dirname, "lib"),
-  $models: path.resolve(__dirname, "models"),
+  $types: path.resolve(__dirname, "types"),
   tslib: "tslib/tslib.es6.js",
 };
 

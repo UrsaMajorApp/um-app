@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MotiView } from "moti";
 import React, { useState } from "react";
@@ -12,6 +12,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  type TextStyle,
+  type TextInputProps,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,6 +28,9 @@ import { useAuth, type UserRole } from "$contexts/AuthContext";
 import { useDevSettings } from "$contexts/DevSettingsContext";
 import { formatPhone } from "$lib/formatPhone";
 import { useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
+
+type WebTextStyle = TextStyle & { outlineWidth?: number };
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -36,7 +41,7 @@ export default function RegisterScreen() {
   // step 0 = role, step 1 = phone/email + password, step 2 = OTP for phone, step 3 = name
   const [step, setStep] = useState<number>(0);
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
-  const [selectedRoute, setSelectedRoute] = useState("");
+  const [selectedRoute, setSelectedRoute] = useState<Href | "">("");
 
   const [authMethod, setAuthMethod] = useState<AuthMethod>("phone");
   const [identifier, setIdentifier] = useState("");
@@ -150,7 +155,7 @@ export default function RegisterScreen() {
       return;
     }
 
-    router.replace(selectedRoute as any);
+    if (selectedRoute) router.replace(selectedRoute);
   };
 
   const handleBack = () => {
@@ -553,17 +558,15 @@ export default function RegisterScreen() {
                           }
                           keyboardType="number-pad"
                           autoFocus
-                          style={
-                            {
-                              fontSize: 48,
-                              fontWeight: "900",
-                              textAlign: "center",
-                              letterSpacing: 10,
-                              color: currentRoleInfo?.color || COLORS.primary,
-                              marginBottom: 20,
-                              outlineWidth: 0,
-                            } as any
-                          }
+                          style={{
+                            fontSize: 48,
+                            fontWeight: "900",
+                            textAlign: "center",
+                            letterSpacing: 10,
+                            color: currentRoleInfo?.color || COLORS.primary,
+                            marginBottom: 20,
+                            outlineWidth: 0,
+                          } satisfies WebTextStyle}
                         />
                         <PressableScale
                           onPress={() => sendRegistrationCode(identifier)}
@@ -768,6 +771,22 @@ export default function RegisterScreen() {
   );
 }
 
+type FieldProps = {
+  label: string;
+  icon: FeatherIconName;
+  value: string;
+  onChange: NonNullable<TextInputProps["onChangeText"]>;
+  placeholder: string;
+  keyboardType?: TextInputProps["keyboardType"];
+  secure?: boolean;
+  autoFocus?: boolean;
+  showToggle?: () => void;
+  shown?: boolean;
+  autoCapitalize?: TextInputProps["autoCapitalize"];
+  autoCorrect?: TextInputProps["autoCorrect"];
+  last?: boolean;
+};
+
 function Field({
   label,
   icon,
@@ -781,9 +800,10 @@ function Field({
   shown,
   autoCapitalize,
   autoCorrect,
-}: any) {
+  last = false,
+}: FieldProps) {
   return (
-    <View style={{ marginBottom: 20 }}>
+    <View style={{ marginBottom: last ? 0 : 20 }}>
       <Text
         style={{
           fontSize: 13,
@@ -809,7 +829,7 @@ function Field({
           onChangeText={onChange}
           placeholder=""
           placeholderTextColor={COLORS.mutedForeground}
-          keyboardType={keyboardType as any}
+          keyboardType={keyboardType}
           secureTextEntry={secure && !shown}
           autoFocus={autoFocus}
           autoCapitalize={autoCapitalize}

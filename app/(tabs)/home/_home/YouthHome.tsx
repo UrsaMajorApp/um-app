@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { useState } from "react";
 import {
   Platform,
@@ -30,6 +31,15 @@ import {
   useYouthAchievements,
 } from "$hooks/useStudentData";
 import { useYouthEnrollmentRequests } from "$hooks/useYouthEnrollmentRequests";
+import { featherIconName } from "$lib/icons";
+import type { FeatherIconName } from "$types/icons";
+
+type QuickAction = {
+  label: string;
+  icon: FeatherIconName;
+  color: string;
+  route: string;
+};
 
 export default function YouthHome() {
   const router = useRouter();
@@ -83,7 +93,7 @@ export default function YouthHome() {
   // QR payload: stable string per user
   const qrValue = `um:pass:${user?.id ?? "guest"}:${user?.firstName ?? ""}`;
 
-  const quickActions = [
+  const quickActions: QuickAction[] = [
     { label: "Мой пропуск", icon: "maximize", color: "#EC4899", route: "#qr" },
     {
       label: "Расписание",
@@ -102,7 +112,7 @@ export default function YouthHome() {
       {/* Header - Restored Violet Aesthetic */}
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -140,7 +150,7 @@ export default function YouthHome() {
                   </Text>
                 </View>
                 <Pressable
-                  onPress={() => router.push("/profile" as any)}
+                  onPress={() => router.push("/profile")}
                   className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
                 >
                   <View className="w-full h-full bg-white/20 items-center justify-center">
@@ -188,7 +198,7 @@ export default function YouthHome() {
               onPress={() =>
                 action.route === "#qr"
                   ? setPassVisible(true)
-                  : router.push(action.route as any)
+                  : router.push(appHref(action.route))
               }
               style={SHADOWS.sm}
               className="flex-1 bg-white p-4 rounded-3xl border border-gray-50 items-center transition-all active:scale-95"
@@ -197,11 +207,7 @@ export default function YouthHome() {
                 style={{ backgroundColor: action.color + "15" }}
                 className="w-12 h-12 rounded-2xl items-center justify-center mb-2"
               >
-                <Feather
-                  name={action.icon as any}
-                  size={22}
-                  color={action.color}
-                />
+                <Feather name={action.icon} size={22} color={action.color} />
               </View>
               <Text className="text-[10px] font-black text-gray-800 uppercase text-center">
                 {action.label}
@@ -232,7 +238,7 @@ export default function YouthHome() {
                   {currentSkills[0].label}. Хочешь знать больше?
                 </Text>
                 <Pressable
-                  onPress={() => router.push("/parent/subscription" as any)}
+                  onPress={() => router.push("/parent/subscription")}
                   className="mt-3"
                 >
                   <Text className="text-blue-600 font-black text-[10px] uppercase underline">
@@ -285,7 +291,7 @@ export default function YouthHome() {
             </View>
             {diagnostic && (
               <Pressable
-                onPress={() => router.push("/profile/youth/results" as any)}
+                onPress={() => router.push("/profile/youth/results")}
               >
                 <Text className="text-primary font-bold text-xs">
                   Все детали
@@ -333,7 +339,7 @@ export default function YouthHome() {
                     params: activeChild?.id
                       ? { childId: activeChild.id }
                       : undefined,
-                  } as any);
+                  });
                 }}
                 className="bg-purple-600 p-4 rounded-2xl items-center flex-row justify-center gap-2"
               >
@@ -437,7 +443,7 @@ export default function YouthHome() {
                       }}
                     >
                       <Feather
-                        name={(rec.icon as any) || "book-open"}
+                        name={featherIconName(rec.icon, "book-open")}
                         size={32}
                         color={c1}
                       />
@@ -468,7 +474,7 @@ export default function YouthHome() {
                       ) : null}
                       <Pressable
                         onPress={() =>
-                          router.push(`/parent/club/${rec.id}` as any)
+                          router.push(appHref(`/parent/club/${rec.id}`))
                         }
                         style={{
                           backgroundColor: "#EDE9FE",
@@ -646,7 +652,11 @@ export default function YouthHome() {
                     }}
                   >
                     <Feather
-                      name={ach.unlocked ? (ach.icon_name as any) : "lock"}
+                      name={
+                        ach.unlocked
+                          ? featherIconName(ach.icon_name, "award")
+                          : "lock"
+                      }
                       size={24}
                       color={
                         ach.unlocked ? COLORS.primary : COLORS.mutedForeground
@@ -700,7 +710,7 @@ export default function YouthHome() {
               Интересные кружки
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/(tabs)/parent/clubs" as any)}
+              onPress={() => router.push("/(tabs)/parent/clubs")}
             >
               <Text
                 style={{
@@ -779,7 +789,7 @@ export default function YouthHome() {
                         }}
                       >
                         <Feather
-                          name={(course.icon as any) || "book-open"}
+                          name={featherIconName(course.icon, "book-open")}
                           size={20}
                           color="white"
                         />

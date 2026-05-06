@@ -92,8 +92,11 @@ export default function OrgProfile() {
         await refreshProfile();
         Alert.alert("Успешно", "Данные отправлены на верификацию");
       }
-    } catch (e: any) {
-      Alert.alert("Ошибка", e.message || "Не удалось отправить данные");
+    } catch (e: unknown) {
+      Alert.alert(
+        "Ошибка",
+        e instanceof Error ? e.message : "Не удалось отправить данные",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -107,7 +110,7 @@ export default function OrgProfile() {
       {/* Premium Header */}
       <View style={{ backgroundColor: "#4F46E5", overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingBottom: 40 }}

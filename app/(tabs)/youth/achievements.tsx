@@ -1,5 +1,6 @@
 import { COLORS } from "$constants/theme";
 import { useYouthAchievements } from "$hooks/useStudentData";
+import { featherIconName } from "$lib/icons";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -29,7 +30,7 @@ export default function YouthAchievements() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <LinearGradient
-        colors={COLORS.gradients.header as any}
+        colors={COLORS.gradients.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
@@ -128,7 +129,11 @@ export default function YouthAchievements() {
                 className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
               >
                 <Feather
-                  name={item.unlocked ? (item.icon_name as any) : "lock"}
+                  name={
+                    item.unlocked
+                      ? featherIconName(item.icon_name, "award")
+                      : "lock"
+                  }
                   size={32}
                   color={item.unlocked ? "#6C5CE7" : "#9CA3AF"}
                 />

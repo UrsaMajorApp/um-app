@@ -2,9 +2,13 @@ import { ADMIN_ROUTES, type AdminRouteKey } from "$constants/admin";
 import { LAYOUT, SPACING } from "$constants/theme";
 import { isSupabaseConfigured, supabase } from "$lib/supabase";
 import { rowsOrEmpty } from "$lib/supabaseHelpers";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { useWindowDimensions } from "react-native";
 import { useIsDesktop } from "$lib/useIsDesktop";
+
+type ConversationParticipantRow = {
+  conversation_id: string;
+};
 
 export function useAdminLayout() {
   const { width } = useWindowDimensions();
@@ -31,7 +35,7 @@ export function formatAdminDate(iso: string): string {
 
 export function useAdminNavigation() {
   const router = useRouter();
-  return (route: AdminRouteKey) => router.push(ADMIN_ROUTES[route] as any);
+  return (route: AdminRouteKey) => router.push(ADMIN_ROUTES[route] as Href);
 }
 
 export async function ensureConversation(
@@ -53,9 +57,11 @@ export async function ensureConversation(
       .eq("user_id", otherUserId),
   ]);
   const currentIds = new Set(
-    rowsOrEmpty<any>(currentParts).map((p) => p.conversation_id),
+    rowsOrEmpty<ConversationParticipantRow>(currentParts).map(
+      (p) => p.conversation_id,
+    ),
   );
-  const shared = rowsOrEmpty<any>(otherParts).find((p) =>
+  const shared = rowsOrEmpty<ConversationParticipantRow>(otherParts).find((p) =>
     currentIds.has(p.conversation_id),
   );
   if (shared?.conversation_id)

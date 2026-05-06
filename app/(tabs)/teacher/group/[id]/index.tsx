@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -105,23 +106,19 @@ export default function TeacherGroupDetail() {
           key={i}
           onPress={() => isLesson && setSelectedDate(dayDate)}
           disabled={!isLesson}
-          style={
-            [
-              styles.calendarDay,
-              isLesson && styles.calendarDayLesson,
-              isSelected && styles.calendarDaySelected,
-              isToday && !isSelected && styles.calendarDayToday,
-            ] as any
-          }
+          style={[
+            styles.calendarDay,
+            isLesson && styles.calendarDayLesson,
+            isSelected && styles.calendarDaySelected,
+            isToday && !isSelected && styles.calendarDayToday,
+          ]}
         >
           <Text
-            style={
-              [
-                styles.calendarDayText,
-                !isLesson && styles.calendarDayTextDisabled,
-                isSelected && styles.calendarDayTextSelected,
-              ] as any
-            }
+            style={[
+              styles.calendarDayText,
+              !isLesson && styles.calendarDayTextDisabled,
+              isSelected && styles.calendarDayTextSelected,
+            ]}
           >
             {i}
           </Text>
@@ -154,7 +151,7 @@ export default function TeacherGroupDetail() {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => router.push(`/teacher/group/${id}/journal` as any)}
+            onPress={() => router.push(appHref(`/teacher/group/${id}/journal`))}
             style={styles.journalBtn}
           >
             <Feather name="file-text" size={20} color={COLORS.primary} />
@@ -171,7 +168,7 @@ export default function TeacherGroupDetail() {
           {/* Calendar Card */}
           <View style={styles.calendarCard}>
             <LinearGradient
-              colors={COLORS.gradients.header as any}
+              colors={COLORS.gradients.header}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.calendarHeader}
@@ -443,14 +440,14 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   calendarDay: {
-    width: `${100 / 7}%` as any,
+    width: `${100 / 7}%`,
     aspectRatio: 1,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 12,
   },
   calendarDayEmpty: {
-    width: `${100 / 7}%` as any,
+    width: `${100 / 7}%`,
     aspectRatio: 1,
   },
   calendarDayLesson: {

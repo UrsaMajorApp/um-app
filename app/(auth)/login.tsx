@@ -76,8 +76,10 @@ export default function LoginScreen() {
       if (Platform.OS !== "web") {
         router.replace("/(tabs)/home");
       }
-    } catch (e: any) {
-      setError(e?.message || "Не удалось войти через Google");
+    } catch (e: unknown) {
+      setError(
+        e instanceof Error ? e.message : "Не удалось войти через Google",
+      );
     } finally {
       setIsGoogleLoading(false);
     }

@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -109,7 +110,7 @@ export default function OrgStaffScreen() {
       {/* Header - Unified Brand Style */}
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -147,7 +148,7 @@ export default function OrgStaffScreen() {
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() => router.push("/organization/staff/add" as any)}
+                onPress={() => router.push("/organization/staff/add")}
                 style={{
                   width: 52,
                   height: 52,
@@ -312,7 +313,7 @@ export default function OrgStaffScreen() {
               Добавьте первого преподавателя для вашей организации
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/organization/staff/add" as any)}
+              onPress={() => router.push("/organization/staff/add")}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 32,
@@ -345,7 +346,7 @@ export default function OrgStaffScreen() {
               >
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(`/organization/staff/${teacher.id}` as any)
+                    router.push(appHref(`/organization/staff/${teacher.id}`))
                   }
                   style={{
                     ...SHADOWS.strict,
@@ -467,7 +468,7 @@ export default function OrgStaffScreen() {
                   <View style={{ flexDirection: "row", gap: SPACING.md }}>
                     <TouchableOpacity
                       onPress={() =>
-                        router.push(`/organization/staff/${teacher.id}` as any)
+                        router.push(appHref(`/organization/staff/${teacher.id}`))
                       }
                       style={{
                         flex: 1,

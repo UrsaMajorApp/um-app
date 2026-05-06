@@ -16,8 +16,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DevRoleSwitcher } from "$components/DevRoleSwitcher";
 import type { AuthUser, UserRole } from "$contexts/AuthContext";
 import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from "$constants/profileRoutes";
+import type { AppHref } from "$types/router";
 
-function getProfileSetupRoute(role: UserRole) {
+function getProfileSetupRoute(role: UserRole): AppHref {
   return PROFILE_SETUP_ROUTES[role] ?? "/(tabs)/home";
 }
 
@@ -86,7 +87,7 @@ function getRouteRedirectPath({
   isLoading: boolean;
   segments: string[];
   user: AuthUser | null;
-}) {
+}): AppHref | null {
   if (isLoading) return null;
 
   const root = segments[0];
@@ -169,7 +170,7 @@ function RootNavigator() {
 
   useEffect(() => {
     if (redirectPath) {
-      router.replace(redirectPath as any);
+      router.replace(redirectPath);
     }
   }, [redirectPath, router]);
 

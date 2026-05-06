@@ -224,6 +224,10 @@ export interface TeacherAttendanceEntry {
   comment: string | null;
 }
 
+type TeacherGroupStudentCountRow = {
+  group_id: string;
+};
+
 export function useTeacherGroups() {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
@@ -256,7 +260,9 @@ export function useTeacherGroups() {
         .from("teacher_group_students")
         .select("group_id")
         .in("group_id", ids);
-      for (const student of rowsOrEmpty<any>(studentsRes)) {
+      for (const student of rowsOrEmpty<TeacherGroupStudentCountRow>(
+        studentsRes,
+      )) {
         counts[student.group_id] = (counts[student.group_id] ?? 0) + 1;
       }
     }

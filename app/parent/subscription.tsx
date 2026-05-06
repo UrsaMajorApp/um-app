@@ -25,7 +25,7 @@ export default function SubscriptionPaywall() {
   const plan = plans.find((item) => item.popular) ?? plans[0] ?? null;
 
   const handleSubscribe = () => {
-    router.push("/profile/common/subscribe" as any);
+    router.push("/profile/common/subscribe");
   };
 
   const content = (
@@ -160,7 +160,7 @@ export default function SubscriptionPaywall() {
   if (isDesktop) {
     return (
       <View style={{ flex: 1, flexDirection: "row" }}>
-        <SideNav role={(user?.role as any) || "parent"} />
+        <SideNav role={user?.role || "parent"} />
         <View style={{ flex: 1 }}>{content}</View>
       </View>
     );

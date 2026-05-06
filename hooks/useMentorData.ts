@@ -67,6 +67,28 @@ export interface MentorFeedback {
   created_at: string;
 }
 
+type MentorGroupRow = Omit<MentorGroup, "student_count">;
+
+type GroupIdRow = Pick<MentorGroup, "id">;
+
+type GroupCountRow = Pick<GroupMember, "group_id">;
+
+type AttendanceSessionRow = {
+  id: string;
+  session_date: string;
+};
+
+type AttendanceRecordRow = {
+  id: string;
+  session_id: string;
+  member_id: string;
+  present: boolean;
+};
+
+type AttendanceSummaryRecordRow = Omit<AttendanceRecordRow, "id">;
+
+type MemberNameRow = Pick<GroupMember, "id" | "student_name">;
+
 // ─── useMentorGroups ──────────────────────────────────────────
 export function useMentorGroups() {
   const { user } = useAuth();
@@ -82,13 +104,13 @@ export function useMentorGroups() {
     setLoading(true);
     const res = await supabase
       .from("mentor_groups")
-      .select("*")
-      .eq("mentor_user_id", user.id)
-      .order("created_at", { ascending: true });
-    const raw = rowsOrEmpty<any>(res);
+        .select("*")
+        .eq("mentor_user_id", user.id)
+        .order("created_at", { ascending: true });
+    const raw = rowsOrEmpty<MentorGroupRow>(res);
 
     // Fetch member counts for each group
-    const ids = raw.map((g: any) => g.id);
+    const ids = raw.map((g) => g.id);
     const countRes = ids.length
       ? await supabase
           .from("group_members")
@@ -96,12 +118,12 @@ export function useMentorGroups() {
           .in("group_id", ids)
       : { data: [], error: null };
     const countMap = new Map<string, number>();
-    for (const row of rowsOrEmpty<any>(countRes)) {
+    for (const row of rowsOrEmpty<GroupCountRow>(countRes)) {
       countMap.set(row.group_id, (countMap.get(row.group_id) ?? 0) + 1);
     }
 
     setGroups(
-      raw.map((g: any) => ({
+      raw.map((g) => ({
         ...g,
         student_count: countMap.get(g.id) ?? 0,
       })),
@@ -162,7 +184,7 @@ export function useMentorStudents() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     if (!groupIds.length) {
       setStudents([]);
       setLoading(false);
@@ -295,7 +317,7 @@ export function useMentorAttendance() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     if (!groupIds.length) {
       setRecords([]);
       setLoading(false);
@@ -308,16 +330,16 @@ export function useMentorAttendance() {
       .select("id, session_date, group_id")
       .in("group_id", groupIds)
       .order("session_date", { ascending: false });
-    const sessions = rowsOrEmpty<any>(sessionRes);
+    const sessions = rowsOrEmpty<AttendanceSessionRow>(sessionRes);
     if (!sessions.length) {
       setRecords([]);
       setLoading(false);
       return;
     }
 
-    const sessionIds = sessions.map((s: any) => s.id);
+    const sessionIds = sessions.map((s) => s.id);
     const sessionMap = new Map<string, string>(
-      sessions.map((s: any) => [s.id, s.session_date]),
+      sessions.map((s) => [s.id, s.session_date]),
     );
 
     // Fetch records + member names
@@ -325,9 +347,9 @@ export function useMentorAttendance() {
       .from("attendance_records")
       .select("id, session_id, member_id, present")
       .in("session_id", sessionIds);
-    const recRows = rowsOrEmpty<any>(recRes);
+    const recRows = rowsOrEmpty<AttendanceRecordRow>(recRes);
 
-    const memberIds = [...new Set(recRows.map((r: any) => r.member_id))];
+    const memberIds = [...new Set(recRows.map((r) => r.member_id))];
     const memberRes = memberIds.length
       ? await supabase
           .from("group_members")
@@ -335,10 +357,10 @@ export function useMentorAttendance() {
           .in("id", memberIds)
       : { data: [], error: null };
     const memberMap = new Map<string, string>(
-      rowsOrEmpty<any>(memberRes).map((m: any) => [m.id, m.student_name]),
+      rowsOrEmpty<MemberNameRow>(memberRes).map((m) => [m.id, m.student_name]),
     );
 
-    const flat: AttendanceRecord[] = recRows.map((r: any) => ({
+    const flat: AttendanceRecord[] = recRows.map((r) => ({
       id: r.id,
       name: memberMap.get(r.member_id) ?? "—",
       present: r.present,
@@ -386,7 +408,7 @@ export function useMentorStudentAttendanceSummary() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     if (!groupIds.length) {
       setSummary({});
       setLoading(false);
@@ -398,8 +420,8 @@ export function useMentorStudentAttendanceSummary() {
       .select("id, session_date")
       .in("group_id", groupIds)
       .order("session_date", { ascending: false });
-    const sessions = rowsOrEmpty<any>(sessionRes);
-    const sessionIds = sessions.map((s: any) => s.id);
+    const sessions = rowsOrEmpty<AttendanceSessionRow>(sessionRes);
+    const sessionIds = sessions.map((s) => s.id);
     if (!sessionIds.length) {
       setSummary({});
       setLoading(false);
@@ -407,7 +429,7 @@ export function useMentorStudentAttendanceSummary() {
     }
 
     const sessionOrder = new Map<string, number>();
-    sessions.forEach((session: any, index: number) =>
+    sessions.forEach((session, index) =>
       sessionOrder.set(session.id, index),
     );
     const recordsRes = await supabase
@@ -416,8 +438,8 @@ export function useMentorStudentAttendanceSummary() {
       .in("session_id", sessionIds);
 
     const next: Record<string, MentorStudentAttendanceSummary> = {};
-    const records = rowsOrEmpty<any>(recordsRes).sort(
-      (a: any, b: any) =>
+    const records = rowsOrEmpty<AttendanceSummaryRecordRow>(recordsRes).sort(
+      (a, b) =>
         (sessionOrder.get(a.session_id) ?? Number.MAX_SAFE_INTEGER) -
         (sessionOrder.get(b.session_id) ?? Number.MAX_SAFE_INTEGER),
     );
@@ -542,14 +564,14 @@ export function useMentorProfileStats() {
       .from("mentor_groups")
       .select("id")
       .eq("mentor_user_id", user.id);
-    const groupIds = rowsOrEmpty<any>(groupRes).map((g: any) => g.id);
+    const groupIds = rowsOrEmpty<GroupIdRow>(groupRes).map((g) => g.id);
     let studentCount = 0;
     if (groupIds.length) {
-      const countRes = await supabase
+      const { count } = await supabase
         .from("group_members")
         .select("id", { count: "exact", head: true })
         .in("group_id", groupIds);
-      studentCount = (countRes as any).count ?? 0;
+      studentCount = count ?? 0;
     }
     setStats({ studentCount, groupCount: groupIds.length });
     setLoading(false);

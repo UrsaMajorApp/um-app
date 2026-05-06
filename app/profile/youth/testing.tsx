@@ -39,7 +39,10 @@ import {
   generateGeminiDiagnosticJson,
   isGeminiFallbackError,
 } from "$lib/geminiDiagnostics";
-import { Diagnostic } from "$models/types";
+import type { AuthUser } from "$contexts/AuthContext";
+import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
+
+type AppRouter = ReturnType<typeof useRouter>;
 
 /* ─────────────────────────────────────────────────────────────
    Main component
@@ -130,10 +133,10 @@ function LegacyQuestionTest({
   horizontalPadding,
 }: {
   questions: OnboardingQuestion[];
-  user: any;
+  user: AuthUser | null;
   activeChildId: string | null;
   updateChildDiagnostic: (id: string, d: Diagnostic) => Promise<void>;
-  router: any;
+  router: AppRouter;
   isDesktop: boolean;
   horizontalPadding: number;
 }) {
@@ -183,7 +186,8 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
   "recommendedConstellation": "string (A creative 1-2 word title for their talent type in Russian, e.g. 'Техно-энтузиаст' or 'Творческий лидер')"
 }`;
 
-      const diagnosticData = await generateGeminiDiagnosticJson(prompt);
+      const diagnosticData =
+        await generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
 
       const targetDiagnostic: Diagnostic = {
         childId: activeChildId || user?.id || "unknown",
@@ -206,7 +210,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
       router.push({
         pathname: "/profile/youth/results",
         params: activeChildId ? { childId: activeChildId } : undefined,
-      } as any);
+      });
     } catch (e) {
       if (!isGeminiFallbackError(e)) {
         console.error("AI processing error:", e);
@@ -232,7 +236,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
       router.push({
         pathname: "/profile/youth/results",
         params: activeChildId ? { childId: activeChildId } : undefined,
-      } as any);
+      });
     } finally {
       setIsProcessing(false);
     }

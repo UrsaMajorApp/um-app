@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -44,7 +45,7 @@ export default function TeacherHome() {
     <View style={styles.container}>
       <View style={styles.topHeader}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
@@ -75,7 +76,7 @@ export default function TeacherHome() {
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() =>
-                    router.push(`/teacher/group/${nextGroup.id}/journal` as any)
+                    router.push(appHref(`/teacher/group/${nextGroup.id}/journal`))
                   }
                 >
                   <View style={styles.nextLessonHeader}>
@@ -132,7 +133,7 @@ export default function TeacherHome() {
         <View style={styles.quickActions}>
           <TouchableOpacity
             style={styles.actionCard}
-            onPress={() => router.push("/teacher/groups" as any)}
+            onPress={() => router.push("/teacher/groups")}
           >
             <View style={[styles.actionIcon, { backgroundColor: "#F5F3FF" }]}>
               <Feather name="users" size={24} color="#6C5CE7" />
@@ -144,7 +145,7 @@ export default function TeacherHome() {
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Расписание групп</Text>
           <TouchableOpacity
-            onPress={() => router.push("/teacher/groups" as any)}
+            onPress={() => router.push("/teacher/groups")}
           >
             <Text style={styles.seeAll}>Весь план</Text>
           </TouchableOpacity>
@@ -185,7 +186,7 @@ export default function TeacherHome() {
                 <TouchableOpacity
                   style={styles.scheduleCard}
                   onPress={() =>
-                    router.push(`/teacher/group/${item.id}/journal` as any)
+                    router.push(appHref(`/teacher/group/${item.id}/journal`))
                   }
                 >
                   <View style={styles.scheduleCardContent}>

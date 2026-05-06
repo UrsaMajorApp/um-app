@@ -88,7 +88,7 @@ export default function AdminUsersScreen() {
     router.push({
       pathname: "/(tabs)/chats/[id]",
       params: { id, name: mentor.name },
-    } as any);
+    });
   };
 
   return (

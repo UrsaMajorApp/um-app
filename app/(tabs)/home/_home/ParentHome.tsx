@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import React, { useMemo, useState } from "react";
 import {
   Platform,
@@ -25,9 +26,11 @@ import {
   SCORE_TO_SKILLS,
   usePublicCourses,
 } from "$hooks/usePublicData";
+import { featherIconName } from "$lib/icons";
 import { formatKZT } from "$lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 import { FloatingBranding } from "$components/home/parent/FloatingBranding";
+import type { WebViewStyle } from "$types/styles";
 
 export default function ParentHome() {
   const router = useRouter();
@@ -74,7 +77,7 @@ export default function ParentHome() {
       <View
         style={{
           ...Platform.select({
-            web: { position: "fixed" } as any,
+            web: { position: "fixed" } as WebViewStyle,
             default: { position: "absolute" },
           }),
           top: 0,
@@ -101,7 +104,7 @@ export default function ParentHome() {
         {/* Header */}
         <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
           <LinearGradient
-            colors={COLORS.gradients.header as any}
+            colors={COLORS.gradients.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -146,7 +149,7 @@ export default function ParentHome() {
                         borderWidth: 1,
                         borderColor: "rgba(255,255,255,0.3)",
                         ...(Platform.OS === "web" &&
-                          ({ cursor: "pointer" } as any)),
+                          ({ cursor: "pointer" } as WebViewStyle)),
                       }}
                     >
                       <Feather name="bell" size={20} color="white" />
@@ -185,7 +188,7 @@ export default function ParentHome() {
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Мои дети</Text>
             <Pressable
-              onPress={() => router.push("/(tabs)/parent/children" as any)}
+              onPress={() => router.push("/(tabs)/parent/children")}
             >
               <Text className="text-purple-600 font-bold text-sm">Все</Text>
             </Pressable>
@@ -201,7 +204,7 @@ export default function ParentHome() {
                 key={child.id}
                 onPress={() => {
                   setActiveChildId(child.id);
-                  router.push(`/(tabs)/parent/child/${child.id}` as any);
+                  router.push(appHref(`/(tabs)/parent/child/${child.id}`));
                 }}
                 style={SHADOWS.md}
                 className={`mr-4 w-36 p-5 bg-white rounded-[32px] items-center border ${activeChildId === child.id ? "border-purple-200" : "border-gray-50"}`}
@@ -225,7 +228,7 @@ export default function ParentHome() {
 
             <Pressable
               onPress={() =>
-                router.push("/profile/youth/create-profile-child" as any)
+                router.push("/profile/youth/create-profile-child")
               }
               className="w-36 p-5 bg-gray-50 rounded-[32px] items-center justify-center border-2 border-dashed border-gray-100"
             >
@@ -259,7 +262,7 @@ export default function ParentHome() {
                 </Text>
                 <View className="flex-row gap-2 mt-3">
                   <Pressable
-                    onPress={() => router.push("/chats" as any)}
+                    onPress={() => router.push("/chats")}
                     className="bg-purple-600 px-3 py-1.5 rounded-full flex-row items-center gap-1"
                   >
                     <Text className="text-white font-black text-[10px] uppercase tracking-widest">
@@ -267,7 +270,7 @@ export default function ParentHome() {
                     </Text>
                   </Pressable>
                   <Pressable
-                    onPress={() => router.push("/parent/mentors" as any)}
+                    onPress={() => router.push("/parent/mentors")}
                     className="bg-white px-3 py-1.5 rounded-full border border-purple-200 flex-row items-center gap-1"
                   >
                     <Feather name="users" size={10} color="#6C5CE7" />
@@ -304,7 +307,7 @@ export default function ParentHome() {
                     router.push({
                       pathname: "/profile/youth/testing",
                       params: { childId: activeChild.id },
-                    } as any);
+                  });
                   }}
                   className="mt-3 bg-white self-start px-3 py-1.5 rounded-full border border-blue-200"
                 >
@@ -365,7 +368,7 @@ export default function ParentHome() {
                 return (
                   <Pressable
                     key={rec.id}
-                    onPress={() => router.push(`/parent/club/${rec.id}` as any)}
+                    onPress={() => router.push(appHref(`/parent/club/${rec.id}`))}
                     style={[
                       SHADOWS.sm,
                       {
@@ -388,7 +391,7 @@ export default function ParentHome() {
                       }}
                     >
                       <Feather
-                        name={(rec.icon as any) || "book-open"}
+                        name={featherIconName(rec.icon, "book-open")}
                         size={36}
                         color={c1}
                       />
@@ -452,7 +455,7 @@ export default function ParentHome() {
             <Text className="text-xl font-black text-gray-900">
               Ближайшие занятия
             </Text>
-            <Pressable onPress={() => router.push("/parent/calendar" as any)}>
+            <Pressable onPress={() => router.push("/parent/calendar")}>
               <Text className="text-purple-600 font-bold text-sm">
                 Календарь
               </Text>
@@ -467,7 +470,7 @@ export default function ParentHome() {
               Пока нет запланированных занятий
             </Text>
             <Pressable
-              onPress={() => router.push("/parent/clubs" as any)}
+              onPress={() => router.push("/parent/clubs")}
               className="bg-purple-600 px-6 py-3 rounded-2xl"
             >
               <Text className="text-white font-black text-sm uppercase">

@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "$constants/theme";
@@ -9,6 +9,7 @@ import { useTabNav } from "$components/navigation/useTabNav";
 import type { Role } from "$constants/navigation/tabItems";
 
 type Props = { role: Role | string | null };
+type PressableInteractionState = { hovered?: boolean; pressed: boolean };
 
 export function SideNav({ role }: Props) {
   const router = useRouter();
@@ -88,7 +89,7 @@ export function SideNav({ role }: Props) {
             <Pressable
               key={item.key}
               onPress={() => go(item.route)}
-              style={({ hovered, pressed }: any) => ({
+              style={({ hovered, pressed }: PressableInteractionState) => ({
                 flexDirection: "row",
                 alignItems: "center",
                 paddingHorizontal: 14,
@@ -133,7 +134,7 @@ export function SideNav({ role }: Props) {
       >
         <Pressable
           onPress={() => setDropdownVisible((v) => !v)}
-          style={({ hovered, pressed }: any) => ({
+          style={({ hovered, pressed }: PressableInteractionState) => ({
             flexDirection: "row",
             alignItems: "center",
             padding: 10,
@@ -225,7 +226,7 @@ export function SideNav({ role }: Props) {
                 icon: "credit-card" as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push("/parent/subscription" as any);
+                  router.push("/parent/subscription" as Href);
                 },
                 destructive: false,
               },
@@ -248,7 +249,7 @@ export function SideNav({ role }: Props) {
               <Pressable
                 key={item.label}
                 onPress={item.onPress}
-                style={({ hovered, pressed }: any) => ({
+                style={({ hovered, pressed }: PressableInteractionState) => ({
                   flexDirection: "row",
                   alignItems: "center",
                   paddingHorizontal: 16,

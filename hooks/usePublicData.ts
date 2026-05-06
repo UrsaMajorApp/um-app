@@ -19,6 +19,12 @@ export interface PublicCourse extends OrgCourse {
   org_name: string;
 }
 
+type PublicCourseRow = OrgCourse & {
+  organizations?: {
+    name?: string | null;
+  } | null;
+};
+
 // Gradient palette indexed by position so cards look varied but consistent
 const GRADIENTS: [string, string][] = [
   ["#6C5CE7", "#8B7FE8"],
@@ -46,12 +52,11 @@ export const SCORE_TO_SKILLS: Record<string, string[]> = {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function mapRow(row: any): PublicCourse {
+function mapRow(row: PublicCourseRow): PublicCourse {
+  const { organizations, ...course } = row;
   return {
-    ...row,
-    org_name: row.organizations?.name ?? "",
-    // Remove the nested object Supabase injects from the join
-    organizations: undefined,
+    ...course,
+    org_name: organizations?.name ?? "",
   };
 }
 
@@ -80,7 +85,7 @@ export function usePublicCourses() {
       setLoading(false);
       return;
     }
-    setCourses((res.data as any[]).map(mapRow));
+    setCourses((res.data as PublicCourseRow[]).map(mapRow));
     setLoading(false);
   }, [devDataVersion]);
 

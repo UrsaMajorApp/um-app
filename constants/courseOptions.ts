@@ -1,3 +1,5 @@
+import type { FeatherIconName } from "$types/icons";
+
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
 export type CourseStatus = "draft" | "active" | "archived";
 
@@ -19,7 +21,7 @@ export const STATUS_OPTIONS: { value: CourseStatus; label: string; color: string
   { value: "archived", label: "Архив", color: "#9CA3AF" },
 ];
 
-export const ICON_OPTIONS = [
+export const ICON_OPTIONS: readonly FeatherIconName[] = [
   "book", "cpu", "code", "target", "music", "activity",
   "globe", "star", "pen-tool", "zap",
 ] as const;

@@ -1,6 +1,7 @@
 import type { UserRole } from "$contexts/AuthContext";
+import type { AppHref } from "$types/router";
 
-export const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, string>> = {
+export const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, AppHref>> = {
   parent: "/profile/parent/create-profile",
   youth: "/profile/youth/create-profile",
   child: "/profile/youth/create-profile",

@@ -69,7 +69,7 @@ export default function ParentResults() {
             router.push({
               pathname: "/profile/youth/testing",
               params: child?.id ? { childId: child.id } : undefined,
-            } as any);
+                    });
           }}
           style={{
             backgroundColor: "white",
@@ -310,7 +310,7 @@ export default function ParentResults() {
               router.push({
                 pathname: "/profile/youth/testing",
                 params: { childId: child.id },
-              } as any);
+                    });
             }}
             style={{
               borderWidth: 2,

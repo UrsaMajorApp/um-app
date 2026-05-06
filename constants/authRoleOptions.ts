@@ -1,13 +1,14 @@
 import type { Feather } from "@expo/vector-icons";
 import type { ComponentProps } from "react";
 import type { UserRole } from "$contexts/AuthContext";
+import type { AppHref } from "$types/router";
 
 export type AuthRoleOption = {
   title: string;
   description: string;
   icon: ComponentProps<typeof Feather>["name"];
   role: UserRole;
-  route: string;
+  route: AppHref;
   color: string;
   gradient: [string, string];
 };

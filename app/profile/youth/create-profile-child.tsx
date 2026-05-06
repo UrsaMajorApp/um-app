@@ -106,7 +106,7 @@ export default function CreateProfileChild() {
       router.push({
         pathname: "/profile/youth/testing",
         params: { childId },
-      } as any);
+                    });
     } catch (error) {
       console.error("Error adding child:", error);
       setSubmitError("Произошла ошибка при сохранении профиля");
@@ -153,7 +153,7 @@ export default function CreateProfileChild() {
       </View>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -423,9 +423,9 @@ export default function CreateProfileChild() {
             >
               <LinearGradient
                 colors={
-                  (isFormValid
+                  isFormValid
                     ? COLORS.gradients.header
-                    : [COLORS.muted, COLORS.muted]) as any
+                    : [COLORS.muted, COLORS.muted]
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -528,7 +528,7 @@ export default function CreateProfileChild() {
   if (isDesktop) {
     return (
       <View style={{ flex: 1, flexDirection: "row" }}>
-        <SideNav role={(user?.role as any) || "parent"} />
+        <SideNav role={user?.role || "parent"} />
         <View style={{ flex: 1 }}>{pageContent}</View>
       </View>
     );

@@ -15,6 +15,8 @@ interface PressableScaleProps extends Omit<PressableProps, "style"> {
   style?: StyleProp<ViewStyle>;
 }
 
+type PressableEvent = Parameters<NonNullable<PressableProps["onPressIn"]>>[0];
+
 // Props that must live on the outer Pressable to work correctly:
 //   - position/inset: so the hit target is placed correctly in the parent
 //   - flex participation: so this element grows/shrinks inside a parent flex row/column
@@ -77,7 +79,7 @@ export function PressableScale({
   const scale = useRef(new Animated.Value(1)).current;
   const { outer, inner } = splitStyle(style);
 
-  const handlePressIn = (e: any) => {
+  const handlePressIn = (e: PressableEvent) => {
     Animated.spring(scale, {
       toValue: disabled ? 1 : scaleTo,
       useNativeDriver: true,
@@ -87,7 +89,7 @@ export function PressableScale({
     onPressIn?.(e);
   };
 
-  const handlePressOut = (e: any) => {
+  const handlePressOut = (e: PressableEvent) => {
     Animated.spring(scale, {
       toValue: 1,
       useNativeDriver: true,

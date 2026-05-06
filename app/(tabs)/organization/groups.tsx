@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -53,7 +54,7 @@ export default function OrgGroupsScreen() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingBottom: SPACING.xl }}
@@ -90,7 +91,7 @@ export default function OrgGroupsScreen() {
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() => router.push("/organization/group/create" as any)}
+                onPress={() => router.push("/organization/group/create")}
                 style={{
                   width: 52,
                   height: 52,
@@ -166,7 +167,7 @@ export default function OrgGroupsScreen() {
               Создайте первую группу для начала работы
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/organization/group/create" as any)}
+              onPress={() => router.push("/organization/group/create")}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 32,
@@ -199,7 +200,7 @@ export default function OrgGroupsScreen() {
               >
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(`/organization/group/${group.id}` as any)
+                    router.push(appHref(`/organization/group/${group.id}`))
                   }
                   style={{
                     ...SHADOWS.strict,
@@ -348,7 +349,7 @@ export default function OrgGroupsScreen() {
 
                   <TouchableOpacity
                     onPress={() =>
-                      router.push(`/organization/group/${group.id}` as any)
+                      router.push(appHref(`/organization/group/${group.id}`))
                     }
                     style={{
                       height: 48,

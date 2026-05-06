@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import type { AuthUser } from "$contexts/AuthContext";
-import type { Child } from "$models/types";
+import type { Child } from "$types/child";
 import type { OrgGroup } from "$hooks/useOrgData";
 import {
   applyToCourse,

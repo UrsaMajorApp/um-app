@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -14,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import EditChildModal from "$components/parent/EditChildModal";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useParentData } from "$contexts/ParentDataContext";
-import { Child } from "$models/types";
+import type { Child } from "$types/child";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentChildren() {
@@ -58,7 +59,7 @@ export default function ParentChildren() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -104,7 +105,7 @@ export default function ParentChildren() {
       >
         <TouchableOpacity
           onPress={() =>
-            router.push("/profile/youth/create-profile-child" as any)
+            router.push("/profile/youth/create-profile-child")
           }
           style={{
             backgroundColor: COLORS.surface,
@@ -173,7 +174,7 @@ export default function ParentChildren() {
             >
               <TouchableOpacity
                 onPress={() =>
-                  router.push(`/(tabs)/parent/child/${child.id}` as any)
+                  router.push(appHref(`/(tabs)/parent/child/${child.id}`))
                 }
                 style={{
                   padding: 20,

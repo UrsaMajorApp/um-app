@@ -904,8 +904,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         success: false,
         error: "Не удалось завершить вход через Google",
       };
-    } catch (e: any) {
-      return { success: false, error: e?.message ?? "Неизвестная ошибка" };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : "Неизвестная ошибка",
+      };
     }
   }, []);
 

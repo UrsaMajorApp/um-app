@@ -1,9 +1,11 @@
+import type { FeatherIconName } from "$types/icons";
+
 export type GameId = "memory" | "sudoku" | "minesweeper" | "2048";
 
 export type GameCard = {
   id: GameId;
   title: string;
-  icon: string;
+  icon: FeatherIconName;
   color: string;
   desc: string;
   iqReward: number;
@@ -15,9 +17,9 @@ export type DailyChallenge = {
   gameId: GameId;
   title: string;
   prize: string;
-  icon: string;
+  icon: FeatherIconName;
   accentColor: string;
-  colors: readonly [string, string];
+  colors: [string, string];
 };
 
 export const GAMES: GameCard[] = [

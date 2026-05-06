@@ -70,6 +70,17 @@ export interface YouthGoal {
   steps: YouthGoalStep[];
 }
 
+type YouthGoalRow = {
+  id: string;
+  title: string;
+  progress: number;
+  color: string;
+};
+
+type YouthGoalStepRow = YouthGoalStep & {
+  goal_id: string;
+};
+
 export function useYouthGoals() {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
@@ -88,8 +99,8 @@ export function useYouthGoals() {
       .select("*")
       .eq("student_user_id", user.id)
       .order("created_at", { ascending: true });
-    const rawGoals = rowsOrEmpty<any>(goalRes);
-    const ids = rawGoals.map((g: any) => g.id);
+    const rawGoals = rowsOrEmpty<YouthGoalRow>(goalRes);
+    const ids = rawGoals.map((g) => g.id);
 
     let stepsMap = new Map<string, YouthGoalStep[]>();
     if (ids.length) {
@@ -98,7 +109,7 @@ export function useYouthGoals() {
         .select("*")
         .in("goal_id", ids)
         .order("step_order", { ascending: true });
-      for (const s of rowsOrEmpty<any>(stepsRes)) {
+      for (const s of rowsOrEmpty<YouthGoalStepRow>(stepsRes)) {
         const arr = stepsMap.get(s.goal_id) ?? [];
         arr.push({
           id: s.id,
@@ -111,7 +122,7 @@ export function useYouthGoals() {
     }
 
     setGoals(
-      rawGoals.map((g: any) => ({
+      rawGoals.map((g) => ({
         id: g.id,
         title: g.title,
         progress: g.progress,
@@ -138,6 +149,12 @@ export interface UserAchievement {
   unlocked: boolean;
 }
 
+type AchievementCatalogRow = Omit<UserAchievement, "unlocked">;
+
+type UserAchievementRow = {
+  achievement_id: string;
+};
+
 export function useYouthAchievements() {
   const { user } = useAuth();
   const devDataVersion = useDevDataVersion();
@@ -156,7 +173,7 @@ export function useYouthAchievements() {
       .from("achievements_catalog")
       .select("*")
       .order("name", { ascending: true });
-    const catalog = rowsOrEmpty<any>(catalogRes);
+    const catalog = rowsOrEmpty<AchievementCatalogRow>(catalogRes);
 
     // Load user's unlocked achievements
     const unlockedSet = new Set<string>();
@@ -166,13 +183,13 @@ export function useYouthAchievements() {
         .select("achievement_id")
         .eq("user_id", user.id)
         .eq("unlocked", true);
-      for (const r of rowsOrEmpty<any>(userRes)) {
+      for (const r of rowsOrEmpty<UserAchievementRow>(userRes)) {
         unlockedSet.add(r.achievement_id);
       }
     }
 
     setAchievements(
-      catalog.map((a: any) => ({
+      catalog.map((a) => ({
         id: a.id,
         name: a.name,
         icon_name: a.icon_name,

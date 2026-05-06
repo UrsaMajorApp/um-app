@@ -44,7 +44,7 @@ export default function YouthTasks() {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <LinearGradient
-        colors={COLORS.gradients.header as any}
+        colors={COLORS.gradients.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{

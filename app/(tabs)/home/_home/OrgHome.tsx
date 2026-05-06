@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import { MotiView } from "moti";
 import React from "react";
 import {
@@ -25,6 +26,7 @@ import {
 } from "$hooks/useOrgData";
 import { useWalletData } from "$hooks/usePlatformData";
 import { formatKZT } from "$lib/formatCurrency";
+import { featherIconName } from "$lib/icons";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 const QUICK_ACTIONS = [
@@ -104,7 +106,7 @@ export default function OrgHome() {
         {/* Header - Premium Purple Aesthetic */}
         <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
           <LinearGradient
-            colors={COLORS.gradients.header as any}
+            colors={COLORS.gradients.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -150,7 +152,7 @@ export default function OrgHome() {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => router.push("/(tabs)/profile" as any)}
+                    onPress={() => router.push("/(tabs)/profile")}
                     style={{
                       width: 52,
                       height: 52,
@@ -239,7 +241,7 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push("/organization/verification" as any)}
+              onPress={() => router.push("/organization/verification")}
               activeOpacity={0.92}
               style={{
                 backgroundColor: "#6C5CE7",
@@ -387,7 +389,7 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push("/organization/verification" as any)}
+              onPress={() => router.push("/organization/verification")}
               activeOpacity={0.92}
               style={{
                 backgroundColor: "#FEE2E2",
@@ -582,7 +584,7 @@ export default function OrgHome() {
                     borderColor: COLORS.border,
                   }}
                 >
-                  <Pressable onPress={() => router.push(item.route as any)}>
+                  <Pressable onPress={() => router.push(appHref(item.route))}>
                     <View
                       style={{
                         backgroundColor: item.color + "10",
@@ -595,7 +597,7 @@ export default function OrgHome() {
                       }}
                     >
                       <Feather
-                        name={item.icon as any}
+                        name={featherIconName(item.icon, "circle")}
                         size={22}
                         color={item.color}
                       />
@@ -827,7 +829,7 @@ export default function OrgHome() {
             </View>
 
             <TouchableOpacity
-              onPress={() => router.push("/(tabs)/organization/wallet" as any)}
+              onPress={() => router.push("/(tabs)/organization/wallet")}
               className="bg-gray-900 py-4 rounded-2xl items-center shadow-sm"
             >
               <Text className="text-white font-bold uppercase tracking-widest text-xs">
@@ -852,7 +854,7 @@ export default function OrgHome() {
           </Text>
           <View className="flex-row gap-4">
             <TouchableOpacity
-              onPress={() => router.push("/organization/course/create" as any)}
+              onPress={() => router.push("/organization/course/create")}
               activeOpacity={0.9}
               style={{
                 ...SHADOWS.md,
@@ -886,7 +888,7 @@ export default function OrgHome() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push("/organization/staff/add" as any)}
+              onPress={() => router.push("/organization/staff/add")}
               activeOpacity={0.9}
               style={{
                 ...SHADOWS.md,

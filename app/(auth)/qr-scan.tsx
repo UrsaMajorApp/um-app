@@ -39,8 +39,8 @@ export default function QRScanScreen() {
   const [useManual, setUseManual] = useState(false);
 
   // Web camera states
-  const videoRef = useRef<any>(null);
-  const canvasRef = useRef<any>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [webCameraActive, setWebCameraActive] = useState(false);
   const [webCameraError, setWebCameraError] = useState("");
 
@@ -78,7 +78,7 @@ export default function QRScanScreen() {
     if (typeof navigator === "undefined" || !navigator.mediaDevices) return;
 
     let animationFrameId: number;
-    let stream: any = null;
+    let stream: MediaStream | null = null;
 
     const startWebCamera = async () => {
       try {
@@ -133,7 +133,7 @@ export default function QRScanScreen() {
         cancelAnimationFrame(animationFrameId);
       }
       if (stream) {
-        stream.getTracks().forEach((track: any) => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       }
     };
   }, [webCameraActive, useManual, scanned]);

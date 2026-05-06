@@ -21,7 +21,7 @@ import {
   type WYRCard
 } from "$data/diagnosticData911";
 import { generateGeminiDiagnosticJson } from "$lib/geminiDiagnostics";
-import type { Diagnostic } from "$models/types";
+import type { Diagnostic, DiagnosticAiResponse } from "$types/diagnostic";
 
 // ─── Phase & state types ──────────────────────────────────────────────────────
 
@@ -267,7 +267,7 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
   }
 }`;
 
-      return generateGeminiDiagnosticJson(prompt);
+      return generateGeminiDiagnosticJson<DiagnosticAiResponse>(prompt);
     },
     [isPro],
   );
@@ -280,7 +280,7 @@ Generate RAW JSON only (no markdown). ${isPro ? "Include ALL fields" : "Include 
 
     const computed = computeResults();
 
-    let aiData: Record<string, any> = {};
+    let aiData: DiagnosticAiResponse = {};
     try {
       aiData = await processWithAI(computed);
     } catch (e) {

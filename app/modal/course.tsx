@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { appHref } from "$lib/router";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,6 +14,7 @@ import { LEVEL_LABELS } from "$constants/courseOptions";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { courseGradient, usePublicCourseById } from "$hooks/usePublicData";
 import { formatKZT } from "$lib/formatCurrency";
+import { featherIconName } from "$lib/icons";
 import { isWebMinWidth } from "$lib/useIsDesktop";
 
 const { width } = Dimensions.get("window");
@@ -113,7 +115,7 @@ export default function CourseModal() {
                 }}
               >
                 <Feather
-                  name={(course.icon as any) || "book-open"}
+                  name={featherIconName(course.icon, "book-open")}
                   size={26}
                   color={c1}
                 />
@@ -259,7 +261,7 @@ export default function CourseModal() {
               <TouchableOpacity
                 onPress={() => {
                   router.back();
-                  router.push(`/parent/club/${course.id}` as any);
+                  router.push(appHref(`/parent/club/${course.id}`));
                 }}
                 style={{
                   backgroundColor: c1,

@@ -35,7 +35,7 @@ export default function OrgScheduleScreen() {
         }}
       >
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           style={{ paddingBottom: 24 }}
         >
           <SafeAreaView edges={["top"]}>

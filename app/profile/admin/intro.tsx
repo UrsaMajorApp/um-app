@@ -58,7 +58,7 @@ export default function AdminIntroScreen() {
           style={{ alignItems: "center" }}
         >
           <LinearGradient
-            colors={COLORS.gradients.primary as any}
+            colors={COLORS.gradients.primary}
             style={{
               width: 80,
               height: 80,

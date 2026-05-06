@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 
 export function AdminCard({
@@ -7,18 +7,20 @@ export function AdminCard({
   style,
 }: {
   children: React.ReactNode;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
     <View
-      style={{
-        backgroundColor: COLORS.surface,
-        borderRadius: RADIUS.lg,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        ...SHADOWS.sm,
-        ...style,
-      }}
+      style={[
+        {
+          backgroundColor: COLORS.surface,
+          borderRadius: RADIUS.lg,
+          borderWidth: 1,
+          borderColor: COLORS.border,
+          ...SHADOWS.sm,
+        },
+        style,
+      ]}
     >
       {children}
     </View>

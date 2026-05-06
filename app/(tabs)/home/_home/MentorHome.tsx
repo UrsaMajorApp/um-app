@@ -24,6 +24,7 @@ import {
 } from "$hooks/useMentorData";
 import { useWalletData } from "$hooks/usePlatformData";
 import { formatKZT } from "$lib/formatCurrency";
+import { appHref } from "$lib/router";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function MentorHome() {
@@ -57,7 +58,7 @@ export default function MentorHome() {
         {/* Violet Header Section */}
         <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
           <LinearGradient
-            colors={COLORS.gradients.header as any}
+            colors={COLORS.gradients.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.headerGradient}
@@ -161,7 +162,7 @@ export default function MentorHome() {
                     );
                     if (targetStudent) {
                       router.push(
-                        `/(tabs)/mentor/student/${targetStudent.id}` as any,
+                        appHref(`/(tabs)/mentor/student/${targetStudent.id}`),
                       );
                     }
                   }}

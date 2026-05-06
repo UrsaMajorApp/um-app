@@ -4,6 +4,7 @@ import { MotiView } from "moti";
 import React from "react";
 import {
     FlatList,
+    type ListRenderItem,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -14,7 +15,7 @@ import {
     COLORS,
     SHADOWS
 } from "$constants/theme";
-import { useWalletData } from "$hooks/usePlatformData";
+import { type WalletTransaction, useWalletData } from "$hooks/usePlatformData";
 import { formatKZT } from "$lib/formatCurrency";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
@@ -24,7 +25,7 @@ export default function MentorWalletScreen() {
 
   const { transactions, summary } = useWalletData("mentor");
 
-  const renderTransaction = ({ item: tx, index }: any) => (
+  const renderTransaction: ListRenderItem<WalletTransaction> = ({ item: tx, index }) => (
     <MotiView
       from={{ opacity: 0, translateX: -10 }}
       animate={{ opacity: 1, translateX: 0 }}

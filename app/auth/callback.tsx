@@ -47,7 +47,7 @@ export default function AuthCallback() {
     const params = new URLSearchParams(window.location.search);
     const errorCode = params.get("error_code") ?? params.get("error");
     if (errorCode) {
-      router.replace("/login" as any);
+      router.replace("/login");
     }
   }, []);
 
@@ -87,7 +87,7 @@ export default function AuthCallback() {
         // onAuthStateChange in AuthContext fires → user is set → routing effect runs
       } catch (e) {
         console.error("[AuthCallback] native session parse error:", e);
-        router.replace("/login" as any);
+        router.replace("/login");
       }
     };
 
@@ -115,7 +115,7 @@ export default function AuthCallback() {
     handled.current = true;
 
     if (!user) {
-      router.replace("/login" as any);
+      router.replace("/login");
       return;
     }
 
@@ -125,7 +125,7 @@ export default function AuthCallback() {
 
   const checkProfile = async () => {
     if (!supabase || !isSupabaseConfigured) {
-      router.replace("/home" as any);
+      router.replace("/home");
       return;
     }
 
@@ -138,9 +138,9 @@ export default function AuthCallback() {
       .maybeSingle();
 
     if (data?.role) {
-      router.replace("/home" as any);
+      router.replace("/home");
     } else {
-      router.replace("/auth/complete-profile" as any);
+      router.replace("/auth/complete-profile");
     }
   };
 

@@ -36,10 +36,14 @@ export const COLORS = {
   
   // Gradient Swatches
   gradients: {
-    primary: ["#5856D6", "#AF52DE"] as const,
-    success: ["#34C759", "#32D74B"] as const,
-    surface: ["#FFFFFF", "#F2F2F7"] as const,
-    header: ["#4F46E5", "#7C3AED", "#C026D3"] as const, // Matches intro page gradient
+    primary: ["#5856D6", "#AF52DE"] as [string, string],
+    success: ["#34C759", "#32D74B"] as [string, string],
+    surface: ["#FFFFFF", "#F2F2F7"] as [string, string],
+    header: ["#4F46E5", "#7C3AED", "#C026D3"] as [
+      string,
+      string,
+      string,
+    ], // Matches intro page gradient
   }
 };
 

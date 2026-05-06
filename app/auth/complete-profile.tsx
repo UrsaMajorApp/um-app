@@ -61,7 +61,7 @@ export default function CompleteProfile() {
     setIsSubmitting(true);
     try {
       await setUserRole(selectedRole);
-      router.push(currentRoleInfo.route as any);
+      router.push(currentRoleInfo.route);
     } finally {
       setIsSubmitting(false);
     }

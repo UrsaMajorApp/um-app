@@ -1,11 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SHADOWS } from "$constants/theme";
+import type { OrgGroup } from "$hooks/useOrgData";
+import type { Child } from "$types/child";
 
 type FullCourseBookingModalProps = {
   visible: boolean;
-  activeChild: any;
-  groups: any[];
+  activeChild: Pick<Child, "name"> | null;
+  groups: OrgGroup[];
   selectedGroupId: string | null;
   applying: boolean;
   onClose: () => void;

@@ -5,6 +5,7 @@ import { MotiView } from "moti";
 import React, { useState } from "react";
 import {
   FlatList,
+  type ListRenderItem,
   Platform,
   StyleSheet,
   Text,
@@ -19,9 +20,11 @@ import {
 } from "$constants/theme";
 import {
   useMentorStudentAttendanceSummary,
+  type GroupMember,
   useMentorStudents,
 } from "$hooks/useMentorData";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
+import type { FeatherIconName } from "$types/icons";
 
 export default function MentorStudentsScreen() {
   const router = useRouter();
@@ -38,7 +41,7 @@ export default function MentorStudentsScreen() {
 
   const getStudentStatus = (
     studentId: string,
-  ): { color: string; label: string; icon: string } => {
+  ): { color: string; label: string; icon: FeatherIconName } => {
     const data = summary[studentId];
     if (!data || data.total === 0)
       return { color: "#9CA3AF", label: "Нет отметок", icon: "minus-circle" };
@@ -57,7 +60,7 @@ export default function MentorStudentsScreen() {
     };
   };
 
-  const renderStudent = ({ item: student, index }: any) => {
+  const renderStudent: ListRenderItem<GroupMember> = ({ item: student, index }) => {
     const status = getStudentStatus(student.id);
     return (
       <MotiView
@@ -97,7 +100,7 @@ export default function MentorStudentsScreen() {
                 justifyContent: "center",
               }}
             >
-              <Feather name={status.icon as any} size={8} color="white" />
+              <Feather name={status.icon} size={8} color="white" />
             </View>
           </View>
           <View style={{ flex: 1 }}>
@@ -166,7 +169,7 @@ export default function MentorStudentsScreen() {
     <View style={{ flex: 1, backgroundColor: "#F8F7FF" }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}

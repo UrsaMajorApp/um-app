@@ -96,8 +96,13 @@ export function useMentorStudentProfile({
       setNotes(tempNotes);
       setIsEditingNotes(false);
       Alert.alert("Сохранено", "Заметки успешно обновлены");
-    } catch (error: any) {
-      Alert.alert("Ошибка", error?.message || "Не удалось сохранить заметки");
+    } catch (error: unknown) {
+      Alert.alert(
+        "Ошибка",
+        error instanceof Error
+          ? error.message
+          : "Не удалось сохранить заметки",
+      );
     }
   };
 
@@ -146,8 +151,11 @@ export function useMentorStudentProfile({
         `Месячный отчёт за ${reportMonth} отправлен родителю`,
         [{ text: "OK", onPress: () => setShowReportModal(false) }],
       );
-    } catch (error: any) {
-      Alert.alert("Ошибка", error?.message || "Не удалось создать отчёт");
+    } catch (error: unknown) {
+      Alert.alert(
+        "Ошибка",
+        error instanceof Error ? error.message : "Не удалось создать отчёт",
+      );
     }
   };
 

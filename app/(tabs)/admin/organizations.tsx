@@ -64,7 +64,7 @@ export default function AdminOrganizationsScreen() {
     router.push({
       pathname: "/(tabs)/chats/[id]",
       params: { id, name: orgName },
-    } as any);
+    });
   };
 
   return (

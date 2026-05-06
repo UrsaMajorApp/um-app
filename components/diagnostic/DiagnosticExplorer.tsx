@@ -81,7 +81,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
       router.push({
         pathname: "/profile/youth/results",
         params: targetChildId ? { childId: targetChildId } : undefined,
-      } as any);
+      });
     }
   }, [engine.phase, router, targetChildId]);
 

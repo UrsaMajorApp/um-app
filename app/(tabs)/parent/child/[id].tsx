@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import EditChildModal from "$components/parent/EditChildModal";
 import { COLORS, SHADOWS } from "$constants/theme";
 import { useParentData } from "$contexts/ParentDataContext";
-import { Child } from "$models/types";
+import type { Child } from "$types/child";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentChildDetails() {
@@ -54,7 +54,7 @@ export default function ParentChildDetails() {
 
   const deleteChild = async () => {
     await removeChild(child.id);
-    router.replace("/(tabs)/parent/children" as any);
+    router.replace("/(tabs)/parent/children");
   };
 
   const confirmRemove = () => {
@@ -83,7 +83,7 @@ export default function ParentChildDetails() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -103,7 +103,7 @@ export default function ParentChildDetails() {
                   if (router.canGoBack()) {
                     router.back();
                   } else {
-                    router.replace("/" as any);
+                    router.replace("/");
                   }
                 }}
                 style={{
@@ -169,7 +169,7 @@ export default function ParentChildDetails() {
       >
         <LinearGradient
           pointerEvents="none"
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{
@@ -188,7 +188,7 @@ export default function ParentChildDetails() {
           showsVerticalScrollIndicator={false}
         >
           <LinearGradient
-            colors={COLORS.gradients.header as any}
+            colors={COLORS.gradients.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={{
@@ -317,7 +317,7 @@ export default function ParentChildDetails() {
                         router.push({
                           pathname: "/profile/youth/testing",
                           params: { childId: child.id },
-                        } as any);
+                    });
                       }}
                       className="bg-blue-50 py-3 px-5 rounded-2xl self-start"
                     >
@@ -450,7 +450,7 @@ export default function ParentChildDetails() {
                     router.push({
                       pathname: "/profile/youth/testing",
                       params: { childId: child.id },
-                    } as any);
+                    });
                   }}
                   className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
                 >
@@ -491,7 +491,7 @@ export default function ParentChildDetails() {
                   трекинг с ментором и детальная аналитика.
                 </Text>
                 <Pressable
-                  onPress={() => router.push("/parent/subscription" as any)}
+                  onPress={() => router.push("/parent/subscription")}
                   className="bg-purple-500 h-14 rounded-2xl items-center justify-center active:bg-purple-600"
                 >
                   <Text className="text-white font-black text-sm uppercase tracking-wide">

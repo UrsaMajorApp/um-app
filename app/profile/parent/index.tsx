@@ -20,6 +20,7 @@ import { COLORS, RADIUS, SHADOWS } from "$constants/theme";
 import { useAuth } from "$contexts/AuthContext";
 import { useParentData } from "$contexts/ParentDataContext";
 import { useParentProfileController } from "$hooks/useParentProfileController";
+import { appHref } from "$lib/router";
 import { getDashboardHorizontalPadding, useIsDesktop } from "$lib/useIsDesktop";
 
 export default function ParentProfile() {
@@ -59,7 +60,7 @@ export default function ParentProfile() {
         ],
       );
     } else {
-      router.push("/parent/subscription" as any);
+      router.push("/parent/subscription");
     }
   };
 
@@ -104,7 +105,7 @@ export default function ParentProfile() {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ backgroundColor: COLORS.primary, overflow: "hidden" }}>
         <LinearGradient
-          colors={COLORS.gradients.header as any}
+          colors={COLORS.gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{ paddingTop: Platform.OS === "ios" ? 0 : 20 }}
@@ -261,7 +262,7 @@ export default function ParentProfile() {
                 })}
                 <TouchableOpacity
                   onPress={() =>
-                    router.push("/profile/youth/create-profile-child" as any)
+                    router.push("/profile/youth/create-profile-child")
                   }
                   style={styles.addChildSelector}
                 >
@@ -275,7 +276,7 @@ export default function ParentProfile() {
             ) : (
               <TouchableOpacity
                 onPress={() =>
-                  router.push("/profile/youth/create-profile-child" as any)
+                  router.push("/profile/youth/create-profile-child")
                 }
                 style={styles.createChildPrompt}
               >
@@ -338,7 +339,9 @@ export default function ParentProfile() {
               <TouchableOpacity
                 onPress={() =>
                   router.push(
-                    `/(tabs)/parent/child/${profileController.selectedChild?.id}` as any,
+                    appHref(
+                      `/(tabs)/parent/child/${profileController.selectedChild?.id}`,
+                    ),
                   )
                 }
                 style={styles.reportCard}
