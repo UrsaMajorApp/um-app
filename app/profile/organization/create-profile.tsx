@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ApprovalPendingSuccessView } from "../../../components/profile/ApprovalPendingSuccessView";
 import { PressableScale } from "../../../components/ui/PressableScale";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -116,7 +117,31 @@ export default function CreateProfileOrganization() {
   };
 
   if (isSuccess) {
-    return <SuccessView onHome={() => router.replace("/(tabs)/home")} />;
+    return (
+      <ApprovalPendingSuccessView
+        accentColor={ORG_COLOR}
+        gradient={ORG_GRADIENT}
+        title="Данные отправлены!"
+        description={
+          <>
+            Ваш профиль создан. В течение{" "}
+            <Text style={{ color: ORG_COLOR, fontWeight: "700" }}>
+              24 часов
+            </Text>{" "}
+            мы проверим данные и откроем доступ к кабинету.
+          </>
+        }
+        buttonLabel="Перейти в кабинет"
+        onHome={() => router.replace("/(tabs)/home")}
+        variant="steps"
+        steps={[
+          { label: "Профиль создан", done: true },
+          { label: "Загрузить документы для верификации", done: false },
+          { label: "Модерация администратором", done: false },
+          { label: "Синяя галочка и выход в поиск", done: false },
+        ]}
+      />
+    );
   }
 
   return (
@@ -493,158 +518,6 @@ function Field({
           </PressableScale>
         )}
       </View>
-    </View>
-  );
-}
-
-function SuccessView({ onHome }: { onHome: () => void }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Background blobs */}
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
-        <View
-          style={{
-            position: "absolute",
-            top: -50,
-            right: -50,
-            width: 200,
-            height: 200,
-            borderRadius: 100,
-            backgroundColor: `${ORG_COLOR}10`,
-          }}
-        />
-        <View
-          style={{
-            position: "absolute",
-            bottom: "20%",
-            left: -80,
-            width: 250,
-            height: 250,
-            borderRadius: 125,
-            backgroundColor: `${ORG_COLOR}05`,
-          }}
-        />
-      </View>
-
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", padding: 24 }}>
-        <MotiView
-          from={{ opacity: 0, scale: 0.9, translateY: 20 }}
-          animate={{ opacity: 1, scale: 1, translateY: 0 }}
-          style={{
-            backgroundColor: "white",
-            borderRadius: RADIUS.xxl,
-            padding: 32,
-            alignItems: "center",
-            ...SHADOWS.md,
-          }}
-        >
-          <MotiView
-            from={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", delay: 200 }}
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              backgroundColor: `${ORG_COLOR}15`,
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 24,
-            }}
-          >
-            <Feather name="check-circle" size={40} color={ORG_COLOR} />
-          </MotiView>
-
-          <Text
-            style={{
-              fontSize: 26,
-              fontWeight: "900",
-              color: COLORS.foreground,
-              textAlign: "center",
-              marginBottom: 12,
-              letterSpacing: -0.5,
-            }}
-          >
-            Данные отправлены!
-          </Text>
-          <Text
-            style={{
-              fontSize: 15,
-              color: COLORS.mutedForeground,
-              textAlign: "center",
-              lineHeight: 24,
-              marginBottom: 24,
-            }}
-          >
-            Ваш профиль создан. В течение{" "}
-            <Text style={{ color: ORG_COLOR, fontWeight: "700" }}>
-              24 часов
-            </Text>{" "}
-            мы проверим данные и откроем доступ к кабинету.
-          </Text>
-
-          {/* Steps */}
-          <View style={{ width: "100%", gap: 14, marginBottom: 32 }}>
-            {[
-              { label: "Профиль создан", done: true },
-              { label: "Загрузить документы для верификации", done: false },
-              { label: "Модерация администратором", done: false },
-              { label: "Синяя галочка и выход в поиск", done: false },
-            ].map((item, i) => (
-              <View
-                key={i}
-                style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
-              >
-                <View
-                  style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: 12,
-                    backgroundColor: item.done
-                      ? `${ORG_COLOR}20`
-                      : COLORS.muted,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Feather
-                    name={item.done ? "check" : "circle"}
-                    size={12}
-                    color={item.done ? ORG_COLOR : COLORS.mutedForeground}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: item.done
-                      ? COLORS.foreground
-                      : COLORS.mutedForeground,
-                    fontWeight: item.done ? "700" : "400",
-                  }}
-                >
-                  {item.label}
-                </Text>
-              </View>
-            ))}
-          </View>
-
-          <PressableScale onPress={onHome} style={{ width: "100%" }}>
-            <LinearGradient
-              colors={ORG_GRADIENT}
-              style={{
-                paddingVertical: 18,
-                borderRadius: RADIUS.xl,
-                alignItems: "center",
-                ...SHADOWS.md,
-              }}
-            >
-              <Text style={{ color: "white", fontWeight: "900", fontSize: 17 }}>
-                Перейти в кабинет
-              </Text>
-            </LinearGradient>
-          </PressableScale>
-        </MotiView>
-      </SafeAreaView>
     </View>
   );
 }

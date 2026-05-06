@@ -1,4 +1,4 @@
-import { SideNav } from "@/app/(tabs)/layout-container";
+import { SideNav } from "@/components/navigation/SideNav";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";

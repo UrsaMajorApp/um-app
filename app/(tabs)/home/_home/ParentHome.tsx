@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NotificationsModal } from "../../layout-container";
+import { NotificationsModal } from "@/components/navigation/NotificationsModal";
 import {
   COLORS,
   RADIUS,

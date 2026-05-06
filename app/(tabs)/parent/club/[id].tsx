@@ -5,9 +5,7 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Modal,
   Platform,
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -25,6 +23,8 @@ import {
   courseGradient,
   usePublicCourseById,
 } from "../../../../hooks/usePublicData";
+import { EnrollmentChoiceModal } from "../../../../components/parent/club/EnrollmentChoiceModal";
+import { FullCourseBookingModal } from "../../../../components/parent/club/FullCourseBookingModal";
 
 export default function ParentClubDetails() {
   const router = useRouter();
@@ -93,6 +93,64 @@ export default function ParentClubDetails() {
     }
     setEnrolled(true);
     setShowBookingModal(false);
+  };
+
+  const handleCloseEnrollmentChoice = () => {
+    setShowEnrollmentChoice(false);
+    setEnrollmentType(null);
+    setSelectedTimeSlot(null);
+  };
+
+  const handleSelectFullCourse = () => {
+    setEnrollmentType("full");
+    setShowEnrollmentChoice(false);
+    setShowBookingModal(true);
+  };
+
+  const handleCloseBookingModal = () => {
+    setShowBookingModal(false);
+    setEnrollmentType(null);
+  };
+
+  const handleConfirmTrialLesson = async () => {
+    if (!course || !activeChild || !selectedTimeSlot) return;
+    setApplying(true);
+
+    const selectedSlot = trialSlots.find((slot) => slot.id === selectedTimeSlot);
+    if (!selectedSlot) {
+      setApplying(false);
+      return;
+    }
+
+    const day = selectedSlot.day_label;
+    const time = selectedSlot.time_label;
+
+    const result = await applyToTrialLesson({
+      childId: activeChild.id,
+      childName: activeChild.name,
+      childAge: activeChild.age ?? null,
+      parentId: user?.id,
+      parentName: user ? `${user.firstName} ${user.lastName}`.trim() : undefined,
+      orgId: course.org_id,
+      courseId: course.id,
+      courseTitle: course.title,
+      requestedSlots: trialSlots.map((slot) => ({
+        day: slot.day_label,
+        time: slot.time_label,
+      })),
+      selectedSlot: { day, time },
+    });
+
+    setApplying(false);
+    if (result.error) {
+      Alert.alert("Ошибка", result.error);
+      return;
+    }
+    setEnrolled(true);
+    setShowEnrollmentChoice(false);
+    setEnrollmentType(null);
+    setSelectedTimeSlot(null);
+    Alert.alert("Успешно!", `Пробный урок забронирован на ${day} в ${time}`);
   };
 
   if (loading || checkingEnrollment) {
@@ -565,672 +623,35 @@ export default function ParentClubDetails() {
         )}
       </View>
 
-      {/* Enrollment choice modal - Trial vs Full course */}
-      <Modal visible={showEnrollmentChoice} transparent animationType="slide">
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            justifyContent: "flex-end",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "white",
-              borderTopLeftRadius: 32,
-              borderTopRightRadius: 32,
-              padding: 24,
-              paddingBottom: 40,
-              ...SHADOWS.lg,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 20,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 22,
-                  fontWeight: "900",
-                  color: COLORS.foreground,
-                }}
-              >
-                Выберите тип записи
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setShowEnrollmentChoice(false);
-                  setEnrollmentType(null);
-                  setSelectedTimeSlot(null);
-                }}
-                style={{
-                  width: 36,
-                  height: 36,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Feather name="x" size={22} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
-            </View>
+      <EnrollmentChoiceModal
+        visible={showEnrollmentChoice}
+        course={course}
+        activeChild={activeChild}
+        trialSlots={trialSlots}
+        enrollmentType={enrollmentType}
+        selectedTimeSlot={selectedTimeSlot}
+        applying={applying}
+        onClose={handleCloseEnrollmentChoice}
+        onSelectTrial={() => setEnrollmentType("trial")}
+        onSelectFullCourse={handleSelectFullCourse}
+        onBackFromTrial={() => {
+          setEnrollmentType(null);
+          setSelectedTimeSlot(null);
+        }}
+        onSelectTimeSlot={setSelectedTimeSlot}
+        onConfirmTrial={handleConfirmTrialLesson}
+      />
 
-            {/* Selected child */}
-            {activeChild && (
-              <View
-                style={{
-                  backgroundColor: COLORS.primary + "10",
-                  padding: 14,
-                  borderRadius: 18,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginBottom: 20,
-                }}
-              >
-                <View
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 22,
-                    backgroundColor: COLORS.primary,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: 14,
-                  }}
-                >
-                  <Text
-                    style={{ color: "white", fontSize: 18, fontWeight: "900" }}
-                  >
-                    {activeChild.name.charAt(0).toUpperCase()}
-                  </Text>
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      color: COLORS.mutedForeground,
-                      fontWeight: "700",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Ребёнок
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      fontWeight: "900",
-                      color: COLORS.foreground,
-                    }}
-                  >
-                    {activeChild.name}
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            {/* Enrollment type selection */}
-            {!enrollmentType && (
-              <View style={{ gap: 12 }}>
-                {/* Trial lesson option */}
-                <Pressable
-                  onPress={() => setEnrollmentType("trial")}
-                  style={{
-                    padding: 20,
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    borderColor: "#10B981",
-                    backgroundColor: "#ECFDF5",
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginBottom: 8,
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        backgroundColor: "#10B981",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginRight: 12,
-                      }}
-                    >
-                      <Feather name="play-circle" size={20} color="white" />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text
-                        style={{
-                          fontSize: 17,
-                          fontWeight: "900",
-                          color: "#065F46",
-                        }}
-                      >
-                        Пробный урок
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: "#059669",
-                          fontWeight: "600",
-                        }}
-                      >
-                        Бесплатно
-                      </Text>
-                    </View>
-                    <Feather name="chevron-right" size={22} color="#10B981" />
-                  </View>
-                  <Text
-                    style={{ fontSize: 13, color: "#047857", lineHeight: 18 }}
-                  >
-                    Посетите одно занятие бесплатно, чтобы познакомиться с
-                    педагогом и программой
-                  </Text>
-                </Pressable>
-
-                {/* Full course option */}
-                <Pressable
-                  onPress={() => {
-                    setEnrollmentType("full");
-                    setShowEnrollmentChoice(false);
-                    setShowBookingModal(true);
-                  }}
-                  style={{
-                    padding: 20,
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    borderColor: COLORS.primary,
-                    backgroundColor: COLORS.primary + "08",
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginBottom: 8,
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        backgroundColor: COLORS.primary,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginRight: 12,
-                      }}
-                    >
-                      <Feather name="calendar" size={20} color="white" />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text
-                        style={{
-                          fontSize: 17,
-                          fontWeight: "900",
-                          color: "#4C1D95",
-                        }}
-                      >
-                        Полный курс
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: COLORS.primary,
-                          fontWeight: "600",
-                        }}
-                      >
-                        {course.price.toLocaleString()} ₸/мес
-                      </Text>
-                    </View>
-                    <Feather
-                      name="chevron-right"
-                      size={22}
-                      color={COLORS.primary}
-                    />
-                  </View>
-                  <Text
-                    style={{ fontSize: 13, color: "#6B21A8", lineHeight: 18 }}
-                  >
-                    Запишитесь на полный курс занятий с регулярным расписанием
-                  </Text>
-                </Pressable>
-              </View>
-            )}
-
-            {/* Trial time slot selection */}
-            {enrollmentType === "trial" && (
-              <View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 16,
-                  }}
-                >
-                  <TouchableOpacity
-                    onPress={() => {
-                      setEnrollmentType(null);
-                      setSelectedTimeSlot(null);
-                    }}
-                    style={{ marginRight: 12 }}
-                  >
-                    <Feather
-                      name="arrow-left"
-                      size={20}
-                      color={COLORS.mutedForeground}
-                    />
-                  </TouchableOpacity>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "800",
-                      color: COLORS.foreground,
-                    }}
-                  >
-                    Выберите время пробного урока
-                  </Text>
-                </View>
-
-                <ScrollView
-                  style={{ maxHeight: 240 }}
-                  showsVerticalScrollIndicator={false}
-                >
-                  <View
-                    style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}
-                  >
-                    {trialSlots.length === 0 && (
-                      <Text
-                        style={{
-                          color: COLORS.mutedForeground,
-                          paddingVertical: 16,
-                        }}
-                      >
-                        Организация пока не добавила слоты для пробного урока.
-                      </Text>
-                    )}
-                    {trialSlots.map((slot) => {
-                      const slotKey = slot.id;
-                      const isSelected = selectedTimeSlot === slotKey;
-                      return (
-                        <Pressable
-                          key={slot.id}
-                          onPress={() => setSelectedTimeSlot(slotKey)}
-                          style={{
-                            paddingHorizontal: 18,
-                            paddingVertical: 14,
-                            borderRadius: 16,
-                            borderWidth: 2,
-                            borderColor: isSelected ? "#10B981" : "#E5E7EB",
-                            backgroundColor: isSelected ? "#ECFDF5" : "white",
-                            minWidth: 90,
-                            alignItems: "center",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              fontWeight: "800",
-                              color: isSelected ? "#065F46" : COLORS.foreground,
-                            }}
-                          >
-                            {slot.day_label}
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 13,
-                              fontWeight: "600",
-                              color: isSelected
-                                ? "#059669"
-                                : COLORS.mutedForeground,
-                              marginTop: 2,
-                            }}
-                          >
-                            {slot.time_label}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-
-                <TouchableOpacity
-                  disabled={applying || !selectedTimeSlot}
-                  onPress={async () => {
-                    if (!course || !activeChild || !selectedTimeSlot) return;
-                    setApplying(true);
-
-                    // Parse selected slot
-                    const selectedSlot = trialSlots.find(
-                      (slot) => slot.id === selectedTimeSlot,
-                    );
-                    if (!selectedSlot) return;
-                    const day = selectedSlot.day_label;
-                    const time = selectedSlot.time_label;
-
-                    const result = await applyToTrialLesson({
-                      childId: activeChild.id,
-                      childName: activeChild.name,
-                      childAge: activeChild.age ?? null,
-                      parentId: user?.id,
-                      parentName: user
-                        ? `${user.firstName} ${user.lastName}`.trim()
-                        : undefined,
-                      orgId: course.org_id,
-                      courseId: course.id,
-                      courseTitle: course.title,
-                      requestedSlots: trialSlots.map((slot) => ({
-                        day: slot.day_label,
-                        time: slot.time_label,
-                      })),
-                      selectedSlot: { day, time },
-                    });
-
-                    setApplying(false);
-                    if (result.error) {
-                      Alert.alert("Ошибка", result.error);
-                      return;
-                    }
-                    setEnrolled(true);
-                    setShowEnrollmentChoice(false);
-                    setEnrollmentType(null);
-                    setSelectedTimeSlot(null);
-                    Alert.alert(
-                      "Успешно!",
-                      `Пробный урок забронирован на ${day} в ${time}`,
-                    );
-                  }}
-                  style={{
-                    backgroundColor:
-                      applying || !selectedTimeSlot ? "#E5E7EB" : "#10B981",
-                    paddingVertical: 18,
-                    borderRadius: 22,
-                    alignItems: "center",
-                    marginTop: 20,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color:
-                        applying || !selectedTimeSlot ? "#9CA3AF" : "white",
-                      fontSize: 16,
-                      fontWeight: "900",
-                    }}
-                  >
-                    {applying
-                      ? "Бронирование..."
-                      : "Забронировать пробный урок"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Booking modal for full course */}
-      <Modal visible={showBookingModal} transparent animationType="slide">
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            justifyContent: "flex-end",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "white",
-              borderTopLeftRadius: 32,
-              borderTopRightRadius: 32,
-              padding: 24,
-              paddingBottom: 40,
-              ...SHADOWS.lg,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 20,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 22,
-                  fontWeight: "900",
-                  color: COLORS.foreground,
-                }}
-              >
-                Запись на полный курс
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setShowBookingModal(false);
-                  setEnrollmentType(null);
-                }}
-                style={{
-                  width: 36,
-                  height: 36,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Feather name="x" size={22} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
-            </View>
-
-            {/* Selected child */}
-            {activeChild && (
-              <View
-                style={{
-                  backgroundColor: COLORS.primary + "10",
-                  padding: 14,
-                  borderRadius: 18,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginBottom: 20,
-                }}
-              >
-                <View
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 22,
-                    backgroundColor: COLORS.primary,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: 14,
-                  }}
-                >
-                  <Text
-                    style={{ color: "white", fontSize: 18, fontWeight: "900" }}
-                  >
-                    {activeChild.name.charAt(0).toUpperCase()}
-                  </Text>
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      color: COLORS.mutedForeground,
-                      fontWeight: "700",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Ребёнок
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      fontWeight: "900",
-                      color: COLORS.foreground,
-                    }}
-                  >
-                    {activeChild.name}
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            <Text
-              style={{
-                fontSize: 15,
-                fontWeight: "800",
-                color: COLORS.foreground,
-                marginBottom: 12,
-              }}
-            >
-              {groups.length > 0 ? "Выберите группу" : "Расписание уточняется"}
-            </Text>
-
-            {groups.length > 0 ? (
-              <ScrollView
-                style={{ maxHeight: 220 }}
-                showsVerticalScrollIndicator={false}
-              >
-                {groups.map((group) => (
-                  <Pressable
-                    key={group.id}
-                    onPress={() => setSelectedGroupId(group.id)}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      padding: 14,
-                      borderRadius: 18,
-                      marginBottom: 10,
-                      borderWidth: 2,
-                      borderColor:
-                        selectedGroupId === group.id
-                          ? COLORS.primary
-                          : "#F3F4F6",
-                      backgroundColor:
-                        selectedGroupId === group.id
-                          ? COLORS.primary + "05"
-                          : "white",
-                    }}
-                  >
-                    <View style={{ flex: 1 }}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontWeight: "800",
-                          color: COLORS.foreground,
-                        }}
-                      >
-                        {group.name}
-                      </Text>
-                      {group.schedule ? (
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: COLORS.mutedForeground,
-                            marginTop: 3,
-                          }}
-                        >
-                          {group.schedule}
-                        </Text>
-                      ) : null}
-                      <Text
-                        style={{
-                          fontSize: 11,
-                          color: COLORS.mutedForeground,
-                          marginTop: 2,
-                        }}
-                      >
-                        Мест:{" "}
-                        {group.capacity - group.enrolled > 0
-                          ? `${group.capacity - group.enrolled} свободно`
-                          : "Группа полная"}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: 11,
-                        borderWidth: 2,
-                        borderColor:
-                          selectedGroupId === group.id
-                            ? COLORS.primary
-                            : "#D1D5DB",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {selectedGroupId === group.id && (
-                        <View
-                          style={{
-                            width: 10,
-                            height: 10,
-                            borderRadius: 5,
-                            backgroundColor: COLORS.primary,
-                          }}
-                        />
-                      )}
-                    </View>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            ) : (
-              <View
-                style={{
-                  backgroundColor: "#F9FAFB",
-                  borderRadius: 16,
-                  padding: 16,
-                  marginBottom: 12,
-                }}
-              >
-                <Text
-                  style={{
-                    color: COLORS.mutedForeground,
-                    fontSize: 14,
-                    textAlign: "center",
-                  }}
-                >
-                  Организация скоро добавит группы с расписанием
-                </Text>
-              </View>
-            )}
-
-            <TouchableOpacity
-              disabled={applying || (groups.length > 0 && !selectedGroupId)}
-              onPress={handleConfirmBooking}
-              style={{
-                backgroundColor:
-                  applying || (groups.length > 0 && !selectedGroupId)
-                    ? "#E5E7EB"
-                    : COLORS.primary,
-                paddingVertical: 18,
-                borderRadius: 22,
-                alignItems: "center",
-                marginTop: 16,
-              }}
-            >
-              <Text
-                style={{
-                  color:
-                    applying || (groups.length > 0 && !selectedGroupId)
-                      ? "#9CA3AF"
-                      : "white",
-                  fontSize: 16,
-                  fontWeight: "900",
-                }}
-              >
-                {applying ? "Отправка..." : "Подтвердить заявку"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <FullCourseBookingModal
+        visible={showBookingModal}
+        activeChild={activeChild}
+        groups={groups}
+        selectedGroupId={selectedGroupId}
+        applying={applying}
+        onClose={handleCloseBookingModal}
+        onSelectGroup={setSelectedGroupId}
+        onConfirm={handleConfirmBooking}
+      />
     </View>
   );
 }

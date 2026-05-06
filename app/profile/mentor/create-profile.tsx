@@ -1,4 +1,4 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ApprovalPendingSuccessView } from "../../../components/profile/ApprovalPendingSuccessView";
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from "../../../constants/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 import { isSupabaseConfigured, supabase } from "../../../lib/supabase";
@@ -27,7 +28,7 @@ import {
   ROLE_GRADIENT,
   SPECIALIZATIONS,
   STEPS,
-} from "./createProfileOptions";
+} from "../../../constants/profile/mentorCreateProfileOptions";
 
 export default function MentorCreateProfile() {
   const router = useRouter();
@@ -156,7 +157,22 @@ export default function MentorCreateProfile() {
   };
 
   if (isSuccess) {
-    return <SuccessView onHome={() => router.replace("/(tabs)/home")} />;
+    return (
+      <ApprovalPendingSuccessView
+        accentColor={ROLE_COLOR}
+        gradient={ROLE_GRADIENT}
+        title="Данные успешно отправлены!"
+        description="Мы проверяем ваш диплом и другие документы."
+        buttonLabel="Вернуться на главную"
+        onHome={() => router.replace("/(tabs)/home")}
+        variant="notes"
+        noteText="⏱ Обычно это занимает до 24 часов"
+        notes={[
+          "Мы отправим уведомление на вашу почту, как только проверка будет завершена",
+          "После одобрения вы получите доступ к платформе и сможете начать работу",
+        ]}
+      />
+    );
   }
 
   const isCurrentStepValid =
@@ -872,175 +888,6 @@ function InputField({
           </Text>
         )}
       </View>
-    </View>
-  );
-}
-
-function SuccessView({ onHome }: { onHome: () => void }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Background blobs */}
-      <View style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}>
-        <View
-          style={{
-            position: "absolute",
-            top: -50,
-            right: -50,
-            width: 200,
-            height: 200,
-            borderRadius: 100,
-            backgroundColor: `${ROLE_COLOR}10`,
-          }}
-        />
-        <View
-          style={{
-            position: "absolute",
-            bottom: "20%",
-            left: -80,
-            width: 250,
-            height: 250,
-            borderRadius: 125,
-            backgroundColor: `${ROLE_COLOR}05`,
-          }}
-        />
-      </View>
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", padding: 24 }}>
-        <MotiView
-          from={{ opacity: 0, scale: 0.9, translateY: 20 }}
-          animate={{ opacity: 1, scale: 1, translateY: 0 }}
-          style={{
-            backgroundColor: "white",
-            borderRadius: RADIUS.xxl,
-            padding: 32,
-            alignItems: "center",
-            ...SHADOWS.lg,
-          }}
-        >
-          <View style={{ position: "relative", marginBottom: 28 }}>
-            <MaterialCommunityIcons
-              name="check-circle"
-              size={96}
-              color="#10B981"
-            />
-            <MotiView
-              from={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 500 }}
-              style={{
-                position: "absolute",
-                bottom: 4,
-                right: 4,
-                width: 32,
-                height: 32,
-                borderRadius: 16,
-                backgroundColor: ROLE_COLOR,
-                alignItems: "center",
-                justifyContent: "center",
-                borderWidth: 3,
-                borderColor: "white",
-              }}
-            >
-              <Feather name="clock" size={16} color="white" />
-            </MotiView>
-          </View>
-
-          <Text
-            style={{
-              fontSize: 26,
-              fontWeight: "900",
-              color: COLORS.foreground,
-              textAlign: "center",
-              marginBottom: 12,
-              letterSpacing: -0.5,
-            }}
-          >
-            Данные успешно отправлены!
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: COLORS.mutedForeground,
-              textAlign: "center",
-              lineHeight: 24,
-              marginBottom: 20,
-            }}
-          >
-            Мы проверяем ваш диплом и другие документы.
-          </Text>
-
-          <View
-            style={{
-              backgroundColor: `${ROLE_COLOR}10`,
-              paddingHorizontal: 20,
-              paddingVertical: 14,
-              borderRadius: RADIUS.md,
-              marginBottom: 28,
-            }}
-          >
-            <Text
-              style={{ color: ROLE_COLOR, fontWeight: "800", fontSize: 14 }}
-            >
-              ⏱ Обычно это занимает до 24 часов
-            </Text>
-          </View>
-
-          <View style={{ width: "100%", gap: 14, marginBottom: 36 }}>
-            {[
-              "Мы отправим уведомление на вашу почту, как только проверка будет завершена",
-              "После одобрения вы получите доступ к платформе и сможете начать работу",
-            ].map((text, i) => (
-              <View
-                key={i}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  gap: 12,
-                }}
-              >
-                <View
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: 4,
-                    backgroundColor: ROLE_COLOR,
-                    marginTop: 8,
-                  }}
-                />
-                <Text
-                  style={{
-                    flex: 1,
-                    fontSize: 15,
-                    color: COLORS.mutedForeground,
-                    lineHeight: 22,
-                  }}
-                >
-                  {text}
-                </Text>
-              </View>
-            ))}
-          </View>
-
-          <TouchableOpacity
-            onPress={onHome}
-            style={{ width: "100%" }}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={ROLE_GRADIENT}
-              style={{
-                paddingVertical: 18,
-                borderRadius: RADIUS.xl,
-                alignItems: "center",
-                ...SHADOWS.md,
-              }}
-            >
-              <Text style={{ color: "white", fontWeight: "900", fontSize: 17 }}>
-                Вернуться на главную
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </MotiView>
-      </SafeAreaView>
     </View>
   );
 }

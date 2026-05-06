@@ -6,7 +6,9 @@ import {
 } from "react-native";
 import { COLORS } from "../../constants/theme";
 import { useAuth, type UserRole } from "../../contexts/AuthContext";
-import CustomTabBar, { SideNav, TabIcon } from "./layout-container";
+import CustomTabBar from "../../components/navigation/CustomTabBar";
+import { SideNav } from "../../components/navigation/SideNav";
+import { TabIcon } from "../../components/navigation/TabIcon";
 import { useIsDesktop } from "../../lib/useIsDesktop";
 
 const YOUTH_ROLES = new Set<UserRole>(["youth", "child", "young-adult"]);
