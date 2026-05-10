@@ -23,7 +23,7 @@ import {
 } from '$constants/courseOptions';
 import { COLORS, LAYOUT, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgCourses } from '$hooks/useOrgData';
-import { appHref } from '$lib/router';
+import { resolveAppRoute } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CreateCourseScreen() {
@@ -64,7 +64,9 @@ export default function CreateCourseScreen() {
     }
 
     if (result.data?.id) {
-      router.replace(appHref(`/organization/course/${result.data.id}`));
+      router.replace(
+        resolveAppRoute('org', { name: 'orgCourseDetails', courseId: result.data.id }),
+      );
     } else {
       router.back();
     }

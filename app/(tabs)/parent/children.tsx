@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { Child } from '$types/child';
 
@@ -154,7 +154,9 @@ export default function ParentChildren() {
               }}
             >
               <TouchableOpacity
-                onPress={() => router.push(appHref(`/(tabs)/parent/child/${child.id}`))}
+                onPress={() =>
+                  navigateApp(router, 'parent', { name: 'parentChildDetails', childId: child.id })
+                }
                 style={{
                   padding: 20,
                   flexDirection: 'row',

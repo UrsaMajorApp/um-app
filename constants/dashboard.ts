@@ -1,35 +1,36 @@
 import { COLORS } from '$constants/theme';
+import type { AppRouteIntent } from '$lib/appNavigation';
 import type { FeatherIconName } from '$types/icons';
 
 export const ORG_HOME_QUICK_ACTIONS = [
   {
     label: 'Заявки',
     icon: 'clipboard',
-    route: '/organization/applications',
+    route: { name: 'orgApplications' },
     color: '#F59E0B',
   },
   {
     label: 'Курсы',
     icon: 'book',
-    route: '/organization/courses',
+    route: { name: 'orgCourses' },
     color: COLORS.primary,
   },
   {
     label: 'Учителя',
     icon: 'users',
-    route: '/organization/staff',
+    route: { name: 'orgStaff' },
     color: '#6366F1',
   },
   {
     label: 'Группы',
     icon: 'layers',
-    route: '/organization/groups',
+    route: { name: 'orgGroups' },
     color: '#10B981',
   },
 ] satisfies Array<{
   label: string;
   icon: FeatherIconName;
-  route: string;
+  route: AppRouteIntent;
   color: string;
 }>;
 

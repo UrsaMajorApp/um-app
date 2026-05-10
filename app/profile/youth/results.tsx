@@ -525,7 +525,7 @@ export default function YouthResults() {
                 профориентацию, анализ поведения и персональные рекомендации.
               </Text>
               <TouchableOpacity
-                onPress={() => router.push('/parent/subscription')}
+                onPress={() => router.push('/profile/common/subscribe')}
                 style={{
                   backgroundColor: 'white',
                   paddingVertical: 14,

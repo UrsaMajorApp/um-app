@@ -5,14 +5,16 @@ import { MotiView } from 'moti';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import { useOrgGroups } from '$hooks/useOrgData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgGroupsScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const { user } = useAuth();
 
   const { groups: rawGroups, loading } = useOrgGroups();
   // Map to the shape the UI expects
@@ -76,7 +78,7 @@ export default function OrgGroupsScreen() {
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() => router.push('/organization/group/create')}
+                onPress={() => navigateApp(router, user?.role, { name: 'orgGroupCreate' })}
                 style={{
                   width: 52,
                   height: 52,
@@ -152,7 +154,7 @@ export default function OrgGroupsScreen() {
               Создайте первую группу для начала работы
             </Text>
             <TouchableOpacity
-              onPress={() => router.push('/organization/group/create')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgGroupCreate' })}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 32,
@@ -184,7 +186,12 @@ export default function OrgGroupsScreen() {
                 transition={{ delay: idx * 100 }}
               >
                 <TouchableOpacity
-                  onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
+                  onPress={() =>
+                    navigateApp(router, user?.role, {
+                      name: 'orgGroupDetails',
+                      groupId: group.id,
+                    })
+                  }
                   style={{
                     ...SHADOWS.strict,
                     backgroundColor: COLORS.white,
@@ -315,7 +322,12 @@ export default function OrgGroupsScreen() {
                   </View>
 
                   <TouchableOpacity
-                    onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
+                    onPress={() =>
+                      navigateApp(router, user?.role, {
+                        name: 'orgGroupDetails',
+                        groupId: group.id,
+                      })
+                    }
                     style={{
                       height: 48,
                       backgroundColor: COLORS.background,

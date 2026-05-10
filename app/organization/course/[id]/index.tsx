@@ -8,8 +8,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgCourseById, useOrgGroups } from '$hooks/useOrgData';
+import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
-import { appHref } from '$lib/router';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function CourseDetailScreen() {
@@ -130,7 +130,9 @@ export default function CourseDetailScreen() {
                   Детали курса
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push(appHref(`/organization/course/${id}/edit`))}
+                  onPress={() =>
+                    navigateApp(router, 'org', { name: 'orgCourseEdit', courseId: id })
+                  }
                   style={{
                     width: 44,
                     height: 44,
@@ -349,7 +351,7 @@ export default function CourseDetailScreen() {
             Группы курса
           </Text>
           <TouchableOpacity
-            onPress={() => router.push(appHref(`/organization/group/create?courseId=${id}`))}
+            onPress={() => navigateApp(router, 'org', { name: 'orgGroupCreate', courseId: id })}
           >
             <Text
               style={{
@@ -390,7 +392,9 @@ export default function CourseDetailScreen() {
             {courseGroups.map((group) => (
               <TouchableOpacity
                 key={group.id}
-                onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
+                onPress={() =>
+                  navigateApp(router, 'org', { name: 'orgGroupDetails', groupId: group.id })
+                }
                 style={{
                   ...SHADOWS.sm,
                   backgroundColor: COLORS.white,

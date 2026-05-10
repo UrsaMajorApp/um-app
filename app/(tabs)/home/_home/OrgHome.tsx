@@ -6,17 +6,19 @@ import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'r
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ORG_HOME_QUICK_ACTIONS } from '$constants/dashboard';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import { useOrgProfile, useOrgSchedule, useOrgStats } from '$hooks/useOrgData';
 import { useWalletData } from '$hooks/usePlatformData';
+import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgHome() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
+  const { user } = useAuth();
   const { status: orgStatus, name: orgName } = useOrgProfile();
   const isVerified = orgStatus === 'verified';
   const { stats } = useOrgStats();
@@ -109,7 +111,7 @@ export default function OrgHome() {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => router.push('/(tabs)/profile')}
+                    onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
                     style={{
                       width: 52,
                       height: 52,
@@ -198,7 +200,7 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push('/organization/verification')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgVerification' })}
               activeOpacity={0.92}
               style={{
                 backgroundColor: '#6C5CE7',
@@ -292,7 +294,7 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push('/profile/organization')}
+              onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
               activeOpacity={0.9}
               style={{
                 backgroundColor: '#FFFBEB',
@@ -342,7 +344,7 @@ export default function OrgHome() {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push('/organization/verification')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgVerification' })}
               activeOpacity={0.92}
               style={{
                 backgroundColor: '#FEE2E2',
@@ -535,7 +537,7 @@ export default function OrgHome() {
                     borderColor: COLORS.border,
                   }}
                 >
-                  <Pressable onPress={() => router.push(appHref(item.route))}>
+                  <Pressable onPress={() => navigateApp(router, user?.role, item.route)}>
                     <View
                       style={{
                         backgroundColor: `${item.color}10`,
@@ -672,7 +674,9 @@ export default function OrgHome() {
                 </Text>
               </View>
             )}
-            <TouchableOpacity onPress={() => router.push('/organization/schedule')}>
+            <TouchableOpacity
+              onPress={() => navigateApp(router, user?.role, { name: 'orgSchedule' })}
+            >
               <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
             </TouchableOpacity>
           </View>
@@ -764,7 +768,7 @@ export default function OrgHome() {
             </View>
 
             <TouchableOpacity
-              onPress={() => router.push('/(tabs)/organization/wallet')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgWallet' })}
               className="bg-gray-900 py-4 rounded-2xl items-center shadow-sm"
             >
               <Text className="text-white font-bold uppercase tracking-widest text-xs">
@@ -789,7 +793,7 @@ export default function OrgHome() {
           </Text>
           <View className="flex-row gap-4">
             <TouchableOpacity
-              onPress={() => router.push('/organization/course/create')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
               activeOpacity={0.9}
               style={{
                 ...SHADOWS.md,
@@ -821,7 +825,7 @@ export default function OrgHome() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push('/organization/staff/add')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
               activeOpacity={0.9}
               style={{
                 ...SHADOWS.md,

@@ -4,22 +4,10 @@ import { ActivityIndicator, View } from 'react-native';
 import CustomTabBar from '$components/navigation/CustomTabBar';
 import { SideNav } from '$components/navigation/SideNav';
 import { TabIcon } from '$components/navigation/TabIcon';
-import { YOUTH_ROLES } from '$constants/profileRoutes';
 import { COLORS } from '$constants/theme';
-import { type UserRole, useAuth } from '$contexts/AuthContext';
+import { useAuth } from '$contexts/AuthContext';
+import { canAccessRouteSegments } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
-
-function canRenderTabSection(role: UserRole, section?: string) {
-  if (section === 'admin') return role === 'admin';
-  if (section === 'parent') return role === 'parent';
-  if (section === 'youth') return YOUTH_ROLES.has(role);
-  if (section === 'mentor') return role === 'mentor';
-  if (section === 'organization') return role === 'org';
-  if (section === 'teacher') return role === 'teacher';
-  if (section === 'chats') return role !== 'child';
-  if (section === 'catalog') return role !== 'mentor' && role !== 'org';
-  return true;
-}
 
 export default function TabsLayout() {
   const { user, isLoading } = useAuth();
@@ -29,8 +17,9 @@ export default function TabsLayout() {
   const role = useMemo(() => user?.role || 'parent', [user?.role]);
   const hideForMentor = role === 'mentor' || role === 'org';
   const isTabsRoute = segments[0] === '(tabs)';
-  const section = isTabsRoute ? (segments[1] as string | undefined) : undefined;
-  const shouldRedirect = Boolean(isTabsRoute && user && !canRenderTabSection(user.role, section));
+  const shouldRedirect = Boolean(
+    isTabsRoute && user && !canAccessRouteSegments(user.role, segments),
+  );
 
   const isDesktop = useIsDesktop();
 

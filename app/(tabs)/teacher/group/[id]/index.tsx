@@ -16,12 +16,13 @@ import { SCHEDULE_TOKENS } from '$constants/calendar';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroup } from '$hooks/usePlatformData';
 import { useTeacherAttendanceEditor } from '$hooks/useTeacherAttendanceEditor';
+import { navigateApp } from '$lib/appNavigation';
 import { formatDateKey } from '$lib/date';
-import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function TeacherGroupDetail() {
   const { id } = useLocalSearchParams();
+  const groupId = Array.isArray(id) ? id[0] : (id ?? '');
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
@@ -35,7 +36,7 @@ export default function TeacherGroupDetail() {
     attendance: savedAttendance,
     loading,
     saveAttendance,
-  } = useTeacherGroup(id as string, selectedDateKey);
+  } = useTeacherGroup(groupId, selectedDateKey);
   const attendanceEditor = useTeacherAttendanceEditor(savedAttendance, saveAttendance);
 
   const daysInMonth = (date: Date) =>
@@ -126,7 +127,7 @@ export default function TeacherGroupDetail() {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => router.push(appHref(`/teacher/group/${id}/journal`))}
+            onPress={() => navigateApp(router, 'teacher', { name: 'teacherJournal', groupId })}
             style={styles.journalBtn}
           >
             <Feather name="file-text" size={20} color={COLORS.primary} />

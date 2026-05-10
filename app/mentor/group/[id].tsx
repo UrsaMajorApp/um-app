@@ -10,7 +10,7 @@ import {
   useMentorGroups,
   useMentorStudentAttendanceSummary,
 } from '$hooks/useMentorData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorGroupDetail() {
@@ -182,7 +182,12 @@ export default function MentorGroupDetail() {
               return (
                 <TouchableOpacity
                   key={s.id}
-                  onPress={() => router.push(appHref(`/(tabs)/mentor/student/${s.id}`))}
+                  onPress={() =>
+                    navigateApp(router, 'mentor', {
+                      name: 'mentorStudentDetails',
+                      studentId: s.id,
+                    })
+                  }
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',

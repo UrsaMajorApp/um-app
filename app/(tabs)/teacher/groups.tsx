@@ -6,7 +6,7 @@ import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroups } from '$hooks/usePlatformData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { WebViewStyle } from '$types/styles';
 
@@ -70,7 +70,12 @@ export default function TeacherGroupsScreen() {
               >
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  onPress={() => router.push(appHref(`/teacher/group/${group.id}`))}
+                  onPress={() =>
+                    navigateApp(router, 'teacher', {
+                      name: 'teacherGroupDetails',
+                      groupId: group.id,
+                    })
+                  }
                   style={styles.groupCard}
                 >
                   <View style={styles.cardHeader}>

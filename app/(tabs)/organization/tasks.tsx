@@ -6,13 +6,16 @@ import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import { useOrgTasks } from '$hooks/useOrgData';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgTasks() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const { user } = useAuth();
   const [selectedClub, setSelectedClub] = useState('all');
   const { tasks: allTasks, loading } = useOrgTasks();
 
@@ -79,7 +82,7 @@ export default function OrgTasks() {
                   Задания
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push('/organization/task/create')}
+                  onPress={() => navigateApp(router, user?.role, { name: 'orgTaskCreate' })}
                   style={{
                     backgroundColor: 'rgba(255,255,255,0.2)',
                     paddingHorizontal: SPACING.lg,

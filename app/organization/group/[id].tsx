@@ -6,7 +6,7 @@ import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications, useOrgGroupById } from '$hooks/useOrgData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function GroupDetailScreen() {
@@ -70,7 +70,7 @@ export default function GroupDetailScreen() {
                   Детали группы
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push(appHref(`/organization/group/${id}/edit`))}
+                  onPress={() => navigateApp(router, 'org', { name: 'orgGroupEdit', groupId: id })}
                   style={{
                     width: 44,
                     height: 44,
@@ -239,7 +239,7 @@ export default function GroupDetailScreen() {
             Список учеников
           </Text>
           <TouchableOpacity
-            onPress={() => router.push(appHref(`/organization/group/${id}/attendance`))}
+            onPress={() => navigateApp(router, 'org', { name: 'orgGroupAttendance', groupId: id })}
             style={{
               backgroundColor: 'rgba(108, 92, 231, 0.1)',
               paddingHorizontal: 12,
@@ -284,7 +284,12 @@ export default function GroupDetailScreen() {
               transition={{ delay: idx * 50 }}
             >
               <TouchableOpacity
-                onPress={() => router.push(appHref(`/organization/student/${student.id}`))}
+                onPress={() =>
+                  navigateApp(router, 'org', {
+                    name: 'orgStudentDetails',
+                    studentId: student.id,
+                  })
+                }
                 style={{
                   ...SHADOWS.sm,
                   backgroundColor: COLORS.white,
@@ -341,7 +346,10 @@ export default function GroupDetailScreen() {
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push(appHref(`/organization/student/${student.id}/feedback`))
+                    navigateApp(router, 'org', {
+                      name: 'orgStudentFeedback',
+                      studentId: student.id,
+                    })
                   }
                   style={{
                     backgroundColor: COLORS.background,

@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useTeacherGroups } from '$hooks/usePlatformData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 function scheduleTimeLabel(schedule: string | null) {
@@ -71,7 +71,12 @@ export default function TeacherHome() {
               ) : nextGroup ? (
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  onPress={() => router.push(appHref(`/teacher/group/${nextGroup.id}/journal`))}
+                  onPress={() =>
+                    navigateApp(router, user?.role, {
+                      name: 'teacherJournal',
+                      groupId: nextGroup.id,
+                    })
+                  }
                 >
                   <View style={styles.nextLessonHeader}>
                     <View style={styles.nextTag}>
@@ -119,7 +124,7 @@ export default function TeacherHome() {
         <View style={styles.quickActions}>
           <TouchableOpacity
             style={styles.actionCard}
-            onPress={() => router.push('/teacher/groups')}
+            onPress={() => navigateApp(router, user?.role, { name: 'teacherGroups' })}
           >
             <View style={[styles.actionIcon, { backgroundColor: '#F5F3FF' }]}>
               <Feather name="users" size={24} color="#6C5CE7" />
@@ -130,7 +135,9 @@ export default function TeacherHome() {
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Расписание групп</Text>
-          <TouchableOpacity onPress={() => router.push('/teacher/groups')}>
+          <TouchableOpacity
+            onPress={() => navigateApp(router, user?.role, { name: 'teacherGroups' })}
+          >
             <Text style={styles.seeAll}>Весь план</Text>
           </TouchableOpacity>
         </View>
@@ -167,7 +174,9 @@ export default function TeacherHome() {
                 </View>
                 <TouchableOpacity
                   style={styles.scheduleCard}
-                  onPress={() => router.push(appHref(`/teacher/group/${item.id}/journal`))}
+                  onPress={() =>
+                    navigateApp(router, user?.role, { name: 'teacherJournal', groupId: item.id })
+                  }
                 >
                   <View style={styles.scheduleCardContent}>
                     <Text style={styles.scheduleTitle}>{item.course_title || item.name}</Text>

@@ -11,10 +11,11 @@ import {
 } from 'react-native';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import { courseGradient, usePublicCourseById } from '$hooks/usePublicData';
+import { resolveAppRoute } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
 const { width } = Dimensions.get('window');
@@ -23,8 +24,10 @@ const IS_DESKTOP = isWebMinWidth(width, 900);
 export default function CourseModal() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { user } = useAuth();
   const { course, loading } = usePublicCourseById(id);
   const [c1, c2] = courseGradient(0);
+  const canUseParentBooking = user?.role === 'parent';
 
   if (loading) {
     return (
@@ -234,8 +237,15 @@ export default function CourseModal() {
               </View>
               <TouchableOpacity
                 onPress={() => {
+                  if (canUseParentBooking) {
+                    router.back();
+                    router.push(
+                      resolveAppRoute(user?.role, { name: 'courseDetails', courseId: course.id }),
+                    );
+                    return;
+                  }
+
                   router.back();
-                  router.push(appHref(`/parent/club/${course.id}`));
                 }}
                 style={{
                   backgroundColor: c1,
@@ -244,7 +254,9 @@ export default function CourseModal() {
                   borderRadius: 18,
                 }}
               >
-                <Text style={{ color: 'white', fontWeight: '900', fontSize: 15 }}>Записаться</Text>
+                <Text style={{ color: 'white', fontWeight: '900', fontSize: 15 }}>
+                  {canUseParentBooking ? 'Записаться' : 'Понятно'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

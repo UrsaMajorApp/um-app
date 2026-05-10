@@ -20,6 +20,7 @@ import {
   useMentorStudentAttendanceSummary,
   useMentorStudents,
 } from '$hooks/useMentorData';
+import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { FeatherIconName } from '$types/icons';
 
@@ -68,7 +69,12 @@ export default function MentorStudentsScreen() {
         {/* Student Info Header */}
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={() => router.push(`/(tabs)/mentor/student/${student.id}`)}
+          onPress={() =>
+            navigateApp(router, 'mentor', {
+              name: 'mentorStudentDetails',
+              studentId: student.id,
+            })
+          }
           style={styles.cardHeader}
         >
           <View style={[styles.avatarContainer, { borderColor: status.color }]}>

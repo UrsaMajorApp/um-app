@@ -14,11 +14,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CATALOG_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
+import { resolveAppRoute } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 
 export default function CatalogScreen() {
@@ -27,10 +28,13 @@ export default function CatalogScreen() {
   const [activeCategory, setActiveCategory] = useState('⭐ Рекомендовано AI');
   const [search, setSearch] = useState('');
   const router = useRouter();
+  const { user } = useAuth();
 
   const { courses, loading } = usePublicCourses();
   const { childrenProfile, activeChildId } = useParentData();
   const activeChild = childrenProfile.find((c) => c.id === activeChildId) || childrenProfile[0];
+  const courseDetailsPath = (courseId: string) =>
+    resolveAppRoute(user?.role, { name: 'courseDetails', courseId });
 
   // Build recommended set from talent profile
   const recommendedIds = useMemo(() => {
@@ -293,7 +297,7 @@ export default function CatalogScreen() {
                         {formatKZT(item.price)}/мес
                       </Text>
                       <TouchableOpacity
-                        onPress={() => router.push(appHref(`/parent/club/${item.id}`))}
+                        onPress={() => router.push(courseDetailsPath(item.id))}
                         style={{
                           backgroundColor: COLORS.primary,
                           paddingVertical: 8,

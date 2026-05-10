@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { OrgStudentStat } from '$types/dashboard';
 
@@ -208,7 +208,9 @@ export default function OrgStudents() {
         {filtered.map((student) => (
           <Pressable
             key={student.id}
-            onPress={() => router.push(appHref(`/organization/student/${student.id}`))}
+            onPress={() =>
+              navigateApp(router, 'org', { name: 'orgStudentDetails', studentId: student.id })
+            }
             style={SHADOWS.sm}
             className="bg-white rounded-3xl p-4 mb-4 border border-gray-100"
           >

@@ -10,64 +10,13 @@ import '../global.css';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { DevRoleSwitcher } from '$components/DevRoleSwitcher';
-import { PROFILE_SETUP_ROUTES, YOUTH_ROLES } from '$constants/profileRoutes';
+import { PROFILE_SETUP_ROUTES } from '$constants/profileRoutes';
 import type { AuthUser, UserRole } from '$contexts/AuthContext';
+import { getRoleGuardRedirect } from '$lib/appNavigation';
 import type { AppHref } from '$types/router';
 
 function getProfileSetupRoute(role: UserRole): AppHref {
   return PROFILE_SETUP_ROUTES[role] ?? '/(tabs)/home';
-}
-
-function isYouthRole(role: UserRole) {
-  return YOUTH_ROLES.has(role);
-}
-
-function canUseYouthDiagnostic(role: UserRole) {
-  return role === 'parent' || isYouthRole(role);
-}
-
-function getRoleGuardRedirect(user: AuthUser, segments: string[]) {
-  const root = segments[0];
-  const section = segments[1];
-  const screen = segments[2];
-  const role = user.role;
-
-  if (root === '(tabs)') {
-    if (section === 'admin' && role !== 'admin') return '/(tabs)/home';
-    if (section === 'parent' && role !== 'parent') return '/(tabs)/home';
-    if (section === 'youth' && !isYouthRole(role)) return '/(tabs)/home';
-    if (section === 'mentor' && role !== 'mentor') return '/(tabs)/home';
-    if (section === 'organization' && role !== 'org') return '/(tabs)/home';
-    if (section === 'teacher' && role !== 'teacher') return '/(tabs)/home';
-    if (section === 'chats' && role === 'child') return '/(tabs)/home';
-    if (section === 'catalog' && (role === 'mentor' || role === 'org')) return '/(tabs)/home';
-    return null;
-  }
-
-  if (root === 'profile') {
-    if (section === 'admin' && role !== 'admin') return '/(tabs)/home';
-    if (section === 'parent' && role !== 'parent') return '/(tabs)/home';
-    if (section === 'organization' && role !== 'org') return '/(tabs)/home';
-    if (section === 'mentor' && role !== 'mentor') return '/(tabs)/home';
-    if (section === 'teacher' && role !== 'teacher') return '/(tabs)/home';
-    if (section === 'youth') {
-      if (screen === 'create-profile-child' && role !== 'parent') return '/(tabs)/home';
-      if (
-        (screen === 'create-profile' || screen === 'create-profile-young-adult') &&
-        !isYouthRole(role)
-      ) {
-        return '/(tabs)/home';
-      }
-      if (!canUseYouthDiagnostic(role)) return '/(tabs)/home';
-    }
-    return null;
-  }
-
-  if (root === 'parent' && role !== 'parent') return '/(tabs)/home';
-  if (root === 'mentor' && role !== 'mentor') return '/(tabs)/home';
-  if (root === 'organization' && role !== 'org') return '/(tabs)/home';
-
-  return null;
 }
 
 function getRouteRedirectPath({
@@ -135,7 +84,7 @@ function getRouteRedirectPath({
   }
 
   if (user) {
-    return getRoleGuardRedirect(user, segments);
+    return getRoleGuardRedirect(user.role, segments);
   }
 
   return null;

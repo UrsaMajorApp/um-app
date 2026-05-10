@@ -6,7 +6,7 @@ import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgGroups, useOrgStaffById } from '$hooks/useOrgData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function StaffDetailScreen() {
@@ -386,7 +386,9 @@ export default function StaffDetailScreen() {
           {groups.map((group) => (
             <TouchableOpacity
               key={group.id}
-              onPress={() => router.push(appHref(`/organization/group/${group.id}`))}
+              onPress={() =>
+                navigateApp(router, 'org', { name: 'orgGroupDetails', groupId: group.id })
+              }
               style={{
                 ...SHADOWS.sm,
                 backgroundColor: COLORS.white,

@@ -5,15 +5,17 @@ import { MotiView } from 'moti';
 import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import type { OrgStaffMember } from '$hooks/useOrgData';
 import { useOrgStaff } from '$hooks/useOrgData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgStaffScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const { user } = useAuth();
 
   const { staff: teachers, loading } = useOrgStaff();
 
@@ -130,7 +132,7 @@ export default function OrgStaffScreen() {
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() => router.push('/organization/staff/add')}
+                onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
                 style={{
                   width: 52,
                   height: 52,
@@ -291,7 +293,7 @@ export default function OrgStaffScreen() {
               Добавьте первого преподавателя для вашей организации
             </Text>
             <TouchableOpacity
-              onPress={() => router.push('/organization/staff/add')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 32,
@@ -323,7 +325,12 @@ export default function OrgStaffScreen() {
                 transition={{ delay: idx * 100 }}
               >
                 <TouchableOpacity
-                  onPress={() => router.push(appHref(`/organization/staff/${teacher.id}`))}
+                  onPress={() =>
+                    navigateApp(router, user?.role, {
+                      name: 'orgStaffDetails',
+                      staffId: teacher.id,
+                    })
+                  }
                   style={{
                     ...SHADOWS.strict,
                     backgroundColor: COLORS.white,
@@ -435,7 +442,12 @@ export default function OrgStaffScreen() {
 
                   <View style={{ flexDirection: 'row', gap: SPACING.md }}>
                     <TouchableOpacity
-                      onPress={() => router.push(appHref(`/organization/staff/${teacher.id}`))}
+                      onPress={() =>
+                        navigateApp(router, user?.role, {
+                          name: 'orgStaffDetails',
+                          staffId: teacher.id,
+                        })
+                      }
                       style={{
                         flex: 1,
                         height: 48,

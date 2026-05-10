@@ -9,8 +9,8 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useMentorOwnProfile, useMentorRequests, useMentorStudents } from '$hooks/useMentorData';
 import { useWalletData } from '$hooks/usePlatformData';
+import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
-import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorHome() {
@@ -107,7 +107,9 @@ export default function MentorHome() {
           <View style={{ marginBottom: 32 }}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Задачи на сегодня</Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigateApp(router, user?.role, { name: 'mentorSessions' })}
+              >
                 <Text style={styles.viewAllBtn}>См. все</Text>
               </TouchableOpacity>
             </View>
@@ -127,7 +129,10 @@ export default function MentorHome() {
                         task.child_name && s.student_name.includes(task.child_name.split(' ')[0]),
                     );
                     if (targetStudent) {
-                      router.push(appHref(`/(tabs)/mentor/student/${targetStudent.id}`));
+                      navigateApp(router, user?.role, {
+                        name: 'mentorStudentDetails',
+                        studentId: targetStudent.id,
+                      });
                     }
                   }}
                 >
@@ -201,7 +206,7 @@ export default function MentorHome() {
           {/* Quick Stats Widget */}
           <View style={styles.statsRow}>
             <TouchableOpacity
-              onPress={() => router.push('/(tabs)/mentor/wallet')}
+              onPress={() => navigateApp(router, user?.role, { name: 'mentorWallet' })}
               style={styles.statInfoCard}
             >
               <View style={[styles.statIconBox, { backgroundColor: '#F0FDF4' }]}>

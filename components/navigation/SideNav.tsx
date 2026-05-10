@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { type Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
@@ -7,6 +7,7 @@ import { useTabNav } from '$hooks/useTabNav';
 import type { Role } from '$constants/navigation/tabItems';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
+import { navigateApp } from '$lib/appNavigation';
 import type { PressableInteractionState } from '$types/navigation';
 
 interface SideNavProps {
@@ -215,7 +216,7 @@ export function SideNav({ role }: SideNavProps) {
                 icon: 'user' as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push('/profile');
+                  navigateApp(router, user?.role, { name: 'profile' });
                 },
                 destructive: false,
               },
@@ -224,7 +225,7 @@ export function SideNav({ role }: SideNavProps) {
                 icon: 'credit-card' as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push('/parent/subscription' as Href);
+                  navigateApp(router, user?.role, { name: 'payments' });
                 },
                 destructive: false,
               },
@@ -233,7 +234,7 @@ export function SideNav({ role }: SideNavProps) {
                 icon: 'settings' as const,
                 onPress: () => {
                   setDropdownVisible(false);
-                  router.push('/profile');
+                  navigateApp(router, user?.role, { name: 'profile' });
                 },
                 destructive: false,
               },

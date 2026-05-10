@@ -13,6 +13,7 @@ import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
 import { useStudentTasks, useYouthAchievements } from '$hooks/useStudentData';
 import { useYouthEnrollmentRequests } from '$hooks/useYouthEnrollmentRequests';
+import { navigateApp, resolveAppRoute } from '$lib/appNavigation';
 import { featherIconName } from '$lib/icons';
 import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
@@ -75,7 +76,7 @@ export default function YouthHome() {
       label: 'Расписание',
       icon: 'calendar',
       color: '#3B82F6',
-      route: '/(tabs)/parent/calendar',
+      route: resolveAppRoute(user?.role, { name: 'calendar' }),
     },
   ];
   const openTasks = tasks.filter((task) => !task.done).length;
@@ -126,7 +127,7 @@ export default function YouthHome() {
                   </Text>
                 </View>
                 <Pressable
-                  onPress={() => router.push('/profile')}
+                  onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
                   className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
                 >
                   <View className="w-full h-full bg-white/20 items-center justify-center">
@@ -209,7 +210,10 @@ export default function YouthHome() {
                   Я проанализировал твой тест. У тебя высокий потенциал в {currentSkills[0].label}.
                   Хочешь знать больше?
                 </Text>
-                <Pressable onPress={() => router.push('/parent/subscription')} className="mt-3">
+                <Pressable
+                  onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
+                  className="mt-3"
+                >
                   <Text className="text-blue-600 font-black text-[10px] uppercase underline">
                     открыть про аналитику
                   </Text>
@@ -309,7 +313,10 @@ export default function YouthHome() {
                   Хочешь узнать свою суперсилу и скрытые таланты? Попроси родителей активировать
                   PRO-доступ!
                 </Text>
-                <Pressable className="bg-white py-2 px-4 rounded-xl self-start border border-gray-200">
+                <Pressable
+                  onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
+                  className="bg-white py-2 px-4 rounded-xl self-start border border-gray-200"
+                >
                   <Text className="text-gray-700 font-bold text-xs">Подробнее о PRO</Text>
                 </Pressable>
               </View>
@@ -410,7 +417,7 @@ export default function YouthHome() {
                         </Text>
                       ) : null}
                       <Pressable
-                        onPress={() => router.push(appHref(`/parent/club/${rec.id}`))}
+                        onPress={() => enrollmentRequests.openEnrollmentModal(rec)}
                         style={{
                           backgroundColor: '#EDE9FE',
                           paddingVertical: 10,
@@ -622,7 +629,7 @@ export default function YouthHome() {
             >
               Интересные кружки
             </Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/parent/clubs')}>
+            <TouchableOpacity onPress={() => navigateApp(router, user?.role, { name: 'clubs' })}>
               <Text
                 style={{
                   fontSize: 13,

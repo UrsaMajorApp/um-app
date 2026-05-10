@@ -14,16 +14,18 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
 import { useOrgCourses, useOrgGroups } from '$hooks/useOrgData';
+import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgCourses() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const { user } = useAuth();
 
   const { courses, loading } = useOrgCourses();
   const { groups } = useOrgGroups();
@@ -87,7 +89,7 @@ export default function OrgCourses() {
                   Курсы
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push('/organization/course/create')}
+                  onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
                   style={{
                     backgroundColor: 'rgba(255,255,255,0.2)',
                     paddingHorizontal: SPACING.lg,
@@ -271,7 +273,7 @@ export default function OrgCourses() {
               Создайте первый курс, чтобы начать набор учеников
             </Text>
             <TouchableOpacity
-              onPress={() => router.push('/organization/course/create')}
+              onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
               style={{
                 backgroundColor: COLORS.primary,
                 paddingHorizontal: 28,
@@ -300,7 +302,12 @@ export default function OrgCourses() {
                   transition={{ delay: idx * 80 }}
                 >
                   <TouchableOpacity
-                    onPress={() => router.push(appHref(`/organization/course/${course.id}`))}
+                    onPress={() =>
+                      navigateApp(router, user?.role, {
+                        name: 'orgCourseDetails',
+                        courseId: course.id,
+                      })
+                    }
                     style={{
                       ...SHADOWS.strict,
                       backgroundColor: COLORS.white,
@@ -437,7 +444,10 @@ export default function OrgCourses() {
                       <View style={{ flexDirection: 'row', gap: SPACING.sm }}>
                         <TouchableOpacity
                           onPress={() =>
-                            router.push(appHref(`/organization/course/${course.id}/edit`))
+                            navigateApp(router, user?.role, {
+                              name: 'orgCourseEdit',
+                              courseId: course.id,
+                            })
                           }
                           style={{
                             width: 44,

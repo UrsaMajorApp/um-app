@@ -7,7 +7,7 @@ import { Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useMentorGroups } from '$hooks/useMentorData';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorGroups() {
@@ -134,7 +134,9 @@ export default function MentorGroups() {
           {filtered.map((group) => (
             <Pressable
               key={group.id}
-              onPress={() => router.push(appHref(`/mentor/group/${group.id}`))}
+              onPress={() =>
+                navigateApp(router, 'mentor', { name: 'mentorGroupDetails', groupId: group.id })
+              }
               style={{
                 ...SHADOWS.strict,
                 backgroundColor: COLORS.white,

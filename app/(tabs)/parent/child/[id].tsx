@@ -439,7 +439,7 @@ export default function ParentChildDetails() {
                   детальная аналитика.
                 </Text>
                 <Pressable
-                  onPress={() => router.push('/parent/subscription')}
+                  onPress={() => router.push('/profile/common/subscribe')}
                   className="bg-purple-500 h-14 rounded-2xl items-center justify-center active:bg-purple-600"
                 >
                   <Text className="text-white font-black text-sm uppercase tracking-wide">

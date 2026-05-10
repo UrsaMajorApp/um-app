@@ -1,4 +1,5 @@
 import type { UserRole } from '$contexts/AuthContext';
+import { YOUTH_ROLES } from '$lib/appNavigation';
 import type { AppHref } from '$types/router';
 
 export const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, AppHref>> = {
@@ -10,4 +11,4 @@ export const PROFILE_SETUP_ROUTES: Partial<Record<UserRole, AppHref>> = {
   org: '/profile/organization/create-profile',
 };
 
-export const YOUTH_ROLES = new Set<UserRole>(['youth', 'child', 'young-adult']);
+export { YOUTH_ROLES };

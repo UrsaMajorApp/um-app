@@ -20,7 +20,7 @@ import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useParentProfileController } from '$hooks/useParentProfileController';
-import { appHref } from '$lib/router';
+import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentProfile() {
@@ -60,7 +60,7 @@ export default function ParentProfile() {
         ],
       );
     } else {
-      router.push('/parent/subscription');
+      navigateApp(router, user?.role, { name: 'subscriptionUpsell' });
     }
   };
 
@@ -284,11 +284,12 @@ export default function ParentProfile() {
                 Отчеты и аналитика ({profileController.selectedChild?.name})
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  router.push(
-                    appHref(`/(tabs)/parent/child/${profileController.selectedChild?.id}`),
-                  )
-                }
+                onPress={() => {
+                  const childId = profileController.selectedChild?.id;
+                  if (childId) {
+                    navigateApp(router, user?.role, { name: 'parentChildDetails', childId });
+                  }
+                }}
                 style={styles.reportCard}
               >
                 <View style={styles.reportIcon}>

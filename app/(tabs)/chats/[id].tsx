@@ -35,7 +35,7 @@ export default function ChatScreen() {
   };
 
   const handleBackToChats = () => {
-    router.replace('/chats');
+    router.replace('/(tabs)/chats');
   };
 
   return (

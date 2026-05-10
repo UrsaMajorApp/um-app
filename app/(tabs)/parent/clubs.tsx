@@ -16,9 +16,9 @@ import { CLUB_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
+import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentClubs() {
@@ -275,7 +275,9 @@ export default function ParentClubs() {
                   return (
                     <Pressable
                       key={club.id}
-                      onPress={() => router.push(appHref(`/parent/club/${club.id}`))}
+                      onPress={() =>
+                        navigateApp(router, 'parent', { name: 'courseDetails', courseId: club.id })
+                      }
                       style={[
                         SHADOWS.md,
                         {
@@ -409,7 +411,9 @@ export default function ParentClubs() {
                 return (
                   <Pressable
                     key={club.id}
-                    onPress={() => router.push(appHref(`/parent/club/${club.id}`))}
+                    onPress={() =>
+                      navigateApp(router, 'parent', { name: 'courseDetails', courseId: club.id })
+                    }
                     style={[
                       SHADOWS.sm,
                       {

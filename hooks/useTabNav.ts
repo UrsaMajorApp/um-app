@@ -1,5 +1,7 @@
 import { type Href, useRouter, useSegments } from 'expo-router';
 import { DEFAULT_TABS, type Role, TABS_BY_ROLE } from '$constants/navigation/tabItems';
+import type { UserRole } from '$contexts/AuthContext';
+import { canAccessRouteSegments } from '$lib/appNavigation';
 
 export function useTabNav(role: Role | string | null) {
   const router = useRouter();
@@ -10,10 +12,16 @@ export function useTabNav(role: Role | string | null) {
 
   const go = (route: string) => {
     const href = `/(tabs)/${route}` as Href;
+    const routeSegments = ['(tabs)', ...route.split('/')];
+    const safeHref =
+      role && canAccessRouteSegments(role as UserRole, routeSegments)
+        ? href
+        : ('/(tabs)/home' as Href);
+
     if (route.includes('/')) {
-      router.push(href);
+      router.push(safeHref);
     } else {
-      router.replace(href);
+      router.replace(safeHref);
     }
   };
 

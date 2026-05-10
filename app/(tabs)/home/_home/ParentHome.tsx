@@ -10,9 +10,9 @@ import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
+import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { WebViewStyle } from '$types/styles';
 
@@ -159,7 +159,7 @@ export default function ParentHome() {
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 24 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Мои дети</Text>
-            <Pressable onPress={() => router.push('/(tabs)/parent/children')}>
+            <Pressable onPress={() => navigateApp(router, user?.role, { name: 'parentChildren' })}>
               <Text className="text-purple-600 font-bold text-sm">Все</Text>
             </Pressable>
           </View>
@@ -174,7 +174,10 @@ export default function ParentHome() {
                 key={child.id}
                 onPress={() => {
                   setActiveChildId(child.id);
-                  router.push(appHref(`/(tabs)/parent/child/${child.id}`));
+                  navigateApp(router, user?.role, {
+                    name: 'parentChildDetails',
+                    childId: child.id,
+                  });
                 }}
                 style={SHADOWS.md}
                 className={`mr-4 w-36 p-5 bg-white rounded-[32px] items-center border ${activeChildId === child.id ? 'border-purple-200' : 'border-gray-50'}`}
@@ -223,7 +226,7 @@ export default function ParentHome() {
                 </Text>
                 <View className="flex-row gap-2 mt-3">
                   <Pressable
-                    onPress={() => router.push('/chats')}
+                    onPress={() => navigateApp(router, user?.role, { name: 'chats' })}
                     className="bg-purple-600 px-3 py-1.5 rounded-full flex-row items-center gap-1"
                   >
                     <Text className="text-white font-black text-[10px] uppercase tracking-widest">
@@ -231,7 +234,7 @@ export default function ParentHome() {
                     </Text>
                   </Pressable>
                   <Pressable
-                    onPress={() => router.push('/parent/mentors')}
+                    onPress={() => navigateApp(router, user?.role, { name: 'parentMentors' })}
                     className="bg-white px-3 py-1.5 rounded-full border border-purple-200 flex-row items-center gap-1"
                   >
                     <Feather name="users" size={10} color="#6C5CE7" />
@@ -325,7 +328,9 @@ export default function ParentHome() {
                 return (
                   <Pressable
                     key={rec.id}
-                    onPress={() => router.push(appHref(`/parent/club/${rec.id}`))}
+                    onPress={() =>
+                      navigateApp(router, user?.role, { name: 'courseDetails', courseId: rec.id })
+                    }
                     style={[
                       SHADOWS.sm,
                       {
@@ -406,7 +411,7 @@ export default function ParentHome() {
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 32 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Ближайшие занятия</Text>
-            <Pressable onPress={() => router.push('/parent/calendar')}>
+            <Pressable onPress={() => navigateApp(router, user?.role, { name: 'calendar' })}>
               <Text className="text-purple-600 font-bold text-sm">Календарь</Text>
             </Pressable>
           </View>
@@ -419,7 +424,7 @@ export default function ParentHome() {
               Пока нет запланированных занятий
             </Text>
             <Pressable
-              onPress={() => router.push('/parent/clubs')}
+              onPress={() => navigateApp(router, user?.role, { name: 'clubs' })}
               className="bg-purple-600 px-6 py-3 rounded-2xl"
             >
               <Text className="text-white font-black text-sm uppercase">Найти кружок</Text>
