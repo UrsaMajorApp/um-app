@@ -20,7 +20,12 @@ import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useParentProfileController } from '$hooks/useParentProfileController';
+import {
+  type SubscriptionRequest,
+  useParentSubscriptionRequests,
+} from '$hooks/useSubscriptionRequests';
 import { navigateApp } from '$lib/appNavigation';
+import { formatSubscriptionPrice } from '$lib/formatCurrency';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentProfile() {
@@ -44,6 +49,34 @@ export default function ParentProfile() {
     updateParentProfile,
     updateChild,
   });
+  const subscriptionRequests = useParentSubscriptionRequests(user);
+
+  const handleActivateSubscriptionRequest = (request: SubscriptionRequest) => {
+    router.push({
+      pathname: '/profile/common/subscribe',
+      params: {
+        requestedPlanId: request.requested_plan_id ?? '',
+        requestedPlanTitle: request.requested_plan_title,
+        subscriptionRequestId: request.id,
+        requestedBy: request.student_name,
+      },
+    });
+  };
+
+  const handleRejectSubscriptionRequest = (request: SubscriptionRequest) => {
+    Alert.alert(
+      'Отклонить запрос?',
+      `${request.student_name} больше не увидит этот запрос активным.`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Отклонить',
+          style: 'destructive',
+          onPress: () => subscriptionRequests.setRequestStatus(request.id, 'rejected'),
+        },
+      ],
+    );
+  };
 
   const handleToggleTariff = () => {
     if (parentProfile?.tariff === 'pro') {
@@ -191,6 +224,59 @@ export default function ParentProfile() {
               </TouchableOpacity>
             </View>
           </View>
+
+          {(subscriptionRequests.loading || subscriptionRequests.requests.length > 0) && (
+            <View style={{ marginTop: 24 }}>
+              <Text style={styles.sectionTitle}>Запросы на подписку</Text>
+              {subscriptionRequests.loading ? (
+                <ActivityIndicator size="small" color={COLORS.primary} />
+              ) : (
+                subscriptionRequests.requests.map((request) => {
+                  const isPending = request.status === 'pending';
+
+                  return (
+                    <View key={request.id} style={styles.subscriptionRequestCard}>
+                      <View style={styles.subscriptionRequestIcon}>
+                        <Feather name="credit-card" size={20} color={COLORS.primary} />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.subscriptionRequestTitle}>
+                          {request.requested_plan_title}
+                        </Text>
+                        <Text style={styles.subscriptionRequestMeta}>
+                          {request.student_name} ·{' '}
+                          {formatSubscriptionPrice(request.price_kzt, request.billing_period)}
+                        </Text>
+                        <Text style={styles.subscriptionRequestStatus}>
+                          {request.status === 'approved'
+                            ? 'Одобрено'
+                            : request.status === 'rejected'
+                              ? 'Отклонено'
+                              : 'Ожидает подтверждения'}
+                        </Text>
+                      </View>
+                      {isPending ? (
+                        <View style={styles.subscriptionRequestActions}>
+                          <TouchableOpacity
+                            onPress={() => handleActivateSubscriptionRequest(request)}
+                            style={styles.subscriptionRequestPrimaryBtn}
+                          >
+                            <Text style={styles.subscriptionRequestPrimaryText}>Активировать</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleRejectSubscriptionRequest(request)}
+                            style={styles.subscriptionRequestSecondaryBtn}
+                          >
+                            <Feather name="x" size={16} color="#EF4444" />
+                          </TouchableOpacity>
+                        </View>
+                      ) : null}
+                    </View>
+                  );
+                })
+              )}
+            </View>
+          )}
 
           {/* Children Selector */}
           <View style={{ marginTop: 32 }}>
@@ -644,6 +730,67 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.foreground,
     marginLeft: 8,
+  },
+  subscriptionRequestCard: {
+    backgroundColor: 'white',
+    borderRadius: 24,
+    padding: 16,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: '#FEF3C7',
+  },
+  subscriptionRequestIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: '#F5F3FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  subscriptionRequestTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: COLORS.foreground,
+  },
+  subscriptionRequestMeta: {
+    fontSize: 12,
+    color: COLORS.mutedForeground,
+    marginTop: 3,
+  },
+  subscriptionRequestStatus: {
+    fontSize: 12,
+    color: COLORS.primary,
+    fontWeight: '700',
+    marginTop: 6,
+  },
+  subscriptionRequestActions: {
+    alignItems: 'flex-end',
+    gap: 8,
+    marginLeft: 12,
+  },
+  subscriptionRequestPrimaryBtn: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+  },
+  subscriptionRequestPrimaryText: {
+    color: 'white',
+    fontSize: 11,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  subscriptionRequestSecondaryBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 12,
+    backgroundColor: '#FEF2F2',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   clubCard: {
     backgroundColor: 'white',
