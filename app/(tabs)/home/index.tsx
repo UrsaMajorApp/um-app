@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import AdminHome from '$app/(tabs)/home/_home/AdminHome';
+import ChildHome from '$app/(tabs)/home/_home/ChildHome';
 import MentorHome from '$app/(tabs)/home/_home/MentorHome';
 import OrgHome from '$app/(tabs)/home/_home/OrgHome';
 import ParentHome from '$app/(tabs)/home/_home/ParentHome';
 import TeacherHome from '$app/(tabs)/home/_home/TeacherHome';
 import YouthHome from '$app/(tabs)/home/_home/YouthHome';
+import YoungAdultHome from '$app/(tabs)/home/_home/YoungAdultHome';
 import { COLORS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import type { HomeScreenRole } from '$types/user';
@@ -42,9 +44,12 @@ export default function HomeScreenRouter() {
   switch (role) {
     case 'parent':
       return <ParentHome />;
-    case 'youth':
     case 'child':
+      return <ChildHome />;
+    case 'youth':
       return <YouthHome />;
+    case 'young-adult':
+      return <YoungAdultHome />;
     case 'mentor':
       return <MentorHome />;
     case 'org':

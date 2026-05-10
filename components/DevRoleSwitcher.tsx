@@ -167,7 +167,16 @@ export function DevRoleSwitcher() {
     setVisible(true);
   };
 
-  const roles: UserRole[] = ['parent', 'youth', 'child', 'mentor', 'org', 'teacher', 'admin'];
+  const roles: UserRole[] = [
+    'parent',
+    'child',
+    'youth',
+    'young-adult',
+    'mentor',
+    'org',
+    'teacher',
+    'admin',
+  ];
 
   const handleSwitch = async (role: UserRole) => {
     if (!devToolsEnabled || switchingRole || clearingRole) return;
@@ -300,8 +309,8 @@ export function DevRoleSwitcher() {
                     />
                   </View>
 
-                  {/* Tariff toggle (parent/child roles) */}
-                  {['parent', 'youth', 'child'].includes(user?.role || '') && (
+                  {/* Tariff toggle (parent/student roles) */}
+                  {['parent', 'child', 'youth', 'young-adult'].includes(user?.role || '') && (
                     <View style={styles.devModeRow}>
                       <View style={{ flex: 1, marginRight: 12 }}>
                         <Text style={styles.devModeTitle}>

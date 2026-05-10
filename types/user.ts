@@ -16,5 +16,5 @@ export type AppUserRole =
   | 'teacher'
   | 'admin';
 
-export type HomeScreenRole = Exclude<AppUserRole, 'young-adult'>;
-export type ProfileScreenRole = Exclude<AppUserRole, 'young-adult' | 'admin'>;
+export type HomeScreenRole = AppUserRole;
+export type ProfileScreenRole = Exclude<AppUserRole, 'admin'>;

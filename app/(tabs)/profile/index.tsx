@@ -39,6 +39,7 @@ export default function ProfileScreenRouter() {
       return <ParentProfile />;
     case 'youth':
     case 'child':
+    case 'young-adult':
       return <YouthProfile />;
     case 'mentor':
       return <MentorProfile />;
