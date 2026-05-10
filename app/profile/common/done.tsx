@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,11 +9,13 @@ import { useAuth } from '$contexts/AuthContext';
 
 export default function DoneScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ temporaryStripeSandbox?: string }>();
   const { user } = useAuth();
   const role = user?.role ?? null;
+  const isTemporaryStripeSandboxSuccess = params.temporaryStripeSandbox === 'success';
 
   const handleStart = () => {
-    if (role === 'youth' || role === 'child') {
+    if (role === 'youth' || role === 'child' || role === 'young-adult') {
       router.replace('/profile/youth/testing');
       return;
     }
@@ -107,7 +109,7 @@ export default function DoneScreen() {
                   letterSpacing: -0.5,
                 }}
               >
-                Ура! Вы в деле
+                {isTemporaryStripeSandboxSuccess ? 'Тестовая оплата принята' : 'Ура! Вы в деле'}
               </Text>
 
               <Text
@@ -120,7 +122,9 @@ export default function DoneScreen() {
                   paddingHorizontal: 10,
                 }}
               >
-                Ваш профиль успешно создан.{'\n'}Теперь вам доступны все возможности платформы.
+                {isTemporaryStripeSandboxSuccess
+                  ? 'Stripe Sandbox подтвердил демо-оплату. Реальные списания не выполнялись.'
+                  : 'Ваш профиль успешно создан.\nТеперь вам доступны все возможности платформы.'}
               </Text>
 
               {/* Action Button */}

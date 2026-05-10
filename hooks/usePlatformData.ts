@@ -1,21 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useDevDataVersion } from '$lib/devDataEvents';
+import {
+  fallbackPlansForRole,
+  type SubscriptionPlan,
+  type SubscriptionPlanRole,
+} from '$lib/subscriptionCatalog';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { resolveOwnedOrgId, rowsOrEmpty } from '$lib/supabaseHelpers';
 
-export type SubscriptionPlanRole = 'parent' | 'youth' | 'org';
-
-export interface SubscriptionPlan {
-  id: string;
-  role: SubscriptionPlanRole;
-  title: string;
-  price_kzt: number;
-  billing_period: string;
-  features: string[];
-  popular: boolean;
-  display_order: number;
-}
+export type { SubscriptionPlan, SubscriptionPlanRole };
 
 function subscriptionRole(role: UserRole | null | undefined): SubscriptionPlanRole | null {
   if (role === 'child' || role === 'young-adult' || role === 'youth') return 'youth';
@@ -31,7 +25,7 @@ export function useSubscriptionPlans(role: UserRole | null | undefined) {
 
   const refresh = useCallback(async () => {
     if (!supabase || !isSupabaseConfigured || !planRole) {
-      setPlans([]);
+      setPlans(fallbackPlansForRole(planRole));
       setLoading(false);
       return;
     }
@@ -43,7 +37,8 @@ export function useSubscriptionPlans(role: UserRole | null | undefined) {
       .eq('role', planRole)
       .eq('active', true)
       .order('display_order', { ascending: true });
-    setPlans(rowsOrEmpty<SubscriptionPlan>(res));
+    const rows = rowsOrEmpty<SubscriptionPlan>(res);
+    setPlans(rows.length > 0 ? rows : fallbackPlansForRole(planRole));
     setLoading(false);
   }, [planRole]);
 

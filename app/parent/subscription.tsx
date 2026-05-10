@@ -7,7 +7,7 @@ import { SideNav } from '$components/navigation/SideNav';
 import { SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useSubscriptionPlans } from '$hooks/usePlatformData';
-import { formatKZT } from '$lib/formatCurrency';
+import { formatBillingPeriodLabel, formatKZT } from '$lib/formatCurrency';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function SubscriptionPaywall() {
@@ -16,6 +16,7 @@ export default function SubscriptionPaywall() {
   const isDesktop = useIsDesktop();
   const { plans } = useSubscriptionPlans('parent');
   const plan = plans.find((item) => item.popular) ?? plans[0] ?? null;
+  const billingLabel = plan ? formatBillingPeriodLabel(plan.billing_period) : null;
 
   const handleSubscribe = () => {
     router.push('/profile/common/subscribe');
@@ -89,7 +90,9 @@ export default function SubscriptionPaywall() {
                 <Text style={styles.pricingLabel}>{plan?.title ?? 'Тариф'}</Text>
                 <View style={styles.priceRow}>
                   <Text style={styles.priceAmount}>{plan ? formatKZT(plan.price_kzt) : '—'}</Text>
-                  <Text style={styles.priceUnit}> / мес</Text>
+                  {plan && plan.price_kzt > 0 && (
+                    <Text style={styles.priceUnit}> / {billingLabel}</Text>
+                  )}
                 </View>
 
                 <Pressable

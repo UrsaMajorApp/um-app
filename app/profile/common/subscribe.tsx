@@ -6,7 +6,12 @@ import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
 import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSubscriptionPlans } from '$hooks/usePlatformData';
-import { formatKZT } from '$lib/formatCurrency';
+import { formatSubscriptionPrice } from '$lib/formatCurrency';
+import type { SubscriptionPlan, SubscriptionPlanRole } from '$lib/subscriptionCatalog';
+import {
+  isTemporaryPreDefenseStripeSandboxEnabled,
+  startTemporaryPreDefenseStripeSandboxCheckout,
+} from '$lib/temporaryPreDefenseStripeSandbox';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 import type { SubscriptionRole } from '$types/auth';
 
@@ -17,11 +22,34 @@ function planKey(role: SubscriptionRole) {
   return `subscription_plan_${role}`;
 }
 
+function paymentRole(role: SubscriptionRole | null): SubscriptionPlanRole | null {
+  if (role === 'child' || role === 'young-adult' || role === 'youth') return 'youth';
+  if (role === 'parent' || role === 'org') return role;
+  return null;
+}
+
+function planActionLabel(params: {
+  isCheckoutLoading: boolean;
+  isSelected: boolean;
+  isPaid: boolean;
+  stripeSandboxEnabled: boolean;
+}) {
+  if (params.isCheckoutLoading) return 'открываем Stripe Sandbox...';
+  if (params.isSelected) return 'оставить выбранным';
+  if (params.isPaid && params.stripeSandboxEnabled) return 'оплатить в Stripe Sandbox';
+  return 'выбрать';
+}
+
 export default function SubscribeScreen() {
   const router = useRouter();
   const [role, setRole] = useState<SubscriptionRole | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<{ planId: string; message: string } | null>(
+    null,
+  );
   const { plans, loading } = useSubscriptionPlans(role);
+  const stripeSandboxEnabled = isTemporaryPreDefenseStripeSandboxEnabled();
 
   useEffect(() => {
     AsyncStorage.getItem('user_role').then((v) => setRole((v as SubscriptionRole) || 'parent'));
@@ -39,9 +67,35 @@ export default function SubscribeScreen() {
     router.replace('/(tabs)/home'); // после выбора подписки отправляем на home (первый таб)
   }
 
-  function formatPrice(priceKzt: number, billingPeriod: string) {
-    const period = billingPeriod === 'month' ? 'мес' : billingPeriod;
-    return `${formatKZT(priceKzt)} / ${period}`;
+  async function choosePaidPlan(plan: SubscriptionPlan) {
+    const roleForPayment = paymentRole(role);
+
+    if (!role || !roleForPayment) return;
+
+    if (plan.price_kzt <= 0 || plan.billing_period === 'free' || !stripeSandboxEnabled) {
+      await choosePlan(plan.title);
+      return;
+    }
+
+    setPaymentError(null);
+    setCheckoutPlanId(plan.id);
+
+    try {
+      await startTemporaryPreDefenseStripeSandboxCheckout({
+        plan,
+        role: roleForPayment,
+        clientReferenceId: `${roleForPayment}:${plan.id}`,
+      });
+      await AsyncStorage.setItem(planKey(role), plan.title);
+      setSelected(plan.title);
+    } catch (error) {
+      setPaymentError({
+        planId: plan.id,
+        message: error instanceof Error ? error.message : 'Не удалось открыть Stripe Sandbox.',
+      });
+    } finally {
+      setCheckoutPlanId(null);
+    }
   }
 
   return (
@@ -117,6 +171,14 @@ export default function SubscribeScreen() {
           {plans.map((plan, index) => {
             const isSelected = selected === plan.title;
             const isPopular = plan.popular === true;
+            const isPaid = plan.price_kzt > 0 && plan.billing_period !== 'free';
+            const isCheckoutLoading = checkoutPlanId === plan.id;
+            const actionLabel = planActionLabel({
+              isCheckoutLoading,
+              isSelected,
+              isPaid,
+              stripeSandboxEnabled,
+            });
 
             return (
               <MotiView
@@ -191,8 +253,21 @@ export default function SubscribeScreen() {
                     marginBottom: 16,
                   }}
                 >
-                  {formatPrice(plan.price_kzt, plan.billing_period)}
+                  {formatSubscriptionPrice(plan.price_kzt, plan.billing_period)}
                 </Text>
+
+                {isPaid && stripeSandboxEnabled ? (
+                  <Text
+                    style={{
+                      color: '#71717A',
+                      fontSize: 12,
+                      marginTop: -8,
+                      marginBottom: 14,
+                    }}
+                  >
+                    Stripe Sandbox: тестовая оплата, реальные списания не выполняются.
+                  </Text>
+                ) : null}
 
                 {plan.features.map((f) => (
                   <View
@@ -209,12 +284,14 @@ export default function SubscribeScreen() {
                 ))}
 
                 <TouchableOpacity
-                  onPress={() => choosePlan(plan.title)}
+                  disabled={isCheckoutLoading}
+                  onPress={() => choosePaidPlan(plan)}
                   style={{
                     backgroundColor: isSelected ? '#6C5CE7' : '#6C5CE7',
                     marginTop: 20,
                     paddingVertical: 14,
                     borderRadius: 999,
+                    opacity: isCheckoutLoading ? 0.72 : 1,
                   }}
                 >
                   <Text
@@ -225,9 +302,18 @@ export default function SubscribeScreen() {
                       fontWeight: '700',
                     }}
                   >
-                    {isSelected ? 'оставить выбранным' : 'выбрать'}
+                    {actionLabel}
                   </Text>
                 </TouchableOpacity>
+
+                {paymentError?.planId === plan.id && checkoutPlanId === null ? (
+                  <Text
+                    selectable
+                    style={{ color: '#B91C1C', fontSize: 12, textAlign: 'center', marginTop: 10 }}
+                  >
+                    {paymentError.message}
+                  </Text>
+                ) : null}
               </MotiView>
             );
           })}
