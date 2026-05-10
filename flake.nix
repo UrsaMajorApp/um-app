@@ -17,10 +17,11 @@
             git
             nodejs_22
             pnpm
+            supabase-cli
           ];
 
           shellHook = ''
-            export PATH="$PWD/node_modules/.bin:$PATH"
+            export PATH="$PATH:$PWD/node_modules/.bin"
           '';
         };
       });
