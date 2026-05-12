@@ -33,6 +33,7 @@ yarn-error.*
 # local agent tooling
 .agents/
 .claude/
+AGENTS.md
 
 # local env files
 .env*.local
