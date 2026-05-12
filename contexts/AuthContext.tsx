@@ -285,21 +285,22 @@ async function hydrateFromSupabaseUser(sessionUser: SupabaseUser): Promise<AuthU
   // Роль считается выбранной только если она пришла из сохраненных данных,
   // а не из fallback-значения parseRole().
   const hasSelectedRole = !!(rawRemoteRole || rawMetaRole);
-  const metadataRole = parseRole(rawMetaRole);
+  const role = parseRole(rawRemoteRole || rawMetaRole);
   const isDevAnonymous =
     isAnonymousSupabaseUser(sessionUser) && metadata.dev_role_switcher === true;
 
-  // Пользователь может входить по телефону или email. Dev anonymous user тоже
-  // допустим: у него специально нет персональных данных в auth identity.
-  if (!phone && !email && !isDevAnonymous) return null;
+  if (isDevAnonymous) {
+    return buildDevUserFromId(sessionUser.id, role);
+  }
+
+  // Пользователь может входить по телефону или email.
+  if (!phone && !email) return null;
 
   // У Google/OAuth пользователей имя обычно лежит в metadata.full_name или name.
   const fullName = ((metadata.full_name || metadata.name || '') as string).trim();
   const nameParts = fullName.split(' ').filter(Boolean);
   const oauthFirstName = nameParts[0] ?? '';
   const oauthLastName = nameParts.slice(1).join(' ');
-  const role = parseRole(rawRemoteRole || rawMetaRole);
-
   return toAuthUser({
     id: sessionUser.id,
     phone,
@@ -308,15 +309,13 @@ async function hydrateFromSupabaseUser(sessionUser: SupabaseUser): Promise<AuthU
     firstName:
       (remoteProfile?.first_name as string | null) ||
       (metadata.first_name as string | undefined) ||
-      oauthFirstName ||
-      (isDevAnonymous ? 'Dev' : ''),
+      oauthFirstName,
     lastName:
       (remoteProfile?.last_name as string | null) ||
       (metadata.last_name as string | undefined) ||
-      oauthLastName ||
-      (isDevAnonymous ? metadataRole.charAt(0).toUpperCase() + metadataRole.slice(1) : ''),
-    profileComplete: isDevAnonymous || (await resolveProfileComplete(sessionUser.id, role)),
-    hasSelectedRole: isDevAnonymous || hasSelectedRole,
+      oauthLastName,
+    profileComplete: await resolveProfileComplete(sessionUser.id, role),
+    hasSelectedRole,
   });
 }
 
