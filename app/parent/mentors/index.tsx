@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { usePublicMentors } from '$hooks/usePublicMentors';
@@ -45,7 +46,7 @@ export default function ParentMentorsScreen() {
                   marginBottom: 20,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 40,
@@ -58,7 +59,7 @@ export default function ParentMentorsScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.size.xxl,
@@ -243,7 +244,7 @@ export default function ParentMentorsScreen() {
                 </View>
 
                 <View style={{ flexDirection: 'row', gap: 12 }}>
-                  <TouchableOpacity
+                  <PressableScale
                     style={{
                       flex: 1,
                       height: 48,
@@ -264,8 +265,8 @@ export default function ParentMentorsScreen() {
                     >
                       ПРОФИЛЬ
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </PressableScale>
+                  <PressableScale
                     style={{
                       flex: 1.5,
                       height: 48,
@@ -285,7 +286,7 @@ export default function ParentMentorsScreen() {
                     >
                       ВЫБРАТЬ
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               </View>
             </MotiView>

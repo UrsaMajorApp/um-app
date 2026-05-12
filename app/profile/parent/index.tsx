@@ -3,18 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import {
-  ActivityIndicator,
-  Alert,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Alert, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import QRCode from 'react-native-qrcode-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
@@ -184,12 +174,12 @@ export default function ParentProfile() {
                 </Text>
                 <Text style={styles.parentPhone}>{parentProfile?.phone || user?.phone}</Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => profileController.setShowEditModal(true)}
                 style={styles.editBtnSmall}
               >
                 <Feather name="settings" size={16} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <View style={styles.divider} />
@@ -207,7 +197,7 @@ export default function ParentProfile() {
                   {parentProfile?.tariff === 'pro' ? 'Family PRO' : 'Базовый'}
                 </Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 onPress={handleToggleTariff}
                 style={[
                   styles.tariffBtn,
@@ -222,7 +212,7 @@ export default function ParentProfile() {
                 >
                   {parentProfile?.tariff === 'pro' ? 'Управление' : 'Активировать PRO'}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
 
@@ -258,18 +248,18 @@ export default function ParentProfile() {
                       </View>
                       {isPending ? (
                         <View style={styles.subscriptionRequestActions}>
-                          <TouchableOpacity
+                          <PressableScale
                             onPress={() => handleActivateSubscriptionRequest(request)}
                             style={styles.subscriptionRequestPrimaryBtn}
                           >
                             <Text style={styles.subscriptionRequestPrimaryText}>Активировать</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
+                          </PressableScale>
+                          <PressableScale
                             onPress={() => handleRejectSubscriptionRequest(request)}
                             style={styles.subscriptionRequestSecondaryBtn}
                           >
                             <Feather name="x" size={16} color="#EF4444" />
-                          </TouchableOpacity>
+                          </PressableScale>
                         </View>
                       ) : null}
                     </View>
@@ -295,7 +285,7 @@ export default function ParentProfile() {
                 {children.map((child) => {
                   const isSelected = profileController.selectedChildId === child.id;
                   return (
-                    <TouchableOpacity
+                    <PressableScale
                       key={child.id}
                       onPress={() => profileController.setSelectedChildId(child.id)}
                       activeOpacity={0.8}
@@ -312,18 +302,18 @@ export default function ParentProfile() {
                       <Text style={[styles.childAge, isSelected && styles.childAgeActive]}>
                         {child.age} лет
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   );
                 })}
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.push('/profile/youth/create-profile-child')}
                   style={styles.addChildSelector}
                 >
                   <Feather name="plus" size={24} color={COLORS.mutedForeground} />
-                </TouchableOpacity>
+                </PressableScale>
               </ScrollView>
             ) : (
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => router.push('/profile/youth/create-profile-child')}
                 style={styles.createChildPrompt}
               >
@@ -337,7 +327,7 @@ export default function ParentProfile() {
                   </Text>
                 </View>
                 <Feather name="chevron-right" size={20} color={COLORS.primary} />
-              </TouchableOpacity>
+              </PressableScale>
             )}
           </View>
 
@@ -355,12 +345,12 @@ export default function ParentProfile() {
                   <Text style={styles.qrSubtitle}>QR-код для отметки</Text>
                 </View>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => profileController.setShowQRModal(true)}
                 style={styles.qrBtn}
               >
                 <Feather name="maximize" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           )}
 
@@ -370,7 +360,7 @@ export default function ParentProfile() {
               <Text style={styles.sectionTitle}>
                 Отчеты и аналитика ({profileController.selectedChild?.name})
               </Text>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => {
                   const childId = profileController.selectedChild?.id;
                   if (childId) {
@@ -387,7 +377,7 @@ export default function ParentProfile() {
                   <Text style={styles.reportSubtitle}>Карта талантов и мягких навыков</Text>
                 </View>
                 <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           )}
 
@@ -415,9 +405,9 @@ export default function ParentProfile() {
                       </View>
                     </View>
                   </View>
-                  <TouchableOpacity style={styles.clubArrow}>
+                  <PressableScale style={styles.clubArrow}>
                     <Feather name="chevron-right" size={20} color={COLORS.primary} />
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               ))
             ) : (
@@ -428,9 +418,9 @@ export default function ParentProfile() {
           </View>
 
           {/* Logout */}
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+          <PressableScale onPress={handleLogout} style={styles.logoutBtn}>
             <Text style={styles.logoutText}>Выйти из аккаунта</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </ScrollView>
 
@@ -451,9 +441,9 @@ export default function ParentProfile() {
           >
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Редактировать профиль</Text>
-              <TouchableOpacity onPress={() => profileController.setShowEditModal(false)}>
+              <PressableScale onPress={() => profileController.setShowEditModal(false)}>
                 <Feather name="x" size={24} color={COLORS.foreground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <View style={{ gap: 20, marginTop: 32 }}>
@@ -487,12 +477,12 @@ export default function ParentProfile() {
                 />
               </View>
 
-              <TouchableOpacity
+              <PressableScale
                 onPress={profileController.handleUpdateProfile}
                 style={styles.saveProfileBtn}
               >
                 <Text style={{ color: 'white', fontWeight: '800', fontSize: 16 }}>СОХРАНИТЬ</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </Pressable>
         </Pressable>
@@ -506,9 +496,9 @@ export default function ParentProfile() {
           >
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Код для входа</Text>
-              <TouchableOpacity onPress={() => profileController.setShowQRModal(false)}>
+              <PressableScale onPress={() => profileController.setShowQRModal(false)}>
                 <Feather name="x" size={24} color="#999" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <View style={{ alignItems: 'center', width: '100%' }}>
@@ -533,13 +523,13 @@ export default function ParentProfile() {
                     Покажите этот код ребёнку для входа в приложение
                   </Text>
 
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={profileController.handleGeneratePin}
                     style={styles.regenerateBtn}
                   >
                     <Feather name="refresh-cw" size={16} color="#6C5CE7" />
                     <Text style={styles.regenerateBtnText}>Обновить код</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </>
               ) : (
                 <>
@@ -549,13 +539,13 @@ export default function ParentProfile() {
                     <Text style={styles.noPinHint}>Создайте 6-значный код для входа ребёнка</Text>
                   </View>
 
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={profileController.handleGeneratePin}
                     style={styles.generatePinBtn}
                   >
                     <Feather name="grid" size={18} color="white" />
                     <Text style={styles.generatePinBtnText}>Создать код</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </>
               )}
             </View>

@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -56,7 +57,7 @@ export default function ParentChildDetails() {
                 marginBottom: 32,
               }}
             >
-              <Pressable
+              <PressableScale
                 onPress={() => {
                   if (router.canGoBack()) {
                     router.back();
@@ -75,7 +76,7 @@ export default function ParentChildDetails() {
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
-              </Pressable>
+              </PressableScale>
               <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Профиль</Text>
             </View>
 
@@ -172,7 +173,7 @@ export default function ParentChildDetails() {
                 <Text className="text-sm font-medium text-gray-500 mb-4 leading-5">
                   Прохождение 1 раз в месяц для детальной корректировки профиля (навыки, архетип).
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => {
                     setActiveChildId(child.id);
                     router.push({
@@ -185,7 +186,7 @@ export default function ParentChildDetails() {
                   <Text className="text-blue-600 font-black text-xs uppercase tracking-wide">
                     Начать тест
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
               <View className="w-16 h-16 bg-blue-50 rounded-[20px] items-center justify-center border border-blue-100">
                 <Feather name="file-text" size={24} color="#3B82F6" />
@@ -247,7 +248,7 @@ export default function ParentChildDetails() {
               {child.talentProfile.summary}
             </Text>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => {
                 setActiveChildId(child.id);
                 router.push('/profile/youth/results');
@@ -260,7 +261,7 @@ export default function ParentChildDetails() {
                 </Text>
                 <Feather name="external-link" size={14} color={COLORS.primary} />
               </View>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         )}
 
@@ -286,7 +287,7 @@ export default function ParentChildDetails() {
             <Text className="text-white/60 text-sm leading-5 mb-6">
               Пройдите глубокий тест способностей ребенка для открытия новых талантов.
             </Text>
-            <Pressable
+            <PressableScale
               onPress={() => {
                 setActiveChildId(child.id);
                 router.push({
@@ -297,7 +298,7 @@ export default function ParentChildDetails() {
               className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
             >
               <Text className="text-gray-900 font-black text-sm uppercase">Начать тест</Text>
-            </Pressable>
+            </PressableScale>
           </View>
         )}
 
@@ -325,14 +326,14 @@ export default function ParentChildDetails() {
               Откройте 100% потенциала: персональные рекомендации секций, трекинг с ментором и
               детальная аналитика.
             </Text>
-            <Pressable
+            <PressableScale
               onPress={() => router.push('/profile/common/subscribe')}
               className="bg-purple-500 h-14 rounded-2xl items-center justify-center active:bg-purple-600"
             >
               <Text className="text-white font-black text-sm uppercase tracking-wide">
                 🔥 Открыть все данные
               </Text>
-            </Pressable>
+            </PressableScale>
           </View>
         )}
 

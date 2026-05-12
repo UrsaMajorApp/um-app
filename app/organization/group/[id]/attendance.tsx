@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Alert,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Alert, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications, useOrgGroupById } from '$hooks/useOrgData';
@@ -92,7 +86,7 @@ export default function AttendanceScreen() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -104,7 +98,7 @@ export default function AttendanceScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     flex: 1,
@@ -251,7 +245,7 @@ export default function AttendanceScreen() {
                 ).map(({ key, label, color }) => {
                   const active = student.status === key;
                   return (
-                    <Pressable
+                    <PressableScale
                       key={key}
                       onPress={() => toggleStatus(student.id, key)}
                       style={{
@@ -274,7 +268,7 @@ export default function AttendanceScreen() {
                       >
                         {label}
                       </Text>
-                    </Pressable>
+                    </PressableScale>
                   );
                 })}
               </View>
@@ -299,7 +293,7 @@ export default function AttendanceScreen() {
           ...SHADOWS.lg,
         }}
       >
-        <TouchableOpacity
+        <PressableScale
           onPress={handleSave}
           style={{
             backgroundColor: COLORS.primary,
@@ -318,7 +312,7 @@ export default function AttendanceScreen() {
           >
             Сохранить
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     </View>
   );

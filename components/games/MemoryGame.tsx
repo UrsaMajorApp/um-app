@@ -1,7 +1,8 @@
 // MemoryGame: реализует игру на память с карточками, совпадениями и локальным прогрессом.
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { Alert, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import {
   MEMORY_CARDS,
   MEMORY_GRID_GAP as GRID_GAP,
@@ -72,16 +73,16 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
           <Text style={styles.statLabel}>Ходы</Text>
           <Text style={styles.statValue}>{moves}</Text>
         </View>
-        <TouchableOpacity onPress={shuffle} style={styles.resetBtn}>
+        <PressableScale onPress={shuffle} style={styles.resetBtn}>
           <Feather name="refresh-cw" size={20} color="white" />
-        </TouchableOpacity>
+        </PressableScale>
       </View>
 
       <View style={[styles.grid, { width: boardSize }]}>
         {cards.map((card, index) => {
           const isFlipped = flipped.includes(index) || solved.includes(index);
           return (
-            <TouchableOpacity
+            <PressableScale
               key={card.id}
               onPress={() => handleClick(index)}
               style={[
@@ -95,7 +96,7 @@ export default function MemoryGame({ onFinish }: { onFinish: (score: number) => 
               <Text style={[styles.emoji, { fontSize: emojiSize }]}>
                 {isFlipped ? card.emoji : '?'}
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           );
         })}
       </View>

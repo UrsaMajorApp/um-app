@@ -1,7 +1,8 @@
 // EnrollmentRequestModal: показывает youth-заявку на курс и отправляет выбранное действие.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { courseGradient, type PublicCourse } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
@@ -62,9 +63,9 @@ export function EnrollmentRequestModal({
             >
               Записаться в кружок
             </Text>
-            <TouchableOpacity onPress={onClose}>
+            <PressableScale onPress={onClose}>
               <Feather name="x" size={24} color={COLORS.mutedForeground} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
           {selectedCourse && (
@@ -218,7 +219,7 @@ export function EnrollmentRequestModal({
                 </View>
               </View>
 
-              <TouchableOpacity
+              <PressableScale
                 onPress={onRequestEnrollment}
                 disabled={isRequested}
                 style={{
@@ -250,7 +251,7 @@ export function EnrollmentRequestModal({
                       ? 'Отправить запрос родителю'
                       : 'Отправить заявку'}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </>
           )}
         </View>

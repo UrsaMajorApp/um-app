@@ -7,7 +7,8 @@
  */
 import { MotiView } from 'moti';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { BasicSkill911, WYRCard as WYRCardType } from '$data/diagnosticData911';
 
@@ -111,7 +112,7 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
 
       {/* Option buttons */}
       <View style={styles.optionsRow}>
-        <TouchableOpacity
+        <PressableScale
           onPress={() => handleChoice('A')}
           activeOpacity={0.75}
           disabled={!!chosen}
@@ -123,9 +124,9 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
           ]}
         >
           <Text style={styles.optionLabel}>{card.optionA.label}</Text>
-        </TouchableOpacity>
+        </PressableScale>
 
-        <TouchableOpacity
+        <PressableScale
           onPress={() => handleChoice('B')}
           activeOpacity={0.75}
           disabled={!!chosen}
@@ -137,7 +138,7 @@ export default function WYRCard({ card, index, total, onChoice, timerSeconds = 1
           ]}
         >
           <Text style={styles.optionLabel}>{card.optionB.label}</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     </MotiView>
   );

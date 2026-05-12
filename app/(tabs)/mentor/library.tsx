@@ -1,7 +1,8 @@
 // Экран mentor/library: загружает и показывает библиотеку материалов в кабинете ментора.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useLearningMaterials } from '$hooks/useMentorData';
@@ -26,7 +27,7 @@ export default function MentorLibrary() {
             gap: 12,
           }}
         >
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             style={{
               width: 40,
@@ -38,7 +39,7 @@ export default function MentorLibrary() {
             }}
           >
             <Feather name="arrow-left" size={20} color="white" />
-          </TouchableOpacity>
+          </PressableScale>
           <Text
             style={{
               fontSize: TYPOGRAPHY.size.xl,
@@ -82,7 +83,7 @@ export default function MentorLibrary() {
         )}
         <View style={{ gap: 12 }}>
           {materials.map((item) => (
-            <TouchableOpacity
+            <PressableScale
               key={item.id}
               activeOpacity={0.8}
               style={{
@@ -134,7 +135,7 @@ export default function MentorLibrary() {
                 </Text>
               </View>
               <Feather name="download" size={18} color={COLORS.mutedForeground} />
-            </TouchableOpacity>
+            </PressableScale>
           ))}
         </View>
       </ScrollView>

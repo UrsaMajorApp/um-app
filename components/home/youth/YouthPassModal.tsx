@@ -1,7 +1,8 @@
 // YouthPassModal: показывает пропуск/QR или данные доступа для youth-сценария.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Pressable, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import QRCode from 'react-native-qrcode-svg';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 
@@ -97,7 +98,7 @@ export function YouthPassModal({ visible, qrValue, userName, onClose }: YouthPas
             Покажите QR куратору или на входе в секцию
           </Text>
 
-          <TouchableOpacity
+          <PressableScale
             onPress={onClose}
             style={{
               paddingHorizontal: 32,
@@ -107,7 +108,7 @@ export function YouthPassModal({ visible, qrValue, userName, onClose }: YouthPas
             }}
           >
             <Text style={{ color: 'white', fontWeight: '700' }}>Закрыть</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </Pressable>
       </Pressable>
     </Modal>

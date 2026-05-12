@@ -13,10 +13,10 @@ import {
   StyleSheet,
   Switch,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { DEV_DATA_KEY, DEV_TOOLS_KEY } from '$constants/dev';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { type UserRole, useAuth } from '$contexts/AuthContext';
@@ -206,10 +206,10 @@ export function DevRoleSwitcher() {
 
   return (
     <>
-      <TouchableOpacity onPress={handleOpen} style={styles.floatingButton} activeOpacity={0.8}>
+      <PressableScale onPress={handleOpen} style={styles.floatingButton} activeOpacity={0.8}>
         <Feather name="settings" size={20} color="white" />
         <Text style={styles.buttonText}>DEV</Text>
-      </TouchableOpacity>
+      </PressableScale>
 
       <Modal
         visible={visible}
@@ -229,9 +229,9 @@ export function DevRoleSwitcher() {
           >
             <View style={styles.header}>
               <Text style={styles.title}>Developer Tools</Text>
-              <TouchableOpacity onPress={() => setVisible(false)}>
+              <PressableScale onPress={() => setVisible(false)}>
                 <Feather name="x" size={24} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -271,7 +271,7 @@ export function DevRoleSwitcher() {
                     )}
                   </View>
 
-                  <TouchableOpacity
+                  <PressableScale
                     style={[
                       styles.clearAllDevDataButton,
                       (!canManageDevData || syncingDevData) && styles.disabledRoleButton,
@@ -287,7 +287,7 @@ export function DevRoleSwitcher() {
                       style={styles.roleButtonSpinner}
                     />
                     <Text style={styles.clearAllDevDataText}>Clear all populated data</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
 
                   {/* OTP mode toggle */}
                   <View style={styles.devModeRow}>
@@ -388,7 +388,7 @@ export function DevRoleSwitcher() {
                       const isSwitching = switchingRole === role;
 
                       return (
-                        <TouchableOpacity
+                        <PressableScale
                           key={role}
                           style={[
                             styles.roleButton,
@@ -412,10 +412,10 @@ export function DevRoleSwitcher() {
                           >
                             {role}
                           </Text>
-                        </TouchableOpacity>
+                        </PressableScale>
                       );
                     })}
-                    <TouchableOpacity
+                    <PressableScale
                       style={[
                         styles.roleButton,
                         styles.clearRoleButton,
@@ -453,7 +453,7 @@ export function DevRoleSwitcher() {
                       <Text style={[styles.roleButtonText, styles.clearRoleButtonText]}>
                         clear role
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
                 </>
               )}

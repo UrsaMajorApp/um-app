@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Game2048 from '$components/games/Game2048';
@@ -81,7 +82,7 @@ export default function YouthGamePage() {
         >
           Вернись в игровой центр и выбери тренажер.
         </Text>
-        <TouchableOpacity
+        <PressableScale
           onPress={goBack}
           style={{
             backgroundColor: COLORS.primary,
@@ -91,7 +92,7 @@ export default function YouthGamePage() {
           }}
         >
           <Text style={{ color: 'white', fontWeight: '900' }}>К играм</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     );
   }
@@ -123,7 +124,7 @@ export default function YouthGamePage() {
                 alignItems: 'center',
               }}
             >
-              <TouchableOpacity
+              <PressableScale
                 accessibilityRole="button"
                 accessibilityLabel="Вернуться к играм"
                 onPress={goBack}
@@ -140,7 +141,7 @@ export default function YouthGamePage() {
                 }}
               >
                 <Feather name="chevron-left" size={28} color={COLORS.foreground} />
-              </TouchableOpacity>
+              </PressableScale>
               <View style={{ alignItems: 'center', flex: 1 }}>
                 <Text
                   style={{

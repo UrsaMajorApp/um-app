@@ -5,17 +5,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import {
-  Alert,
-  FlatList,
-  type ListRenderItem,
-  Modal,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Alert, FlatList, type ListRenderItem, Modal, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useWalletData, type WalletTransaction } from '$hooks/usePlatformData';
@@ -121,9 +112,9 @@ export default function OrgWalletScreen() {
             gap: 16,
           }}
         >
-          <TouchableOpacity onPress={() => router.back()}>
+          <PressableScale onPress={() => router.back()}>
             <Feather name="arrow-left" size={24} color={COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
           <Text style={styles.mainTitle}>Вывод денег</Text>
         </View>
 
@@ -159,17 +150,17 @@ export default function OrgWalletScreen() {
                 </View>
 
                 <View style={styles.balanceActions}>
-                  <TouchableOpacity
+                  <PressableScale
                     style={styles.actionBtn}
                     onPress={() => setShowWithdrawModal(true)}
                   >
                     <Feather name="download" size={18} color={COLORS.primary} />
                     <Text style={styles.actionBtnText}>Вывести</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.actionBtnOutline}>
+                  </PressableScale>
+                  <PressableScale style={styles.actionBtnOutline}>
                     <Feather name="file-text" size={18} color="white" />
                     <Text style={styles.actionBtnOutlineText}>Отчёт</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               </LinearGradient>
 
@@ -214,9 +205,9 @@ export default function OrgWalletScreen() {
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Вывод средств</Text>
-                <TouchableOpacity onPress={() => setShowWithdrawModal(false)}>
+                <PressableScale onPress={() => setShowWithdrawModal(false)}>
                   <Feather name="x" size={24} color={COLORS.mutedForeground} />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <View style={styles.inputGroup}>
@@ -263,9 +254,9 @@ export default function OrgWalletScreen() {
                 />
               </View>
 
-              <TouchableOpacity style={styles.submitBtn} onPress={handleWithdraw}>
+              <PressableScale style={styles.submitBtn} onPress={handleWithdraw}>
                 <Text style={styles.submitBtnText}>Отправить заявку</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </Modal>

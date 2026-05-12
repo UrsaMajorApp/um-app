@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WEEKDAYS_SHORT } from '$constants/calendar';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
@@ -38,7 +39,7 @@ export default function OrgScheduleScreen() {
                   marginBottom: 20,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -51,7 +52,7 @@ export default function OrgScheduleScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     fontSize: 20,
@@ -62,7 +63,7 @@ export default function OrgScheduleScreen() {
                 >
                   Расписание
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   style={{
                     width: 44,
                     height: 44,
@@ -73,7 +74,7 @@ export default function OrgScheduleScreen() {
                   }}
                 >
                   <Feather name="plus" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <ScrollView
@@ -82,7 +83,7 @@ export default function OrgScheduleScreen() {
                 className="-mx-1 px-1 overflow-visible"
               >
                 {WEEKDAYS_SHORT.map((day, index) => (
-                  <Pressable
+                  <PressableScale
                     key={day}
                     onPress={() => setSelectedDay(index)}
                     style={{
@@ -115,7 +116,7 @@ export default function OrgScheduleScreen() {
                         backgroundColor: selectedDay === index ? COLORS.primary : 'transparent',
                       }}
                     />
-                  </Pressable>
+                  </PressableScale>
                 ))}
               </ScrollView>
             </View>
@@ -198,9 +199,9 @@ export default function OrgScheduleScreen() {
                 </View>
               </View>
 
-              <Pressable className="w-8 h-8 rounded-full bg-gray-50 items-center justify-center">
+              <PressableScale className="w-8 h-8 rounded-full bg-gray-50 items-center justify-center">
                 <Feather name="more-vertical" size={16} color="#D1D5DB" />
-              </Pressable>
+              </PressableScale>
             </View>
           ))}
         </View>

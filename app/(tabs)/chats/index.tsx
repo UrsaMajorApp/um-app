@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
-import { Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useChats } from '$hooks/useChats';
@@ -147,7 +148,7 @@ export default function ChatsScreen() {
           {TABS.map((tab) => {
             const active = tab === activeTab;
             return (
-              <TouchableOpacity
+              <PressableScale
                 key={tab}
                 onPress={() => setActiveTab(tab)}
                 style={{
@@ -169,7 +170,7 @@ export default function ChatsScreen() {
                 >
                   {tab}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             );
           })}
         </View>
@@ -188,7 +189,7 @@ export default function ChatsScreen() {
             </Text>
           ) : (
             filteredChats.map((chat, idx) => (
-              <TouchableOpacity
+              <PressableScale
                 key={chat.id}
                 activeOpacity={0.7}
                 style={{ width: '100%' }}
@@ -293,7 +294,7 @@ export default function ChatsScreen() {
                     )}
                   </View>
                 </MotiView>
-              </TouchableOpacity>
+              </PressableScale>
             ))
           )}
 

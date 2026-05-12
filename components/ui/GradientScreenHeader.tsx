@@ -1,7 +1,8 @@
 // GradientScreenHeader: декоративный заголовок экрана с градиентом и крупным title.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 
@@ -32,7 +33,7 @@ export function GradientScreenHeader({
         <SafeAreaView edges={['top']}>
           <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableOpacity
+              <PressableScale
                 onPress={onBack}
                 style={{
                   width: 44,
@@ -45,7 +46,7 @@ export function GradientScreenHeader({
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.size.xl,

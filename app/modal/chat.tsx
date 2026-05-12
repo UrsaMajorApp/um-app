@@ -5,15 +5,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useRef, useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useChatMessages } from '$hooks/useChats';
 import { isWebMinWidth } from '$lib/useIsDesktop';
@@ -69,7 +62,7 @@ export default function ChatModal() {
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 40,
@@ -82,7 +75,7 @@ export default function ChatModal() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>{name}</Text>
               </View>
             </View>
@@ -173,7 +166,7 @@ export default function ChatModal() {
               onSubmitEditing={handleSend}
               returnKeyType="send"
             />
-            <TouchableOpacity
+            <PressableScale
               onPress={handleSend}
               style={{
                 backgroundColor: input.trim() ? COLORS.primary : '#E5E7EB',
@@ -190,7 +183,7 @@ export default function ChatModal() {
               >
                 Отпр.
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </KeyboardAvoidingView>

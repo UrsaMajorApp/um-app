@@ -3,13 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentChoiceModal } from '$components/parent/club/EnrollmentChoiceModal';
 import { FullCourseBookingModal } from '$components/parent/club/FullCourseBookingModal';
@@ -75,7 +70,7 @@ export default function ParentClubDetails() {
         >
           Курс не найден
         </Text>
-        <TouchableOpacity
+        <PressableScale
           onPress={() => router.back()}
           style={{
             marginTop: 20,
@@ -86,7 +81,7 @@ export default function ParentClubDetails() {
           }}
         >
           <Text style={{ color: 'white', fontWeight: '800' }}>Вернуться</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </SafeAreaView>
     );
   }
@@ -139,7 +134,7 @@ export default function ParentClubDetails() {
               left: 16,
             }}
           >
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.back()}
               style={{
                 width: 44,
@@ -152,7 +147,7 @@ export default function ParentClubDetails() {
               }}
             >
               <Feather name="arrow-left" size={22} color="#1F2937" />
-            </TouchableOpacity>
+            </PressableScale>
           </SafeAreaView>
         </View>
 
@@ -467,7 +462,7 @@ export default function ParentClubDetails() {
             <Text style={{ color: 'white', fontWeight: '900', fontSize: 15 }}>Вы записаны</Text>
           </View>
         ) : (
-          <TouchableOpacity
+          <PressableScale
             onPress={enrollment.openEnrollmentChoice}
             style={{
               backgroundColor: COLORS.primary,
@@ -477,7 +472,7 @@ export default function ParentClubDetails() {
             }}
           >
             <Text style={{ color: 'white', fontWeight: '900', fontSize: 15 }}>Записаться</Text>
-          </TouchableOpacity>
+          </PressableScale>
         )}
       </View>
 

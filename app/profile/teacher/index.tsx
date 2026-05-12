@@ -3,14 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import {
-  Alert,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Alert, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -154,10 +148,10 @@ export default function TeacherProfile() {
 
             {/* Logout Button */}
             <View style={styles.divider} />
-            <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+            <PressableScale onPress={handleLogout} style={styles.logoutBtn}>
               <Feather name="log-out" size={20} color="#EF4444" />
               <Text style={styles.logoutText}>Выйти из аккаунта</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
           {/* Registration Date */}

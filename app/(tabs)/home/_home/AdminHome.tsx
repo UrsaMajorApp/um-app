@@ -1,6 +1,7 @@
 // AdminHome: собирает виджеты и быстрые действия домашнего экрана для роли администратора.
 import { Feather } from '@expo/vector-icons';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { AdminCard } from '$components/admin/AdminCard';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
@@ -126,7 +127,7 @@ export default function AdminOverviewScreen() {
         title="Очередь проверки"
         subtitle="Сначала разберите операционные задачи, потом отчеты и настройки."
         trailing={
-          <TouchableOpacity
+          <PressableScale
             onPress={() => {
               families.refresh();
               mentorApps.refresh();
@@ -159,7 +160,7 @@ export default function AdminOverviewScreen() {
             >
               Обновить
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         }
       />
       <ScrollView style={{ flex: 1 }}>
@@ -225,7 +226,7 @@ export default function AdminOverviewScreen() {
               </View>
               {visibleQueue.length > 0 ? (
                 visibleQueue.map((item, index) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={item.title}
                     onPress={item.action}
                     activeOpacity={0.75}
@@ -280,7 +281,7 @@ export default function AdminOverviewScreen() {
                       {item.count}
                     </Text>
                     <Feather name="chevron-right" size={18} color={COLORS.mutedForeground} />
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))
               ) : (
                 <View
@@ -348,7 +349,7 @@ export default function AdminOverviewScreen() {
               </Text>
               <View style={{ gap: SPACING.md }}>
                 {metrics.map((metric) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={metric.label}
                     onPress={metric.action}
                     activeOpacity={0.75}
@@ -399,13 +400,13 @@ export default function AdminOverviewScreen() {
                     >
                       {metric.detail}
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </View>
             </AdminCard>
           </View>
 
-          <TouchableOpacity
+          <PressableScale
             onPress={() => goAdmin('support')}
             activeOpacity={0.75}
             style={{
@@ -472,7 +473,7 @@ export default function AdminOverviewScreen() {
               </Text>
               <Feather name="chevron-right" size={16} color={COLORS.primary} />
             </View>
-          </TouchableOpacity>
+          </PressableScale>
 
           <AdminCard style={{ padding: SPACING.lg }}>
             <Text
@@ -492,7 +493,7 @@ export default function AdminOverviewScreen() {
               }}
             >
               {queue.map((item) => (
-                <TouchableOpacity
+                <PressableScale
                   key={item.title}
                   onPress={item.action}
                   activeOpacity={0.75}
@@ -566,7 +567,7 @@ export default function AdminOverviewScreen() {
                       {item.count}
                     </Text>
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               ))}
             </View>
           </AdminCard>

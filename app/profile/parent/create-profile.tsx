@@ -5,15 +5,8 @@ import { useRouter } from 'expo-router';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import QRCode from 'react-native-qrcode-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -214,7 +207,7 @@ export default function CreateProfileParent() {
                   marginBottom: 24,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={handleBack}
                   style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
@@ -229,7 +222,7 @@ export default function CreateProfileParent() {
                   >
                     Назад
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
 
                 {/* Step dots: 1 step, last dot is active wide */}
                 <View style={{ flexDirection: 'row', gap: 6 }}>
@@ -361,7 +354,7 @@ export default function CreateProfileParent() {
                 >
                   Дети
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={addChild}
                   style={{
                     flexDirection: 'row',
@@ -382,7 +375,7 @@ export default function CreateProfileParent() {
                   >
                     Добавить
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               {children.map((child, index) => (
@@ -414,9 +407,9 @@ export default function CreateProfileParent() {
                       Ребенок {index + 1}
                     </Text>
                     {children.length > 1 && (
-                      <TouchableOpacity onPress={() => removeChild(child.id)}>
+                      <PressableScale onPress={() => removeChild(child.id)}>
                         <Feather name="trash-2" size={20} color={COLORS.destructive} />
-                      </TouchableOpacity>
+                      </PressableScale>
                     )}
                   </View>
 
@@ -435,7 +428,7 @@ export default function CreateProfileParent() {
                     {AGE_OPTIONS.map((opt) => {
                       const active = child.ageGroup === opt.value;
                       return (
-                        <TouchableOpacity
+                        <PressableScale
                           key={opt.value}
                           onPress={() => updateChild(child.id, { ageGroup: opt.value })}
                           style={{
@@ -458,7 +451,7 @@ export default function CreateProfileParent() {
                             {opt.label}
                           </Text>
                           {active && <Feather name="check-circle" size={20} color={ROLE_COLOR} />}
-                        </TouchableOpacity>
+                        </PressableScale>
                       );
                     })}
                   </View>
@@ -479,7 +472,7 @@ export default function CreateProfileParent() {
                         const active =
                           opt === 'YES' ? child.hasPhone === true : child.hasPhone === false;
                         return (
-                          <TouchableOpacity
+                          <PressableScale
                             key={opt}
                             onPress={() =>
                               updateChild(child.id, {
@@ -506,7 +499,7 @@ export default function CreateProfileParent() {
                             >
                               {opt === 'YES' ? 'Да' : 'Нет'}
                             </Text>
-                          </TouchableOpacity>
+                          </PressableScale>
                         );
                       })}
                     </View>
@@ -580,7 +573,7 @@ export default function CreateProfileParent() {
                             </Text>
 
                             {/* One-time use toggle */}
-                            <TouchableOpacity
+                            <PressableScale
                               onPress={() =>
                                 updateChild(child.id, {
                                   qrPinOneTimeUse: !child.qrPinOneTimeUse,
@@ -623,9 +616,9 @@ export default function CreateProfileParent() {
                               >
                                 Одноразовый код
                               </Text>
-                            </TouchableOpacity>
+                            </PressableScale>
 
-                            <TouchableOpacity
+                            <PressableScale
                               onPress={() => {
                                 const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
                                 updateChild(child.id, {
@@ -649,10 +642,10 @@ export default function CreateProfileParent() {
                               >
                                 Обновить код
                               </Text>
-                            </TouchableOpacity>
+                            </PressableScale>
                           </>
                         ) : (
-                          <TouchableOpacity
+                          <PressableScale
                             onPress={() => {
                               const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
                               updateChild(child.id, {
@@ -684,7 +677,7 @@ export default function CreateProfileParent() {
                             >
                               Создать код для входа
                             </Text>
-                          </TouchableOpacity>
+                          </PressableScale>
                         )}
                       </View>
                     )}
@@ -693,7 +686,7 @@ export default function CreateProfileParent() {
               ))}
 
               {/* Submit Button */}
-              <TouchableOpacity
+              <PressableScale
                 onPress={handleSubmit}
                 disabled={!canContinue}
                 style={{ marginTop: 8, marginBottom: 40 }}
@@ -719,7 +712,7 @@ export default function CreateProfileParent() {
                     Продолжить
                   </Text>
                 </LinearGradient>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </ScrollView>
         </SafeAreaView>

@@ -5,7 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
-import { Alert, Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useSubscriptionPlans } from '$hooks/usePlatformData';
@@ -199,7 +200,7 @@ function SubscribePlanCard(props: PlanCardProps) {
         </View>
       ))}
 
-      <TouchableOpacity
+      <PressableScale
         disabled={isCheckoutLoading || isRequestPending}
         onPress={() => onChoose(plan)}
         style={{
@@ -213,7 +214,7 @@ function SubscribePlanCard(props: PlanCardProps) {
         <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: '700' }}>
           {actionLabel}
         </Text>
-      </TouchableOpacity>
+      </PressableScale>
 
       {paymentError?.planId === plan.id && checkoutPlanId === null ? (
         <Text

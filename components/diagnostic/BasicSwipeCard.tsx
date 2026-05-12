@@ -7,7 +7,8 @@
  */
 import { Feather } from '@expo/vector-icons';
 import { MotiView } from 'moti';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SHADOWS } from '$constants/theme';
 import { type BasicCard, CATEGORY_COLORS } from '$data/diagnosticData';
 
@@ -59,23 +60,23 @@ export default function BasicSwipeCard({ card, index, total, onLike, onDislike }
 
       {/* Buttons */}
       <View style={styles.buttonsRow}>
-        <TouchableOpacity
+        <PressableScale
           onPress={onDislike}
           activeOpacity={0.7}
           style={[styles.actionButton, styles.dislikeButton]}
         >
           <Text style={styles.actionEmoji}>👎</Text>
           <Text style={styles.dislikeLabel}>Нет</Text>
-        </TouchableOpacity>
+        </PressableScale>
 
-        <TouchableOpacity
+        <PressableScale
           onPress={onLike}
           activeOpacity={0.7}
           style={[styles.actionButton, styles.likeButton]}
         >
           <Text style={styles.actionEmoji}>👍</Text>
           <Text style={styles.likeLabel}>Да!</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     </MotiView>
   );

@@ -13,7 +13,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { YOUTH_RESULT_COLOR_PALETTE } from '$constants/profile';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
@@ -76,7 +77,7 @@ export default function YouthResults() {
         >
           Анализ почти завершен! Пожалуйста, подождите...
         </Text>
-        <TouchableOpacity
+        <PressableScale
           onPress={() => handleGoHome()}
           style={{
             marginTop: 20,
@@ -86,7 +87,7 @@ export default function YouthResults() {
           }}
         >
           <Text style={{ color: COLORS.primary, fontWeight: 'bold' }}>Вернуться на главную</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     );
   }
@@ -525,7 +526,7 @@ export default function YouthResults() {
                 Подпишитесь на PRO, чтобы получить расширенный отчёт: тип интеллекта,
                 профориентацию, анализ поведения и персональные рекомендации.
               </Text>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => router.push('/profile/common/subscribe')}
                 style={{
                   backgroundColor: 'white',
@@ -543,7 +544,7 @@ export default function YouthResults() {
                 >
                   ОТКРЫТЬ ВСЕ ВОЗМОЖНОСТИ
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           )}
 
@@ -569,7 +570,7 @@ export default function YouthResults() {
           )}
 
           {/* ── CTA ── */}
-          <TouchableOpacity onPress={() => handleGoHome()} style={{ marginTop: 8 }}>
+          <PressableScale onPress={() => handleGoHome()} style={{ marginTop: 8 }}>
             <LinearGradient
               colors={[COLORS.primary, COLORS.secondary]}
               style={{
@@ -582,7 +583,7 @@ export default function YouthResults() {
             >
               <Text style={{ fontSize: 18, fontWeight: '800', color: 'white' }}>На главную</Text>
             </LinearGradient>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </ScrollView>
     </View>

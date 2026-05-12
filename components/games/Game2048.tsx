@@ -1,13 +1,7 @@
 // Game2048: реализует поле 2048, свайпы/ходы, объединение плиток и подсчет score.
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
@@ -312,9 +306,9 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
           <Text style={styles.scoreLabel}>СЧЕТ</Text>
           <Text style={styles.scoreValue}>{score}</Text>
         </View>
-        <TouchableOpacity onPress={initGame} style={styles.resetBtn}>
+        <PressableScale onPress={initGame} style={styles.resetBtn}>
           <Text style={styles.resetBtnText}>НОВАЯ ИГРА</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
 
       <GestureDetector gesture={swipeGesture}>
@@ -332,9 +326,9 @@ export default function Game2048({ onFinish }: { onFinish: (score: number) => vo
           {gameOver && (
             <View style={styles.overlay}>
               <Text style={styles.gameOverText}>Игра окончена!</Text>
-              <TouchableOpacity onPress={initGame} style={styles.overlayBtn}>
+              <PressableScale onPress={initGame} style={styles.overlayBtn}>
                 <Text style={styles.overlayBtnText}>Еще раз</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           )}
         </View>

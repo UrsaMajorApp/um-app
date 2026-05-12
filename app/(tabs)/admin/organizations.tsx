@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
@@ -155,7 +156,7 @@ export default function AdminOrganizationsScreen() {
                     alignItems: 'center',
                   }}
                 >
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => openOrgChat(org.name, org.owner_user_id)}
                     style={{
                       width: 34,
@@ -167,10 +168,10 @@ export default function AdminOrganizationsScreen() {
                     }}
                   >
                     <Feather name="message-circle" size={16} color={COLORS.primary} />
-                  </TouchableOpacity>
+                  </PressableScale>
                   {org.status === 'pending' || org.status === 'ready_for_review' ? (
                     <>
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => orgs.verify(org.id)}
                         style={{
                           backgroundColor: COLORS.success,
@@ -188,8 +189,8 @@ export default function AdminOrganizationsScreen() {
                         >
                           Активировать
                         </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                      </PressableScale>
+                      <PressableScale
                         onPress={() => orgs.reject(org.id)}
                         style={{
                           backgroundColor: COLORS.destructive,
@@ -207,7 +208,7 @@ export default function AdminOrganizationsScreen() {
                         >
                           Отклонить
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     </>
                   ) : (
                     <Text
@@ -308,7 +309,7 @@ export default function AdminOrganizationsScreen() {
                       marginTop: SPACING.sm,
                     }}
                   >
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => courses.approveCourse(course.id)}
                       style={{
                         flex: 1,
@@ -319,8 +320,8 @@ export default function AdminOrganizationsScreen() {
                       }}
                     >
                       <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Опубликовать</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
+                    </PressableScale>
+                    <PressableScale
                       onPress={() => {
                         setRejectingCourse(course);
                         setRejectReason('');
@@ -334,7 +335,7 @@ export default function AdminOrganizationsScreen() {
                       }}
                     >
                       <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Отклонить</Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
                 ) : null}
               </View>
@@ -383,7 +384,7 @@ export default function AdminOrganizationsScreen() {
                   }}
                 >
                   {enrollment.status === 'awaiting_payment' ? (
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => enrollments.markPaid(enrollment.id)}
                       style={{
                         flex: 1,
@@ -396,10 +397,10 @@ export default function AdminOrganizationsScreen() {
                       <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>
                         Отметить оплаченным
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   ) : null}
                   {enrollment.status === 'paid' ? (
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => enrollments.activate(enrollment.id)}
                       style={{
                         flex: 1,
@@ -410,9 +411,9 @@ export default function AdminOrganizationsScreen() {
                       }}
                     >
                       <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Активировать</Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   ) : null}
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => enrollments.reject(enrollment.id)}
                     style={{
                       flex: 1,
@@ -423,7 +424,7 @@ export default function AdminOrganizationsScreen() {
                     }}
                   >
                     <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Отклонить</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               ) : null}
             </View>
@@ -477,7 +478,7 @@ export default function AdminOrganizationsScreen() {
                 color: COLORS.foreground,
               }}
             />
-            <TouchableOpacity
+            <PressableScale
               onPress={async () => {
                 if (rejectingCourse)
                   await courses.rejectCourse(rejectingCourse.id, rejectReason.trim() || undefined);
@@ -491,7 +492,7 @@ export default function AdminOrganizationsScreen() {
               }}
             >
               <Text style={{ color: COLORS.white, fontWeight: '900' }}>Отклонить</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </Modal>

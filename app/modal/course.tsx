@@ -3,13 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
-  ActivityIndicator,
-  Dimensions,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Dimensions, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -56,9 +51,9 @@ export default function CourseModal() {
         }}
       >
         <Text style={{ color: COLORS.mutedForeground, fontSize: 16 }}>Курс не найден</Text>
-        <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 16 }}>
+        <PressableScale onPress={() => router.back()} style={{ marginTop: 16 }}>
           <Text style={{ color: COLORS.primary, fontWeight: '700' }}>← Закрыть</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     );
   }
@@ -74,9 +69,9 @@ export default function CourseModal() {
       >
         <View style={{ width: IS_DESKTOP ? '50%' : '100%' }}>
           {/* Close */}
-          <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: 20 }}>
+          <PressableScale onPress={() => router.back()} style={{ marginBottom: 20 }}>
             <Text style={{ fontSize: 16, color: 'white', fontWeight: '700' }}>← закрыть</Text>
-          </TouchableOpacity>
+          </PressableScale>
 
           {/* Card */}
           <View
@@ -236,7 +231,7 @@ export default function CourseModal() {
                   {formatKZT(course.price)}/мес
                 </Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => {
                   if (canUseParentBooking) {
                     router.back();
@@ -258,7 +253,7 @@ export default function CourseModal() {
                 <Text style={{ color: 'white', fontWeight: '900', fontSize: 15 }}>
                   {canUseParentBooking ? 'Записаться' : 'Понятно'}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </View>

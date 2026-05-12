@@ -1,6 +1,7 @@
 // EnrollmentChoiceModal: дает родителю выбрать ребенка и вариант записи на курс.
 import { Feather } from '@expo/vector-icons';
-import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
 import type { PublicCourse, TrialLessonSlot } from '$hooks/usePublicData';
 import { formatKZT } from '$lib/formatCurrency';
@@ -73,7 +74,7 @@ export function EnrollmentChoiceModal({
             >
               Выберите тип записи
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={onClose}
               style={{
                 width: 36,
@@ -83,7 +84,7 @@ export function EnrollmentChoiceModal({
               }}
             >
               <Feather name="x" size={22} color={COLORS.mutedForeground} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
           {activeChild && (
@@ -138,7 +139,7 @@ export function EnrollmentChoiceModal({
 
           {!enrollmentType && (
             <View style={{ gap: 12 }}>
-              <Pressable
+              <PressableScale
                 onPress={onSelectTrial}
                 style={{
                   padding: 20,
@@ -193,9 +194,9 @@ export function EnrollmentChoiceModal({
                 <Text style={{ fontSize: 13, color: '#047857', lineHeight: 18 }}>
                   Посетите одно занятие бесплатно, чтобы познакомиться с педагогом и программой
                 </Text>
-              </Pressable>
+              </PressableScale>
 
-              <Pressable
+              <PressableScale
                 onPress={onSelectFullCourse}
                 style={{
                   padding: 20,
@@ -250,7 +251,7 @@ export function EnrollmentChoiceModal({
                 <Text style={{ fontSize: 13, color: '#6B21A8', lineHeight: 18 }}>
                   Запишитесь на полный курс занятий с регулярным расписанием
                 </Text>
-              </Pressable>
+              </PressableScale>
             </View>
           )}
 
@@ -263,9 +264,9 @@ export function EnrollmentChoiceModal({
                   marginBottom: 16,
                 }}
               >
-                <TouchableOpacity onPress={onBackFromTrial} style={{ marginRight: 12 }}>
+                <PressableScale onPress={onBackFromTrial} style={{ marginRight: 12 }}>
                   <Feather name="arrow-left" size={20} color={COLORS.mutedForeground} />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     fontSize: 16,
@@ -292,7 +293,7 @@ export function EnrollmentChoiceModal({
                   {trialSlots.map((slot) => {
                     const isSelected = selectedTimeSlot === slot.id;
                     return (
-                      <Pressable
+                      <PressableScale
                         key={slot.id}
                         onPress={() => onSelectTimeSlot(slot.id)}
                         style={{
@@ -325,13 +326,13 @@ export function EnrollmentChoiceModal({
                         >
                           {slot.time_label}
                         </Text>
-                      </Pressable>
+                      </PressableScale>
                     );
                   })}
                 </View>
               </ScrollView>
 
-              <TouchableOpacity
+              <PressableScale
                 disabled={applying || !selectedTimeSlot}
                 onPress={onConfirmTrial}
                 style={{
@@ -351,7 +352,7 @@ export function EnrollmentChoiceModal({
                 >
                   {applying ? 'Бронирование...' : 'Забронировать пробный урок'}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           )}
         </View>

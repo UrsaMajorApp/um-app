@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
-import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -95,7 +96,7 @@ export default function YoungAdultHome() {
                       {firstName}, твой план
                     </Text>
                   </View>
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
                     style={{
                       width: 44,
@@ -107,7 +108,7 @@ export default function YoungAdultHome() {
                     }}
                   >
                     <Feather name="user" size={20} color="white" />
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
 
                 <View
@@ -145,7 +146,7 @@ export default function YoungAdultHome() {
                     </Text>
                   </View>
                   {!isPro && (
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() =>
                         navigateApp(router, user?.role, { name: 'subscriptionUpsell' })
                       }
@@ -157,7 +158,7 @@ export default function YoungAdultHome() {
                       }}
                     >
                       <Text style={{ color: '#111827', fontWeight: '900', fontSize: 12 }}>PRO</Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   )}
                 </View>
               </View>
@@ -187,7 +188,7 @@ export default function YoungAdultHome() {
                 action: () => navigateApp(router, user?.role, { name: 'chats' }),
               },
             ].map((action) => (
-              <TouchableOpacity
+              <PressableScale
                 key={action.label}
                 onPress={action.action}
                 style={{
@@ -220,7 +221,7 @@ export default function YoungAdultHome() {
                 <Text style={{ color: COLORS.foreground, fontWeight: '900', fontSize: 12 }}>
                   {action.label}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             ))}
           </View>
 
@@ -277,7 +278,7 @@ export default function YoungAdultHome() {
                 <Text style={{ color: '#6B7280', lineHeight: 19 }}>
                   Пройди диагностику, чтобы собрать карту навыков и карьерных направлений.
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.push('/profile/youth/testing')}
                   style={{
                     alignSelf: 'flex-start',
@@ -288,7 +289,7 @@ export default function YoungAdultHome() {
                   }}
                 >
                   <Text style={{ color: 'white', fontWeight: '900' }}>Начать диагностику</Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             )}
           </View>
@@ -305,9 +306,9 @@ export default function YoungAdultHome() {
               <Text style={{ color: COLORS.foreground, fontSize: 18, fontWeight: '900' }}>
                 Цели
               </Text>
-              <TouchableOpacity onPress={() => router.push(appHref('/(tabs)/youth/goals'))}>
+              <PressableScale onPress={() => router.push(appHref('/(tabs)/youth/goals'))}>
                 <Text style={{ color: COLORS.primary, fontWeight: '900', fontSize: 13 }}>Все</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
             {goals.length === 0 ? (
               <View
@@ -397,7 +398,7 @@ export default function YoungAdultHome() {
             ) : (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {courses.slice(0, 4).map((course, index) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={course.id}
                     onPress={() =>
                       navigateApp(router, user?.role, {
@@ -428,7 +429,7 @@ export default function YoungAdultHome() {
                         </Text>
                       </View>
                     </LinearGradient>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </ScrollView>
             )}

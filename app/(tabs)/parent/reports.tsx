@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -73,13 +74,13 @@ export default function ParentReports() {
                   className="-mx-1 px-1 overflow-visible"
                 >
                   {children.map((child) => (
-                    <Pressable
+                    <PressableScale
                       key={child}
                       onPress={() => setSelectedChild(child)}
                       className={`mr-3 px-6 py-2.5 rounded-full border ${selectedChild === child ? 'bg-white/20 border-white/40' : 'bg-transparent border-white/20'}`}
                     >
                       <Text className="font-bold text-sm text-white">{child}</Text>
-                    </Pressable>
+                    </PressableScale>
                   ))}
                 </ScrollView>
               )}
@@ -97,7 +98,7 @@ export default function ParentReports() {
         showsVerticalScrollIndicator={false}
       >
         {!hasChildren && (
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.push('/profile/youth/create-profile-child')}
             activeOpacity={0.8}
             style={SHADOWS.sm}
@@ -110,7 +111,7 @@ export default function ParentReports() {
             <Text className="text-sm text-gray-400 text-center leading-5">
               Отчёты, посещаемость и диагностика появятся после создания детского профиля.
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         )}
 
         {loading && (
@@ -271,7 +272,7 @@ export default function ParentReports() {
               </Text>
             </View>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => {
                 setActiveChildId(selectedChildProfile.id);
                 router.push('/profile/youth/results');
@@ -281,7 +282,7 @@ export default function ParentReports() {
               <Text className="text-primary font-black text-xs uppercase tracking-wide">
                 Посмотреть расширенный отчет
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         ) : hasChildren ? (
           <View style={SHADOWS.md} className="bg-gray-900 rounded-[40px] p-8 mb-8 overflow-hidden">
@@ -305,7 +306,7 @@ export default function ParentReports() {
               У {selectedChild || 'этого ребенка'} еще нет результатов диагностики. Пройдите тест,
               чтобы узнать сильные стороны.
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => {
                 if (selectedChildProfile) {
                   setActiveChildId(selectedChildProfile.id);
@@ -320,7 +321,7 @@ export default function ParentReports() {
               <Text className="text-gray-900 font-black text-xs uppercase tracking-wide">
                 Начать тестирование
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         ) : null}
 

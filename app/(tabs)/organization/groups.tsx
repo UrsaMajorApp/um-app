@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -78,7 +79,7 @@ export default function OrgGroupsScreen() {
                   Всего групп: {groups.length}
                 </Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => navigateApp(router, user?.role, { name: 'orgGroupCreate' })}
                 style={{
                   width: 52,
@@ -90,7 +91,7 @@ export default function OrgGroupsScreen() {
                 }}
               >
                 <Feather name="plus" size={24} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </SafeAreaView>
         </LinearGradient>
@@ -154,7 +155,7 @@ export default function OrgGroupsScreen() {
             >
               Создайте первую группу для начала работы
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgGroupCreate' })}
               style={{
                 backgroundColor: COLORS.primary,
@@ -175,7 +176,7 @@ export default function OrgGroupsScreen() {
               >
                 Создать группу
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         ) : (
           <View style={{ gap: SPACING.lg }}>
@@ -186,7 +187,7 @@ export default function OrgGroupsScreen() {
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ delay: idx * 100 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() =>
                     navigateApp(router, user?.role, {
                       name: 'orgGroupDetails',
@@ -322,7 +323,7 @@ export default function OrgGroupsScreen() {
                     )}
                   </View>
 
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() =>
                       navigateApp(router, user?.role, {
                         name: 'orgGroupDetails',
@@ -346,8 +347,8 @@ export default function OrgGroupsScreen() {
                     >
                       ПОДРОБНЕЕ
                     </Text>
-                  </TouchableOpacity>
-                </TouchableOpacity>
+                  </PressableScale>
+                </PressableScale>
               </MotiView>
             ))}
           </View>

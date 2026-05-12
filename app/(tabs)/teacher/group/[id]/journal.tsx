@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroup } from '$hooks/usePlatformData';
@@ -36,9 +37,9 @@ export default function TeacherGroupJournal() {
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         {/* Header */}
         <View style={[styles.header, { paddingHorizontal: paddingX }]}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+          <PressableScale onPress={() => router.back()} style={styles.backBtn}>
             <Feather name="arrow-left" size={20} color={COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
           <View style={{ flex: 1, marginLeft: 16 }}>
             <Text style={styles.headerTitle}>{group?.course_title || 'Группа'}</Text>
             <Text style={styles.headerSubtitle}>{group?.name || '—'}</Text>
@@ -47,13 +48,13 @@ export default function TeacherGroupJournal() {
 
         {/* Date Selector */}
         <View style={[styles.dateSelector, { marginHorizontal: paddingX }]}>
-          <TouchableOpacity
+          <PressableScale
             onPress={() =>
               setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() - 1)))
             }
           >
             <Feather name="chevron-left" size={24} color={COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
           <View style={styles.dateInfo}>
             <Feather name="calendar" size={16} color={COLORS.primary} />
             <Text style={styles.dateLabel}>
@@ -64,13 +65,13 @@ export default function TeacherGroupJournal() {
               })}
             </Text>
           </View>
-          <TouchableOpacity
+          <PressableScale
             onPress={() =>
               setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() + 1)))
             }
           >
             <Feather name="chevron-right" size={24} color={COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         <ScrollView
@@ -124,31 +125,31 @@ export default function TeacherGroupJournal() {
                   </View>
 
                   <View style={styles.actionsRow}>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => attendanceEditor.toggleStatus(student.id, 'present')}
                       style={[styles.actionBtn, isPresent && styles.btnPresent]}
                     >
                       <Feather name="check" size={24} color={isPresent ? 'white' : '#9CA3AF'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
+                    </PressableScale>
+                    <PressableScale
                       onPress={() => attendanceEditor.toggleStatus(student.id, 'absent')}
                       style={[styles.actionBtn, isAbsent && styles.btnAbsent]}
                     >
                       <Feather name="x" size={24} color={isAbsent ? 'white' : '#9CA3AF'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionBtnMsg}>
+                    </PressableScale>
+                    <PressableScale style={styles.actionBtnMsg}>
                       <Feather name="message-square" size={20} color={COLORS.primary} />
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
                 </MotiView>
               );
             })}
           </View>
 
-          <TouchableOpacity style={styles.submitBtn} onPress={submitAttendance}>
+          <PressableScale style={styles.submitBtn} onPress={submitAttendance}>
             <Feather name="send" size={20} color="white" />
             <Text style={styles.submitText}>Отправить отчет родителям</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </ScrollView>
       </SafeAreaView>
     </View>

@@ -1,7 +1,8 @@
 // Экран mentor/attendance: загружает и показывает посещаемость занятий в кабинете ментора.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useMentorAttendance } from '$hooks/useMentorData';
@@ -25,7 +26,7 @@ export default function MentorAttendance() {
             gap: 12,
           }}
         >
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             style={{
               width: 40,
@@ -37,7 +38,7 @@ export default function MentorAttendance() {
             }}
           >
             <Feather name="arrow-left" size={20} color="white" />
-          </TouchableOpacity>
+          </PressableScale>
           <Text
             style={{
               fontSize: TYPOGRAPHY.size.xl,

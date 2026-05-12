@@ -3,15 +3,8 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import {
-  ActivityIndicator,
-  FlatList,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -70,7 +63,7 @@ export default function MentorSessionsScreen() {
             const slotKey = `${slot.day}-${slot.time}`;
             const isSelected = selectedSlot === slotKey;
             return (
-              <Pressable
+              <PressableScale
                 key={slotKey}
                 onPress={() => trialRequests.selectSlot(item.id, slotKey)}
                 style={[styles.slotChip, isSelected && styles.slotChipSelected]}
@@ -81,28 +74,28 @@ export default function MentorSessionsScreen() {
                 <Text style={[styles.slotTime, isSelected && styles.slotTextSelected]}>
                   {slot.time}
                 </Text>
-              </Pressable>
+              </PressableScale>
             );
           })}
         </View>
 
         {/* Action buttons */}
         <View style={styles.actionsRow}>
-          <TouchableOpacity
+          <PressableScale
             style={styles.declineBtn}
             onPress={() => trialRequests.declineRequest(item.id)}
           >
             <Feather name="x" size={18} color="#EF4444" />
             <Text style={styles.declineBtnText}>Отклонить</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </PressableScale>
+          <PressableScale
             style={[styles.confirmBtn, !selectedSlot && styles.confirmBtnDisabled]}
             onPress={() => trialRequests.confirmRequest(item.id)}
             disabled={!selectedSlot}
           >
             <Feather name="check" size={18} color="white" />
             <Text style={styles.confirmBtnText}>Подтвердить</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </MotiView>
     );
@@ -197,7 +190,7 @@ export default function MentorSessionsScreen() {
       >
         {/* Tabs */}
         <View style={styles.tabsContainer}>
-          <Pressable
+          <PressableScale
             onPress={() => trialRequests.setActiveTab('requests')}
             style={[styles.tab, trialRequests.activeTab === 'requests' && styles.tabActive]}
           >
@@ -214,8 +207,8 @@ export default function MentorSessionsScreen() {
                 <Text style={styles.tabBadgeText}>{trialRequests.requests.length}</Text>
               </View>
             )}
-          </Pressable>
-          <Pressable
+          </PressableScale>
+          <PressableScale
             onPress={() => trialRequests.setActiveTab('archive')}
             style={[styles.tab, trialRequests.activeTab === 'archive' && styles.tabActive]}
           >
@@ -227,7 +220,7 @@ export default function MentorSessionsScreen() {
             >
               Архив
             </Text>
-          </Pressable>
+          </PressableScale>
         </View>
       </View>
 

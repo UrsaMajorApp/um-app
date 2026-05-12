@@ -9,13 +9,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HackathonTask from '$components/diagnostic/rebels/HackathonTask';
 import VibeSwipeCard from '$components/diagnostic/rebels/VibeSwipeCard';
@@ -85,12 +80,12 @@ export default function DiagnosticRebels({ childId }: Props) {
             Узнай свои сильные стороны через{'\n'}быстрый Vibe Check 🔥
           </Text>
           <View style={{ width: '100%', paddingHorizontal: 32, marginTop: 40 }}>
-            <TouchableOpacity onPress={engine.startBasic} style={styles.startBtn}>
+            <PressableScale onPress={engine.startBasic} style={styles.startBtn}>
               <Text style={styles.startBtnText}>Погнали</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
+            </PressableScale>
+            <PressableScale onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
               <Text style={styles.skipText}>Пропустить</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </SafeAreaView>
       </LinearGradient>
@@ -104,20 +99,20 @@ export default function DiagnosticRebels({ childId }: Props) {
     <View style={[styles.screen, isProPhase && styles.screenDark]}>
       <SafeAreaView edges={['top']} style={{ zIndex: 20 }}>
         <View style={[styles.header, { paddingHorizontal: hPad }]}>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             style={[styles.backBtn, isProPhase && styles.backBtnDark]}
           >
             <Feather name="arrow-left" size={20} color={isProPhase ? 'white' : COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
           <Text style={[styles.headerTitle, isProPhase && { color: 'white' }]}>
             {isProPhase ? '💬 Hackathon Team' : '🔥 Vibe Check'}
           </Text>
-          <TouchableOpacity onPress={handleSkip}>
+          <PressableScale onPress={handleSkip}>
             <Text style={[styles.skipHeader, isProPhase && { color: 'rgba(255,255,255,0.5)' }]}>
               Скип
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </SafeAreaView>
 

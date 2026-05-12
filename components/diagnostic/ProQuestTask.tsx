@@ -8,7 +8,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { PRO_QUEST_STAR_POSITIONS } from '$constants/diagnosticUi';
 import { SHADOWS } from '$constants/theme';
 import type { ProTask } from '$data/diagnosticData';
@@ -108,7 +109,7 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
               confirmed && isSelected && task.correctIndex !== -1 && opt.id !== task.correctIndex;
 
             return (
-              <TouchableOpacity
+              <PressableScale
                 key={opt.id}
                 onPress={() => handleSelect(opt.id)}
                 activeOpacity={0.7}
@@ -123,20 +124,20 @@ export default function ProQuestTask({ task, index, total, onAnswer }: Props) {
                 <Text style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
                   {opt.label}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             );
           })}
         </View>
 
         {/* Confirm */}
-        <TouchableOpacity
+        <PressableScale
           onPress={handleConfirm}
           disabled={selected === null || confirmed}
           activeOpacity={0.8}
           style={[styles.confirmButton, (selected === null || confirmed) && styles.confirmDisabled]}
         >
           <Text style={styles.confirmText}>{confirmed ? '✓' : 'Ответить!'}</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </LinearGradient>
     </MotiView>
   );

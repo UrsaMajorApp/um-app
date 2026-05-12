@@ -5,14 +5,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -89,7 +83,7 @@ export default function OrgCourses() {
                 >
                   Курсы
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
                   style={{
                     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -109,7 +103,7 @@ export default function OrgCourses() {
                   >
                     + Добавить
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <View
@@ -273,7 +267,7 @@ export default function OrgCourses() {
             >
               Создайте первый курс, чтобы начать набор учеников
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
               style={{
                 backgroundColor: COLORS.primary,
@@ -286,7 +280,7 @@ export default function OrgCourses() {
               <Text style={{ color: 'white', fontWeight: TYPOGRAPHY.weight.bold }}>
                 Создать курс
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         )}
 
@@ -302,7 +296,7 @@ export default function OrgCourses() {
                   animate={{ opacity: 1, translateY: 0 }}
                   transition={{ delay: idx * 80 }}
                 >
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() =>
                       navigateApp(router, user?.role, {
                         name: 'orgCourseDetails',
@@ -443,7 +437,7 @@ export default function OrgCourses() {
                       </View>
 
                       <View style={{ flexDirection: 'row', gap: SPACING.sm }}>
-                        <TouchableOpacity
+                        <PressableScale
                           onPress={() =>
                             navigateApp(router, user?.role, {
                               name: 'orgCourseEdit',
@@ -460,7 +454,7 @@ export default function OrgCourses() {
                           }}
                         >
                           <Feather name="edit-2" size={16} color={COLORS.mutedForeground} />
-                        </TouchableOpacity>
+                        </PressableScale>
                         <View
                           style={{
                             width: 44,
@@ -476,7 +470,7 @@ export default function OrgCourses() {
                         </View>
                       </View>
                     </View>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </MotiView>
               );
             })}

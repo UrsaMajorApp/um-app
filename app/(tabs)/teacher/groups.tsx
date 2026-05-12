@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroups } from '$hooks/usePlatformData';
@@ -69,7 +70,7 @@ export default function TeacherGroupsScreen() {
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ delay: idx * 100 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   activeOpacity={0.9}
                   onPress={() =>
                     navigateApp(router, 'teacher', {
@@ -126,7 +127,7 @@ export default function TeacherGroupsScreen() {
                       </View>
                     )}
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               </MotiView>
             ))}
           </View>

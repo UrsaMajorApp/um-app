@@ -2,14 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  UIManager,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+  Platform, StyleSheet, Text, UIManager, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import {
   SUDOKU_BASE_BOARD,
   SUDOKU_BOARD_PADDING as BOARD_PADDING,
@@ -142,9 +136,9 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
           />
           <Text style={styles.statText}>{mistakes}/5</Text>
         </View>
-        <TouchableOpacity onPress={generateSudoku} style={styles.resetBtn}>
+        <PressableScale onPress={generateSudoku} style={styles.resetBtn}>
           <Feather name="refresh-cw" size={20} color="white" />
-        </TouchableOpacity>
+        </PressableScale>
         <View style={styles.statBox}>
           <Feather name="award" size={16} color="#F59E0B" />
           <Text style={styles.statText}>150 IQ</Text>
@@ -161,7 +155,7 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                 style={[styles.row, rowNumber % 3 === 2 && rowNumber !== 8 && styles.rowBorder]}
               >
                 {row.map((cell) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={`cell-${cell.r}-${cell.c}`}
                     activeOpacity={1}
                     onPress={() => setSelectedCell({ r: cell.r, c: cell.c })}
@@ -192,7 +186,7 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
                         {cell.value}
                       </Text>
                     )}
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </View>
             );
@@ -202,13 +196,13 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
 
       <View style={[styles.numberPad, { width: boardSize }]}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-          <TouchableOpacity
+          <PressableScale
             key={num}
             onPress={() => handleNumberInput(num)}
             style={[styles.padBtn, { width: numberPadButtonSize, height: numberPadButtonSize }]}
           >
             <Text style={styles.padBtnText}>{num}</Text>
-          </TouchableOpacity>
+          </PressableScale>
         ))}
       </View>
 
@@ -218,9 +212,9 @@ export default function Sudoku({ onFinish }: { onFinish: (score: number) => void
             <Feather name="check-circle" size={48} color="#10B981" />
             <Text style={styles.winText}>Превосходно!</Text>
             <Text style={styles.winSub}>Головоломка решена</Text>
-            <TouchableOpacity onPress={generateSudoku} style={styles.continueBtn}>
+            <PressableScale onPress={generateSudoku} style={styles.continueBtn}>
               <Text style={styles.continueText}>Еще разок</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       )}

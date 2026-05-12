@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
@@ -134,7 +135,7 @@ export default function AdminUsersScreen() {
           }}
         >
           {USER_ROLES.map((role) => (
-            <TouchableOpacity
+            <PressableScale
               key={role}
               onPress={() => setRoleFilter(role)}
               style={{
@@ -154,7 +155,7 @@ export default function AdminUsersScreen() {
               >
                 {ROLE_LABELS[role]}
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           ))}
         </ScrollView>
       ) : null}
@@ -183,7 +184,7 @@ export default function AdminUsersScreen() {
                     ? COLORS.success
                     : COLORS.destructive;
               return (
-                <TouchableOpacity
+                <PressableScale
                   key={mentor.id}
                   onPress={() => setSelectedMentorId(mentor.id)}
                   style={{
@@ -239,7 +240,7 @@ export default function AdminUsersScreen() {
                   >
                     {statusLabel}
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               );
             })}
           {tab === 'users' &&
@@ -416,7 +417,7 @@ export default function AdminUsersScreen() {
                   {selectedMentor.bio}
                 </Text>
               ) : null}
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => openMentorChat(selectedMentor)}
                 style={{
                   flexDirection: 'row',
@@ -434,10 +435,10 @@ export default function AdminUsersScreen() {
                 <Text style={{ fontWeight: '700', color: COLORS.foreground }}>
                   Написать ментору
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
               {selectedMentor.status === 'pending' ? (
                 <View style={{ gap: SPACING.sm }}>
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => mentorApps.approve(selectedMentor.id)}
                     style={{
                       backgroundColor: COLORS.success,
@@ -447,8 +448,8 @@ export default function AdminUsersScreen() {
                     }}
                   >
                     <Text style={{ color: COLORS.white, fontWeight: '900' }}>Одобрить</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </PressableScale>
+                  <PressableScale
                     onPress={() => {
                       setRejecting(selectedMentor);
                       setRejectReason('');
@@ -461,7 +462,7 @@ export default function AdminUsersScreen() {
                     }}
                   >
                     <Text style={{ color: COLORS.white, fontWeight: '900' }}>Отклонить</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               ) : null}
             </ScrollView>
@@ -516,7 +517,7 @@ export default function AdminUsersScreen() {
                 color: COLORS.foreground,
               }}
             />
-            <TouchableOpacity
+            <PressableScale
               onPress={async () => {
                 if (rejecting)
                   await mentorApps.reject(rejecting.id, rejectReason.trim() || undefined);
@@ -530,7 +531,7 @@ export default function AdminUsersScreen() {
               }}
             >
               <Text style={{ color: COLORS.white, fontWeight: '900' }}>Отклонить</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </Modal>

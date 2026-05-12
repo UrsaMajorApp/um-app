@@ -4,16 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import React, { useState } from 'react';
 import {
-  Alert,
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Alert, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -116,7 +108,7 @@ export default function MentorProfile() {
                 >
                   Профиль ментора
                 </Text>
-                <TouchableOpacity onPress={() => setShowEditModal(true)}>
+                <PressableScale onPress={() => setShowEditModal(true)}>
                   <Text
                     style={{
                       color: 'rgba(255,255,255,0.8)',
@@ -126,7 +118,7 @@ export default function MentorProfile() {
                   >
                     Изм.
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             </View>
           </SafeAreaView>
@@ -168,9 +160,9 @@ export default function MentorProfile() {
                 </View>
               ) : null}
             </View>
-            <TouchableOpacity onPress={() => setShowEditModal(true)}>
+            <PressableScale onPress={() => setShowEditModal(true)}>
               <Feather name="edit-3" size={20} color={COLORS.primary} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
           <View style={styles.statsGrid}>
@@ -211,7 +203,7 @@ export default function MentorProfile() {
               {isAcceptingOrders ? 'Вы видны в поиске' : 'Режим отпуска'}
             </Text>
           </View>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => setIsAcceptingOrders(!isAcceptingOrders)}
             style={[styles.toggleSwitch, isAcceptingOrders && styles.toggleSwitchActive]}
           >
@@ -219,7 +211,7 @@ export default function MentorProfile() {
               animate={{ translateX: isAcceptingOrders ? 22 : 0 }}
               style={styles.toggleThumb}
             />
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         {/* Contact Info Card */}
@@ -263,10 +255,10 @@ export default function MentorProfile() {
         ) : null}
 
         {/* Logout */}
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+        <PressableScale onPress={handleLogout} style={styles.logoutBtn}>
           <Feather name="log-out" size={20} color="#EF4444" />
           <Text style={styles.logoutText}>Выйти из аккаунта</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </ScrollView>
 
       {/* Edit Modal */}
@@ -275,9 +267,9 @@ export default function MentorProfile() {
           <ScrollView style={{ padding: 24 }} showsVerticalScrollIndicator={false}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Редактировать профиль</Text>
-              <TouchableOpacity onPress={() => setShowEditModal(false)}>
+              <PressableScale onPress={() => setShowEditModal(false)}>
                 <Feather name="x" size={24} color={COLORS.foreground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <View style={{ gap: 20, marginTop: 32, paddingBottom: 60 }}>
@@ -315,9 +307,9 @@ export default function MentorProfile() {
                 />
               </View>
 
-              <TouchableOpacity onPress={handleUpdateProfile} style={styles.saveProfileBtn}>
+              <PressableScale onPress={handleUpdateProfile} style={styles.saveProfileBtn}>
                 <Text style={{ color: 'white', fontWeight: '800', fontSize: 16 }}>СОХРАНИТЬ</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </ScrollView>
         </SafeAreaView>

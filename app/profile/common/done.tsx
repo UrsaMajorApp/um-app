@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -129,7 +130,7 @@ export default function DoneScreen() {
               </Text>
 
               {/* Action Button */}
-              <TouchableOpacity onPress={handleStart} activeOpacity={0.8} style={{ width: '100%' }}>
+              <PressableScale onPress={handleStart} activeOpacity={0.8} style={{ width: '100%' }}>
                 <LinearGradient
                   colors={[COLORS.primary, COLORS.secondary]}
                   start={{ x: 0, y: 0 }}
@@ -154,7 +155,7 @@ export default function DoneScreen() {
                     Начать работу
                   </Text>
                 </LinearGradient>
-              </TouchableOpacity>
+              </PressableScale>
             </MotiView>
 
             {/* Subtle feedback text */}

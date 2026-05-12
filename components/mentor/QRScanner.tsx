@@ -1,7 +1,8 @@
 // QRScanner: оборачивает камеру и jsQR, чтобы считать QR-код для входа или проверки.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { Modal, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
 import type { QRScanResult } from '$types/auth';
 
@@ -49,12 +50,12 @@ export function QRScanner({ onClose, onSuccess, visible }: QRScannerProps) {
         >
           <View className="flex-row justify-between items-center mb-6">
             <Text className="text-xl font-bold text-gray-900">Активация курса</Text>
-            <Pressable
+            <PressableScale
               onPress={onClose}
               className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center"
             >
               <Feather name="x" size={20} color="#9CA3AF" />
-            </Pressable>
+            </PressableScale>
           </View>
 
           {success ? (
@@ -91,7 +92,7 @@ export function QRScanner({ onClose, onSuccess, visible }: QRScannerProps) {
                 </View>
               </View>
 
-              <Pressable
+              <PressableScale
                 onPress={handleActivate}
                 disabled={loading || !manualInput}
                 className={`h-14 rounded-2xl items-center justify-center ${loading || !manualInput ? 'bg-gray-200' : 'bg-primary shadow-lg shadow-primary/20'}`}
@@ -99,7 +100,7 @@ export function QRScanner({ onClose, onSuccess, visible }: QRScannerProps) {
                 <Text className="text-white font-bold">
                   {loading ? 'Активация...' : 'Активировать'}
                 </Text>
-              </Pressable>
+              </PressableScale>
             </View>
           )}
         </View>

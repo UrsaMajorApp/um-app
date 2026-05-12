@@ -4,7 +4,8 @@
  */
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { REBELS_HACKATHON_SPEAKERS } from '$constants/diagnosticUi';
 import { COLORS, RADIUS } from '$constants/theme';
 import type { ProTask1214 } from '$data/diagnosticData1214';
@@ -53,13 +54,13 @@ export default function HackathonTask({ task, index, total, onAnswer }: Props) {
 
       <View style={styles.optionsList}>
         {task.options.map((opt) => (
-          <TouchableOpacity
+          <PressableScale
             key={opt.id}
             onPress={() => handleSelect(opt.id)}
             style={styles.optionBtn}
           >
             <Text style={styles.optionText}>{opt.label}</Text>
-          </TouchableOpacity>
+          </PressableScale>
         ))}
       </View>
     </MotiView>

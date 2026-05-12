@@ -1,6 +1,7 @@
 // Экран admin/support: загружает и показывает тикеты поддержки, жалобы и обратную связь в кабинете администратора.
 import { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
@@ -169,7 +170,7 @@ export default function AdminSupportScreen() {
                 }}
               >
                 {ticket.status === 'open' ? (
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => tickets.takeInProgress(ticket.id)}
                     style={{
                       paddingVertical: SPACING.sm,
@@ -187,10 +188,10 @@ export default function AdminSupportScreen() {
                     >
                       Взять в работу
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ) : null}
                 {ticket.status !== 'resolved' ? (
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => tickets.resolve(ticket.id)}
                     style={{
                       paddingVertical: SPACING.sm,
@@ -208,7 +209,7 @@ export default function AdminSupportScreen() {
                     >
                       Отметить решенным
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ) : null}
               </View>
             </View>

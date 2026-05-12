@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -60,7 +61,7 @@ export default function ParentChildren() {
                 paddingBottom: 32,
               }}
             >
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => router.back()}
                 style={{
                   width: 40,
@@ -73,7 +74,7 @@ export default function ParentChildren() {
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
               <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Мои дети</Text>
             </View>
           </SafeAreaView>
@@ -87,7 +88,7 @@ export default function ParentChildren() {
           paddingBottom: 100,
         }}
       >
-        <TouchableOpacity
+        <PressableScale
           onPress={() => router.push('/profile/youth/create-profile-child')}
           style={{
             backgroundColor: COLORS.surface,
@@ -113,7 +114,7 @@ export default function ParentChildren() {
           >
             Добавить ребенка
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
 
         {children.length === 0 ? (
           <View
@@ -154,7 +155,7 @@ export default function ParentChildren() {
                 overflow: 'hidden',
               }}
             >
-              <TouchableOpacity
+              <PressableScale
                 onPress={() =>
                   navigateApp(router, 'parent', { name: 'parentChildDetails', childId: child.id })
                 }
@@ -225,7 +226,7 @@ export default function ParentChildren() {
                   </View>
                 </View>
                 <Feather name="chevron-right" size={20} color="#C4B5FD" />
-              </TouchableOpacity>
+              </PressableScale>
 
               <View
                 style={{
@@ -234,7 +235,7 @@ export default function ParentChildren() {
                   borderTopColor: 'rgba(108,92,231,0.1)',
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => setEditingChild(child)}
                   style={{
                     flex: 1,
@@ -255,9 +256,9 @@ export default function ParentChildren() {
                   >
                     Изменить
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
                 <View style={{ width: 1, backgroundColor: 'rgba(108,92,231,0.1)' }} />
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => confirmRemove(child)}
                   style={{
                     flex: 1,
@@ -278,7 +279,7 @@ export default function ParentChildren() {
                   >
                     Удалить
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             </View>
           ))

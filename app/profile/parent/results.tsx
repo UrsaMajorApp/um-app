@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useIsDesktop } from '$lib/useIsDesktop';
@@ -55,7 +56,7 @@ export default function ParentResults() {
         >
           Пройдите тест, чтобы узнать таланты вашего ребёнка
         </Text>
-        <TouchableOpacity
+        <PressableScale
           onPress={() => {
             router.push({
               pathname: '/profile/youth/testing',
@@ -72,7 +73,7 @@ export default function ParentResults() {
           <Text style={{ color: COLORS.primary, fontWeight: '800', fontSize: 16 }}>
             Начать тестирование
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
       </LinearGradient>
     );
   }
@@ -294,7 +295,7 @@ export default function ParentResults() {
           </MotiView>
 
           {/* Actions */}
-          <TouchableOpacity
+          <PressableScale
             onPress={() => {
               router.push({
                 pathname: '/profile/youth/testing',
@@ -319,9 +320,9 @@ export default function ParentResults() {
             >
               Пройти тест заново
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
 
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             style={{
               backgroundColor: 'white',
@@ -339,7 +340,7 @@ export default function ParentResults() {
             >
               Назад
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </ScrollView>
     </LinearGradient>

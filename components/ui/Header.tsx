@@ -1,7 +1,8 @@
 // Header: общий верхний заголовок экрана с кнопкой назад и optional action.
 import { Feather } from '@expo/vector-icons';
 import { type Href, useRouter } from 'expo-router';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 
 export interface HeaderProps {
   title?: string;
@@ -38,12 +39,12 @@ export function Header({
     >
       <View className="flex-row items-center gap-3 space-x-3">
         {showBack && (
-          <Pressable
+          <PressableScale
             onPress={handleBackClick}
             className={`w-10 h-10 items-center justify-center rounded-full ${dark ? 'bg-gray-100' : 'bg-white/20'}`}
           >
             <Feather name="arrow-left" size={24} color={dark ? '#111827' : '#FFFFFF'} />
-          </Pressable>
+          </PressableScale>
         )}
         {title && (
           <Text className={`font-black text-2xl ml-2 ${dark ? 'text-gray-900' : 'text-white'}`}>
@@ -54,7 +55,7 @@ export function Header({
 
       <View className="flex-row items-center space-x-3">
         {showNotifications && (
-          <Pressable
+          <PressableScale
             onPress={onNotificationClick}
             className={`w-10 h-10 items-center justify-center rounded-full relative ${dark ? 'bg-gray-100' : 'bg-white/20'}`}
           >
@@ -62,7 +63,7 @@ export function Header({
             <View
               className={`absolute top-1 right-1 w-2.5 h-2.5 rounded-full border-2 ${dark ? 'bg-[#6C5CE7] border-white' : 'bg-white border-[#6C5CE7]'}`}
             />
-          </Pressable>
+          </PressableScale>
         )}
         {avatar && (
           <View

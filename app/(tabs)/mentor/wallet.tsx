@@ -3,13 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import {
-  FlatList,
-  type ListRenderItem,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  FlatList, type ListRenderItem, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useWalletData, type WalletTransaction } from '$hooks/usePlatformData';
@@ -84,14 +79,14 @@ export default function MentorWalletScreen() {
                 <Text style={styles.balanceLabel}>Доступно к выводу</Text>
                 <Text style={styles.balanceVal}>{formatKZT(summary.availableBalance)}</Text>
                 <View style={styles.balanceActions}>
-                  <TouchableOpacity style={styles.actionBtn}>
+                  <PressableScale style={styles.actionBtn}>
                     <Feather name="download" size={18} color={COLORS.primary} />
                     <Text style={styles.actionBtnText}>Вывести</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.actionBtnOutline}>
+                  </PressableScale>
+                  <PressableScale style={styles.actionBtnOutline}>
                     <Feather name="credit-card" size={18} color="white" />
                     <Text style={styles.actionBtnOutlineText}>История</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               </LinearGradient>
 

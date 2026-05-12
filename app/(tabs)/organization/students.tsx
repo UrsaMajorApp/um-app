@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
@@ -108,7 +102,7 @@ export default function OrgStudents() {
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {clubs.map((club) => (
-              <TouchableOpacity
+              <PressableScale
                 key={club}
                 onPress={() => setActiveClub(club)}
                 style={{
@@ -131,7 +125,7 @@ export default function OrgStudents() {
                 >
                   {club}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             ))}
           </ScrollView>
         </View>
@@ -207,7 +201,7 @@ export default function OrgStudents() {
 
         {/* Students */}
         {filtered.map((student) => (
-          <Pressable
+          <PressableScale
             key={student.id}
             onPress={() =>
               navigateApp(router, 'org', { name: 'orgStudentDetails', studentId: student.id })
@@ -228,7 +222,7 @@ export default function OrgStudents() {
               </View>
               <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
             </View>
-          </Pressable>
+          </PressableScale>
         ))}
 
         {!loading && filtered.length === 0 && (

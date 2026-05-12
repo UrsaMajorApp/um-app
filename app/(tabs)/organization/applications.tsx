@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
@@ -140,7 +141,7 @@ export default function OrgApplicationsScreen() {
                   Новые поступления
                 </Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 style={{
                   width: 52,
                   height: 52,
@@ -151,7 +152,7 @@ export default function OrgApplicationsScreen() {
                 }}
               >
                 <Feather name="filter" size={24} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </SafeAreaView>
         </LinearGradient>
@@ -403,7 +404,7 @@ export default function OrgApplicationsScreen() {
                   </View>
 
                   <View style={{ flexDirection: 'row', gap: SPACING.md }}>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => handleAction(app.id, 'reject')}
                       style={{
                         flex: 1,
@@ -423,10 +424,10 @@ export default function OrgApplicationsScreen() {
                       >
                         ОТКЛОНИТЬ
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
 
                     {app.status === 'paid' ? (
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => handleAction(app.id, 'approve')}
                         style={{
                           flex: 1.5,
@@ -447,9 +448,9 @@ export default function OrgApplicationsScreen() {
                         >
                           ЗАЧИСЛИТЬ
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     ) : (
-                      <TouchableOpacity
+                      <PressableScale
                         style={{
                           flex: 1.5,
                           height: 48,
@@ -469,7 +470,7 @@ export default function OrgApplicationsScreen() {
                         >
                           ЖДЕМ ОПЛАТУ
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     )}
                   </View>
                 </View>

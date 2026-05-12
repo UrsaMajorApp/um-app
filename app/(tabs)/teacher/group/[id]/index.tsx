@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SCHEDULE_TOKENS } from '$constants/calendar';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -84,7 +78,7 @@ export default function TeacherGroupDetail() {
       const isLesson = isLessonDay(dayDate);
 
       days.push(
-        <TouchableOpacity
+        <PressableScale
           key={i}
           onPress={() => isLesson && setSelectedDate(dayDate)}
           disabled={!isLesson}
@@ -105,7 +99,7 @@ export default function TeacherGroupDetail() {
             {i}
           </Text>
           {isLesson && !isSelected && <View style={styles.lessonDot} />}
-        </TouchableOpacity>,
+        </PressableScale>,
       );
     }
 
@@ -117,9 +111,9 @@ export default function TeacherGroupDetail() {
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         {/* Header */}
         <View style={[styles.header, { paddingHorizontal: paddingX }]}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+          <PressableScale onPress={() => router.back()} style={styles.backBtn}>
             <Feather name="arrow-left" size={20} color={COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
           <View style={{ flex: 1, marginLeft: 16 }}>
             <Text style={styles.headerTitle}>{group?.course_title || 'Группа'}</Text>
             <Text style={styles.headerSubtitle}>
@@ -127,12 +121,12 @@ export default function TeacherGroupDetail() {
               {group?.schedule ? ` • ${group.schedule}` : ''}
             </Text>
           </View>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => navigateApp(router, 'teacher', { name: 'teacherJournal', groupId })}
             style={styles.journalBtn}
           >
             <Feather name="file-text" size={20} color={COLORS.primary} />
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         <ScrollView
@@ -150,18 +144,18 @@ export default function TeacherGroupDetail() {
               end={{ x: 1, y: 1 }}
               style={styles.calendarHeader}
             >
-              <TouchableOpacity onPress={() => changeMonth(-1)}>
+              <PressableScale onPress={() => changeMonth(-1)}>
                 <Feather name="chevron-left" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
               <Text style={styles.calendarMonth}>
                 {currentMonth.toLocaleDateString('ru-RU', {
                   month: 'long',
                   year: 'numeric',
                 })}
               </Text>
-              <TouchableOpacity onPress={() => changeMonth(1)}>
+              <PressableScale onPress={() => changeMonth(1)}>
                 <Feather name="chevron-right" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </LinearGradient>
 
             <View style={styles.weekDays}>
@@ -188,7 +182,7 @@ export default function TeacherGroupDetail() {
                 </Text>
               </View>
               {attendanceEditor.hasAttendanceSelection && (
-                <TouchableOpacity
+                <PressableScale
                   onPress={saveReport}
                   disabled={attendanceEditor.saving}
                   style={styles.saveActionBtn}
@@ -196,7 +190,7 @@ export default function TeacherGroupDetail() {
                   <Text style={styles.saveActionText}>
                     {attendanceEditor.saving ? '...' : 'Сохранить'}
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               )}
             </View>
 
@@ -228,7 +222,7 @@ export default function TeacherGroupDetail() {
                   </View>
 
                   <View style={styles.actionRow}>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => attendanceEditor.toggleStatus(student.id, 'present')}
                       style={[
                         styles.statusBtn,
@@ -254,9 +248,9 @@ export default function TeacherGroupDetail() {
                       >
                         Был
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
 
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => attendanceEditor.toggleStatus(student.id, 'absent')}
                       style={[
                         styles.statusBtn,
@@ -280,7 +274,7 @@ export default function TeacherGroupDetail() {
                       >
                         Не был
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
 
                   <TextInput
@@ -297,7 +291,7 @@ export default function TeacherGroupDetail() {
           </View>
 
           {/* Bottom Primary Action */}
-          <TouchableOpacity
+          <PressableScale
             activeOpacity={0.8}
             onPress={saveReport}
             disabled={attendanceEditor.saving}
@@ -318,7 +312,7 @@ export default function TeacherGroupDetail() {
                 </>
               )}
             </LinearGradient>
-          </TouchableOpacity>
+          </PressableScale>
         </ScrollView>
       </SafeAreaView>
     </View>

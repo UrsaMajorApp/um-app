@@ -1,10 +1,11 @@
 // Экран admin/billing: загружает и показывает биллинг, комиссии и транзакции платформы в кабинете администратора.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { EmptyState } from '$components/admin/EmptyState';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAdminStats, useFamilies, useOrganizations, useTransactions } from '$hooks/useAdminData';
 import { formatAdminDate, useAdminLayout } from '$lib/adminUtils';
@@ -227,7 +228,7 @@ export default function AdminBillingScreen() {
                   }}
                 />
                 <Text style={{ fontWeight: 'bold' }}>%</Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => {
                     const val = parseFloat(drafts[org.id] ?? String(org.commission_pct));
                     if (Number.isFinite(val)) orgs.setCommission(org.id, val);
@@ -248,7 +249,7 @@ export default function AdminBillingScreen() {
                   >
                     Сохранить
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             </View>
           ))}

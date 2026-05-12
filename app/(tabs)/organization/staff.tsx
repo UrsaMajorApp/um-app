@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -132,7 +133,7 @@ export default function OrgStaffScreen() {
                   Преподавательский состав
                 </Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
                 style={{
                   width: 52,
@@ -144,7 +145,7 @@ export default function OrgStaffScreen() {
                 }}
               >
                 <Feather name="plus" size={24} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </SafeAreaView>
         </LinearGradient>
@@ -293,7 +294,7 @@ export default function OrgStaffScreen() {
             >
               Добавьте первого преподавателя для вашей организации
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
               style={{
                 backgroundColor: COLORS.primary,
@@ -314,7 +315,7 @@ export default function OrgStaffScreen() {
               >
                 Добавить учителя
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         ) : (
           <View style={{ gap: SPACING.lg }}>
@@ -325,7 +326,7 @@ export default function OrgStaffScreen() {
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ delay: idx * 100 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() =>
                     navigateApp(router, user?.role, {
                       name: 'orgStaffDetails',
@@ -442,7 +443,7 @@ export default function OrgStaffScreen() {
                   </View>
 
                   <View style={{ flexDirection: 'row', gap: SPACING.md }}>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() =>
                         navigateApp(router, user?.role, {
                           name: 'orgStaffDetails',
@@ -467,9 +468,9 @@ export default function OrgStaffScreen() {
                       >
                         ПОДРОБНЕЕ
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                     {teacher.status === 'invited' && (
-                      <TouchableOpacity
+                      <PressableScale
                         style={{
                           paddingHorizontal: 24,
                           height: 48,
@@ -489,10 +490,10 @@ export default function OrgStaffScreen() {
                         >
                           НАПОМНИТЬ
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     )}
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               </MotiView>
             ))}
           </View>

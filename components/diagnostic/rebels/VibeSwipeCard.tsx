@@ -4,7 +4,8 @@
  */
 import { MotiView } from 'moti';
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import SwipeableDecisionCard from '$components/diagnostic/SwipeableDecisionCard';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { VibeCard } from '$data/diagnosticData1214';
@@ -81,22 +82,22 @@ export default function VibeSwipeCard({ card, index, total, onSwipe }: Props) {
               <Text style={styles.cardText}>{card.text}</Text>
 
               <View style={styles.actions}>
-                <TouchableOpacity
+                <PressableScale
                   disabled={isLeaving}
                   onPress={() => swipe(false)}
                   style={[styles.btn, styles.btnDislike]}
                 >
                   <Text style={styles.btnEmoji}>🗑️</Text>
                   <Text style={styles.btnLabelDislike}>Skip</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+                </PressableScale>
+                <PressableScale
                   disabled={isLeaving}
                   onPress={() => swipe(true)}
                   style={[styles.btn, styles.btnLike]}
                 >
                   <Text style={styles.btnEmoji}>🔥</Text>
                   <Text style={styles.btnLabelLike}>Vibe</Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             </View>
           </>

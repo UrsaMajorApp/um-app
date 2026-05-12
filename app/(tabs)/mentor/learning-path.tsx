@@ -5,15 +5,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import React from 'react';
 import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useLearningPath } from '$hooks/useMentorData';
@@ -88,7 +81,7 @@ export default function MentorLearningPath() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -101,7 +94,7 @@ export default function MentorLearningPath() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <View>
                   <Text
                     style={{
@@ -319,7 +312,7 @@ export default function MentorLearningPath() {
 
                   <View style={{ gap: SPACING.sm }}>
                     {phase.items.map((item) => (
-                      <TouchableOpacity
+                      <PressableScale
                         key={item.id}
                         onPress={() => toggleStep(item.id)}
                         style={{
@@ -360,12 +353,12 @@ export default function MentorLearningPath() {
                         >
                           {item.item_text}
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     ))}
                   </View>
 
                   {phase.status === 'active' && (
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => {
                         setActivePhase({
                           phase: phase.phase,
@@ -397,7 +390,7 @@ export default function MentorLearningPath() {
                       >
                         Добавить цель
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   )}
                 </View>
               </View>
@@ -458,12 +451,12 @@ export default function MentorLearningPath() {
               >
                 Новая цель
               </Text>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => setShowAddModal(false)}
                 style={{ padding: SPACING.xs }}
               >
                 <Feather name="x" size={24} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
             <TextInput
               value={newTaskText}
@@ -480,7 +473,7 @@ export default function MentorLearningPath() {
                 marginBottom: SPACING.xl,
               }}
             />
-            <TouchableOpacity
+            <PressableScale
               onPress={handleAddTask}
               disabled={!newTaskText.trim()}
               style={{
@@ -499,7 +492,7 @@ export default function MentorLearningPath() {
               >
                 Добавить
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </KeyboardAvoidingView>
       </Modal>

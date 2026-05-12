@@ -2,7 +2,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { ORG_RESULT_BARS } from '$constants/profile';
 import { LAYOUT } from '$constants/theme';
 import { useIsDesktop } from '$lib/useIsDesktop';
@@ -190,7 +191,7 @@ export default function OrgResults() {
           </View>
 
           {/* BUTTON */}
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.push('/profile/common/subscribe')}
             style={{
               backgroundColor: '#007A7A',
@@ -208,7 +209,7 @@ export default function OrgResults() {
             >
               Перейти в панель
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </ScrollView>
     </LinearGradient>

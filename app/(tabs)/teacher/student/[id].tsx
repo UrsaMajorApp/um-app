@@ -1,7 +1,8 @@
 // Карточка ученика преподавателя: открывает данные ученика по id из списка группы.
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, TYPOGRAPHY } from '$constants/theme';
 
 export default function TeacherStudentDetail() {
@@ -21,7 +22,7 @@ export default function TeacherStudentDetail() {
           borderBottomColor: COLORS.border,
         }}
       >
-        <TouchableOpacity
+        <PressableScale
           onPress={() => router.back()}
           style={{
             flexDirection: 'row',
@@ -39,7 +40,7 @@ export default function TeacherStudentDetail() {
           >
             Назад
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View

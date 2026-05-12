@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
@@ -92,7 +93,7 @@ export default function ParentHome() {
                     Привет, {user?.firstName || parentProfile?.firstName || 'Родитель'}!
                   </Text>
                   {!isDesktop && (
-                    <Pressable
+                    <PressableScale
                       onPress={() => setNotificationsVisible(true)}
                       style={{
                         width: 52,
@@ -120,7 +121,7 @@ export default function ParentHome() {
                           borderColor: 'rgba(255,255,255,0.4)',
                         }}
                       />
-                    </Pressable>
+                    </PressableScale>
                   )}
                 </View>
                 <Text
@@ -141,9 +142,9 @@ export default function ParentHome() {
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 24 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Мои дети</Text>
-            <Pressable onPress={() => navigateApp(router, user?.role, { name: 'parentChildren' })}>
+            <PressableScale onPress={() => navigateApp(router, user?.role, { name: 'parentChildren' })}>
               <Text className="text-purple-600 font-bold text-sm">Все</Text>
-            </Pressable>
+            </PressableScale>
           </View>
 
           <ScrollView
@@ -152,7 +153,7 @@ export default function ParentHome() {
             className="overflow-visible"
           >
             {children.map((child) => (
-              <Pressable
+              <PressableScale
                 key={child.id}
                 onPress={() => {
                   setActiveChildId(child.id);
@@ -175,18 +176,20 @@ export default function ParentHome() {
                 <Text className="text-[10px] text-gray-400 font-bold uppercase mt-1">
                   {child.age} ЛЕТ
                 </Text>
-              </Pressable>
+              </PressableScale>
             ))}
 
-            <Pressable
+            <PressableScale
               onPress={() => router.push('/profile/youth/create-profile-child')}
+              scaleTo={0.94}
+              pressDelayMs={90}
               className="w-36 p-5 bg-gray-50 rounded-[32px] items-center justify-center border-2 border-dashed border-gray-100"
             >
               <View className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center mb-2">
                 <Feather name="plus" size={20} color="#9CA3AF" />
               </View>
               <Text className="text-xs font-bold text-gray-400 text-center">Добавить</Text>
-            </Pressable>
+            </PressableScale>
           </ScrollView>
         </View>
 
@@ -207,15 +210,15 @@ export default function ParentHome() {
                   секции!»
                 </Text>
                 <View className="flex-row gap-2 mt-3">
-                  <Pressable
+                  <PressableScale
                     onPress={() => navigateApp(router, user?.role, { name: 'chats' })}
                     className="bg-purple-600 px-3 py-1.5 rounded-full flex-row items-center gap-1"
                   >
                     <Text className="text-white font-black text-[10px] uppercase tracking-widest">
                       Чат 🔥
                     </Text>
-                  </Pressable>
-                  <Pressable
+                  </PressableScale>
+                  <PressableScale
                     onPress={() => navigateApp(router, user?.role, { name: 'parentMentors' })}
                     className="bg-white px-3 py-1.5 rounded-full border border-purple-200 flex-row items-center gap-1"
                   >
@@ -223,7 +226,7 @@ export default function ParentHome() {
                     <Text className="text-purple-600 font-black text-[10px] uppercase tracking-widest">
                       Менторы
                     </Text>
-                  </Pressable>
+                  </PressableScale>
                 </View>
               </View>
             </View>
@@ -244,7 +247,7 @@ export default function ParentHome() {
                   Пройдите диагностику талантов для {activeChild.name}, чтобы получить персональные
                   рекомендации по развитию.
                 </Text>
-                <Pressable
+                <PressableScale
                   onPress={() => {
                     if (!activeChild) return;
                     setActiveChildId(activeChild.id);
@@ -258,7 +261,7 @@ export default function ParentHome() {
                   <Text className="text-blue-600 font-black text-[10px] uppercase tracking-widest">
                     Начать тест
                   </Text>
-                </Pressable>
+                </PressableScale>
               </View>
             </View>
           ) : null}
@@ -308,7 +311,7 @@ export default function ParentHome() {
               recommendations.map((rec, idx) => {
                 const [c1] = courseGradient(idx);
                 return (
-                  <Pressable
+                  <PressableScale
                     key={rec.id}
                     onPress={() =>
                       navigateApp(router, user?.role, { name: 'courseDetails', courseId: rec.id })
@@ -382,7 +385,7 @@ export default function ParentHome() {
                         </Text>
                       </View>
                     </View>
-                  </Pressable>
+                  </PressableScale>
                 );
               })
             )}
@@ -393,9 +396,9 @@ export default function ParentHome() {
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 32 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Ближайшие занятия</Text>
-            <Pressable onPress={() => navigateApp(router, user?.role, { name: 'calendar' })}>
+            <PressableScale onPress={() => navigateApp(router, user?.role, { name: 'calendar' })}>
               <Text className="text-purple-600 font-bold text-sm">Календарь</Text>
-            </Pressable>
+            </PressableScale>
           </View>
 
           <View className="bg-gray-50 rounded-[32px] p-8 items-center border border-gray-100">
@@ -405,12 +408,13 @@ export default function ParentHome() {
             <Text className="text-gray-400 font-bold text-sm mb-4 text-center">
               Пока нет запланированных занятий
             </Text>
-            <Pressable
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'clubs' })}
+              pressDelayMs={90}
               className="bg-purple-600 px-6 py-3 rounded-2xl"
             >
               <Text className="text-white font-black text-sm uppercase">Найти кружок</Text>
-            </Pressable>
+            </PressableScale>
           </View>
         </View>
       </ScrollView>

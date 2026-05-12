@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SideNav } from '$components/navigation/SideNav';
 import { SHADOWS } from '$constants/theme';
@@ -36,9 +37,9 @@ export default function SubscriptionPaywall() {
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         {/* Close button */}
         <View style={[styles.topBar, { paddingHorizontal: isDesktop ? 40 : 20 }]}>
-          <Pressable onPress={() => router.back()} style={styles.closeBtn}>
+          <PressableScale onPress={() => router.back()} style={styles.closeBtn}>
             <Feather name="x" size={20} color="white" />
-          </Pressable>
+          </PressableScale>
         </View>
 
         <ScrollView
@@ -96,13 +97,13 @@ export default function SubscriptionPaywall() {
                   )}
                 </View>
 
-                <Pressable
+                <PressableScale
                   disabled={!plan}
                   onPress={handleSubscribe}
                   style={({ pressed }) => [styles.kaspiBtn, pressed && { opacity: 0.9 }]}
                 >
                   <Text style={styles.kaspiText}>Выбрать тариф</Text>
-                </Pressable>
+                </PressableScale>
 
                 <View style={styles.secureRow}>
                   <Feather name="lock" size={11} color="rgba(255,255,255,0.6)" />
@@ -112,9 +113,9 @@ export default function SubscriptionPaywall() {
             </View>
 
             {/* Free tier */}
-            <Pressable onPress={() => router.back()} style={styles.freeBtn}>
+            <PressableScale onPress={() => router.back()} style={styles.freeBtn}>
               <Text style={styles.freeText}>Продолжить на бесплатном (Basic)</Text>
-            </Pressable>
+            </PressableScale>
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -1,5 +1,6 @@
 // SegmentTabs: переключает под-разделы админки через компактные segmented tabs.
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { useAdminLayout } from '$lib/adminUtils';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '$constants/theme';
 
@@ -27,7 +28,7 @@ export function SegmentTabs<T extends string>({
         {tabs.map((tab) => {
           const active = tab.key === value;
           return (
-            <TouchableOpacity
+            <PressableScale
               key={tab.key}
               onPress={() => onChange(tab.key)}
               style={{
@@ -46,7 +47,7 @@ export function SegmentTabs<T extends string>({
               >
                 {tab.label}
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           );
         })}
       </View>

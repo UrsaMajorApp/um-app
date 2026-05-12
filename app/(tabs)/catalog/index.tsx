@@ -4,14 +4,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+  ActivityIndicator, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CATALOG_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
@@ -111,9 +105,9 @@ export default function CatalogScreen() {
                 }}
               />
               {search.length > 0 && (
-                <TouchableOpacity onPress={() => setSearch('')}>
+                <PressableScale onPress={() => setSearch('')}>
                   <Feather name="x" size={16} color={COLORS.mutedForeground} />
-                </TouchableOpacity>
+                </PressableScale>
               )}
             </View>
 
@@ -126,7 +120,7 @@ export default function CatalogScreen() {
               {CATALOG_SKILL_FILTERS.map((cat) => {
                 const active = cat === activeCategory;
                 return (
-                  <TouchableOpacity
+                  <PressableScale
                     key={cat}
                     onPress={() => setActiveCategory(cat)}
                     style={{
@@ -146,7 +140,7 @@ export default function CatalogScreen() {
                     >
                       {cat}
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 );
               })}
             </ScrollView>
@@ -297,7 +291,7 @@ export default function CatalogScreen() {
                       >
                         {formatKZT(item.price)}/мес
                       </Text>
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => router.push(courseDetailsPath(item.id))}
                         style={{
                           backgroundColor: COLORS.primary,
@@ -316,7 +310,7 @@ export default function CatalogScreen() {
                         >
                           Подробнее
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     </View>
                   </MotiView>
                 );

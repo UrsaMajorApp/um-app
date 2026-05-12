@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DAY_ALIASES, RUSSIAN_MONTHS, WEEKDAYS_SHORT } from '$constants/calendar';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -103,18 +104,18 @@ export default function ParentCalendar() {
                   {RUSSIAN_MONTHS[currentDate.month]} {currentDate.year}
                 </Text>
                 <View className="flex-row gap-2">
-                  <Pressable
+                  <PressableScale
                     onPress={() => shiftMonth(-1)}
                     className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
                   >
                     <Feather name="chevron-left" size={20} color="white" />
-                  </Pressable>
-                  <Pressable
+                  </PressableScale>
+                  <PressableScale
                     onPress={() => shiftMonth(1)}
                     className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
                   >
                     <Feather name="chevron-right" size={20} color="white" />
-                  </Pressable>
+                  </PressableScale>
                 </View>
               </View>
             </View>
@@ -182,7 +183,7 @@ export default function ParentCalendar() {
                   }}
                 >
                   {dayValue && (
-                    <Pressable
+                    <PressableScale
                       onPress={() => setSelectedDay(dayValue)}
                       style={{
                         width: '100%',
@@ -220,7 +221,7 @@ export default function ParentCalendar() {
                             }}
                           />
                         )}
-                    </Pressable>
+                    </PressableScale>
                   )}
                 </View>
               );

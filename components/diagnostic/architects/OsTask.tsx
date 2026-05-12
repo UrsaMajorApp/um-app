@@ -5,7 +5,8 @@
  */
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { ARCHITECTS_OS_MODULE_STYLES } from '$constants/diagnosticUi';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { ProTask1517 } from '$data/diagnosticData1517';
@@ -72,7 +73,7 @@ export default function OsTask({ task, index, total, onAnswer }: Props) {
         {/* Action Buttons */}
         <View style={styles.optionsList}>
           {task.options.map((opt) => (
-            <TouchableOpacity
+            <PressableScale
               key={opt.id}
               onPress={() => {
                 if (!interacted) setInteracted(true);
@@ -89,7 +90,7 @@ export default function OsTask({ task, index, total, onAnswer }: Props) {
               <Text style={[styles.optionText, task.module !== 'mail' && { color: '#FFFFFF' }]}>
                 {opt.label}
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           ))}
         </View>
       </View>

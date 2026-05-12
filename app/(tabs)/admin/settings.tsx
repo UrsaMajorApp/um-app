@@ -1,7 +1,8 @@
 // Экран admin/settings: загружает и показывает админские настройки платформы в кабинете администратора.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { AdminHeader } from '$components/admin/AdminHeader';
 import { SegmentTabs } from '$components/admin/SegmentTabs';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
@@ -102,7 +103,7 @@ export default function AdminSettingsScreen() {
                           {question.answers.join(' · ')}
                         </Text>
                       </View>
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => onboarding.toggleActive(question.id, !question.active)}
                         style={{ padding: 4 }}
                       >
@@ -111,8 +112,8 @@ export default function AdminSettingsScreen() {
                           size={16}
                           color={COLORS.mutedForeground}
                         />
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                      </PressableScale>
+                      <PressableScale
                         onPress={() =>
                           Alert.alert('Удалить вопрос?', question.question_text, [
                             { text: 'Отмена', style: 'cancel' },
@@ -126,7 +127,7 @@ export default function AdminSettingsScreen() {
                         style={{ padding: 4 }}
                       >
                         <Feather name="trash-2" size={16} color={COLORS.destructive} />
-                      </TouchableOpacity>
+                      </PressableScale>
                     </View>
                   ))}
                 </View>
@@ -145,7 +146,7 @@ export default function AdminSettingsScreen() {
               }}
             >
               {tags.data.map((tag) => (
-                <TouchableOpacity
+                <PressableScale
                   key={tag.id}
                   onLongPress={() => tags.remove(tag.id)}
                   style={{
@@ -158,7 +159,7 @@ export default function AdminSettingsScreen() {
                   }}
                 >
                   <Text style={{ color: COLORS.primary, fontWeight: 'bold' }}>{tag.name}</Text>
-                </TouchableOpacity>
+                </PressableScale>
               ))}
             </View>
             <View
@@ -182,7 +183,7 @@ export default function AdminSettingsScreen() {
                   color: COLORS.foreground,
                 }}
               />
-              <TouchableOpacity
+              <PressableScale
                 onPress={async () => {
                   await tags.add(newTagName);
                   setNewTagName('');
@@ -195,7 +196,7 @@ export default function AdminSettingsScreen() {
                 }}
               >
                 <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Добавить</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
             <Text
               style={{
@@ -232,7 +233,7 @@ export default function AdminSettingsScreen() {
                       gap: SPACING.md,
                     }}
                   >
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => aiRules.toggle(rule.id, !rule.enabled)}
                       style={{
                         width: 44,
@@ -253,7 +254,7 @@ export default function AdminSettingsScreen() {
                           ...SHADOWS.sm,
                         }}
                       />
-                    </TouchableOpacity>
+                    </PressableScale>
                     <View style={{ flex: 1 }}>
                       <Text
                         style={{
@@ -277,7 +278,7 @@ export default function AdminSettingsScreen() {
                         </Text>
                       ) : null}
                     </View>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => {
                         if (isEditing) setEditingRuleId(null);
                         else {
@@ -304,7 +305,7 @@ export default function AdminSettingsScreen() {
                         size={14}
                         color={isEditing ? COLORS.primary : COLORS.mutedForeground}
                       />
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
                   {isEditing ? (
                     <View
@@ -340,7 +341,7 @@ export default function AdminSettingsScreen() {
                           }}
                         />
                       ))}
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={async () => {
                           await aiRules.updateRule(rule.id, editingRule);
                           setEditingRuleId(null);
@@ -362,7 +363,7 @@ export default function AdminSettingsScreen() {
                         >
                           Сохранить
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     </View>
                   ) : null}
                 </View>

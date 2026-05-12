@@ -5,17 +5,8 @@ import { useRouter } from 'expo-router';
 import type React from 'react';
 import { useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SideNav } from '$components/navigation/SideNav';
 import {
@@ -154,10 +145,10 @@ export default function CreateProfileChild() {
         >
           <SafeAreaView edges={['top']}>
             <View style={[styles.gradientHeader, { paddingHorizontal: horizontalPadding }]}>
-              <TouchableOpacity onPress={handleBack} style={styles.headerBackButton}>
+              <PressableScale onPress={handleBack} style={styles.headerBackButton}>
                 <Feather name="arrow-left" size={20} color={COLORS.white} />
                 <Text style={styles.headerBackText}>Назад</Text>
-              </TouchableOpacity>
+              </PressableScale>
               <Text style={styles.headerTitle}>Профиль ребенка</Text>
               <Text style={styles.headerSubtitle}>Данные для кружков, целей и диагностики</Text>
             </View>
@@ -225,7 +216,7 @@ export default function CreateProfileChild() {
 
               <View style={styles.field}>
                 <RequiredLabel>Возраст</RequiredLabel>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => setShowAgePicker(true)}
                   style={[styles.selectInput, hasSubmitted && !validation.age && styles.inputError]}
                 >
@@ -233,7 +224,7 @@ export default function CreateProfileChild() {
                     {formData.age ? `${formData.age} лет` : 'Выберите возраст'}
                   </Text>
                   <Feather name="chevron-down" size={18} color={COLORS.mutedForeground} />
-                </TouchableOpacity>
+                </PressableScale>
                 {hasSubmitted && !validation.age && (
                   <Text style={styles.errorText}>Выберите возраст</Text>
                 )}
@@ -242,7 +233,7 @@ export default function CreateProfileChild() {
               <View style={styles.field}>
                 <RequiredLabel>Пол</RequiredLabel>
                 <View style={styles.segmented}>
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => setFormData({ ...formData, gender: 'boy' })}
                     style={[
                       styles.segment,
@@ -258,8 +249,8 @@ export default function CreateProfileChild() {
                     >
                       Мальчик
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </PressableScale>
+                  <PressableScale
                     onPress={() => setFormData({ ...formData, gender: 'girl' })}
                     style={[
                       styles.segment,
@@ -275,7 +266,7 @@ export default function CreateProfileChild() {
                     >
                       Девочка
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
                 {hasSubmitted && !validation.gender && (
                   <Text style={styles.errorText}>Выберите пол</Text>
@@ -295,7 +286,7 @@ export default function CreateProfileChild() {
               {availableInterests.map((interest) => {
                 const isSelected = interests.includes(interest);
                 return (
-                  <TouchableOpacity
+                  <PressableScale
                     key={interest}
                     onPress={() => toggleInterest(interest)}
                     style={[styles.chip, isSelected && styles.chipActive]}
@@ -303,7 +294,7 @@ export default function CreateProfileChild() {
                     <Text style={[styles.chipText, isSelected && styles.chipTextActive]}>
                       {interest}
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 );
               })}
             </View>
@@ -320,9 +311,9 @@ export default function CreateProfileChild() {
                 placeholderTextColor={COLORS.mutedForeground}
                 style={[styles.input, { flex: 1 }]}
               />
-              <TouchableOpacity onPress={addOtherInterest} style={styles.addButton}>
+              <PressableScale onPress={addOtherInterest} style={styles.addButton}>
                 <Feather name="plus" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
 
@@ -353,7 +344,7 @@ export default function CreateProfileChild() {
 
           <View style={styles.footer}>
             {submitError ? <Text style={styles.submitErrorText}>{submitError}</Text> : null}
-            <TouchableOpacity
+            <PressableScale
               onPress={handleNext}
               disabled={isSubmitting || !isFormValid}
               activeOpacity={0.8}
@@ -372,7 +363,7 @@ export default function CreateProfileChild() {
                   {isSubmitting ? 'Сохранение...' : 'Добавить ребенка'}
                 </Text>
               </LinearGradient>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
 
@@ -403,13 +394,13 @@ export default function CreateProfileChild() {
                 >
                   Выберите возраст
                 </Text>
-                <TouchableOpacity onPress={() => setShowAgePicker(false)}>
+                <PressableScale onPress={() => setShowAgePicker(false)}>
                   <Feather name="x" size={24} color="#9CA3AF" />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
                 {AGE_OPTIONS.map((age) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={age}
                     onPress={() => {
                       setFormData({ ...formData, age });
@@ -436,7 +427,7 @@ export default function CreateProfileChild() {
                       {age} лет
                     </Text>
                     {formData.age === age && <Feather name="check" size={20} color="#6C5CE7" />}
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </ScrollView>
             </Pressable>

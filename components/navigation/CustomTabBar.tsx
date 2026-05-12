@@ -3,7 +3,8 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSegments } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, Pressable, Text, useWindowDimensions, View } from 'react-native';
+import { Platform, Text, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { useTabNav } from '$hooks/useTabNav';
 import type { Role } from '$constants/navigation/tabItems';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
@@ -124,7 +125,7 @@ export default function CustomTabBar({ role }: CustomTabBarProps) {
           {tabs.map((item) => {
             const active = isActive(item.route);
             return (
-              <Pressable
+              <PressableScale
                 key={item.key}
                 onPress={() => go(item.route)}
                 style={{
@@ -152,7 +153,7 @@ export default function CustomTabBar({ role }: CustomTabBarProps) {
                     {item.label}
                   </Text>
                 )}
-              </Pressable>
+              </PressableScale>
             );
           })}
         </BlurView>

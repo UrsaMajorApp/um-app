@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useMentorGroups } from '$hooks/useMentorData';
@@ -50,7 +51,7 @@ export default function MentorGroups() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -63,7 +64,7 @@ export default function MentorGroups() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.size.xl,
@@ -133,7 +134,7 @@ export default function MentorGroups() {
         )}
         <View style={{ gap: SPACING.lg }}>
           {filtered.map((group) => (
-            <Pressable
+            <PressableScale
               key={group.id}
               onPress={() =>
                 navigateApp(router, 'mentor', { name: 'mentorGroupDetails', groupId: group.id })
@@ -265,7 +266,7 @@ export default function MentorGroups() {
                   <Feather name="chevron-right" size={20} color={COLORS.primary} />
                 </View>
               </View>
-            </Pressable>
+            </PressableScale>
           ))}
         </View>
       </ScrollView>

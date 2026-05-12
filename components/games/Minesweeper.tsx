@@ -2,14 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  UIManager,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+  Platform, StyleSheet, Text, UIManager, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import {
   MINESWEEPER_GRID_SIZE as GRID_SIZE,
   MINESWEEPER_MAX_BOARD_SIZE as MAX_BOARD_SIZE,
@@ -175,13 +169,13 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
           <Feather name="flag" size={16} color="#EF4444" />
           <Text style={styles.statText}>{minesLeft}</Text>
         </View>
-        <TouchableOpacity onPress={initGrid} style={styles.resetBtn}>
+        <PressableScale onPress={initGrid} style={styles.resetBtn}>
           <Feather
             name={gameOver === 'won' ? 'smile' : gameOver === 'lost' ? 'frown' : 'refresh-cw'}
             size={24}
             color="white"
           />
-        </TouchableOpacity>
+        </PressableScale>
         <View style={styles.statBox}>
           <Feather name="clock" size={16} color="#3B82F6" />
           <Text style={styles.statText}>IQ 100</Text>
@@ -193,7 +187,7 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
           {grid.map((row) => (
             <View key={`row-${row[0]?.r ?? 'empty'}`} style={styles.row}>
               {row.map((cell) => (
-                <TouchableOpacity
+                <PressableScale
                   key={`cell-${cell.r}-${cell.c}`}
                   activeOpacity={0.7}
                   onPress={() => revealCell(cell.r, cell.c)}
@@ -228,7 +222,7 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
                   ) : cell.isFlagged ? (
                     <Feather name="flag" size={numberSize} color="#EF4444" />
                   ) : null}
-                </TouchableOpacity>
+                </PressableScale>
               ))}
             </View>
           ))}
@@ -240,9 +234,9 @@ export default function Minesweeper({ onFinish }: { onFinish: (score: number) =>
         {gameOver !== 'playing' && (
           <View style={styles.overlay}>
             <Text style={styles.resultText}>{gameOver === 'won' ? 'Победа!' : 'Бум! Майна!'}</Text>
-            <TouchableOpacity onPress={initGrid} style={styles.retryBtn}>
+            <PressableScale onPress={initGrid} style={styles.retryBtn}>
               <Text style={styles.retryText}>Еще раз</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         )}
       </View>

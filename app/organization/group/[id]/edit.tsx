@@ -2,7 +2,8 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { FormCard } from '$components/ui/form/FormCard';
 import { LabeledTextInput } from '$components/ui/form/LabeledTextInput';
 import { PrimaryActionButton } from '$components/ui/form/PrimaryActionButton';
@@ -120,7 +121,7 @@ export default function GroupEditScreen() {
             {loading ? 'СОХРАНЕНИЕ...' : 'СОХРАНИТЬ ИЗМЕНЕНИЯ'}
           </PrimaryActionButton>
 
-          <TouchableOpacity
+          <PressableScale
             onPress={handleArchive}
             disabled={loading || groupLoading}
             style={{
@@ -140,7 +141,7 @@ export default function GroupEditScreen() {
             >
               АРХИВИРОВАТЬ ГРУППУ
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </MotiView>
       </ScrollView>
     </View>

@@ -1,7 +1,8 @@
 // Экран профиля youth: показывает основную страницу раздела для роли ребенка/подростка.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Alert, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ScreenHeader from '$components/ui/ScreenHeader';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
@@ -231,7 +232,7 @@ export default function YouthProfile() {
                 >
                   Мои таланты
                 </Text>
-                <Pressable onPress={() => router.push('/profile/youth/results')}>
+                <PressableScale onPress={() => router.push('/profile/youth/results')}>
                   <Text
                     style={{
                       color: COLORS.primary,
@@ -241,7 +242,7 @@ export default function YouthProfile() {
                   >
                     Все детали
                   </Text>
-                </Pressable>
+                </PressableScale>
               </View>
               <View
                 style={{
@@ -378,7 +379,7 @@ export default function YouthProfile() {
             </View>
 
             {/* Logout */}
-            <Pressable
+            <PressableScale
               onPress={handleLogout}
               style={{
                 flexDirection: 'row',
@@ -402,7 +403,7 @@ export default function YouthProfile() {
               >
                 Выйти из аккаунта
               </Text>
-            </Pressable>
+            </PressableScale>
           </View>
         </ScrollView>
       </SafeAreaView>

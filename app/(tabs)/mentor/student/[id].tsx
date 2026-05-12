@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import {
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Modal, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -86,13 +80,13 @@ export default function MentorStudentDetailScreen() {
         >
           <SafeAreaView edges={['top']}>
             <View style={[styles.headerTop, { paddingHorizontal: paddingX }]}>
-              <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+              <PressableScale onPress={() => router.back()} style={styles.backBtn}>
                 <Feather name="arrow-left" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
               <Text style={styles.headerTitle}>Профиль ученика</Text>
-              <TouchableOpacity style={styles.editBtn}>
+              <PressableScale style={styles.editBtn}>
                 <Feather name="edit-3" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <MotiView
@@ -240,13 +234,13 @@ export default function MentorStudentDetailScreen() {
             >
               <Text style={styles.sectionTitle}>Заметки ментора</Text>
               {!studentProfile.isEditingNotes && (
-                <TouchableOpacity
+                <PressableScale
                   onPress={studentProfile.startEditingNotes}
                   style={styles.editNotesBtn}
                 >
                   <Feather name="edit-2" size={14} color="#6C5CE7" />
                   <Text style={styles.editNotesBtnText}>Редактировать</Text>
-                </TouchableOpacity>
+                </PressableScale>
               )}
             </View>
             {studentProfile.isEditingNotes ? (
@@ -260,16 +254,16 @@ export default function MentorStudentDetailScreen() {
                   placeholderTextColor="#9CA3AF"
                 />
                 <View style={styles.notesEditActions}>
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={studentProfile.cancelEditingNotes}
                     style={styles.notesCancelBtn}
                   >
                     <Text style={styles.notesCancelText}>Отмена</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={studentProfile.saveNotes} style={styles.notesSaveBtn}>
+                  </PressableScale>
+                  <PressableScale onPress={studentProfile.saveNotes} style={styles.notesSaveBtn}>
                     <Feather name="check" size={16} color="white" />
                     <Text style={styles.notesSaveText}>Сохранить</Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               </View>
             ) : (
@@ -282,7 +276,7 @@ export default function MentorStudentDetailScreen() {
           {/* Monthly Report Button */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Отчётность</Text>
-            <TouchableOpacity
+            <PressableScale
               style={styles.reportBtn}
               onPress={() => studentProfile.setShowReportModal(true)}
             >
@@ -294,7 +288,7 @@ export default function MentorStudentDetailScreen() {
                 <Text style={styles.reportBtnSubtitle}>Создать и отправить родителю</Text>
               </View>
               <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </ScrollView>
@@ -305,9 +299,9 @@ export default function MentorStudentDetailScreen() {
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Месячный отчёт</Text>
-              <TouchableOpacity onPress={() => studentProfile.setShowReportModal(false)}>
+              <PressableScale onPress={() => studentProfile.setShowReportModal(false)}>
                 <Feather name="x" size={24} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <View style={styles.reportPreview}>
@@ -347,7 +341,7 @@ export default function MentorStudentDetailScreen() {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.generateBtn} onPress={studentProfile.generateReport}>
+            <PressableScale style={styles.generateBtn} onPress={studentProfile.generateReport}>
               <LinearGradient
                 colors={['#6C5CE7', '#A78BFA']}
                 start={{ x: 0, y: 0 }}
@@ -357,7 +351,7 @@ export default function MentorStudentDetailScreen() {
                 <Feather name="send" size={18} color="white" />
                 <Text style={styles.generateBtnText}>Отправить родителю</Text>
               </LinearGradient>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </Modal>

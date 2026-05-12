@@ -5,14 +5,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useRef, useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT } from '$constants/theme';
 import { useChatMessages } from '$hooks/useChats';
@@ -63,7 +57,7 @@ export default function ChatScreen() {
                   paddingBottom: 20,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={handleBackToChats}
                   style={{
                     width: 40,
@@ -76,7 +70,7 @@ export default function ChatScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text style={{ fontSize: 18, fontWeight: '700', color: 'white' }}>{name}</Text>
               </View>
             </SafeAreaView>
@@ -160,7 +154,7 @@ export default function ChatScreen() {
             onSubmitEditing={handleSend}
             returnKeyType="send"
           />
-          <TouchableOpacity
+          <PressableScale
             onPress={handleSend}
             style={{
               backgroundColor: input.trim() ? '#6C5CE7' : '#E5E7EB',
@@ -177,7 +171,7 @@ export default function ChatScreen() {
             >
               Отпр.
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </View>
     </KeyboardAvoidingView>

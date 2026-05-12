@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgGroups, useOrgStaffById } from '$hooks/useOrgData';
@@ -45,7 +46,7 @@ export default function StaffDetailScreen() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -58,7 +59,7 @@ export default function StaffDetailScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     flex: 1,
@@ -385,7 +386,7 @@ export default function StaffDetailScreen() {
 
         <View style={{ gap: SPACING.sm }}>
           {groups.map((group) => (
-            <TouchableOpacity
+            <PressableScale
               key={group.id}
               onPress={() =>
                 navigateApp(router, 'org', { name: 'orgGroupDetails', groupId: group.id })
@@ -450,7 +451,7 @@ export default function StaffDetailScreen() {
                   </Text>
                 </View>
               </View>
-            </TouchableOpacity>
+            </PressableScale>
           ))}
         </View>
       </ScrollView>

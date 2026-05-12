@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -58,10 +59,10 @@ export default function MentorHome() {
                   ) : null}
                 </View>
                 {!isDesktop && (
-                  <TouchableOpacity style={styles.bellBtn}>
+                  <PressableScale style={styles.bellBtn}>
                     <Feather name="bell" size={20} color="white" />
                     <View style={styles.bellDot} />
-                  </TouchableOpacity>
+                  </PressableScale>
                 )}
               </View>
 
@@ -89,7 +90,7 @@ export default function MentorHome() {
                     {isAcceptingOrders ? 'Вы видны в поиске' : 'Режим отпуска'}
                   </Text>
                 </View>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => setIsAcceptingOrders(!isAcceptingOrders)}
                   style={[styles.switch, isAcceptingOrders && styles.switchActive]}
                 >
@@ -97,7 +98,7 @@ export default function MentorHome() {
                     animate={{ translateX: isAcceptingOrders ? 20 : 0 }}
                     style={styles.switchThumb}
                   />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             </SafeAreaView>
           </LinearGradient>
@@ -108,11 +109,11 @@ export default function MentorHome() {
           <View style={{ marginBottom: 32 }}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Задачи на сегодня</Text>
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => navigateApp(router, user?.role, { name: 'mentorSessions' })}
               >
                 <Text style={styles.viewAllBtn}>См. все</Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
             <View style={{ gap: 12 }}>
               {todayTasks.length === 0 && (
@@ -121,7 +122,7 @@ export default function MentorHome() {
                 </View>
               )}
               {todayTasks.map((task) => (
-                <TouchableOpacity
+                <PressableScale
                   key={task.id}
                   style={styles.taskCard}
                   onPress={() => {
@@ -154,7 +155,7 @@ export default function MentorHome() {
                   <View style={[styles.statusBadge, styles.statusWait]}>
                     <Text style={[styles.statusText, styles.statusWaitText]}>Ожидает</Text>
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               ))}
             </View>
           </View>
@@ -185,18 +186,18 @@ export default function MentorHome() {
                       </View>
                     </View>
                     <View style={{ flexDirection: 'row', gap: 8 }}>
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => respond(req.id, 'rejected')}
                         style={styles.actionBtnReject}
                       >
                         <Feather name="x" size={16} color="#EF4444" />
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                      </PressableScale>
+                      <PressableScale
                         onPress={() => respond(req.id, 'accepted')}
                         style={styles.actionBtnAccept}
                       >
                         <Feather name="check" size={16} color="#10B981" />
-                      </TouchableOpacity>
+                      </PressableScale>
                     </View>
                   </View>
                 ))}
@@ -206,7 +207,7 @@ export default function MentorHome() {
 
           {/* Quick Stats Widget */}
           <View style={styles.statsRow}>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'mentorWallet' })}
               style={styles.statInfoCard}
             >
@@ -217,7 +218,7 @@ export default function MentorHome() {
                 <Text style={styles.statInfoVal}>{formatKZT(walletSummary.periodRevenue)}</Text>
                 <Text style={styles.statInfoLabel}>Доход (мес)</Text>
               </View>
-            </TouchableOpacity>
+            </PressableScale>
             <View style={styles.statInfoCard}>
               <View style={[styles.statIconBox, { backgroundColor: '#EEF2FF' }]}>
                 <Feather name="users" size={18} color="#4F46E5" />

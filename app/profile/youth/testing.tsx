@@ -15,13 +15,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DiagnosticArchitects from '$components/diagnostic/DiagnosticArchitects';
 import DiagnosticCreators from '$components/diagnostic/DiagnosticCreators';
@@ -313,7 +308,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.back()}
               style={{
                 width: 44,
@@ -327,7 +322,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
               }}
             >
               <Feather name="arrow-left" size={20} color={COLORS.foreground} />
-            </TouchableOpacity>
+            </PressableScale>
             <Text
               style={{
                 fontSize: 22,
@@ -339,7 +334,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
               Тестирование
             </Text>
           </View>
-          <TouchableOpacity onPress={handleSkip}>
+          <PressableScale onPress={handleSkip}>
             <Text
               style={{
                 color: COLORS.mutedForeground,
@@ -349,7 +344,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             >
               Пропустить
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </SafeAreaView>
 
@@ -427,7 +422,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
             {current.answers.map((text, i) => {
               const active = answers[step] === i;
               return (
-                <TouchableOpacity
+                <PressableScale
                   key={text}
                   onPress={() => selectAnswer(i)}
                   style={{
@@ -449,12 +444,12 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
                   >
                     {text}
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               );
             })}
           </MotiView>
 
-          <TouchableOpacity
+          <PressableScale
             disabled={answers[step] === undefined}
             onPress={next}
             style={{ marginTop: 8 }}
@@ -483,7 +478,7 @@ Based on these answers, generate a JSON object matching this Diagnostic interfac
                 {step === QUESTIONS.length - 1 ? 'Завершить' : 'Следующий вопрос'}
               </Text>
             </LinearGradient>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </ScrollView>
     </View>

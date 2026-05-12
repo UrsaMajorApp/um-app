@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
 import { YouthPassModal } from '$components/home/youth/YouthPassModal';
@@ -107,7 +108,7 @@ export default function ChildHome() {
 
         <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 24, gap: 24 }}>
           <View style={{ flexDirection: 'row', gap: 12 }}>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => setPassVisible(true)}
               style={{
                 flex: 1,
@@ -136,9 +137,9 @@ export default function ChildHome() {
               <Text style={{ fontSize: 11, fontWeight: '900', color: COLORS.foreground }}>
                 МОЙ ПРОПУСК
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.push(appHref('/(tabs)/youth/games'))}
               style={{
                 flex: 1,
@@ -167,7 +168,7 @@ export default function ChildHome() {
               <Text style={{ fontSize: 11, fontWeight: '900', color: COLORS.foreground }}>
                 ИГРЫ
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
           <View
@@ -220,7 +221,7 @@ export default function ChildHome() {
                     </View>
                   ))}
                 </View>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.push('/profile/youth/results')}
                   style={{
                     marginTop: 4,
@@ -231,14 +232,14 @@ export default function ChildHome() {
                   }}
                 >
                   <Text style={{ color: 'white', fontWeight: '900' }}>Посмотреть карту</Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             ) : (
               <View style={{ gap: 14 }}>
                 <Text style={{ color: '#6B7280', fontSize: 13, lineHeight: 18 }}>
                   Пройди короткую диагностику, чтобы узнать свои сильные стороны.
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.push('/profile/youth/testing')}
                   style={{
                     backgroundColor: '#EEF2FF',
@@ -248,7 +249,7 @@ export default function ChildHome() {
                   }}
                 >
                   <Text style={{ color: COLORS.primary, fontWeight: '900' }}>Начать тест</Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             )}
           </View>
@@ -283,7 +284,7 @@ export default function ChildHome() {
             ) : (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {courses.slice(0, 4).map((course, index) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={course.id}
                     onPress={() => enrollmentRequests.openEnrollmentModal(course)}
                     style={{ width: 190, marginRight: 14, ...SHADOWS.sm }}
@@ -309,7 +310,7 @@ export default function ChildHome() {
                         </Text>
                       </View>
                     </LinearGradient>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </ScrollView>
             )}

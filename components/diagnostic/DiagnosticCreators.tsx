@@ -17,13 +17,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NovellaTask from '$components/diagnostic/creators/NovellaTask';
 import WYRCard from '$components/diagnostic/creators/WYRCard';
@@ -143,17 +138,17 @@ export default function DiagnosticCreators({ childId }: Props) {
               )}
             </View>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={engine.startBasic}
               activeOpacity={0.8}
               style={styles.startButton}
             >
               <Text style={styles.startButtonText}>Начать! ⚡</Text>
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
+            <PressableScale onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
               <Text style={styles.skipText}>Пропустить</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         </SafeAreaView>
       </LinearGradient>
@@ -185,7 +180,7 @@ export default function DiagnosticCreators({ childId }: Props) {
       <SafeAreaView edges={['top']} style={{ zIndex: 20 }}>
         <View style={[styles.header, { paddingHorizontal: hPad }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.back()}
               style={[styles.backBtn, isProPhase && styles.backBtnDark]}
             >
@@ -194,16 +189,16 @@ export default function DiagnosticCreators({ childId }: Props) {
                 size={20}
                 color={isProPhase ? 'white' : COLORS.foreground}
               />
-            </TouchableOpacity>
+            </PressableScale>
             <Text style={[styles.headerTitle, isProPhase && { color: 'white' }]}>
               {isProPhase ? '🔬 Тайна Лаборатории 404' : '⚡ Что выберешь?'}
             </Text>
           </View>
-          <TouchableOpacity onPress={handleSkip}>
+          <PressableScale onPress={handleSkip}>
             <Text style={[styles.skipHeader, isProPhase && { color: 'rgba(255,255,255,0.5)' }]}>
               Пропустить
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </SafeAreaView>
 

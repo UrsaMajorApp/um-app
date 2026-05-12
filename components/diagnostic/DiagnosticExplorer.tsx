@@ -11,13 +11,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BasicSwipeCard from '$components/diagnostic/BasicSwipeCard';
 import ProQuestTask from '$components/diagnostic/ProQuestTask';
@@ -171,7 +166,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
             transition={{ delay: 600, duration: 400 }}
             style={{ width: '100%', paddingHorizontal: 32, marginTop: 48 }}
           >
-            <TouchableOpacity
+            <PressableScale
               onPress={() => {
                 speak('Давай узнаем, что тебе нравится!');
                 engine.startBasic();
@@ -180,11 +175,11 @@ export default function DiagnosticExplorer({ childId }: Props) {
               style={styles.startButton}
             >
               <Text style={styles.startButtonText}>Начать! 🎮</Text>
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
+            <PressableScale onPress={handleSkip} style={{ alignItems: 'center', marginTop: 20 }}>
               <Text style={styles.skipText}>Пропустить</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         </SafeAreaView>
       </LinearGradient>
@@ -243,7 +238,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => {
                 stopSpeech();
                 router.back();
@@ -255,16 +250,16 @@ export default function DiagnosticExplorer({ childId }: Props) {
                 size={20}
                 color={isProPhase ? 'white' : COLORS.foreground}
               />
-            </TouchableOpacity>
+            </PressableScale>
             <Text style={[styles.headerTitle, isProPhase && { color: 'white' }]}>
               {isProPhase ? 'Космический квест 🚀' : 'Что тебе нравится?'}
             </Text>
           </View>
-          <TouchableOpacity onPress={handleSkip}>
+          <PressableScale onPress={handleSkip}>
             <Text style={[styles.skipTextHeader, isProPhase && { color: 'rgba(255,255,255,0.6)' }]}>
               Пропустить
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </SafeAreaView>
 
@@ -321,7 +316,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
       </ScrollView>
 
       {/* Replay audio FAB */}
-      <TouchableOpacity
+      <PressableScale
         onPress={() => {
           const text =
             engine.phase === 'basic'
@@ -333,7 +328,7 @@ export default function DiagnosticExplorer({ childId }: Props) {
         activeOpacity={0.7}
       >
         <Feather name="volume-2" size={22} color={isProPhase ? 'white' : COLORS.primary} />
-      </TouchableOpacity>
+      </PressableScale>
     </View>
   );
 }

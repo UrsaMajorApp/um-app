@@ -4,13 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+  Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GAMES, getDailyChallenge } from '$constants/games';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
@@ -131,7 +126,7 @@ export default function GamesLobby() {
           }}
         >
           {/* Daily Challenge Card */}
-          <TouchableOpacity
+          <PressableScale
             accessibilityRole="button"
             accessibilityLabel={`Открыть челлендж дня: ${dailyChallenge.title}`}
             activeOpacity={0.88}
@@ -207,7 +202,7 @@ export default function GamesLobby() {
                 </View>
               </View>
             </LinearGradient>
-          </TouchableOpacity>
+          </PressableScale>
 
           <Text
             style={{
@@ -229,7 +224,7 @@ export default function GamesLobby() {
             }}
           >
             {GAMES.map((game) => (
-              <TouchableOpacity
+              <PressableScale
                 key={game.id}
                 accessibilityRole="button"
                 accessibilityLabel={`Открыть игру: ${game.title}`}
@@ -296,7 +291,7 @@ export default function GamesLobby() {
                   </Text>
                   {game.locked && <Feather name="lock" size={12} color={COLORS.mutedForeground} />}
                 </View>
-              </TouchableOpacity>
+              </PressableScale>
             ))}
           </View>
 

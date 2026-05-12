@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -82,7 +83,7 @@ export default function ParentChildDetails() {
                 paddingBottom: 18,
               }}
             >
-              <Pressable
+              <PressableScale
                 onPress={() => {
                   if (router.canGoBack()) {
                     router.back();
@@ -101,7 +102,7 @@ export default function ParentChildDetails() {
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
-              </Pressable>
+              </PressableScale>
               <Text
                 style={{
                   flex: 1,
@@ -112,7 +113,7 @@ export default function ParentChildDetails() {
               >
                 Профиль
               </Text>
-              <Pressable
+              <PressableScale
                 onPress={() => setEditingChild(child)}
                 style={{
                   width: 40,
@@ -125,8 +126,8 @@ export default function ParentChildDetails() {
                 }}
               >
                 <Feather name="edit-2" size={18} color="white" />
-              </Pressable>
-              <Pressable
+              </PressableScale>
+              <PressableScale
                 onPress={confirmRemove}
                 style={{
                   width: 40,
@@ -138,7 +139,7 @@ export default function ParentChildDetails() {
                 }}
               >
                 <Feather name="trash-2" size={18} color="white" />
-              </Pressable>
+              </PressableScale>
             </View>
           </SafeAreaView>
         </LinearGradient>
@@ -277,7 +278,7 @@ export default function ParentChildDetails() {
                       Прохождение 1 раз в месяц для детальной корректировки профиля (навыки,
                       архетип).
                     </Text>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => {
                         setActiveChildId(child.id);
                         router.push({
@@ -290,7 +291,7 @@ export default function ParentChildDetails() {
                       <Text className="text-blue-600 font-black text-xs uppercase tracking-wide">
                         Начать тест
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
                   <View className="w-16 h-16 bg-blue-50 rounded-[20px] items-center justify-center border border-blue-100">
                     <Feather name="file-text" size={24} color="#3B82F6" />
@@ -355,7 +356,7 @@ export default function ParentChildDetails() {
                   {child.talentProfile.summary}
                 </Text>
 
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => {
                     setActiveChildId(child.id);
                     router.push('/profile/youth/results');
@@ -368,7 +369,7 @@ export default function ParentChildDetails() {
                     </Text>
                     <Feather name="external-link" size={14} color={COLORS.primary} />
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             )}
 
@@ -397,7 +398,7 @@ export default function ParentChildDetails() {
                 <Text className="text-white/60 text-sm leading-5 mb-6">
                   Пройдите глубокий тест способностей ребенка для открытия новых талантов.
                 </Text>
-                <Pressable
+                <PressableScale
                   onPress={() => {
                     setActiveChildId(child.id);
                     router.push({
@@ -408,7 +409,7 @@ export default function ParentChildDetails() {
                   className="bg-white h-14 rounded-2xl items-center justify-center active:bg-gray-100"
                 >
                   <Text className="text-gray-900 font-black text-sm uppercase">Начать тест</Text>
-                </Pressable>
+                </PressableScale>
               </View>
             )}
 
@@ -439,14 +440,14 @@ export default function ParentChildDetails() {
                   Откройте 100% потенциала: персональные рекомендации секций, трекинг с ментором и
                   детальная аналитика.
                 </Text>
-                <Pressable
+                <PressableScale
                   onPress={() => router.push('/profile/common/subscribe')}
                   className="bg-purple-500 h-14 rounded-2xl items-center justify-center active:bg-purple-600"
                 >
                   <Text className="text-white font-black text-sm uppercase tracking-wide">
                     🔥 Открыть все данные
                   </Text>
-                </Pressable>
+                </PressableScale>
               </View>
             )}
 

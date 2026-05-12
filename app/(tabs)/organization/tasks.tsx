@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -58,7 +59,7 @@ export default function OrgTasks() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -71,7 +72,7 @@ export default function OrgTasks() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.size.xl,
@@ -82,7 +83,7 @@ export default function OrgTasks() {
                 >
                   Задания
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => navigateApp(router, user?.role, { name: 'orgTaskCreate' })}
                   style={{
                     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -102,12 +103,12 @@ export default function OrgTasks() {
                   >
                     + СОЗДАТЬ
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-1 px-1">
                 {clubs.map((club) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={club.id}
                     onPress={() => setSelectedClub(club.id)}
                     style={{
@@ -130,7 +131,7 @@ export default function OrgTasks() {
                     >
                       {club.name}
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </ScrollView>
             </View>
@@ -168,7 +169,7 @@ export default function OrgTasks() {
               animate={{ opacity: 1, translateY: 0 }}
               transition={{ delay: idx * 100 }}
             >
-              <TouchableOpacity
+              <PressableScale
                 style={{
                   ...SHADOWS.strict,
                   backgroundColor: COLORS.white,
@@ -369,7 +370,7 @@ export default function OrgTasks() {
                 </View>
 
                 <View style={{ flexDirection: 'row', gap: SPACING.md }}>
-                  <TouchableOpacity
+                  <PressableScale
                     style={{
                       flex: 1,
                       height: 48,
@@ -388,8 +389,8 @@ export default function OrgTasks() {
                     >
                       ПОДРОБНЕЕ
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </PressableScale>
+                  <PressableScale
                     style={{
                       width: 48,
                       height: 48,
@@ -402,9 +403,9 @@ export default function OrgTasks() {
                     }}
                   >
                     <Feather name="trash-2" size={18} color={COLORS.destructive} />
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
-              </TouchableOpacity>
+              </PressableScale>
             </MotiView>
           );
         })}

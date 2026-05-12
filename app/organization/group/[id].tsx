@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications, useOrgGroupById } from '$hooks/useOrgData';
@@ -46,7 +47,7 @@ export default function GroupDetailScreen() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -58,7 +59,7 @@ export default function GroupDetailScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     flex: 1,
@@ -70,7 +71,7 @@ export default function GroupDetailScreen() {
                 >
                   Детали группы
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => navigateApp(router, 'org', { name: 'orgGroupEdit', groupId: id })}
                   style={{
                     width: 44,
@@ -82,7 +83,7 @@ export default function GroupDetailScreen() {
                   }}
                 >
                   <Feather name="settings" size={18} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <MotiView
@@ -239,7 +240,7 @@ export default function GroupDetailScreen() {
           >
             Список учеников
           </Text>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => navigateApp(router, 'org', { name: 'orgGroupAttendance', groupId: id })}
             style={{
               backgroundColor: 'rgba(108, 92, 231, 0.1)',
@@ -257,7 +258,7 @@ export default function GroupDetailScreen() {
             >
               ПОСЕЩАЕМОСТЬ
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         {!loading && students.length === 0 && (
@@ -284,7 +285,7 @@ export default function GroupDetailScreen() {
               animate={{ opacity: 1, translateY: 0 }}
               transition={{ delay: idx * 50 }}
             >
-              <TouchableOpacity
+              <PressableScale
                 onPress={() =>
                   navigateApp(router, 'org', {
                     name: 'orgStudentDetails',
@@ -345,7 +346,7 @@ export default function GroupDetailScreen() {
                     </Text>
                   </View>
                 </View>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() =>
                     navigateApp(router, 'org', {
                       name: 'orgStudentFeedback',
@@ -372,8 +373,8 @@ export default function GroupDetailScreen() {
                   >
                     Отзыв
                   </Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
+                </PressableScale>
+              </PressableScale>
             </MotiView>
           ))}
         </View>

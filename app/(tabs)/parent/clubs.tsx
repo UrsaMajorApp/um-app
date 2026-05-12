@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+  ActivityIndicator, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CLUB_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -130,9 +124,9 @@ export default function ParentClubs() {
                   style={{ flex: 1, color: 'white', fontWeight: '500' }}
                 />
                 {search.length > 0 && (
-                  <Pressable onPress={() => setSearch('')}>
+                  <PressableScale onPress={() => setSearch('')}>
                     <Feather name="x" size={16} color="rgba(255,255,255,0.6)" />
-                  </Pressable>
+                  </PressableScale>
                 )}
               </View>
             </View>
@@ -155,7 +149,7 @@ export default function ParentClubs() {
           style={{ marginBottom: 24, marginHorizontal: -4 }}
         >
           {CLUB_SKILL_FILTERS.map((skill) => (
-            <Pressable
+            <PressableScale
               key={skill}
               onPress={() => setActiveSkill(skill)}
               style={{
@@ -177,7 +171,7 @@ export default function ParentClubs() {
               >
                 {skill}
               </Text>
-            </Pressable>
+            </PressableScale>
           ))}
         </ScrollView>
 
@@ -274,7 +268,7 @@ export default function ParentClubs() {
                 {recommendedCourses.map((club, idx) => {
                   const grad = courseGradient(idx);
                   return (
-                    <Pressable
+                    <PressableScale
                       key={club.id}
                       onPress={() =>
                         navigateApp(router, 'parent', { name: 'courseDetails', courseId: club.id })
@@ -380,7 +374,7 @@ export default function ParentClubs() {
                           </View>
                         </View>
                       </View>
-                    </Pressable>
+                    </PressableScale>
                   );
                 })}
               </ScrollView>
@@ -410,7 +404,7 @@ export default function ParentClubs() {
               {filtered.map((club, idx) => {
                 const [color] = courseGradient(idx);
                 return (
-                  <Pressable
+                  <PressableScale
                     key={club.id}
                     onPress={() =>
                       navigateApp(router, 'parent', { name: 'courseDetails', courseId: club.id })
@@ -529,7 +523,7 @@ export default function ParentClubs() {
                         </Text>
                       ) : null}
                     </View>
-                  </Pressable>
+                  </PressableScale>
                 );
               })}
             </View>

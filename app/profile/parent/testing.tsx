@@ -3,7 +3,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { LAYOUT } from '$constants/theme';
 import { useOnboardingQuestions } from '$hooks/usePlatformData';
 import { useIsDesktop } from '$lib/useIsDesktop';
@@ -139,7 +140,7 @@ export default function ParentTesting() {
             {current.answers.map((text, i) => {
               const active = answers[step] === i;
               return (
-                <TouchableOpacity
+                <PressableScale
                   key={text}
                   onPress={() => selectAnswer(i)}
                   style={{
@@ -160,13 +161,13 @@ export default function ParentTesting() {
                   >
                     {text}
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               );
             })}
           </MotiView>
 
           {/* BUTTON */}
-          <TouchableOpacity
+          <PressableScale
             disabled={answers[step] === undefined}
             onPress={next}
             style={{
@@ -185,7 +186,7 @@ export default function ParentTesting() {
             >
               {step === questions.length - 1 ? 'Завершить' : 'Следующий вопрос'}
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </ScrollView>
     </LinearGradient>

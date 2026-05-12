@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useMemo } from 'react';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
@@ -67,7 +68,7 @@ export default function CourseDetailScreen() {
         >
           Курс не найден
         </Text>
-        <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 20 }}>
+        <PressableScale onPress={() => router.back()} style={{ marginTop: 20 }}>
           <Text
             style={{
               color: COLORS.primary,
@@ -76,7 +77,7 @@ export default function CourseDetailScreen() {
           >
             Назад
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     );
   }
@@ -106,7 +107,7 @@ export default function CourseDetailScreen() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -119,7 +120,7 @@ export default function CourseDetailScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     flex: 1,
@@ -130,7 +131,7 @@ export default function CourseDetailScreen() {
                 >
                   Детали курса
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   onPress={() =>
                     navigateApp(router, 'org', { name: 'orgCourseEdit', courseId: id })
                   }
@@ -144,7 +145,7 @@ export default function CourseDetailScreen() {
                   }}
                 >
                   <Feather name="edit-2" size={18} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <View>
@@ -351,7 +352,7 @@ export default function CourseDetailScreen() {
           >
             Группы курса
           </Text>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => navigateApp(router, 'org', { name: 'orgGroupCreate', courseId: id })}
           >
             <Text
@@ -362,7 +363,7 @@ export default function CourseDetailScreen() {
             >
               + Добавить
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         {courseGroups.length === 0 ? (
@@ -391,7 +392,7 @@ export default function CourseDetailScreen() {
         ) : (
           <View style={{ gap: SPACING.sm }}>
             {courseGroups.map((group) => (
-              <TouchableOpacity
+              <PressableScale
                 key={group.id}
                 onPress={() =>
                   navigateApp(router, 'org', { name: 'orgGroupDetails', groupId: group.id })
@@ -468,7 +469,7 @@ export default function CourseDetailScreen() {
                     </Text>
                   </View>
                 </View>
-              </TouchableOpacity>
+              </PressableScale>
             ))}
           </View>
         )}

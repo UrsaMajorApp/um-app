@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -70,7 +64,7 @@ export default function TeacherHome() {
                   <ActivityIndicator size="small" color="white" />
                 </View>
               ) : nextGroup ? (
-                <TouchableOpacity
+                <PressableScale
                   activeOpacity={0.9}
                   onPress={() =>
                     navigateApp(router, user?.role, {
@@ -103,7 +97,7 @@ export default function TeacherHome() {
                       <Text style={styles.startButtonText}>Журнал</Text>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               ) : (
                 <View>
                   <Text style={styles.lessonTitle}>Групп пока нет</Text>
@@ -123,7 +117,7 @@ export default function TeacherHome() {
       >
         {/* Quick Actions */}
         <View style={styles.quickActions}>
-          <TouchableOpacity
+          <PressableScale
             style={styles.actionCard}
             onPress={() => navigateApp(router, user?.role, { name: 'teacherGroups' })}
           >
@@ -131,16 +125,16 @@ export default function TeacherHome() {
               <Feather name="users" size={24} color="#6C5CE7" />
             </View>
             <Text style={styles.actionLabel}>Мои группы</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Расписание групп</Text>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => navigateApp(router, user?.role, { name: 'teacherGroups' })}
           >
             <Text style={styles.seeAll}>Весь план</Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         <View style={styles.lessonList}>
@@ -173,7 +167,7 @@ export default function TeacherHome() {
                   <Text style={styles.scheduleTime}>{scheduleTimeLabel(item.schedule)}</Text>
                   <View style={styles.timeDot} />
                 </View>
-                <TouchableOpacity
+                <PressableScale
                   style={styles.scheduleCard}
                   onPress={() =>
                     navigateApp(router, user?.role, { name: 'teacherJournal', groupId: item.id })
@@ -187,7 +181,7 @@ export default function TeacherHome() {
                     </Text>
                   </View>
                   <Feather name="chevron-right" size={18} color="#C7C7CC" />
-                </TouchableOpacity>
+                </PressableScale>
               </MotiView>
             ))}
         </View>

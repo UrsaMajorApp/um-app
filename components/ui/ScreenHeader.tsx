@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import type React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS } from '$constants/theme';
 
@@ -42,7 +43,7 @@ export default function ScreenHeader({
       }}
     >
       {onBack ? (
-        <Pressable
+        <PressableScale
           onPress={onBack}
           style={{
             width: 42,
@@ -59,7 +60,7 @@ export default function ScreenHeader({
             size={isSurface ? 26 : 22}
             color={isSurface ? COLORS.foreground : 'white'}
           />
-        </Pressable>
+        </PressableScale>
       ) : null}
       <Text
         style={{

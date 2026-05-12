@@ -1,6 +1,7 @@
 // FullCourseBookingModal: собирает данные полной записи ребенка на выбранный курс.
 import { Feather } from '@expo/vector-icons';
-import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
 import type { OrgGroup } from '$hooks/useOrgData';
 import type { Child } from '$types/child';
@@ -62,7 +63,7 @@ export function FullCourseBookingModal({
             >
               Запись на полный курс
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={onClose}
               style={{
                 width: 36,
@@ -72,7 +73,7 @@ export function FullCourseBookingModal({
               }}
             >
               <Feather name="x" size={22} color={COLORS.mutedForeground} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
           {activeChild && (
@@ -139,7 +140,7 @@ export function FullCourseBookingModal({
           {groups.length > 0 ? (
             <ScrollView style={{ maxHeight: 220 }} showsVerticalScrollIndicator={false}>
               {groups.map((group) => (
-                <Pressable
+                <PressableScale
                   key={group.id}
                   onPress={() => onSelectGroup(group.id)}
                   style={{
@@ -210,7 +211,7 @@ export function FullCourseBookingModal({
                       />
                     )}
                   </View>
-                </Pressable>
+                </PressableScale>
               ))}
             </ScrollView>
           ) : (
@@ -234,7 +235,7 @@ export function FullCourseBookingModal({
             </View>
           )}
 
-          <TouchableOpacity
+          <PressableScale
             disabled={applying || (groups.length > 0 && !selectedGroupId)}
             onPress={onConfirm}
             style={{
@@ -255,7 +256,7 @@ export function FullCourseBookingModal({
             >
               {applying ? 'Отправка...' : 'Подтвердить заявку'}
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </View>
     </Modal>

@@ -4,15 +4,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { FormCard } from '$components/ui/form/FormCard';
 import { LabeledTextInput } from '$components/ui/form/LabeledTextInput';
 import { PrimaryActionButton } from '$components/ui/form/PrimaryActionButton';
@@ -188,7 +181,7 @@ export default function CourseEditScreen() {
                   }}
                 >
                   {LEVEL_OPTIONS.map((opt) => (
-                    <TouchableOpacity
+                    <PressableScale
                       key={opt.value}
                       onPress={() => setLevel(opt.value)}
                       style={{
@@ -210,7 +203,7 @@ export default function CourseEditScreen() {
                       >
                         {opt.label.toUpperCase()}
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   ))}
                 </View>
               </View>
@@ -225,7 +218,7 @@ export default function CourseEditScreen() {
                   }}
                 >
                   {STATUS_OPTIONS.map((opt) => (
-                    <TouchableOpacity
+                    <PressableScale
                       key={opt.value}
                       onPress={() => setStatus(opt.value)}
                       style={{
@@ -248,7 +241,7 @@ export default function CourseEditScreen() {
                       >
                         {opt.label.toUpperCase()}
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   ))}
                 </View>
               </View>
@@ -266,7 +259,7 @@ export default function CourseEditScreen() {
                 }}
               >
                 {ICON_OPTIONS.map((ic) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={ic}
                     onPress={() => setIcon(ic)}
                     style={{
@@ -285,7 +278,7 @@ export default function CourseEditScreen() {
                       size={20}
                       color={icon === ic ? COLORS.primary : COLORS.mutedForeground}
                     />
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </View>
             </FormCard>
@@ -304,7 +297,7 @@ export default function CourseEditScreen() {
                 {SKILL_OPTIONS.map((skill) => {
                   const selected = skills.includes(skill);
                   return (
-                    <TouchableOpacity
+                    <PressableScale
                       key={skill}
                       onPress={() => toggleSkill(skill)}
                       style={{
@@ -325,7 +318,7 @@ export default function CourseEditScreen() {
                       >
                         {skill.toUpperCase()}
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   );
                 })}
               </View>
@@ -337,7 +330,7 @@ export default function CourseEditScreen() {
             </PrimaryActionButton>
 
             {/* Delete */}
-            <TouchableOpacity
+            <PressableScale
               onPress={handleDelete}
               style={{
                 height: 56,
@@ -356,7 +349,7 @@ export default function CourseEditScreen() {
               >
                 УДАЛИТЬ КУРС
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         </ScrollView>
       </KeyboardAvoidingView>

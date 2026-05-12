@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import {
@@ -75,7 +76,7 @@ export default function MentorGroupDetail() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -88,7 +89,7 @@ export default function MentorGroupDetail() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <View>
                   <Text
                     style={{
@@ -181,7 +182,7 @@ export default function MentorGroupDetail() {
             {members.map((s) => {
               const status = getStatusColor(s.id);
               return (
-                <TouchableOpacity
+                <PressableScale
                   key={s.id}
                   onPress={() =>
                     navigateApp(router, 'mentor', {
@@ -254,7 +255,7 @@ export default function MentorGroupDetail() {
                       ...SHADOWS.sm,
                     }}
                   />
-                </TouchableOpacity>
+                </PressableScale>
               );
             })}
           </View>

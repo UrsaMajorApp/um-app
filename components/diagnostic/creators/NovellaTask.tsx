@@ -8,7 +8,8 @@
  */
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import {
   CREATORS_NOVELLA_ACT_LABELS,
   CREATORS_NOVELLA_SPEAKER_CONFIG,
@@ -81,7 +82,7 @@ export default function NovellaTask({ task, index, total, onAnswer }: Props) {
                 delay: 200 + i * 80,
               }}
             >
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => onAnswer(opt.id)}
                 activeOpacity={0.75}
                 style={styles.optionButton}
@@ -97,7 +98,7 @@ export default function NovellaTask({ task, index, total, onAnswer }: Props) {
                     <Text style={styles.optionText}>{opt.label}</Text>
                   </View>
                 </LinearGradient>
-              </TouchableOpacity>
+              </PressableScale>
             </MotiView>
           ))}
         </View>

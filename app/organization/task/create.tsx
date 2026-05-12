@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { FormCard } from '$components/ui/form/FormCard';
 import { LabeledTextInput } from '$components/ui/form/LabeledTextInput';
 import { PrimaryActionButton } from '$components/ui/form/PrimaryActionButton';
@@ -98,7 +99,7 @@ export default function TaskCreateScreen() {
                 >
                   Срок выполнения
                 </Text>
-                <TouchableOpacity
+                <PressableScale
                   style={{
                     height: 56,
                     backgroundColor: COLORS.background,
@@ -121,7 +122,7 @@ export default function TaskCreateScreen() {
                     {formData.dueDate || 'Выберите дату'}
                   </Text>
                   <Feather name="calendar" size={18} color={COLORS.primary} />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
             </View>
           </FormCard>

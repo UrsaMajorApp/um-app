@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { appHref } from '$lib/router';
@@ -112,7 +113,7 @@ export default function MentorStatusPage() {
             >
               DEV Режим
             </Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.replace(appHref('/(tabs)/mentor'))}
               style={{
                 width: '100%',
@@ -132,9 +133,9 @@ export default function MentorStatusPage() {
               >
                 Перейти на дашборд ментора
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.replace('/login')}
               style={{
                 width: '100%',
@@ -151,7 +152,7 @@ export default function MentorStatusPage() {
               >
                 Вернуться на главную
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </SafeAreaView>

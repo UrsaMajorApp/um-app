@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
@@ -56,7 +57,7 @@ export default function OrgAttendance() {
                 marginBottom: 16,
               }}
             >
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => router.back()}
                 style={{
                   width: 40,
@@ -69,13 +70,13 @@ export default function OrgAttendance() {
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
               <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Посещаемость</Text>
             </View>
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {clubs.map((club) => (
-                <TouchableOpacity
+                <PressableScale
                   key={club.id}
                   onPress={() => setSelectedClub(club.id)}
                   style={{
@@ -97,7 +98,7 @@ export default function OrgAttendance() {
                   >
                     {club.name}
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               ))}
             </ScrollView>
           </View>

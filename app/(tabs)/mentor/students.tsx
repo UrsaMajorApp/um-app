@@ -5,15 +5,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import {
-  FlatList,
-  type ListRenderItem,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  FlatList, type ListRenderItem, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import {
@@ -68,7 +61,7 @@ export default function MentorStudentsScreen() {
         style={styles.card}
       >
         {/* Student Info Header */}
-        <TouchableOpacity
+        <PressableScale
           activeOpacity={0.9}
           onPress={() =>
             navigateApp(router, 'mentor', {
@@ -121,7 +114,7 @@ export default function MentorStudentsScreen() {
             </View>
           </View>
           <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
-        </TouchableOpacity>
+        </PressableScale>
 
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
@@ -141,10 +134,10 @@ export default function MentorStudentsScreen() {
         </View>
 
         {/* Chat Button */}
-        <TouchableOpacity style={styles.chatBtn} onPress={() => router.push('/(tabs)/chats')}>
+        <PressableScale style={styles.chatBtn} onPress={() => router.push('/(tabs)/chats')}>
           <Feather name="message-circle" size={18} color="white" />
           <Text style={styles.chatBtnText}>Перейти в диалог</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </MotiView>
     );
   };

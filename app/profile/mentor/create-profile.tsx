@@ -6,17 +6,8 @@ import { StatusBar } from 'expo-status-bar';
 import { AnimatePresence, MotiView } from 'moti';
 import { useState } from 'react';
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  type TextInputProps,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, type TextInputProps, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApprovalPendingSuccessView } from '$components/profile/ApprovalPendingSuccessView';
 import {
@@ -236,7 +227,7 @@ export default function MentorCreateProfile() {
                   marginBottom: 24,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={handleBack}
                   style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
@@ -251,7 +242,7 @@ export default function MentorCreateProfile() {
                   >
                     Назад
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
 
                 {/* Step dots: 3 steps shown as dots 1–3, last dot active for current step */}
                 <View style={{ flexDirection: 'row', gap: 6 }}>
@@ -339,7 +330,7 @@ export default function MentorCreateProfile() {
                           }}
                         >
                           <Feather name="camera" size={28} color={COLORS.mutedForeground} />
-                          <TouchableOpacity
+                          <PressableScale
                             style={{
                               position: 'absolute',
                               bottom: 0,
@@ -355,7 +346,7 @@ export default function MentorCreateProfile() {
                             }}
                           >
                             <Feather name="plus" size={16} color="white" />
-                          </TouchableOpacity>
+                          </PressableScale>
                         </View>
                         <Text
                           style={{
@@ -385,7 +376,7 @@ export default function MentorCreateProfile() {
                         {CITIES.map((c) => {
                           const active = formData.city === c;
                           return (
-                            <TouchableOpacity
+                            <PressableScale
                               key={c}
                               onPress={() => setFormData({ ...formData, city: c })}
                               style={{
@@ -406,7 +397,7 @@ export default function MentorCreateProfile() {
                               >
                                 {c}
                               </Text>
-                            </TouchableOpacity>
+                            </PressableScale>
                           );
                         })}
                       </ScrollView>
@@ -423,7 +414,7 @@ export default function MentorCreateProfile() {
                         {['Казахский', 'Русский', 'Английский'].map((l) => {
                           const active = formData.languages.includes(l);
                           return (
-                            <TouchableOpacity
+                            <PressableScale
                               key={l}
                               onPress={() => toggleLanguage(l)}
                               style={{
@@ -444,7 +435,7 @@ export default function MentorCreateProfile() {
                               >
                                 {l}
                               </Text>
-                            </TouchableOpacity>
+                            </PressableScale>
                           );
                         })}
                       </View>
@@ -463,7 +454,7 @@ export default function MentorCreateProfile() {
                         {SPECIALIZATIONS.map((s) => {
                           const active = formData.specialization === s;
                           return (
-                            <TouchableOpacity
+                            <PressableScale
                               key={s}
                               onPress={() => setFormData({ ...formData, specialization: s })}
                               style={{
@@ -487,7 +478,7 @@ export default function MentorCreateProfile() {
                                 {s}
                               </Text>
                               {active && <Feather name="check" size={18} color="white" />}
-                            </TouchableOpacity>
+                            </PressableScale>
                           );
                         })}
                       </View>
@@ -540,7 +531,7 @@ export default function MentorCreateProfile() {
                         {PREDEFINED_SKILLS.map((s) => {
                           const active = formData.skills.includes(s);
                           return (
-                            <TouchableOpacity
+                            <PressableScale
                               key={s}
                               onPress={() => toggleSkill(s)}
                               style={{
@@ -561,7 +552,7 @@ export default function MentorCreateProfile() {
                               >
                                 {s}
                               </Text>
-                            </TouchableOpacity>
+                            </PressableScale>
                           );
                         })}
                       </View>
@@ -603,7 +594,7 @@ export default function MentorCreateProfile() {
                             </Text>
                           )}
                         </View>
-                        <TouchableOpacity
+                        <PressableScale
                           onPress={addCustomSkill}
                           style={{
                             width: 50,
@@ -616,10 +607,10 @@ export default function MentorCreateProfile() {
                           }}
                         >
                           <Feather name="plus" size={20} color="white" />
-                        </TouchableOpacity>
+                        </PressableScale>
                       </View>
 
-                      <TouchableOpacity
+                      <PressableScale
                         style={{
                           flexDirection: 'row',
                           alignItems: 'center',
@@ -642,7 +633,7 @@ export default function MentorCreateProfile() {
                         >
                           Диплом/сертификат (PDF, JPG)
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     </MotiView>
                   )}
 
@@ -714,7 +705,7 @@ export default function MentorCreateProfile() {
               </View>
 
               {/* Action Button */}
-              <TouchableOpacity
+              <PressableScale
                 onPress={currentStep < 3 ? () => setCurrentStep((s) => s + 1) : handleSubmit}
                 disabled={!isCurrentStepValid || submitting}
                 style={{ marginTop: 24, marginBottom: 40 }}
@@ -744,7 +735,7 @@ export default function MentorCreateProfile() {
                     </Text>
                   )}
                 </LinearGradient>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </ScrollView>
         </SafeAreaView>

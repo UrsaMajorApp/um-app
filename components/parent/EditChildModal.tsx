@@ -2,14 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
-  Modal,
-  Pressable,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+  Modal, Pressable, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SHADOWS, SPACING } from '$constants/theme';
 import { isWebMinWidth } from '$lib/useIsDesktop';
 import type { Child } from '$types/child';
@@ -137,7 +131,7 @@ export default function EditChildModal({
           />
 
           <View style={{ flexDirection: 'row', gap: 12 }}>
-            <TouchableOpacity
+            <PressableScale
               onPress={onClose}
               style={{
                 flex: 1,
@@ -149,8 +143,8 @@ export default function EditChildModal({
               }}
             >
               <Text style={{ color: COLORS.foreground, fontWeight: '600' }}>Отмена</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </PressableScale>
+            <PressableScale
               onPress={handleSave}
               style={{
                 flex: 1,
@@ -161,7 +155,7 @@ export default function EditChildModal({
               }}
             >
               <Text style={{ color: 'white', fontWeight: '700' }}>Сохранить</Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </Pressable>
       </Pressable>

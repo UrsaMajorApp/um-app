@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useYouthGoals } from '$hooks/useStudentData';
@@ -36,7 +37,7 @@ export default function YouthGoals() {
                 marginBottom: 20,
               }}
             >
-              <Pressable
+              <PressableScale
                 onPress={() => router.back()}
                 style={{
                   width: 40,
@@ -49,7 +50,7 @@ export default function YouthGoals() {
                 }}
               >
                 <Feather name="arrow-left" size={20} color="white" />
-              </Pressable>
+              </PressableScale>
               <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Мои цели</Text>
             </View>
             <Text
@@ -75,10 +76,10 @@ export default function YouthGoals() {
         showsVerticalScrollIndicator={false}
       >
         {/* Add Goal Button */}
-        <Pressable className="h-16 rounded-3xl border-2 border-dashed border-gray-200 items-center justify-center flex-row gap-3 mb-8">
+        <PressableScale className="h-16 rounded-3xl border-2 border-dashed border-gray-200 items-center justify-center flex-row gap-3 mb-8">
           <Feather name="plus-circle" size={20} color={COLORS.mutedForeground} />
           <Text className="font-bold text-gray-500">Добавить новую цель</Text>
-        </Pressable>
+        </PressableScale>
 
         {loading && (
           <Text
@@ -145,9 +146,9 @@ export default function YouthGoals() {
                 ))}
               </View>
 
-              <Pressable className="h-12 bg-gray-50 rounded-xl items-center justify-center">
+              <PressableScale className="h-12 bg-gray-50 rounded-xl items-center justify-center">
                 <Text className="text-gray-500 font-bold text-sm">Редактировать шаги</Text>
-              </Pressable>
+              </PressableScale>
             </View>
           ))}
 

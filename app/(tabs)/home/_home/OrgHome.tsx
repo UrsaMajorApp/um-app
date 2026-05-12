@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ORG_HOME_QUICK_ACTIONS } from '$constants/dashboard';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
@@ -111,7 +112,7 @@ export default function OrgHome() {
                       {orgName || 'Моя организация'}
                     </Text>
                   </View>
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
                     style={{
                       width: 52,
@@ -125,7 +126,7 @@ export default function OrgHome() {
                     }}
                   >
                     <Feather name="settings" size={22} color="white" />
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
 
                 {/* Sub-header Context Chips */}
@@ -200,7 +201,7 @@ export default function OrgHome() {
               marginBottom: 8,
             }}
           >
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgVerification' })}
               activeOpacity={0.92}
               style={{
@@ -280,7 +281,7 @@ export default function OrgHome() {
                   </View>
                 </View>
               </View>
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         )}
 
@@ -294,7 +295,7 @@ export default function OrgHome() {
               marginBottom: 8,
             }}
           >
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
               activeOpacity={0.9}
               style={{
@@ -330,7 +331,7 @@ export default function OrgHome() {
                 </Text>
               </View>
               <Feather name="chevron-right" size={20} color="#854D0E" />
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         )}
 
@@ -344,7 +345,7 @@ export default function OrgHome() {
               marginBottom: 8,
             }}
           >
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgVerification' })}
               activeOpacity={0.92}
               style={{
@@ -379,7 +380,7 @@ export default function OrgHome() {
                 </Text>
               </View>
               <Feather name="chevron-right" size={18} color="#B91C1C" />
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         )}
 
@@ -538,7 +539,7 @@ export default function OrgHome() {
                     borderColor: COLORS.border,
                   }}
                 >
-                  <Pressable onPress={() => navigateApp(router, user?.role, item.route)}>
+                  <PressableScale onPress={() => navigateApp(router, user?.role, item.route)}>
                     <View
                       style={{
                         backgroundColor: `${item.color}10`,
@@ -585,7 +586,7 @@ export default function OrgHome() {
                         <Text className="text-[10px] font-black text-white">{badge}</Text>
                       </View>
                     )}
-                  </Pressable>
+                  </PressableScale>
                 </MotiView>
               );
             })}
@@ -675,11 +676,11 @@ export default function OrgHome() {
                 </Text>
               </View>
             )}
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgSchedule' })}
             >
               <Feather name="chevron-right" size={20} color={COLORS.mutedForeground} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
         {/* Finance - Premium System Widget */}
@@ -742,9 +743,9 @@ export default function OrgHome() {
                   Баланс текущего месяца
                 </Text>
               </View>
-              <TouchableOpacity className="w-12 h-12 bg-gray-50 rounded-full items-center justify-center border border-gray-100">
+              <PressableScale className="w-12 h-12 bg-gray-50 rounded-full items-center justify-center border border-gray-100">
                 <Feather name="external-link" size={18} color={COLORS.mutedForeground} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
 
             <View className="bg-gray-50/50 rounded-2xl p-5 border border-gray-100 mb-6">
@@ -768,14 +769,14 @@ export default function OrgHome() {
               </View>
             </View>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgWallet' })}
               className="bg-gray-900 py-4 rounded-2xl items-center shadow-sm"
             >
               <Text className="text-white font-bold uppercase tracking-widest text-xs">
                 Вывод средств
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </MotiView>
         </View>
 
@@ -793,7 +794,7 @@ export default function OrgHome() {
             Центр создания
           </Text>
           <View className="flex-row gap-4">
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
               activeOpacity={0.9}
               style={{
@@ -823,9 +824,9 @@ export default function OrgHome() {
               <Text className="text-white/60 text-[10px] font-bold uppercase mt-1 tracking-wider">
                 Программа
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
               activeOpacity={0.9}
               style={{
@@ -855,7 +856,7 @@ export default function OrgHome() {
               <Text className="text-white/60 text-[10px] font-bold uppercase mt-1 tracking-wider">
                 Доступ
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </ScrollView>

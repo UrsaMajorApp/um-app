@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
 import { YouthPassModal } from '$components/home/youth/YouthPassModal';
@@ -119,14 +120,14 @@ export default function YouthHome() {
                     {diagnostic ? 'Профиль готов' : 'Диагностика не пройдена'}
                   </Text>
                 </View>
-                <Pressable
+                <PressableScale
                   onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
                   className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
                 >
                   <View className="w-full h-full bg-white/20 items-center justify-center">
                     <Feather name="user" size={20} color="white" />
                   </View>
-                </Pressable>
+                </PressableScale>
               </View>
             </View>
           </SafeAreaView>
@@ -143,7 +144,7 @@ export default function YouthHome() {
       >
         <View className="flex-row gap-3 mb-8">
           {quickActions.map((action) => (
-            <Pressable
+            <PressableScale
               key={action.route}
               onPress={() =>
                 action.route === '#qr' ? setPassVisible(true) : router.push(appHref(action.route))
@@ -160,7 +161,7 @@ export default function YouthHome() {
               <Text className="text-[10px] font-black text-gray-800 uppercase text-center">
                 {action.label}
               </Text>
-            </Pressable>
+            </PressableScale>
           ))}
         </View>
 
@@ -185,14 +186,14 @@ export default function YouthHome() {
                   Я проанализировал твой тест. У тебя высокий потенциал в {currentSkills[0].label}.
                   Хочешь знать больше?
                 </Text>
-                <Pressable
+                <PressableScale
                   onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
                   className="mt-3"
                 >
                   <Text className="text-blue-600 font-black text-[10px] uppercase underline">
                     открыть про аналитику
                   </Text>
-                </Pressable>
+                </PressableScale>
               </View>
             </View>
           </View>
@@ -209,9 +210,9 @@ export default function YouthHome() {
               <Text className="text-lg font-bold text-gray-900">Мои результаты</Text>
             </View>
             {diagnostic && (
-              <Pressable onPress={() => router.push('/profile/youth/results')}>
+              <PressableScale onPress={() => router.push('/profile/youth/results')}>
                 <Text className="text-primary font-bold text-xs">Все детали</Text>
-              </Pressable>
+              </PressableScale>
             )}
           </View>
 
@@ -243,7 +244,7 @@ export default function YouthHome() {
           {/* Big Testing Status */}
           <View className="mt-6 pt-6 border-t border-gray-100">
             {isPro ? (
-              <Pressable
+              <PressableScale
                 onPress={() => {
                   router.push({
                     pathname: '/profile/youth/testing',
@@ -254,7 +255,7 @@ export default function YouthHome() {
               >
                 <Feather name="zap" size={18} color="white" />
                 <Text className="text-white font-bold">Пройти Большое Исследование</Text>
-              </Pressable>
+              </PressableScale>
             ) : (
               <View className="bg-gray-50 p-4 rounded-2xl border border-gray-200">
                 <View className="flex-row items-center gap-2 mb-2">
@@ -265,12 +266,12 @@ export default function YouthHome() {
                   Хочешь узнать свою суперсилу и скрытые таланты? Попроси родителей активировать
                   PRO-доступ!
                 </Text>
-                <Pressable
+                <PressableScale
                   onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
                   className="bg-white py-2 px-4 rounded-xl self-start border border-gray-200"
                 >
                   <Text className="text-gray-700 font-bold text-xs">Подробнее о PRO</Text>
-                </Pressable>
+                </PressableScale>
               </View>
             )}
           </View>
@@ -368,7 +369,7 @@ export default function YouthHome() {
                           {rec.org_name}
                         </Text>
                       ) : null}
-                      <Pressable
+                      <PressableScale
                         onPress={() => enrollmentRequests.openEnrollmentModal(rec)}
                         style={{
                           backgroundColor: '#EDE9FE',
@@ -387,7 +388,7 @@ export default function YouthHome() {
                         >
                           {isIndependent ? 'Записаться' : 'Хочу сюда'}
                         </Text>
-                      </Pressable>
+                      </PressableScale>
                     </View>
                   </View>
                 );
@@ -412,9 +413,9 @@ export default function YouthHome() {
                 <Text className="text-xs text-gray-500 mb-3" leading-4>
                   Обсудите результаты тестирования и план развития на звонке.
                 </Text>
-                <TouchableOpacity className="bg-amber-50 py-2.5 px-4 rounded-xl self-start">
+                <PressableScale className="bg-amber-50 py-2.5 px-4 rounded-xl self-start">
                   <Text className="text-amber-700 font-bold text-xs uppercase">Записаться</Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
               <View className="w-16 h-16 bg-amber-50 rounded-2xl items-center justify-center border border-amber-100">
                 <Feather name="calendar" size={24} color="#D97706" />
@@ -443,7 +444,7 @@ export default function YouthHome() {
             >
               Интересные кружки
             </Text>
-            <TouchableOpacity onPress={() => navigateApp(router, user?.role, { name: 'clubs' })}>
+            <PressableScale onPress={() => navigateApp(router, user?.role, { name: 'clubs' })}>
               <Text
                 style={{
                   fontSize: 13,
@@ -453,7 +454,7 @@ export default function YouthHome() {
               >
                 Все →
               </Text>
-            </TouchableOpacity>
+            </PressableScale>
           </View>
           {courses.length === 0 ? (
             <View
@@ -488,7 +489,7 @@ export default function YouthHome() {
                 const isRequested = enrollmentRequests.enrollmentRequested.includes(course.id);
                 const gradient = courseGradient(idx);
                 return (
-                  <TouchableOpacity
+                  <PressableScale
                     key={course.id}
                     onPress={() => enrollmentRequests.openEnrollmentModal(course)}
                     style={{
@@ -568,7 +569,7 @@ export default function YouthHome() {
                         </Text>
                       </View>
                     )}
-                  </TouchableOpacity>
+                  </PressableScale>
                 );
               })}
             </ScrollView>

@@ -2,7 +2,8 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { useTabNav } from '$hooks/useTabNav';
 import type { Role } from '$constants/navigation/tabItems';
@@ -68,7 +69,7 @@ export function SideNav({ role }: SideNavProps) {
         >
           UM
         </Text>
-        <Pressable
+        <PressableScale
           onPress={() => setNotificationsVisible(true)}
           style={{
             width: 36,
@@ -80,7 +81,7 @@ export function SideNav({ role }: SideNavProps) {
           }}
         >
           <Feather name="bell" size={18} color={COLORS.mutedForeground} />
-        </Pressable>
+        </PressableScale>
       </View>
 
       {/* Nav items */}
@@ -88,7 +89,7 @@ export function SideNav({ role }: SideNavProps) {
         {navTabs.map((item) => {
           const active = isActive(item.route);
           return (
-            <Pressable
+            <PressableScale
               key={item.key}
               onPress={() => go(item.route)}
               style={({ hovered, pressed }: PressableInteractionState) => ({
@@ -121,7 +122,7 @@ export function SideNav({ role }: SideNavProps) {
               >
                 {item.label}
               </Text>
-            </Pressable>
+            </PressableScale>
           );
         })}
       </View>
@@ -134,7 +135,7 @@ export function SideNav({ role }: SideNavProps) {
           padding: 12,
         }}
       >
-        <Pressable
+        <PressableScale
           onPress={() => setDropdownVisible((v) => !v)}
           style={({ hovered, pressed }: PressableInteractionState) => ({
             flexDirection: 'row',
@@ -180,12 +181,12 @@ export function SideNav({ role }: SideNavProps) {
             size={16}
             color={COLORS.mutedForeground}
           />
-        </Pressable>
+        </PressableScale>
       </View>
 
       {dropdownVisible && (
         <>
-          <Pressable
+          <PressableScale
             onPress={() => setDropdownVisible(false)}
             style={{
               position: 'absolute',
@@ -246,7 +247,7 @@ export function SideNav({ role }: SideNavProps) {
                 destructive: true,
               },
             ].map((item, index, arr) => (
-              <Pressable
+              <PressableScale
                 key={item.label}
                 onPress={item.onPress}
                 style={({ hovered, pressed }: PressableInteractionState) => ({
@@ -280,7 +281,7 @@ export function SideNav({ role }: SideNavProps) {
                 >
                   {item.label}
                 </Text>
-              </Pressable>
+              </PressableScale>
             ))}
           </View>
         </>

@@ -4,15 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useOrgProfile } from '$hooks/useOrgData';
@@ -44,9 +37,9 @@ export default function OrgVerificationScreen() {
               paddingBottom: 16,
             }}
           >
-            <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 12, padding: 4 }}>
+            <PressableScale onPress={() => router.back()} style={{ marginRight: 12, padding: 4 }}>
               <Feather name="arrow-left" size={22} color={COLORS.foreground} />
-            </TouchableOpacity>
+            </PressableScale>
             <Text
               style={{
                 fontSize: 20,
@@ -153,9 +146,9 @@ export default function OrgVerificationScreen() {
             paddingBottom: 16,
           }}
         >
-          <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 12, padding: 4 }}>
+          <PressableScale onPress={() => router.back()} style={{ marginRight: 12, padding: 4 }}>
             <Feather name="arrow-left" size={22} color={COLORS.foreground} />
-          </TouchableOpacity>
+          </PressableScale>
           <View style={{ flex: 1 }}>
             <Text
               style={{
@@ -305,7 +298,7 @@ export default function OrgVerificationScreen() {
             {DOC_SLOTS.map((slot) => {
               const uploaded = verification.docs[slot.key];
               return (
-                <TouchableOpacity
+                <PressableScale
                   key={slot.key}
                   onPress={() => verification.toggleDoc(slot.key)}
                   activeOpacity={0.8}
@@ -358,7 +351,7 @@ export default function OrgVerificationScreen() {
                     </Text>
                   </View>
                   {!uploaded && <Feather name="upload" size={18} color="#6C5CE7" />}
-                </TouchableOpacity>
+                </PressableScale>
               );
             })}
           </View>
@@ -374,7 +367,7 @@ export default function OrgVerificationScreen() {
             ...SHADOWS.sm,
           }}
         >
-          <TouchableOpacity
+          <PressableScale
             onPress={verification.toggleOfferAccepted}
             activeOpacity={0.8}
             style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 14 }}
@@ -414,7 +407,7 @@ export default function OrgVerificationScreen() {
               </Text>{' '}
               платформы UM. Это заменяет бумажный договор.
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         {verification.error && (
@@ -443,7 +436,7 @@ export default function OrgVerificationScreen() {
           </MotiView>
         )}
 
-        <TouchableOpacity
+        <PressableScale
           onPress={verification.submit}
           disabled={verification.submitting || !verification.canSubmit}
           style={{
@@ -475,7 +468,7 @@ export default function OrgVerificationScreen() {
               </>
             )}
           </LinearGradient>
-        </TouchableOpacity>
+        </PressableScale>
       </ScrollView>
     </KeyboardAvoidingView>
   );

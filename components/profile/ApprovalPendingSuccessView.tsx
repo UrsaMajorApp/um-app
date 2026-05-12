@@ -3,7 +3,8 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import type { ReactNode } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import type { ApprovalStep } from '$types/profile';
@@ -229,7 +230,7 @@ export function ApprovalPendingSuccessView({
             </View>
           )}
 
-          <TouchableOpacity onPress={onHome} style={{ width: '100%' }} activeOpacity={0.8}>
+          <PressableScale onPress={onHome} style={{ width: '100%' }} activeOpacity={0.8}>
             <LinearGradient
               colors={gradient}
               style={{
@@ -241,7 +242,7 @@ export function ApprovalPendingSuccessView({
             >
               <Text style={{ color: 'white', fontWeight: '900', fontSize: 17 }}>{buttonLabel}</Text>
             </LinearGradient>
-          </TouchableOpacity>
+          </PressableScale>
         </MotiView>
       </SafeAreaView>
     </View>

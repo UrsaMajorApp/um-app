@@ -4,15 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   YOUTH_PROFILE_COLOR as ROLE_COLOR,
@@ -129,7 +122,7 @@ export default function CreateProfileTeen() {
                   marginBottom: 24,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={handleBack}
                   style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
@@ -144,7 +137,7 @@ export default function CreateProfileTeen() {
                   >
                     Назад
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
 
                 {/* Step dots */}
                 <View style={{ flexDirection: 'row', gap: 6 }}>
@@ -292,7 +285,7 @@ export default function CreateProfileTeen() {
                         height: 50,
                       }}
                     >
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => setFormData({ ...formData, gender: 'male' })}
                         style={{
                           flex: 1,
@@ -309,8 +302,8 @@ export default function CreateProfileTeen() {
                         >
                           М
                         </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                      </PressableScale>
+                      <PressableScale
                         onPress={() => setFormData({ ...formData, gender: 'female' })}
                         style={{
                           flex: 1,
@@ -327,7 +320,7 @@ export default function CreateProfileTeen() {
                         >
                           Ж
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     </View>
                   </View>
                 </View>
@@ -380,7 +373,7 @@ export default function CreateProfileTeen() {
                   {availableInterests.map((interest) => {
                     const isSelected = interests.includes(interest);
                     return (
-                      <TouchableOpacity
+                      <PressableScale
                         key={interest}
                         onPress={() => toggleInterest(interest)}
                         style={{
@@ -400,7 +393,7 @@ export default function CreateProfileTeen() {
                         >
                           {interest}
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     );
                   })}
                 </View>
@@ -414,7 +407,7 @@ export default function CreateProfileTeen() {
                     placeholderTextColor={COLORS.mutedForeground}
                     style={[styles.input, { flex: 1 }]}
                   />
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={addOtherInterest}
                     style={{
                       width: 50,
@@ -427,7 +420,7 @@ export default function CreateProfileTeen() {
                     }}
                   >
                     <Feather name="plus" size={22} color="white" />
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
 
                 {/* Selected custom interests */}
@@ -464,9 +457,9 @@ export default function CreateProfileTeen() {
                           >
                             {interest}
                           </Text>
-                          <TouchableOpacity onPress={() => toggleInterest(interest)}>
+                          <PressableScale onPress={() => toggleInterest(interest)}>
                             <Feather name="x" size={13} color={ROLE_COLOR} />
-                          </TouchableOpacity>
+                          </PressableScale>
                         </View>
                       ))}
                   </View>
@@ -517,7 +510,7 @@ export default function CreateProfileTeen() {
               </View>
 
               {/* Submit Button */}
-              <TouchableOpacity
+              <PressableScale
                 disabled={
                   !(
                     formData.firstName.trim().length > 0 &&
@@ -565,7 +558,7 @@ export default function CreateProfileTeen() {
                     Перейти к тестам
                   </Text>
                 </LinearGradient>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </ScrollView>
         </SafeAreaView>

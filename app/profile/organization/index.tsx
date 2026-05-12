@@ -4,15 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
 import {
-  Alert,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Alert, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -130,9 +123,9 @@ export default function OrgProfile() {
                 >
                   Настройки профиля
                 </Text>
-                <TouchableOpacity onPress={handleLogout} style={styles.logoutIconBtn}>
+                <PressableScale onPress={handleLogout} style={styles.logoutIconBtn}>
                   <Feather name="log-out" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
@@ -227,18 +220,18 @@ export default function OrgProfile() {
 
               {/* Upload Buttons */}
               <View style={{ flexDirection: 'row', gap: 10 }}>
-                <TouchableOpacity style={styles.uploadBtn}>
+                <PressableScale style={styles.uploadBtn}>
                   <Feather name="file-text" size={16} color="white" />
                   <Text style={styles.uploadBtnText}>Справка гос. рег.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.uploadBtn}>
+                </PressableScale>
+                <PressableScale style={styles.uploadBtn}>
                   <Feather name="award" size={16} color="white" />
                   <Text style={styles.uploadBtnText}>Лицензия</Text>
-                </TouchableOpacity>
+                </PressableScale>
               </View>
 
               {/* Offer Acceptance */}
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => setHasAcceptedOffer(!hasAcceptedOffer)}
                 activeOpacity={0.7}
                 style={styles.checkboxContainer}
@@ -250,9 +243,9 @@ export default function OrgProfile() {
                   Я принимаю условия{' '}
                   <Text style={{ textDecorationLine: 'underline' }}>публичной оферты</Text>
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
 
-              <TouchableOpacity
+              <PressableScale
                 onPress={handleVerify}
                 disabled={submitting}
                 style={[styles.verifyActionBtn, submitting && { opacity: 0.7 }]}
@@ -260,7 +253,7 @@ export default function OrgProfile() {
                 <Text style={styles.verifyActionBtnText}>
                   {submitting ? 'Отправка...' : 'Отправить на проверку'}
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </MotiView>
         )}
@@ -302,10 +295,10 @@ export default function OrgProfile() {
         )}
 
         {/* Logout */}
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+        <PressableScale onPress={handleLogout} style={styles.logoutBtn}>
           <Feather name="log-out" size={20} color={COLORS.destructive} />
           <Text style={styles.logoutBtnText}>Выйти из аккаунта</Text>
-        </TouchableOpacity>
+        </PressableScale>
       </ScrollView>
     </View>
   );

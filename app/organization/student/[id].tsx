@@ -3,7 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
@@ -58,7 +59,7 @@ export default function StudentDetailScreen() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -70,7 +71,7 @@ export default function StudentDetailScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     flex: 1,
@@ -535,7 +536,7 @@ export default function StudentDetailScreen() {
                   Связаться через чат
                 </Text>
               </View>
-              <TouchableOpacity
+              <PressableScale
                 style={{
                   width: 48,
                   height: 48,
@@ -548,7 +549,7 @@ export default function StudentDetailScreen() {
                 onPress={() => router.push('/(tabs)/chats')}
               >
                 <Feather name="message-circle" size={20} color="white" />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </MotiView>

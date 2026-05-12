@@ -4,14 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FEEDBACK_TAGS } from '$constants/feedback';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
@@ -77,7 +71,7 @@ export default function FeedbackFormScreen() {
                   marginBottom: SPACING.xl,
                 }}
               >
-                <TouchableOpacity
+                <PressableScale
                   onPress={() => router.back()}
                   style={{
                     width: 44,
@@ -89,7 +83,7 @@ export default function FeedbackFormScreen() {
                   }}
                 >
                   <Feather name="arrow-left" size={20} color="white" />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text
                   style={{
                     flex: 1,
@@ -185,14 +179,14 @@ export default function FeedbackFormScreen() {
             }}
           >
             {[1, 2, 3, 4, 5].map((star) => (
-              <TouchableOpacity key={star} onPress={() => setRating(star)} style={{ padding: 4 }}>
+              <PressableScale key={star} onPress={() => setRating(star)} style={{ padding: 4 }}>
                 <Feather
                   name="star"
                   size={44}
                   color={star <= rating ? COLORS.accent : COLORS.muted}
                   fill={star <= rating ? COLORS.accent : 'transparent'}
                 />
-              </TouchableOpacity>
+              </PressableScale>
             ))}
           </View>
         </View>
@@ -224,7 +218,7 @@ export default function FeedbackFormScreen() {
             {FEEDBACK_TAGS.map((tag) => {
               const isSelected = selectedTags.includes(tag);
               return (
-                <TouchableOpacity
+                <PressableScale
                   key={tag}
                   onPress={() => toggleTag(tag)}
                   style={{
@@ -245,7 +239,7 @@ export default function FeedbackFormScreen() {
                   >
                     {tag}
                   </Text>
-                </TouchableOpacity>
+                </PressableScale>
               );
             })}
           </View>
@@ -320,7 +314,7 @@ export default function FeedbackFormScreen() {
           ...SHADOWS.lg,
         }}
       >
-        <TouchableOpacity
+        <PressableScale
           onPress={handleSave}
           style={{
             ...SHADOWS.md,
@@ -340,7 +334,7 @@ export default function FeedbackFormScreen() {
           >
             Отправить отзыв
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     </KeyboardAvoidingView>
   );

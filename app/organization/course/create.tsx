@@ -4,14 +4,8 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  Alert, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { FormCard } from '$components/ui/form/FormCard';
 import { LabeledTextInput } from '$components/ui/form/LabeledTextInput';
 import { PrimaryActionButton } from '$components/ui/form/PrimaryActionButton';
@@ -129,7 +123,7 @@ export default function CreateCourseScreen() {
               <Text style={labelStyle}>Уровень</Text>
               <View style={{ flexDirection: 'row', gap: SPACING.sm, marginTop: 8 }}>
                 {LEVEL_OPTIONS.map((opt) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={opt.value}
                     onPress={() => setLevel(opt.value)}
                     style={{
@@ -151,7 +145,7 @@ export default function CreateCourseScreen() {
                     >
                       {opt.label.toUpperCase()}
                     </Text>
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </View>
             </FormCard>
@@ -168,7 +162,7 @@ export default function CreateCourseScreen() {
                 }}
               >
                 {ICON_OPTIONS.map((ic) => (
-                  <TouchableOpacity
+                  <PressableScale
                     key={ic}
                     onPress={() => setIcon(ic)}
                     style={{
@@ -187,7 +181,7 @@ export default function CreateCourseScreen() {
                       size={20}
                       color={icon === ic ? COLORS.primary : COLORS.mutedForeground}
                     />
-                  </TouchableOpacity>
+                  </PressableScale>
                 ))}
               </View>
             </FormCard>
@@ -206,7 +200,7 @@ export default function CreateCourseScreen() {
                 {SKILL_OPTIONS.map((skill) => {
                   const selected = skills.includes(skill);
                   return (
-                    <TouchableOpacity
+                    <PressableScale
                       key={skill}
                       onPress={() => toggleSkill(skill)}
                       style={{
@@ -227,7 +221,7 @@ export default function CreateCourseScreen() {
                       >
                         {skill.toUpperCase()}
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   );
                 })}
               </View>

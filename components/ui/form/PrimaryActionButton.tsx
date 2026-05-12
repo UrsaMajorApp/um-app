@@ -1,6 +1,7 @@
 // PrimaryActionButton: главная кнопка формы с состояниями loading/disabled.
 import type React from 'react';
-import { Text, TouchableOpacity, type TouchableOpacityProps } from 'react-native';
+import { Text, type TouchableOpacityProps } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 
 export function PrimaryActionButton({
@@ -12,7 +13,7 @@ export function PrimaryActionButton({
   children: React.ReactNode;
 }) {
   return (
-    <TouchableOpacity
+    <PressableScale
       disabled={disabled}
       {...props}
       style={[
@@ -37,6 +38,6 @@ export function PrimaryActionButton({
       >
         {children}
       </Text>
-    </TouchableOpacity>
+    </PressableScale>
   );
 }

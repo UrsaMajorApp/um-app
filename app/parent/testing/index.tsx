@@ -2,7 +2,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Platform, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Platform, Text, View } from 'react-native';
+import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useOnboardingQuestions } from '$hooks/usePlatformData';
@@ -146,9 +147,9 @@ export default function DiagnosticTest() {
             marginBottom: 30,
           }}
         >
-          <Pressable onPress={() => router.back()} disabled={isAnalyzing}>
+          <PressableScale onPress={() => router.back()} disabled={isAnalyzing}>
             <Text style={{ color: 'rgba(255,255,255,0.7)', fontWeight: '600' }}>Отмена</Text>
-          </Pressable>
+          </PressableScale>
           <Text style={{ color: 'white', fontWeight: '800' }}>Анализ: {child.name}</Text>
           <View style={{ width: 50 }} />
         </View>
@@ -202,7 +203,7 @@ export default function DiagnosticTest() {
             </Text>
 
             {QUESTIONS[currentQ].answers.map((optText, idx) => (
-              <Pressable
+              <PressableScale
                 key={optText}
                 onPress={() => handleSelectOption(idx)}
                 style={({ pressed }) => ({
@@ -216,7 +217,7 @@ export default function DiagnosticTest() {
                 })}
               >
                 <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>{optText}</Text>
-              </Pressable>
+              </PressableScale>
             ))}
           </View>
         )}
