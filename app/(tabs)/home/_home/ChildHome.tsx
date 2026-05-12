@@ -11,7 +11,6 @@ import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
-import { useStudentTasks, useYouthAchievements } from '$hooks/useStudentData';
 import { useYouthEnrollmentRequests } from '$hooks/useYouthEnrollmentRequests';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
@@ -29,15 +28,7 @@ export default function ChildHome() {
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const [passVisible, setPassVisible] = useState(false);
   const { courses } = usePublicCourses();
-  const { tasks, toggleTask } = useStudentTasks();
-  const { achievements } = useYouthAchievements();
   const enrollmentRequests = useYouthEnrollmentRequests({ user, activeChild });
-
-  const openTasks = tasks.filter((task) => !task.done);
-  const unlockedAchievements = achievements.filter((item) => item.unlocked);
-  const learningEnergy = tasks.length
-    ? Math.round(((tasks.length - openTasks.length) / tasks.length) * 100)
-    : 0;
 
   const topSkills = useMemo(() => {
     if (!diagnostic?.scores) return [];
@@ -107,48 +98,6 @@ export default function ChildHome() {
                     >
                       Привет, {profileName}!
                     </Text>
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.12)',
-                    borderRadius: 24,
-                    padding: 18,
-                    borderWidth: 1,
-                    borderColor: 'rgba(255,255,255,0.18)',
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Text style={{ color: 'white', fontSize: 12, fontWeight: '800' }}>
-                      Энергия обучения
-                    </Text>
-                    <Text style={{ color: 'white', fontSize: 12, fontWeight: '900' }}>
-                      {learningEnergy}%
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      height: 10,
-                      borderRadius: 999,
-                      backgroundColor: 'rgba(255,255,255,0.2)',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: `${learningEnergy}%`,
-                        height: '100%',
-                        borderRadius: 999,
-                        backgroundColor: 'white',
-                      }}
-                    />
                   </View>
                 </View>
               </View>
@@ -313,69 +262,6 @@ export default function ChildHome() {
                 marginBottom: 12,
               }}
             >
-              Задания
-            </Text>
-            {tasks.length === 0 ? (
-              <View
-                style={{
-                  backgroundColor: '#F9FAFB',
-                  borderRadius: 24,
-                  padding: 24,
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: '#EEF2F7',
-                }}
-              >
-                <Feather name="check-circle" size={26} color="#CBD5E1" />
-                <Text style={{ marginTop: 10, color: '#94A3B8', fontWeight: '800' }}>
-                  Заданий пока нет
-                </Text>
-              </View>
-            ) : (
-              <View style={{ gap: 10 }}>
-                {tasks.slice(0, 3).map((task) => (
-                  <TouchableOpacity
-                    key={task.id}
-                    onPress={() => toggleTask(task.id)}
-                    style={{
-                      backgroundColor: task.done ? '#F0FDF4' : 'white',
-                      borderRadius: 20,
-                      padding: 16,
-                      borderWidth: 1,
-                      borderColor: task.done ? '#BBF7D0' : '#E5E7EB',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 12,
-                    }}
-                  >
-                    <Feather
-                      name={task.done ? 'check-circle' : 'circle'}
-                      size={22}
-                      color={task.done ? '#16A34A' : '#94A3B8'}
-                    />
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ color: COLORS.foreground, fontWeight: '800' }}>
-                        {task.title}
-                      </Text>
-                      <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
-                        +{task.xp_reward} XP
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </View>
-
-          <View>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '900',
-                color: COLORS.foreground,
-                marginBottom: 12,
-              }}
-            >
               Кружки
             </Text>
             {courses.length === 0 ? (
@@ -429,62 +315,6 @@ export default function ChildHome() {
             )}
           </View>
 
-          <View>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '900',
-                color: COLORS.foreground,
-                marginBottom: 12,
-              }}
-            >
-              Ачивки
-            </Text>
-            <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
-              {(unlockedAchievements.length ? unlockedAchievements : achievements.slice(0, 3)).map(
-                (achievement) => (
-                  <View
-                    key={achievement.id}
-                    style={{
-                      width: 104,
-                      backgroundColor: 'white',
-                      borderRadius: 20,
-                      padding: 14,
-                      alignItems: 'center',
-                      opacity: achievement.unlocked ? 1 : 0.55,
-                      borderWidth: 1,
-                      borderColor: '#E5E7EB',
-                    }}
-                  >
-                    <Feather
-                      name={
-                        achievement.unlocked
-                          ? featherIconName(achievement.icon_name, 'award')
-                          : 'lock'
-                      }
-                      size={22}
-                      color={achievement.unlocked ? COLORS.primary : '#94A3B8'}
-                    />
-                    <Text
-                      style={{
-                        marginTop: 8,
-                        color: COLORS.foreground,
-                        fontSize: 11,
-                        fontWeight: '800',
-                        textAlign: 'center',
-                      }}
-                      numberOfLines={2}
-                    >
-                      {achievement.name}
-                    </Text>
-                  </View>
-                ),
-              )}
-              {achievements.length === 0 && (
-                <Text style={{ color: '#94A3B8', fontWeight: '800' }}>Пока пусто</Text>
-              )}
-            </View>
-          </View>
         </View>
       </ScrollView>
 
@@ -499,6 +329,7 @@ export default function ChildHome() {
         visible={enrollmentRequests.showEnrollModal}
         selectedCourse={enrollmentRequests.selectedCourse}
         enrollmentRequested={enrollmentRequests.enrollmentRequested}
+        requiresParentApproval={enrollmentRequests.requiresParentApproval}
         onClose={enrollmentRequests.closeEnrollmentModal}
         onRequestEnrollment={enrollmentRequests.requestSelectedCourse}
       />

@@ -9,7 +9,7 @@ import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
-import { useStudentTasks, useYouthAchievements, useYouthGoals } from '$hooks/useStudentData';
+import { useYouthGoals } from '$hooks/useStudentData';
 import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
@@ -23,9 +23,7 @@ export default function YoungAdultHome() {
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const { courses } = usePublicCourses();
-  const { tasks, toggleTask } = useStudentTasks();
   const { goals } = useYouthGoals();
-  const { achievements } = useYouthAchievements();
 
   const activeProfile = childrenProfile.find((child) => child.id === activeChildId);
   const firstName = activeProfile?.name || user?.firstName || 'Студент';
@@ -378,69 +376,6 @@ export default function YoungAdultHome() {
                 marginBottom: 12,
               }}
             >
-              Задачи
-            </Text>
-            {tasks.length === 0 ? (
-              <View
-                style={{
-                  backgroundColor: '#F9FAFB',
-                  borderRadius: 24,
-                  padding: 24,
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: '#EEF2F7',
-                }}
-              >
-                <Feather name="check-circle" size={26} color="#CBD5E1" />
-                <Text style={{ marginTop: 10, color: '#94A3B8', fontWeight: '800' }}>
-                  Активных задач нет
-                </Text>
-              </View>
-            ) : (
-              <View style={{ gap: 10 }}>
-                {tasks.slice(0, 3).map((task) => (
-                  <TouchableOpacity
-                    key={task.id}
-                    onPress={() => toggleTask(task.id)}
-                    style={{
-                      backgroundColor: task.done ? '#F0FDF4' : 'white',
-                      borderRadius: 20,
-                      padding: 16,
-                      borderWidth: 1,
-                      borderColor: task.done ? '#BBF7D0' : '#E5E7EB',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 12,
-                    }}
-                  >
-                    <Feather
-                      name={task.done ? 'check-circle' : 'circle'}
-                      size={22}
-                      color={task.done ? '#16A34A' : '#94A3B8'}
-                    />
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ color: COLORS.foreground, fontWeight: '800' }}>
-                        {task.title}
-                      </Text>
-                      <Text style={{ color: '#64748B', fontSize: 12, marginTop: 2 }}>
-                        {task.club || 'Личный план'} · +{task.xp_reward} XP
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </View>
-
-          <View>
-            <Text
-              style={{
-                color: COLORS.foreground,
-                fontSize: 18,
-                fontWeight: '900',
-                marginBottom: 12,
-              }}
-            >
               Курсы
             </Text>
             {courses.length === 0 ? (
@@ -499,76 +434,6 @@ export default function YoungAdultHome() {
             )}
           </View>
 
-          <View>
-            <Text
-              style={{
-                color: COLORS.foreground,
-                fontSize: 18,
-                fontWeight: '900',
-                marginBottom: 12,
-              }}
-            >
-              Достижения
-            </Text>
-            {achievements.length === 0 ? (
-              <View
-                style={{
-                  backgroundColor: '#F9FAFB',
-                  borderRadius: 24,
-                  padding: 24,
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: '#EEF2F7',
-                }}
-              >
-                <Feather name="award" size={26} color="#CBD5E1" />
-                <Text style={{ marginTop: 10, color: '#94A3B8', fontWeight: '800' }}>
-                  Достижений пока нет
-                </Text>
-              </View>
-            ) : (
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {achievements.slice(0, 5).map((achievement) => (
-                  <View
-                    key={achievement.id}
-                    style={{
-                      width: 132,
-                      marginRight: 12,
-                      backgroundColor: 'white',
-                      borderRadius: 22,
-                      padding: 16,
-                      alignItems: 'center',
-                      opacity: achievement.unlocked ? 1 : 0.55,
-                      borderWidth: 1,
-                      borderColor: '#E5E7EB',
-                    }}
-                  >
-                    <Feather
-                      name={
-                        achievement.unlocked
-                          ? featherIconName(achievement.icon_name, 'award')
-                          : 'lock'
-                      }
-                      size={24}
-                      color={achievement.unlocked ? COLORS.primary : '#94A3B8'}
-                    />
-                    <Text
-                      style={{
-                        marginTop: 10,
-                        color: COLORS.foreground,
-                        fontSize: 12,
-                        fontWeight: '800',
-                        textAlign: 'center',
-                      }}
-                      numberOfLines={2}
-                    >
-                      {achievement.name}
-                    </Text>
-                  </View>
-                ))}
-              </ScrollView>
-            )}
-          </View>
         </View>
       </ScrollView>
     </View>

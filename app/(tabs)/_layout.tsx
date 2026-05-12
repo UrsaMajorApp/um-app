@@ -106,8 +106,6 @@ export default function TabsLayout() {
       <Tabs.Screen name="youth/games" options={{ href: null }} />
       <Tabs.Screen name="youth/games/[id]" options={{ href: null }} />
       <Tabs.Screen name="youth/goals" options={{ href: null }} />
-      <Tabs.Screen name="youth/tasks" options={{ href: null }} />
-      <Tabs.Screen name="youth/achievements" options={{ href: null }} />
 
       {/* MENTOR SCREENS */}
       <Tabs.Screen name="mentor/students" options={{ href: null }} />

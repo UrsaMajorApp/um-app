@@ -7,12 +7,11 @@ import { Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from 'r
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
 import { YouthPassModal } from '$components/home/youth/YouthPassModal';
-import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
-import { useStudentTasks, useYouthAchievements } from '$hooks/useStudentData';
 import { useYouthEnrollmentRequests } from '$hooks/useYouthEnrollmentRequests';
 import { navigateApp, resolveAppRoute } from '$lib/appNavigation';
 import { featherIconName } from '$lib/icons';
@@ -59,11 +58,9 @@ export default function YouthHome() {
       ]
     : [];
 
-  const { tasks, toggleTask } = useStudentTasks();
-  const { achievements } = useYouthAchievements();
   const { devYouthAge } = useDevSettings();
 
-  const isIndependent = devYouthAge >= 14; // "Подросток сам принимает решения"
+  const isIndependent = user?.role === 'youth' && !activeChild ? true : devYouthAge >= 14;
   const isPro = parentProfile?.tariff === 'pro'; // PRO тариф
   const [passVisible, setPassVisible] = useState(false);
   const enrollmentRequests = useYouthEnrollmentRequests({ user, activeChild });
@@ -80,11 +77,6 @@ export default function YouthHome() {
       route: resolveAppRoute(user?.role, { name: 'calendar' }),
     },
   ];
-  const openTasks = tasks.filter((task) => !task.done).length;
-  const learningEnergy = tasks.length
-    ? Math.round(((tasks.length - openTasks) / tasks.length) * 100)
-    : 0;
-
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       {/* Header - Restored Violet Aesthetic */}
@@ -135,24 +127,6 @@ export default function YouthHome() {
                     <Feather name="user" size={20} color="white" />
                   </View>
                 </Pressable>
-              </View>
-
-              <View
-                className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20"
-                style={{ marginTop: 16 }}
-              >
-                <View className="flex-row justify-between items-center mb-3">
-                  <Text className="text-white text-xs font-bold uppercase tracking-wider">
-                    Энергия обучения
-                  </Text>
-                  <Text className="text-white text-xs font-black">{learningEnergy}%</Text>
-                </View>
-                <View className="h-2.5 bg-white/20 rounded-full overflow-hidden">
-                  <View
-                    style={{ width: `${learningEnergy}%` }}
-                    className="h-full bg-white rounded-full"
-                  />
-                </View>
               </View>
             </View>
           </SafeAreaView>
@@ -220,29 +194,6 @@ export default function YouthHome() {
                   </Text>
                 </Pressable>
               </View>
-            </View>
-          </View>
-        )}
-
-        {/* Upcoming tasks hint */}
-        {tasks.length > 0 && (
-          <View
-            className="mb-8 p-6 bg-blue-50 rounded-[32px] border border-blue-100 flex-row items-center justify-between"
-            style={SHADOWS.sm}
-          >
-            <View className="flex-1 mr-4">
-              <Text className="text-xs font-bold text-blue-500 uppercase mb-1">
-                Следующее задание
-              </Text>
-              <Text className="text-lg font-black text-blue-900 mb-1" numberOfLines={1}>
-                {tasks.find((t) => !t.done)?.title ?? tasks[0].title}
-              </Text>
-              <Text className="text-sm font-semibold text-blue-700">
-                +{tasks.find((t) => !t.done)?.xp_reward ?? tasks[0].xp_reward} XP
-              </Text>
-            </View>
-            <View className="w-12 h-12 rounded-2xl bg-blue-500 items-center justify-center">
-              <Feather name="target" size={24} color="white" />
             </View>
           </View>
         )}
@@ -472,144 +423,6 @@ export default function YouthHome() {
           </View>
         )}
 
-        {/* Mentor Tasks */}
-        {isPro && (
-          <View className="mb-8">
-            <Text className="text-lg font-bold text-gray-900 mb-4 px-1">Задания от ментора</Text>
-            <View className="gap-3">
-              {tasks.map((item) => (
-                <TouchableOpacity
-                  key={item.id}
-                  onPress={() => toggleTask(item.id)}
-                  style={SHADOWS.sm}
-                  className={`p-4 rounded-2xl flex-row items-center gap-4 border ${item.done ? 'bg-green-50 border-green-100' : 'bg-white border-gray-50'}`}
-                >
-                  <View
-                    style={{
-                      width: 24,
-                      height: 24,
-                      borderRadius: 8,
-                      borderWidth: item.done ? 0 : 2,
-                      borderColor: COLORS.mutedForeground,
-                      backgroundColor: item.done ? COLORS.success : 'transparent',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {item.done && <Feather name="check" size={14} color="white" />}
-                  </View>
-                  <View className="flex-1">
-                    <Text
-                      style={{
-                        fontSize: TYPOGRAPHY.size.md,
-                        fontWeight: TYPOGRAPHY.weight.bold,
-                        color: item.done ? COLORS.success : COLORS.foreground,
-                        textDecorationLine: item.done ? 'line-through' : 'none',
-                      }}
-                    >
-                      {item.title}
-                    </Text>
-                  </View>
-                  <View
-                    className={`px-2 py-1 rounded-md ${item.done ? 'bg-green-200' : 'bg-yellow-100'}`}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 10,
-                        fontWeight: TYPOGRAPHY.weight.bold,
-                        color: item.done ? '#166534' : '#854D0E',
-                      }}
-                    >
-                      +{item.xp_reward} XP
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {/* Achievements */}
-        <View className="mb-8">
-          <Text className="text-lg font-bold text-gray-900 mb-4 px-1">Твои ачивки</Text>
-          {achievements.length === 0 ? (
-            <View
-              style={{
-                backgroundColor: '#F9FAFB',
-                borderRadius: 24,
-                padding: 24,
-                alignItems: 'center',
-                borderWidth: 1,
-                borderColor: '#F3F4F6',
-              }}
-            >
-              <Feather name="award" size={28} color="#D1D5DB" />
-              <Text
-                style={{
-                  color: '#9CA3AF',
-                  fontWeight: '700',
-                  fontSize: 13,
-                  marginTop: 10,
-                }}
-              >
-                Достижений пока нет
-              </Text>
-            </View>
-          ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="-mx-1 px-1 overflow-visible"
-            >
-              {achievements.map((ach) => (
-                <View
-                  key={ach.id}
-                  style={{ ...SHADOWS.sm, opacity: ach.unlocked ? 1 : 0.5 }}
-                  className="w-32 bg-white p-4 rounded-[24px] border border-gray-50 mr-4 items-center"
-                >
-                  <View
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: RADIUS.full,
-                      backgroundColor: ach.unlocked ? `${COLORS.primary}15` : COLORS.muted,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 12,
-                    }}
-                  >
-                    <Feather
-                      name={ach.unlocked ? featherIconName(ach.icon_name, 'award') : 'lock'}
-                      size={24}
-                      color={ach.unlocked ? COLORS.primary : COLORS.mutedForeground}
-                    />
-                  </View>
-                  <Text
-                    style={{
-                      fontSize: TYPOGRAPHY.size.sm,
-                      fontWeight: TYPOGRAPHY.weight.bold,
-                      color: COLORS.foreground,
-                      textAlign: 'center',
-                      marginBottom: 4,
-                    }}
-                  >
-                    {ach.name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: COLORS.mutedForeground,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {ach.description ?? ''}
-                  </Text>
-                </View>
-              ))}
-            </ScrollView>
-          )}
-        </View>
-
         {/* Browse Clubs - Student can request enrollment with parent approval */}
         <View style={{ marginBottom: 32 }}>
           <View
@@ -770,13 +583,14 @@ export default function YouthHome() {
         onClose={() => setPassVisible(false)}
       />
 
-      <EnrollmentRequestModal
-        visible={enrollmentRequests.showEnrollModal}
-        selectedCourse={enrollmentRequests.selectedCourse}
-        enrollmentRequested={enrollmentRequests.enrollmentRequested}
-        onClose={enrollmentRequests.closeEnrollmentModal}
-        onRequestEnrollment={enrollmentRequests.requestSelectedCourse}
-      />
+        <EnrollmentRequestModal
+          visible={enrollmentRequests.showEnrollModal}
+          selectedCourse={enrollmentRequests.selectedCourse}
+          enrollmentRequested={enrollmentRequests.enrollmentRequested}
+          requiresParentApproval={enrollmentRequests.requiresParentApproval}
+          onClose={enrollmentRequests.closeEnrollmentModal}
+          onRequestEnrollment={enrollmentRequests.requestSelectedCourse}
+        />
     </View>
   );
 }
