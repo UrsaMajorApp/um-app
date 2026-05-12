@@ -184,6 +184,7 @@ export default function LoginScreen() {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
+                  alignSelf: 'flex-start',
                   marginBottom: 32,
                 }}
                 scaleTo={0.93}
