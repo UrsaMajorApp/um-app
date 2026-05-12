@@ -1,3 +1,4 @@
+// useDiagnosticEngine1214: управляет диагностикой 12-14, заданиями, scoring и итоговым профилем.
 /**
  * useDiagnosticEngine1214.ts
  *

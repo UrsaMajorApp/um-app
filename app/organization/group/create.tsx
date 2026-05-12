@@ -1,3 +1,4 @@
+// Organization route create: создает новую запись для сущности группу в кабинете организации.
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';

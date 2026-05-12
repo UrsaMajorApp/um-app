@@ -1,3 +1,4 @@
+// Экран mentor/wallet: загружает и показывает кошелек и финансовые операции в кабинете ментора.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';

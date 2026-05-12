@@ -1,3 +1,4 @@
+// Layout авторизации: задает Stack без header для intro, login, register, forgot-password и QR-входа.
 import { Stack } from 'expo-router';
 
 export const unstable_settings = {

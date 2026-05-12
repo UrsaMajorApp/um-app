@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для dev seed parent youth refresh.
 -- Expand populated dev data beyond org/teacher flows, and allow any
 -- anonymous dev-switcher session to run the toggle instead of requiring the
 -- in-app role to be admin.

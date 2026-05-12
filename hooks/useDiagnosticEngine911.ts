@@ -1,3 +1,4 @@
+// useDiagnosticEngine911: управляет диагностикой 9-11, ответами, scoring и итоговым отчетом.
 /**
  * useDiagnosticEngine911.ts
  *

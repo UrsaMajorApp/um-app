@@ -1,3 +1,4 @@
+// Экран профиля youth: запускает диагностический тест для роли ребенка/подростка.
 /**
  * testing.tsx — Age-based router for diagnostic modules.
  *

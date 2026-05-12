@@ -1,3 +1,4 @@
+// usePlatformData: собирает dashboard-данные платформы для аналитики и обзора.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useDevDataVersion } from '$lib/devDataEvents';

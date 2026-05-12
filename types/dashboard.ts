@@ -1,3 +1,4 @@
+// dashboard types: описывает TypeScript-структуры данных для дашбордов.
 import type { FeatherIconName } from '$types/icons';
 
 export type DashboardQuickAction = {

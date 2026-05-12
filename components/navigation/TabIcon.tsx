@@ -1,3 +1,4 @@
+// TabIcon: выбирает иконку вкладки и окрашивает ее по active/inactive состоянию.
 import { Feather } from '@expo/vector-icons';
 import { View } from 'react-native';
 import type { FeatherIconName } from '$types/icons';

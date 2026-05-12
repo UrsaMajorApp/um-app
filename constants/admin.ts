@@ -1,3 +1,4 @@
+// Admin constants: фильтры, статусы и подписи для административной панели.
 export type AdminRouteKey =
   | 'overview'
   | 'users'

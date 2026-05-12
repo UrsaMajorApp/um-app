@@ -1,3 +1,4 @@
+// Organization route create: создает новую запись для сущности курс в кабинете организации.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';

@@ -1,3 +1,4 @@
+// Dashboard constants: статичные блоки и summary-данные для dashboard screens.
 import { COLORS } from '$constants/theme';
 import type { AppRouteIntent } from '$lib/appNavigation';
 import type { FeatherIconName } from '$types/icons';

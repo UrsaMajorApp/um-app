@@ -1,3 +1,4 @@
+// App navigation: превращает semantic intent в route и проверяет доступ по роли пользователя.
 import type { UserRole } from '$contexts/AuthContext';
 import type { AppHref, AppRouter } from '$types/router';
 
@@ -63,6 +64,8 @@ function canUseYouthDiagnostic(role: UserRole) {
   return role === 'parent' || isYouthRole(role);
 }
 
+// Эти словари отвечают на вопрос комиссии "кто имеет доступ к каким экранам".
+// Если роль не подходит, пользователя отправляем на главный экран.
 const tabSectionAccess: Record<string, (role: UserRole) => boolean> = {
   admin: (role) => role === 'admin',
   parent: (role) => role === 'parent',
@@ -102,6 +105,8 @@ export function canAccessRouteSegments(role: UserRole, segments: string[]) {
   const section = segments[1];
   const screen = segments[2];
 
+  // Expo Router передает маршрут как сегменты: например (tabs)/parent/reports.
+  // Мы проверяем первый и второй сегмент, чтобы не держать логику доступа в каждом экране.
   if (root === '(tabs)') return tabSectionAccess[section]?.(role) ?? true;
 
   if (root === 'profile') {
@@ -121,6 +126,7 @@ function roleRoute(
   allowedRoles: readonly UserRole[],
   href: AppHref,
 ): AppHref {
+  // Безопасный переход: если пользователь не той роли, он не попадет на чужой кабинет.
   return role && allowedRoles.includes(role) ? href : HOME_ROUTE;
 }
 
@@ -128,6 +134,7 @@ export function resolveAppRoute(
   role: UserRole | null | undefined,
   intent: AppRouteIntent,
 ): AppHref {
+  // Все программные переходы проходят через intent, чтобы кнопки не собирали URL вручную.
   switch (intent.name) {
     case 'home':
       return HOME_ROUTE;

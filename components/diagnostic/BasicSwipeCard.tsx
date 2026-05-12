@@ -1,3 +1,4 @@
+// BasicSwipeCard: показывает базовую swipe-карточку интереса и передает like/dislike наверх.
 /**
  * BasicSwipeCard.tsx — Card component for the BASIC "Palette" swipe phase.
  *

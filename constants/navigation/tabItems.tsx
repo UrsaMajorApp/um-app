@@ -1,3 +1,4 @@
+// Tab items config: описывает вкладки, иконки и role-based видимость навигации.
 import { Feather } from '@expo/vector-icons';
 import type React from 'react';
 

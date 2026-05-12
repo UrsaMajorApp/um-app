@@ -1,3 +1,4 @@
+// child types: описывает TypeScript-структуры данных для детей.
 import type { Diagnostic } from '$types/diagnostic';
 
 export type ChildAgeCategory = 'child' | 'teen' | 'young-adult';

@@ -1,3 +1,4 @@
+// useParentReports: загружает отчеты и диагностические summary для детей родителя.
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '$contexts/AuthContext';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';

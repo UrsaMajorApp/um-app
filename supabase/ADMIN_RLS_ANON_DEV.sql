@@ -1,3 +1,4 @@
+-- ADMIN_RLS_ANON_DEV: SQL-скрипт Supabase для настройки admin rls anon dev.
 -- ADMIN_RLS_ANON_DEV.sql
 -- FOR DEVELOPMENT / MVP ONLY
 --

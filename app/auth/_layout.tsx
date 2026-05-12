@@ -1,3 +1,4 @@
+// Layout служебной авторизации: группирует callback, reset-password и complete-profile без верхнего header.
 import { Stack } from 'expo-router';
 
 export default function AuthLayout() {

@@ -1,3 +1,4 @@
+// Экран parent/clubs: загружает и показывает клубы и курсы в кабинете родителя.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

@@ -1,3 +1,4 @@
+// Экран home/index: загружает и показывает домашний экран в кабинете home.
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import AdminHome from '$app/(tabs)/home/_home/AdminHome';

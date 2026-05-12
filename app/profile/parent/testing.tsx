@@ -1,3 +1,4 @@
+// Экран профиля parent: запускает диагностический тест для роли родителя.
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';

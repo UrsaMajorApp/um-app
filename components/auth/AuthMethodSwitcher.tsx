@@ -1,3 +1,4 @@
+// AuthMethodSwitcher: переключает форму входа между телефоном и email без дублирования разметки.
 import { StyleSheet, Text, View } from 'react-native';
 import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS } from '$constants/theme';

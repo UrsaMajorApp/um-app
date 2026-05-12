@@ -1,3 +1,4 @@
+// Dev data events: рассылает события обновления demo-data между экранами без перезапуска app.
 import { useEffect, useState } from 'react';
 
 let version = 0;

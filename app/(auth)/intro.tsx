@@ -1,3 +1,4 @@
+// Стартовый auth-экран: показывает выбор между входом и регистрацией перед основным приложением.
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

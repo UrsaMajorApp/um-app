@@ -1,3 +1,4 @@
+// Экран входа: принимает телефон/email и пароль, запускает Google OAuth или QR-вход.
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

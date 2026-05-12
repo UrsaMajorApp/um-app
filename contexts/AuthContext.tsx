@@ -1,3 +1,4 @@
+// AuthContext: хранит пользователя, роли, Supabase session, OTP/Google/QR login и demo-режим.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import * as WebBrowser from 'expo-web-browser';
@@ -33,7 +34,7 @@ export interface AuthUser {
   firstName: string;
   lastName: string;
   profileComplete: boolean;
-  /** False for new OAuth users who haven't selected a role yet. */
+  /** False для новых OAuth-пользователей, которые еще не выбрали роль. */
   hasSelectedRole: boolean;
 }
 
@@ -76,21 +77,21 @@ interface AuthContextValue {
   devLogin: (role: UserRole) => Promise<void>;
   devMode: boolean;
   setDevMode: (enabled: boolean) => Promise<void>;
-  /** Call this after the role-specific create-profile screen succeeds.
-   *  Persists the in-memory user to localStorage so they survive a refresh. */
+  /** Вызывается после role-specific create-profile.
+   *  Сохраняет пользователя локально, чтобы он не пропал после refresh. */
   finalizeRegistration: () => Promise<void>;
 }
 
-// Fallback dev-switcher users are persisted locally only when Supabase is not
-// configured or anonymous auth is unavailable.
+// Dev-пользователи нужны для демонстрации: можно быстро переключать роли,
+// даже если Supabase временно не настроен или anonymous auth недоступен.
 const DEV_USER_KEY = 'um_dev_user';
 const DEV_MODE_KEY = 'um_dev_mode';
 const PROFILE_COMPLETE_PREFIX = 'um_profile_complete:';
 
 const DEV_OTP = process.env.EXPO_PUBLIC_DEV_OTP?.trim() || null;
 
-// Stable, valid UUIDs for each dev role so FK constraints don't fail.
-// Used by both devLogin() and the fake-OTP bypass in verifyOtpAndRegister().
+// Стабильные UUID для каждой demo-роли. Так внешние ключи в Supabase
+// не ломаются, когда приложение показывает тестовые данные на предзащите.
 const DEV_IDS: Record<UserRole, string> = {
   parent: 'd0000000-0000-4000-a000-000000000001',
   youth: 'd0000000-0000-4000-a000-000000000002',
@@ -210,6 +211,8 @@ async function setLocalProfileComplete(userId: string, complete: boolean) {
 async function hasRemoteProfileSetup(userId: string, role: UserRole) {
   if (!supabase || !isSupabaseConfigured) return false;
 
+  // Для каждой роли признак "профиль завершен" хранится в своей таблице.
+  // Поэтому проверка разветвляется по роли, а не смотрит только auth.users.
   if (role === 'mentor') {
     const { data, error } = await supabase
       .from('mentor_applications')
@@ -240,8 +243,8 @@ async function hasRemoteProfileSetup(userId: string, role: UserRole) {
     return !error && !!data;
   }
 
-  // Youth setup currently finishes through local diagnostic/profile flows, not
-  // a single durable Supabase row. Avoid locking existing users out.
+  // Youth-профиль пока завершается через локальные diagnostic/profile flow,
+  // а не через одну отдельную строку в Supabase. Не блокируем таких пользователей.
   return true;
 }
 
@@ -279,18 +282,18 @@ async function hydrateFromSupabaseUser(sessionUser: SupabaseUser): Promise<AuthU
 
   const rawMetaRole = metadata.role as string | undefined;
   const rawRemoteRole = remoteProfile?.role as string | null;
-  // Only treat the role as "selected" when it came from real stored data, not
-  // from the default fallback inside parseRole.
+  // Роль считается выбранной только если она пришла из сохраненных данных,
+  // а не из fallback-значения parseRole().
   const hasSelectedRole = !!(rawRemoteRole || rawMetaRole);
   const metadataRole = parseRole(rawMetaRole);
   const isDevAnonymous =
     isAnonymousSupabaseUser(sessionUser) && metadata.dev_role_switcher === true;
 
-  // Accept users who have either phone OR email. Dev anonymous users are also
-  // valid because they intentionally have no PII attached to the auth identity.
+  // Пользователь может входить по телефону или email. Dev anonymous user тоже
+  // допустим: у него специально нет персональных данных в auth identity.
   if (!phone && !email && !isDevAnonymous) return null;
 
-  // Google/OAuth users have `full_name` or `name` in metadata
+  // У Google/OAuth пользователей имя обычно лежит в metadata.full_name или name.
   const fullName = ((metadata.full_name || metadata.name || '') as string).trim();
   const nameParts = fullName.split(' ').filter(Boolean);
   const oauthFirstName = nameParts[0] ?? '';
@@ -321,8 +324,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [devMode, setDevModeState] = useState(false);
-  // Track whether the initial bootstrap has finished so the onAuthStateChange
-  // listener doesn't clobber a dev-switcher user that was just restored.
+  // Флаг защищает от race condition: auth listener не должен перезаписать
+  // dev-пользователя, пока initial bootstrap еще восстанавливает состояние.
   const bootstrapDone = useRef(false);
   const authEventSeq = useRef(0);
 
@@ -334,7 +337,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const rawDevMode = await AsyncStorage.getItem(DEV_MODE_KEY);
         if (rawDevMode !== null) setDevModeState(rawDevMode === 'true');
 
-        // 1. Real users: restore from Supabase session (no localStorage needed)
+        // 1. Реальные пользователи восстанавливаются из Supabase session.
         if (supabase && isSupabaseConfigured) {
           const { data } = await supabase.auth.getSession();
           if (data.session?.user) {
@@ -348,7 +351,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         }
 
-        // 2. Dev-switcher users only: restore from local key
+        // 2. Dev-switcher пользователи восстанавливаются из локального ключа.
         const rawDevUser = await AsyncStorage.getItem(DEV_USER_KEY);
         if (rawDevUser) {
           try {
@@ -365,19 +368,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     bootstrap();
 
-    // Subscribe to auth state changes — critical for OAuth redirects.
-    // When the Google OAuth callback fires, Supabase sets the session and
-    // emits SIGNED_IN here so we hydrate the user without a page reload.
+    // Подписка на auth-события особенно важна для Google OAuth.
+    // Когда callback возвращается в приложение, Supabase ставит session
+    // и отправляет SIGNED_IN, после чего мы собираем AuthUser без перезагрузки.
     if (supabase && isSupabaseConfigured) {
       const { data } = supabase.auth.onAuthStateChange((event, session) => {
-        // Ignore events that fire before bootstrap finishes to avoid a race
-        // where INITIAL_SESSION clobbers a just-restored dev user.
+        // Игнорируем события до конца bootstrap, чтобы INITIAL_SESSION
+        // не стер только что восстановленного demo-пользователя.
         if (!bootstrapDone.current) return;
 
         if ((event === 'SIGNED_IN' || event === 'PASSWORD_RECOVERY') && session?.user) {
           const eventSeq = ++authEventSeq.current;
-          // Supabase auth callbacks run synchronously; defer Supabase queries
-          // from hydration so setSession/exchangeCodeForSession can complete.
+          // Supabase вызывает callback синхронно, поэтому переносим запросы
+          // на следующий tick: setSession/exchangeCodeForSession успеют завершиться.
           setTimeout(async () => {
             const hydrated = await hydrateFromSupabaseUser(session.user);
             if (eventSeq === authEventSeq.current && hydrated) setUser(hydrated);
@@ -412,7 +415,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { success: false, error: 'Введите корректный номер телефона' };
       }
 
-      // Dev bypass: skip real SMS only while Dev Mode is explicitly enabled.
+      // Dev bypass пропускает реальный SMS только при явно включенном Dev Mode.
       const useRealOtp = await getUseRealOtpSetting();
       if (DEV_OTP && devMode && !useRealOtp) return { success: true };
 
@@ -525,7 +528,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     ): Promise<AuthActionResult> => {
       const normalized = normalizePhone(phone);
 
-      // Dev bypass: accept the dev code only while Dev Mode is explicitly enabled.
+      // Dev bypass принимает тестовый код только при явно включенном Dev Mode.
       const useRealOtp = await getUseRealOtpSetting();
       const isDevBypass = DEV_OTP && devMode && !useRealOtp && otp === DEV_OTP;
 
@@ -540,7 +543,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return { success: false, error: 'Неверный код подтверждения' };
         }
 
-        // Set password so the user can log in with phone + password later
+        // Ставим пароль, чтобы потом пользователь мог войти по телефону + паролю.
         const { error: pwError } = await supabase.auth.updateUser({ password });
         if (pwError) {
           return { success: false, error: pwError.message };
@@ -560,10 +563,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { success: true };
       }
 
-      // Dev bypass: synthetic in-memory user, no Supabase session.
-      // Reuse the stable dev UUID for this role so any incidental Supabase
-      // calls at least pass UUID format validation (they'll be silently ignored
-      // by ParentDataContext which skips writes when there's no real session).
+      // Dev bypass создает синтетического пользователя без Supabase session.
+      // UUID остается валидным, чтобы случайные запросы не падали на формате id.
       const nextUser = toAuthUser({
         id: DEV_IDS[role] ?? 'd0000000-0000-4000-a000-000000000009',
         phone: normalized,

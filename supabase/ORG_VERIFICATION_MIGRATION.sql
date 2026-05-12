@@ -1,3 +1,4 @@
+-- ORG_VERIFICATION_MIGRATION: SQL-скрипт Supabase для настройки org verification migration.
 -- ORG_VERIFICATION_MIGRATION.sql
 -- Adds the two-phase org onboarding:
 --   new             → org just registered (minimal form)

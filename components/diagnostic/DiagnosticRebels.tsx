@@ -1,3 +1,4 @@
+// DiagnosticRebels: собирает rebel-диагностику с hackathon/vibe заданиями и итоговым flow.
 /**
  * DiagnosticRebels.tsx
  * Main orchestrator for 12-14 Rebels diagnostic.

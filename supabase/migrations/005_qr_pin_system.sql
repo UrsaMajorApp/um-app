@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для qr pin system.
 -- Migration: Replace QR token with PIN-based system
 -- Add qr_pin, qr_pin_expires_at, and qr_pin_one_time_use columns
 

@@ -1,3 +1,4 @@
+// QRScanner: оборачивает камеру и jsQR, чтобы считать QR-код для входа или проверки.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Modal, Pressable, Text, TextInput, View } from 'react-native';

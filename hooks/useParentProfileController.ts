@@ -1,3 +1,4 @@
+// useParentProfileController: держит форму профиля родителя, выбранного ребенка, заявки и QR PIN actions.
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import type { AuthUser } from '$contexts/AuthContext';
@@ -36,6 +37,7 @@ type UseParentProfileControllerParams = {
 };
 
 function generateQRPin(): string {
+  // Шестизначный PIN нужен для быстрого входа ребенка по QR-сценарию.
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
@@ -62,6 +64,8 @@ export function useParentProfileController({
   useEffect(() => {
     if (!parentProfile) return;
 
+    // Когда профиль загрузился, переносим его в форму редактирования.
+    // Форма живет локально, чтобы пользователь мог менять поля до сохранения.
     setEditForm({
       firstName: parentProfile.firstName || '',
       lastName: parentProfile.lastName || '',
@@ -75,6 +79,7 @@ export function useParentProfileController({
       return;
     }
 
+    // Если выбранный ребенок удалился или еще не выбран, берем первого из списка.
     if (!selectedChildId || !children.some((child) => child.id === selectedChildId)) {
       setSelectedChildId(children[0].id);
     }
@@ -85,6 +90,7 @@ export function useParentProfileController({
 
     setLoadingEnrollments(true);
     try {
+      // Заявки на курсы загружаются из Supabase по parent_id текущего пользователя.
       const res = await supabase
         .from('student_enrollment_requests')
         .select('id, course_title, org_name, status, created_at')
@@ -126,6 +132,7 @@ export function useParentProfileController({
     if (!selectedChild) return;
 
     const newPin = generateQRPin();
+    // PIN живет 15 минут: этого хватает для демонстрации и снижает риск повторного входа.
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
     await updateChild(selectedChild.id, {

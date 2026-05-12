@@ -1,3 +1,4 @@
+// Header: общий верхний заголовок экрана с кнопкой назад и optional action.
 import { Feather } from '@expo/vector-icons';
 import { type Href, useRouter } from 'expo-router';
 import { Image, Pressable, Text, View } from 'react-native';

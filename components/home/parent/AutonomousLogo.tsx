@@ -1,3 +1,4 @@
+// AutonomousLogo: рисует брендовый знак на родительском home screen.
 import { MotiView } from 'moti';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image } from 'react-native';

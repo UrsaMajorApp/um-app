@@ -1,3 +1,4 @@
+// useMentorTrialRequests: управляет заявками на пробные занятия для ментора.
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';

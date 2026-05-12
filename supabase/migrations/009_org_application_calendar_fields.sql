@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для org application calendar fields.
 -- Store the selected group on organisation applications so parent calendars
 -- can render recurring activated classes.
 

@@ -1,3 +1,4 @@
+// useTeacherAttendanceEditor: редактирует посещаемость группы преподавателя и сохраняет изменения.
 import { useCallback, useEffect, useState } from 'react';
 import type { TeacherAttendanceEntry } from '$hooks/usePlatformData';
 

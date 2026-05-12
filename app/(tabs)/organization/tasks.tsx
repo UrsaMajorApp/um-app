@@ -1,3 +1,4 @@
+// Экран organization/tasks: загружает и показывает задания в кабинете организации.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

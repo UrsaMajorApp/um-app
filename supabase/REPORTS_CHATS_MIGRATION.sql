@@ -1,3 +1,4 @@
+-- REPORTS_CHATS_MIGRATION: SQL-скрипт Supabase для настройки reports chats migration.
 -- REPORTS_CHATS_MIGRATION.sql
 -- Creates missing tables for /parent/reports and /chats
 -- Safe to re-run — uses IF NOT EXISTS throughout

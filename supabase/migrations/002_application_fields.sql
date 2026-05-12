@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для application fields.
 -- Add columns captured by mentor/org registration forms.
 
 alter table public.mentor_applications

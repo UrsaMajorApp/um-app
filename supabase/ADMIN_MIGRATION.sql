@@ -1,3 +1,4 @@
+-- ADMIN_MIGRATION: SQL-скрипт Supabase для настройки admin migration.
 -- ADMIN_MIGRATION.sql
 -- Run in Supabase SQL Editor after COURSES_MIGRATION.sql
 -- Enables course moderation flow and admin oversight

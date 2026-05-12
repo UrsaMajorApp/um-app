@@ -1,3 +1,4 @@
+// useIsDesktop: определяет широкий web layout, чтобы экраны меняли отступы и max-width.
 import { Platform, useWindowDimensions } from 'react-native';
 import { LAYOUT } from '$constants/theme';
 

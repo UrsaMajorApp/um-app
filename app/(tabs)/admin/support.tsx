@@ -1,3 +1,4 @@
+// Экран admin/support: загружает и показывает тикеты поддержки, жалобы и обратную связь в кабинете администратора.
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { AdminHeader } from '$components/admin/AdminHeader';

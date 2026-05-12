@@ -1,3 +1,4 @@
+// Calendar constants: подписи, цвета и настройки отображения расписания.
 export const RUSSIAN_CALENDAR_LOCALE = {
   monthNames: [
     'Январь',

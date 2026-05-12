@@ -1,3 +1,4 @@
+// EmptyState: показывает пустое состояние списка с иконкой, текстом и optional action.
 import { Feather } from '@expo/vector-icons';
 import type React from 'react';
 import { Text, View } from 'react-native';

@@ -1,3 +1,4 @@
+// YouthHome: собирает виджеты и быстрые действия домашнего экрана для роли ребенка/подростка.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

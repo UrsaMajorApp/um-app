@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для seed subscription catalog from diploma.
 -- Subscription catalog from diploma project table 4.
 insert into public.subscription_plans (
   id, role, title, price_kzt, billing_period, features, popular, active, display_order

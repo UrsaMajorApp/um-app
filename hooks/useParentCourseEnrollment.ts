@@ -1,3 +1,4 @@
+// useParentCourseEnrollment: отправляет заявку родителя на запись ребенка в курс.
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import type { AuthUser } from '$contexts/AuthContext';

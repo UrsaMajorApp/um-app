@@ -1,3 +1,4 @@
+// useDiagnosticEngine1517: управляет диагностикой 15-17, career-сценариями, scoring и отчетом.
 /**
  * useDiagnosticEngine1517.ts
  *

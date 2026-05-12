@@ -1,3 +1,4 @@
+// OrgHome: собирает виджеты и быстрые действия домашнего экрана для роли org.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

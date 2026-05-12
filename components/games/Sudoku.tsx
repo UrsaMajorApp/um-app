@@ -1,3 +1,4 @@
+// Sudoku: реализует сетку судоку, ввод чисел, проверку ошибок и завершение игры.
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import {

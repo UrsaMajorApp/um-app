@@ -1,3 +1,4 @@
+// Icon helpers: связывает строковые имена из конфигов с конкретными icon-компонентами.
 import { Feather } from '@expo/vector-icons';
 import type { FeatherIconName } from '$types/icons';
 

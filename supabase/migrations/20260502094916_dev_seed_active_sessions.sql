@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для dev seed active sessions.
 -- Keep shared populated-dev rows alive until the last active dev-data session
 -- turns the toggle off. Per-user seed rows are still restored for the user who
 -- disables the toggle.

@@ -1,3 +1,4 @@
+// DiagnosticArchitects: собирает возрастную диагностику architects с отдельными заданиями и UI.
 /**
  * DiagnosticArchitects.tsx
  * Main orchestrator for 15-17 Architects diagnostic.

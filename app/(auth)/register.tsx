@@ -1,3 +1,4 @@
+// Экран регистрации: собирает роль, имя, телефон/email, OTP и пароль для создания аккаунта.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { type Href, useRouter } from 'expo-router';

@@ -1,3 +1,4 @@
+// useYouthGameIq: хранит результаты game-IQ мини-игр и пересчитывает показатели навыков.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
 import type { GameId } from '$types/games';

@@ -1,3 +1,4 @@
+// FormCard: оборачивает поля формы в единый контейнер с одинаковыми отступами.
 import type React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import { COLORS, RADIUS, SHADOWS, SPACING } from '$constants/theme';

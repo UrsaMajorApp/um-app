@@ -1,3 +1,4 @@
+// AdminHeader: заголовок админского раздела с описанием и основными действиями.
 import { LinearGradient } from 'expo-linear-gradient';
 import type React from 'react';
 import { Platform, Text, View } from 'react-native';

@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для conversations type compat.
 -- Some linked databases have the conversations table from an older migration
 -- shape. The dev seed helper writes this column, and chat code can safely use
 -- direct/group/system once present.

@@ -1,3 +1,4 @@
+// user types: описывает TypeScript-структуры данных для пользователей.
 export interface User {
   uid: string;
   email?: string;

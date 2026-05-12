@@ -1,3 +1,4 @@
+-- ADMIN_RLS_MIGRATION: SQL-скрипт Supabase для настройки admin rls migration.
 -- ADMIN_RLS_MIGRATION.sql
 -- Grants the admin role full read/write access to every table the admin
 -- panel queries. Uses a SECURITY DEFINER helper so the role check itself

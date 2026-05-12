@@ -1,3 +1,4 @@
+// Экран parent/reports: загружает и показывает отчеты по детям в кабинете родителя.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

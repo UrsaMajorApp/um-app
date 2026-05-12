@@ -1,3 +1,4 @@
+// profile types: описывает TypeScript-структуры данных для профилей.
 export type ChildAgeGroup = '6-8' | '9-11' | '12-14' | '15-17';
 
 export type ParentProfileChildDraft = {

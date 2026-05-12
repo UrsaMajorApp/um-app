@@ -1,3 +1,4 @@
+// diagnosticData911: вопросы, варианты ответов, skill-векторы и scoring data для диагностики 9-11.
 /**
  * diagnosticData911.ts
  *

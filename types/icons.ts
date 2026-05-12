@@ -1,3 +1,4 @@
+// icons types: описывает TypeScript-структуры данных для иконок.
 import type { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
 

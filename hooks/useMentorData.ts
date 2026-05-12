@@ -1,3 +1,4 @@
+// useMentorData: загружает учеников, группы, сессии и операции кабинета ментора.
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '$contexts/AuthContext';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';

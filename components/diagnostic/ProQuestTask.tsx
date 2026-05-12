@@ -1,3 +1,4 @@
+// ProQuestTask: показывает PRO-задание диагностики с вариантами ответа и обработкой выбора.
 /**
  * ProQuestTask.tsx — Single task screen for the PRO "Space Quest" phase.
  *

@@ -1,3 +1,4 @@
+// useStudentData: собирает профиль, прогресс и задачи ученика для student screens.
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '$contexts/AuthContext';
 import { useDevDataVersion } from '$lib/devDataEvents';

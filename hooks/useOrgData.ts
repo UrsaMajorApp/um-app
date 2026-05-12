@@ -1,3 +1,4 @@
+// useOrgData: загружает курсы, группы, staff, students и finance-данные организации.
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '$contexts/AuthContext';
 import { useDevDataVersion } from '$lib/devDataEvents';

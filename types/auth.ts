@@ -1,3 +1,4 @@
+// auth types: описывает TypeScript-структуры данных для авторизации.
 export type AuthMethod = 'phone' | 'email';
 
 export type QRScanResult = {

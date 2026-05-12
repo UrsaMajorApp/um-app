@@ -1,3 +1,4 @@
+// SwipeableDecisionCard: добавляет жесты свайпа и анимацию принятия решения для диагностики.
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';

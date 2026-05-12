@@ -1,3 +1,4 @@
+// LabeledTextInput: поле ввода с label, ошибкой и единым стилем для анкет.
 import { Text, TextInput, type TextInputProps, View } from 'react-native';
 import { COLORS, RADIUS, TYPOGRAPHY } from '$constants/theme';
 

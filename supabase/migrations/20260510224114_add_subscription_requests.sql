@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для add subscription requests.
 -- Requests from parent-controlled youth accounts to activate a paid subscription.
 create table if not exists public.subscription_requests (
   id uuid primary key default gen_random_uuid(),

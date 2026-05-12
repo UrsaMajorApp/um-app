@@ -1,3 +1,4 @@
+// Minesweeper: реализует поле с минами, раскрытие клеток, флаги и состояние победы/поражения.
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import {

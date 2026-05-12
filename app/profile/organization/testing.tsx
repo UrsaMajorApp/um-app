@@ -1,3 +1,4 @@
+// Экран профиля organization: запускает диагностический тест для роли организации.
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';

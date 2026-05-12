@@ -1,3 +1,4 @@
+// Organization route add: добавляет новую запись для сущности сотрудника в кабинете организации.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';

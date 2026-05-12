@@ -1,3 +1,4 @@
+// Mentor profile options: варианты специализаций, опыта и данных для анкеты ментора.
 export const ROLE_COLOR = '#EF4444';
 export const ROLE_GRADIENT: [string, string] = ['#EF4444', '#F87171'];
 

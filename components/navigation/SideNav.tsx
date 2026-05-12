@@ -1,3 +1,4 @@
+// SideNav: рисует desktop-боковое меню с role-based пунктами навигации.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';

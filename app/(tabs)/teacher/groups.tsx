@@ -1,3 +1,4 @@
+// Экран teacher/groups: загружает и показывает группы обучения в кабинете преподавателя.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

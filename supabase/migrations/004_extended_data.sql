@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для extended data.
 -- ─── 004_extended_data.sql ────────────────────────────────────────────────
 -- Additional tables for: learning paths, youth goals/achievements,
 -- org schedule, parent child reports, mentorship requests, chat messages fix

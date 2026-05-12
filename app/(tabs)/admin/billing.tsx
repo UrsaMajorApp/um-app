@@ -1,3 +1,4 @@
+// Экран admin/billing: загружает и показывает биллинг, комиссии и транзакции платформы в кабинете администратора.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';

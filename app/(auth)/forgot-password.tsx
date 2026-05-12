@@ -1,3 +1,4 @@
+// Экран восстановления пароля: валидирует email и отправляет Supabase password-reset письмо.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

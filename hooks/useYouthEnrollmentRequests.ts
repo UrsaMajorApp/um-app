@@ -1,3 +1,4 @@
+// useYouthEnrollmentRequests: загружает заявки ребенка/подростка на курсы и их статусы.
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import type { AuthUser } from '$contexts/AuthContext';

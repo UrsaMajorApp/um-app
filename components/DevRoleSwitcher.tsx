@@ -1,3 +1,4 @@
+// DevRoleSwitcher: быстро переключает demo-роли без ручного логина и перезапуска приложения.
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';

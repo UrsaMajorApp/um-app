@@ -1,3 +1,4 @@
+// Экран профиля mentor: показывает статус заявки или профиля для роли ментора.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';

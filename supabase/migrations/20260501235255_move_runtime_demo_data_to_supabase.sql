@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для move runtime demo data to supabase.
 -- Move runtime/demo records out of the app bundle and into Supabase.
 -- Static UI vocabulary can stay in code; product data belongs here.
 

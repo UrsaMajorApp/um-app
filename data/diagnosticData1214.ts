@@ -1,3 +1,4 @@
+// diagnosticData1214: вопросы, варианты ответов, skill-векторы и scoring data для диагностики 12-14.
 /**
  * diagnosticData1214.ts
  *

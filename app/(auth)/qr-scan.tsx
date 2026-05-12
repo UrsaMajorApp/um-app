@@ -1,3 +1,4 @@
+// Экран QR-входа: открывает камеру, считывает QR/PIN ребенка и передает его в auth flow.
 import { Feather } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';

@@ -1,3 +1,4 @@
+// Temporary Stripe sandbox: запускает demo-checkout и возвращает пользователя в app flow.
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import { Platform } from 'react-native';
@@ -45,9 +46,9 @@ export async function startTemporaryPreDefenseStripeSandboxCheckout(params: {
   customerEmail?: string;
   clientReferenceId?: string;
 }) {
-  // TEMPORARY PRE-DEFENSE ONLY:
-  // Stripe is only used here because the incomplete Atlas account gives us sandbox credentials.
-  // This helper intentionally does not pretend to be the real production payment integration.
+  // Только для предзащиты:
+  // Stripe используется как sandbox-демо, потому что Atlas account еще не завершен.
+  // Это не production-интеграция платежей, а безопасный временный сценарий показа.
   if (!isTemporaryPreDefenseStripeSandboxEnabled()) {
     throw new Error('Temporary pre-defense Stripe sandbox checkout is disabled.');
   }

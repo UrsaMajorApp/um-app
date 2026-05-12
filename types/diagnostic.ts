@@ -1,3 +1,4 @@
+// diagnostic types: описывает TypeScript-структуры данных для диагностики.
 import type { JsonObject } from '$types/index';
 
 export interface Diagnostic {

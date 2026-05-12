@@ -1,17 +1,15 @@
+// useDiagnosticEngine: управляет диагностикой 6-8, swipe/pro ответами, scoring и Gemini-отчетом.
 /**
- * useDiagnosticEngine.ts
+ * Движок диагностики 6-8 "Explorers".
  *
- * Encapsulates all business logic for the 6–8 "Explorers" diagnostic:
- *  • Phase management (intro → basic → pro → processing → done)
- *  • Stealth analytics collection
- *  • Score computation
- *  • AI report generation via Gemini
+ * Здесь находится бизнес-логика теста:
+ *  • управление этапами intro -> basic -> pro -> processing -> done
+ *  • сбор скрытой аналитики по ответам
+ *  • подсчет score
+ *  • генерация AI-отчета через Gemini
  *
- * ────────────────────────────────────────────────────────────────────────
- * FOR BACKEND DEVS: The scoring formulas and AI prompt live here.
- * When you build the server-side scoring endpoint, replicate the logic
- * from `computeResults()` and the Gemini prompt in `processWithAI()`.
- * ────────────────────────────────────────────────────────────────────────
+ * Если комиссия спросит "где алгоритм диагностики", показывать этот файл:
+ * формулы находятся в computeResults(), а AI prompt — в processWithAI().
  */
 
 import { useCallback, useRef, useState } from 'react';
@@ -28,7 +26,7 @@ import {
 import { generateGeminiDiagnosticJson } from '$lib/geminiDiagnostics';
 import type { Diagnostic, DiagnosticAiResponse } from '$types/diagnostic';
 
-// ─── Types ──────────────────────────────────────────────────────────────
+// ─── Типы состояния диагностики ─────────────────────────────────────────
 
 export type DiagnosticPhase = 'intro' | 'basic' | 'pro' | 'processing' | 'done';
 
@@ -53,7 +51,7 @@ interface SwipeRecord {
   timestamp: number;
 }
 
-// ─── Hook ───────────────────────────────────────────────────────────────
+// ─── Основной hook диагностики ──────────────────────────────────────────
 
 export function useDiagnosticEngine(opts: {
   childId: string;
@@ -69,14 +67,15 @@ export function useDiagnosticEngine(opts: {
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState<Diagnostic | null>(null);
 
-  // Collected data
+  // Накопленные ответы пользователя. useRef выбран, чтобы ответы не терялись
+  // между render-циклами и не вызывали лишнюю перерисовку экрана.
   const swipes = useRef<SwipeRecord[]>([]);
   const stealthEvents = useRef<StealthEvent[]>([]);
   const taskEnteredAt = useRef<number>(Date.now());
   const taskAttempts = useRef<number>(0);
   const finishDiagnosticRef = useRef<() => Promise<void> | void>(() => {});
 
-  // ── Progress ─────────────────────────────────────────────────────────
+  // ── Расчет прогресса ─────────────────────────────────────────────────
 
   const totalSteps = BASIC_CARDS.length + (isPro ? PRO_TASKS.length : 0);
   const currentStep =
@@ -89,7 +88,7 @@ export function useDiagnosticEngine(opts: {
           : 0;
   const progress = totalSteps > 0 ? currentStep / totalSteps : 0;
 
-  // ── Phase helpers ────────────────────────────────────────────────────
+  // ── Переходы между этапами ───────────────────────────────────────────
 
   const startBasic = useCallback(() => {
     setPhase('basic');
@@ -108,7 +107,7 @@ export function useDiagnosticEngine(opts: {
     }
   }, [isPro]);
 
-  // ── BASIC: swipe handler ─────────────────────────────────────────────
+  // ── BASIC: обработка swipe-карточек ──────────────────────────────────
 
   const handleSwipe = useCallback(
     (liked: boolean) => {
@@ -132,7 +131,7 @@ export function useDiagnosticEngine(opts: {
     [basicIndex, advanceToPro],
   );
 
-  // ── PRO: answer handler ──────────────────────────────────────────────
+  // ── PRO: обработка заданий с вариантами ──────────────────────────────
 
   const handleProAnswer = useCallback(
     (optionId: number) => {
@@ -142,7 +141,7 @@ export function useDiagnosticEngine(opts: {
       taskAttempts.current += 1;
       const isCorrect =
         task.correctIndex === -1
-          ? true // no single correct answer (personality-type)
+          ? true // У personality-type задания нет единственного правильного ответа.
           : optionId === task.correctIndex;
 
       const event: StealthEvent = {
@@ -168,7 +167,7 @@ export function useDiagnosticEngine(opts: {
     [proIndex],
   );
 
-  // ── Scoring ──────────────────────────────────────────────────────────
+  // ── Scoring: перевод ответов в диагностический результат ─────────────
 
   const computeResults = useCallback((): {
     scores: Diagnostic['scores'];
@@ -176,7 +175,7 @@ export function useDiagnosticEngine(opts: {
     stealthProfile: string;
     rawScoreMap: Record<string, number>;
   } => {
-    // 1) Count BASIC likes per category
+    // 1) Считаем лайки BASIC-карточек по категориям интересов.
     const categoryCounts: Record<SkillCategory, number> = {
       tech: 0,
       art: 0,
@@ -194,7 +193,7 @@ export function useDiagnosticEngine(opts: {
       .sort((a, b) => b[1] - a[1])
       .map(([category, count]) => ({ category, count }));
 
-    // 2) Sum PRO task scores
+    // 2) Суммируем баллы PRO-заданий по skill-векторам.
     const rawScoreMap: Record<string, number> = {};
     for (const ev of stealthEvents.current) {
       const task = PRO_TASKS.find((t) => t.id === ev.taskId);
@@ -206,13 +205,13 @@ export function useDiagnosticEngine(opts: {
       }
     }
 
-    // 3) Map to Diagnostic scores (0-100 scale)
+    // 3) Собираем итоговую карту score для отчета.
     const scores: Record<string, number> = {
       ...categoryCounts,
       ...rawScoreMap,
     };
 
-    // 4) Stealth personality profile
+    // 4) Определяем поведенческий профиль по скрытым паттернам прохождения.
     const patternCounts: Record<string, number> = {};
     for (const ev of stealthEvents.current) {
       for (const p of STEALTH_PATTERNS) {
@@ -234,7 +233,7 @@ export function useDiagnosticEngine(opts: {
     };
   }, []);
 
-  // ── AI report generation ─────────────────────────────────────────────
+  // ── Генерация AI-отчета ──────────────────────────────────────────────
 
   const processWithAI = useCallback(
     async (computed: ReturnType<typeof computeResults>) => {

@@ -1,3 +1,4 @@
+// YouthPassModal: показывает пропуск/QR или данные доступа для youth-сценария.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';

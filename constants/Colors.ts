@@ -1,3 +1,4 @@
+// Colors: legacy/color-scheme palette, используемая частью Expo шаблона и UI.
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 

@@ -1,3 +1,4 @@
+// Экран mentor/students: загружает и показывает учеников в кабинете ментора.
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

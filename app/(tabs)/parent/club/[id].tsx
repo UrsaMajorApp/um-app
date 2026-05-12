@@ -1,3 +1,4 @@
+// Детальная вкладка клуба: показывает выбранный курс/клуб и сценарий записи ребенка по id.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';

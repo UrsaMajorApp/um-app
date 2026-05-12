@@ -1,3 +1,4 @@
+// Экран profile/index: загружает и показывает профиль текущего пользователя в кабинете пользователя.
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import MentorProfile from '$app/profile/mentor/index';

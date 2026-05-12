@@ -1,3 +1,4 @@
+// GradientScreenHeader: декоративный заголовок экрана с градиентом и крупным title.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text, TouchableOpacity, View } from 'react-native';

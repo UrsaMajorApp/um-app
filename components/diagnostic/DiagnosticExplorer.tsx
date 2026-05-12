@@ -1,3 +1,4 @@
+// DiagnosticExplorer: собирает экран диагностики 6-8 и подключает useDiagnosticEngine.
 /**
  * DiagnosticExplorer.tsx
  *

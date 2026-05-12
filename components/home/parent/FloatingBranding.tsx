@@ -1,3 +1,4 @@
+// FloatingBranding: добавляет плавающий brand-layer на главный экран родителя.
 import React from 'react';
 import { AutonomousLogo } from '$components/home/parent/AutonomousLogo';
 

@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для admin schema.
 -- UM admin-panel schema. Run in Supabase SQL Editor.
 -- Assumes um_user_profiles, parent_profiles, child_profiles already exist.
 

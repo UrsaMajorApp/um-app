@@ -1,3 +1,4 @@
+// CustomTabBar: рисует нижнюю навигацию и фильтрует вкладки по роли пользователя.
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSegments } from 'expo-router';

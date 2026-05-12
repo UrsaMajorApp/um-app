@@ -1,3 +1,4 @@
+// Экран admin/settings: загружает и показывает админские настройки платформы в кабинете администратора.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';

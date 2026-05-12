@@ -1,3 +1,4 @@
+// QR scan constants: тексты, ограничения и настройки QR/PIN-сценария.
 export const QR_SCAN_CORNER_GUIDES = [
   {
     id: 'top-left',

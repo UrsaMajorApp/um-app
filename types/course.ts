@@ -1,3 +1,4 @@
+// course types: описывает TypeScript-структуры данных для курсов.
 export type CourseSkill = {
   name: string;
   value: number;

@@ -1,3 +1,4 @@
+// Organization route edit: редактирует существующую запись для сущности курс в кабинете организации.
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';

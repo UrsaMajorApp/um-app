@@ -1,3 +1,4 @@
+// API оплаты: создает временную Stripe sandbox-ссылку для демонстрации покупки подписки.
 import { getSubscriptionPlanById, type SubscriptionPlanRole } from '$lib/subscriptionCatalog';
 
 const STRIPE_CHECKOUT_SESSIONS_ENDPOINT = 'https://api.stripe.com/v1/checkout/sessions';

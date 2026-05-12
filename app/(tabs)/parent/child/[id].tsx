@@ -1,3 +1,4 @@
+// Детальная вкладка ребенка: показывает профиль выбранного ребенка, диагностики и родительские действия по id.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';

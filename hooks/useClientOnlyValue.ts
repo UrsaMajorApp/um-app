@@ -1,3 +1,4 @@
+// useClientOnlyValue: возвращает значение только после client mount, чтобы избежать SSR/web mismatch.
 import React from 'react';
 
 // `useEffect` is not invoked during server rendering, meaning

@@ -1,3 +1,4 @@
+// NotificationsModal: показывает уведомления пользователя поверх текущего экрана.
 import { Feather } from '@expo/vector-icons';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';

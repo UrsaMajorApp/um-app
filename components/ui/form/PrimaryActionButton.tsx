@@ -1,3 +1,4 @@
+// PrimaryActionButton: главная кнопка формы с состояниями loading/disabled.
 import type React from 'react';
 import { Text, TouchableOpacity, type TouchableOpacityProps } from 'react-native';
 import { COLORS, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';

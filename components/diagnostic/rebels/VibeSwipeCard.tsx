@@ -1,3 +1,4 @@
+// VibeSwipeCard: swipe-карточка rebel-диагностики для выбора близких стилей и сценариев.
 /**
  * VibeSwipeCard.tsx — TikTok/Pinterest style moodboard for 12-14 BASIC phase.
  */

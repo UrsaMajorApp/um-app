@@ -1,3 +1,4 @@
+// Экран профиля teacher: показывает основную страницу раздела для роли преподавателя.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';

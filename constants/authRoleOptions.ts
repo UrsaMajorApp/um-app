@@ -1,3 +1,4 @@
+// Auth role options: список ролей, которые пользователь выбирает при регистрации.
 import type { Feather } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
 import type { UserRole } from '$contexts/AuthContext';

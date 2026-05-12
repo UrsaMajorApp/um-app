@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для anonymous dev role switcher.
 -- Allow dev anonymous sessions to create the matching app profile row.
 -- Supabase anonymous users still use auth.role() = 'authenticated', so this
 -- lets the dev role switcher participate in auth.uid()-based RLS paths.

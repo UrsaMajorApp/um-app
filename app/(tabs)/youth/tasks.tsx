@@ -1,3 +1,4 @@
+// Экран youth/tasks: загружает и показывает задания в кабинете ребенка/подростка.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

@@ -1,3 +1,4 @@
+// useSubscriptionRequests: управляет заявками и статусами подписки в admin/parent flows.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { AuthUser } from '$contexts/AuthContext';

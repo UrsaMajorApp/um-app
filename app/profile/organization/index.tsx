@@ -1,3 +1,4 @@
+// Экран профиля organization: показывает основную страницу раздела для роли организации.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';

@@ -1,3 +1,4 @@
+// Экран parent/calendar: загружает и показывает календарь занятий в кабинете родителя.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useMemo, useState } from 'react';

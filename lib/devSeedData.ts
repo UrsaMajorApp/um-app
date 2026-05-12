@@ -1,3 +1,4 @@
+// Dev seed data: наполняет demo-базу семьями, курсами, заявками и событиями для показа приложения.
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 
 function requireSupabase() {

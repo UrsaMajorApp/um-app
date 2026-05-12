@@ -1,3 +1,4 @@
+// Корневой layout: подключает провайдеры, шрифты, splash-screen и общий router guard приложения.
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';

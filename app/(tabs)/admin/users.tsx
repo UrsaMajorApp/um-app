@@ -1,3 +1,4 @@
+// Экран admin/users: загружает и показывает пользователей, семьи и роли в кабинете администратора.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';

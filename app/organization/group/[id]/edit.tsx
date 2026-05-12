@@ -1,3 +1,4 @@
+// Organization route edit: редактирует существующую запись для сущности группу в кабинете организации.
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';

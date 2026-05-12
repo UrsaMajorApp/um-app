@@ -1,3 +1,4 @@
+// Layout профиля: объединяет onboarding/profile screens и убирает системный header Expo Router.
 import { Stack } from 'expo-router';
 
 export default function ProfileLayout() {

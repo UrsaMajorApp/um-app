@@ -1,3 +1,4 @@
+// Supabase client: создает общий клиент, настраивает хранение session и OAuth callback behavior.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, type SupabaseClient, type SupportedStorage } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
@@ -7,8 +8,8 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? '';
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-// On web, use localStorage directly so AsyncStorage never touches `window` during SSR.
-// The `typeof window` guard makes it safe for server-side rendering.
+// Для web используем localStorage напрямую, а на телефоне оставляем AsyncStorage.
+// Проверка `typeof window` нужна, чтобы код не падал при server-side rendering.
 const webStorage: SupportedStorage = {
   getItem: (key) => (typeof window !== 'undefined' ? window.localStorage.getItem(key) : null),
   setItem: (key, value) => {
@@ -27,8 +28,8 @@ export const supabase: SupabaseClient | null = isSupabaseConfigured
         storage: authStorage,
         autoRefreshToken: true,
         persistSession: true,
-        // On web we need this true so OAuth redirects are handled automatically.
-        // On native we handle the callback manually via expo-web-browser.
+        // На web Supabase сам считывает OAuth callback из URL.
+        // В native callback обрабатывается отдельно через expo-web-browser.
         detectSessionInUrl: Platform.OS === 'web',
       },
     })

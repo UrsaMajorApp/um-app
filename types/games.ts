@@ -1,3 +1,4 @@
+// games types: описывает TypeScript-структуры данных для мини-игр.
 import type { FeatherIconName } from '$types/icons';
 
 export type GameId = 'memory' | 'sudoku' | 'minesweeper' | '2048';

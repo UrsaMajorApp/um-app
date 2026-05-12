@@ -1,3 +1,4 @@
+-- NEW_FEATURES_MIGRATION: SQL-скрипт Supabase для настройки new features migration.
 -- ============================================================================
 -- NEW FEATURES MIGRATION
 -- Adds tables for trial lessons, student enrollment requests, and mentor notes

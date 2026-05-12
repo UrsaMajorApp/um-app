@@ -1,3 +1,4 @@
+// WYRCard: карточка выбора “что бы ты предпочел” для creator-диагностики.
 /**
  * WYRCard.tsx — "Would You Rather" card for the BASIC phase (9–11).
  *

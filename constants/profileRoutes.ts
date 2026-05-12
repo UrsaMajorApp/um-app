@@ -1,3 +1,4 @@
+// Profile routes: связывает роли пользователя с нужными profile/onboarding screens.
 import type { UserRole } from '$contexts/AuthContext';
 import { YOUTH_ROLES } from '$lib/appNavigation';
 import type { AppHref } from '$types/router';

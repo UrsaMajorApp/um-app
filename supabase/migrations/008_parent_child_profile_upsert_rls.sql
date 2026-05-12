@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для parent child profile upsert rls.
 -- Make parent-owned profile upserts work for authenticated users, including
 -- anonymous dev-switcher sessions. Upserts need both USING and WITH CHECK so
 -- PostgREST can validate inserted or updated rows.

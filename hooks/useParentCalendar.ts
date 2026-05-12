@@ -1,3 +1,4 @@
+// useParentCalendar: собирает календарь занятий ребенка для parent calendar screen.
 import { useCallback, useEffect, useState } from 'react';
 import { isUuid } from '$lib/idUtils';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';

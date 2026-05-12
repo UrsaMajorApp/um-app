@@ -1,3 +1,4 @@
+-- APPLY_TO_SUPABASE: SQL-скрипт Supabase для настройки apply to supabase.
 -- ============================================================
 -- CONSOLIDATED SETUP — paste this entire file into
 -- https://supabase.com/dashboard/project/mmwqkmwrseeuwhyiftoz/sql

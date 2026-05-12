@@ -1,3 +1,4 @@
+// FullCourseBookingModal: собирает данные полной записи ребенка на выбранный курс.
 import { Feather } from '@expo/vector-icons';
 import { Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, SHADOWS } from '$constants/theme';

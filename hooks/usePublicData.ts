@@ -1,3 +1,4 @@
+// usePublicData: загружает публичные каталожные данные без приватного role context.
 /**
  * usePublicData — hooks for the parent/youth-facing course catalog.
  *

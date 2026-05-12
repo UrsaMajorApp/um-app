@@ -1,3 +1,4 @@
+// Layout вкладок: выбирает tab/side navigation и скрывает разделы, недоступные текущей роли.
 import { Tabs, useRouter, useSegments } from 'expo-router';
 import { useEffect, useMemo } from 'react';
 import { ActivityIndicator, View } from 'react-native';

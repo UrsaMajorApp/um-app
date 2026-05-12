@@ -1,3 +1,4 @@
+// DiagnosticCreators: собирает creator-диагностику с творческими заданиями и карточками.
 /**
  * DiagnosticCreators.tsx
  *

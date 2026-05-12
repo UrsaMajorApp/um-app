@@ -1,3 +1,4 @@
+// useChats: загружает список чатов, сообщения и операции отправки для chat screens.
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '$contexts/AuthContext';
 import { useDevDataVersion } from '$lib/devDataEvents';

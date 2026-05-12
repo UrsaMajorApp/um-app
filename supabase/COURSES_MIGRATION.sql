@@ -1,3 +1,4 @@
+-- COURSES_MIGRATION: SQL-скрипт Supabase для настройки courses migration.
 -- COURSES_MIGRATION.sql
 -- Run this in the Supabase SQL Editor (Dashboard → SQL Editor → New query)
 -- Safe to run multiple times — uses IF NOT EXISTS / ADD COLUMN IF NOT EXISTS

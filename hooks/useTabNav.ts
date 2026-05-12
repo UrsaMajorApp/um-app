@@ -1,3 +1,4 @@
+// useTabNav: вычисляет видимые вкладки и активный пункт навигации по роли и маршруту.
 import { type Href, useRouter, useSegments } from 'expo-router';
 import { DEFAULT_TABS, type Role, TABS_BY_ROLE } from '$constants/navigation/tabItems';
 import type { UserRole } from '$contexts/AuthContext';

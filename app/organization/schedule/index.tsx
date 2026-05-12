@@ -1,3 +1,4 @@
+// Organization route index: показывает основную страницу раздела для сущности расписание в кабинете организации.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

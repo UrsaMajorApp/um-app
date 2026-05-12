@@ -1,3 +1,4 @@
+// diagnosticData1517: вопросы, варианты ответов, skill-векторы и scoring data для диагностики 15-17.
 /**
  * diagnosticData1517.ts
  *

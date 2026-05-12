@@ -1,3 +1,4 @@
+// styles types: описывает TypeScript-структуры данных для стилей.
 import type { TextStyle, ViewStyle } from 'react-native';
 
 export type WebViewStyle = Omit<ViewStyle, 'position'> & {

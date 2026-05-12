@@ -1,3 +1,4 @@
+// Анкета ребенка: родитель добавляет child-профиль и связывает его со своим аккаунтом.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

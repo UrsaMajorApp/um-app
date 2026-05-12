@@ -1,3 +1,4 @@
+// EnrollmentRequestModal: показывает youth-заявку на курс и отправляет выбранное действие.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';

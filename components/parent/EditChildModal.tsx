@@ -1,3 +1,4 @@
+// EditChildModal: редактирует данные ребенка и передает изменения в parent data context.
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import {

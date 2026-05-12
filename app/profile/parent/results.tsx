@@ -1,3 +1,4 @@
+// Экран профиля parent: показывает результат диагностики для роли родителя.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

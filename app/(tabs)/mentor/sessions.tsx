@@ -1,3 +1,4 @@
+// Экран mentor/sessions: загружает и показывает сессии и занятия в кабинете ментора.
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';

@@ -1,3 +1,4 @@
+// admin types: описывает TypeScript-структуры данных для админки.
 import type { FeatherIconName } from '$types/icons';
 
 export type AdminBillingTab = 'transactions' | 'fees';

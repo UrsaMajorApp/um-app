@@ -1,3 +1,4 @@
+// Экран analytics/index: загружает и показывает аналитику и ключевые метрики в кабинете пользователя.
 import { Feather } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
 import { ScrollView, Text, useWindowDimensions, View } from 'react-native';

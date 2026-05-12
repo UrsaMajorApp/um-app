@@ -1,3 +1,4 @@
+// Web focus helper: снимает фокус с активного input перед навигацией на web.
 import { Platform } from 'react-native';
 
 export function blurActiveWebElement() {

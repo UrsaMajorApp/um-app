@@ -1,3 +1,4 @@
+// MemoryGame: реализует игру на память с карточками, совпадениями и локальным прогрессом.
 import { Feather } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';

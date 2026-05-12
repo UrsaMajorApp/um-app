@@ -1,3 +1,4 @@
+// Gemini diagnostics: отправляет prompt модели и парсит JSON-ответ для диагностического отчета.
 import type { JsonObject, JsonValue } from '$types/index';
 
 const GEMINI_MODEL = 'gemini-2.5-flash';

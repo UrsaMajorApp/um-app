@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для qr pin login access.
 -- Migration: Allow anonymous users to query child_profiles by qr_pin for login
 -- This enables QR code login for children who aren't authenticated yet
 

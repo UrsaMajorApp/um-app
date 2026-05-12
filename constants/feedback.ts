@@ -1,3 +1,4 @@
+// Feedback constants: варианты отзывов, статусов и UI-текстов для feedback flows.
 export const FEEDBACK_TAGS = [
   'Внимательно слушал',
   'Проявил лидерство',

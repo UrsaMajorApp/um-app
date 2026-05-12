@@ -1,3 +1,4 @@
+// CareerSwipeCard: показывает career-вариант и фиксирует выбор в architect-диагностике.
 /**
  * CareerSwipeCard.tsx — Strict, stylish Tinder/LinkedIn style for 15-17 BASIC.
  */

@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для onboarding questions.
 -- Onboarding / diagnostic questionnaires for each audience type.
 -- Questions were previously hardcoded in the app bundle; moving here allows
 -- content edits without an app deploy.

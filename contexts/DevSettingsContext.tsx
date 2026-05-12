@@ -1,3 +1,4 @@
+// DevSettingsContext: хранит переключатели demo-сценариев, например реальный или тестовый OTP.
 /**
  * DevSettingsContext — lightweight context for dev-only UI toggles.
  *

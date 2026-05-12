@@ -1,3 +1,4 @@
+// Date utils: форматирует даты и интервалы для экранов расписания.
 export function formatDateKey(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');

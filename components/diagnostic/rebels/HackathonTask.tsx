@@ -1,3 +1,4 @@
+// HackathonTask: rebel-задание про решение проблемы в формате hackathon-сценария.
 /**
  * HackathonTask.tsx — Messenger simulation for 12-14 PRO phase.
  */

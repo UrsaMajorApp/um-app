@@ -1,3 +1,4 @@
+// Supabase helpers: нормализуют ответы Supabase, чтобы UI не падал на error/null data.
 import { supabase } from '$lib/supabase';
 
 type SupabaseRowsResponse<T> = {

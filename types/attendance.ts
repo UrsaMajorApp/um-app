@@ -1,3 +1,4 @@
+// attendance types: описывает TypeScript-структуры данных для посещаемости.
 export type AttendanceStatus = 'present' | 'absent' | 'sick' | null;
 
 export interface AttendanceStudentRow {

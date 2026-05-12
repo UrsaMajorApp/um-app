@@ -1,3 +1,4 @@
+// Экран профиля organization: создает профиль для роли организации.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

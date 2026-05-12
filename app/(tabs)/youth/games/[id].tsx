@@ -1,3 +1,4 @@
+// Экран выбранной мини-игры: берет game id из маршрута и запускает нужный game-компонент.
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';

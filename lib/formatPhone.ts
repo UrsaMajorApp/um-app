@@ -1,3 +1,4 @@
+// Phone formatter: приводит телефон к читаемой маске во время ввода.
 /**
  * Formats a phone number string into `+7 777 777 7777` style as the user types.
  * Strips everything except digits and a leading +.

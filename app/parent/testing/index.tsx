@@ -1,3 +1,4 @@
+// Parent route index: показывает основную страницу раздела testing в отдельном parent-flow.
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';

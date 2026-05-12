@@ -1,3 +1,4 @@
+// useSpeech: оборачивает expo-speech для озвучивания текста в диагностике или обучении.
 /**
  * useSpeech.ts — Thin wrapper around expo-speech for the diagnostic module.
  *

@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для clear all dev data safe delete.
 -- pg_safeupdate rejects DELETE statements without a WHERE clause.
 
 create or replace function public.clear_all_dev_data()

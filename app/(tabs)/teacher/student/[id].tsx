@@ -1,3 +1,4 @@
+// Карточка ученика преподавателя: открывает данные ученика по id из списка группы.
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';

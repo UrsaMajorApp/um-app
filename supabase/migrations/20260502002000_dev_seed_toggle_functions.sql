@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для dev seed toggle functions.
 -- Dev-only seed helpers used by the in-app developer switcher.
 -- Rows are deterministic and removable by ID, so turning the toggle off only
 -- deletes records created by this seed.

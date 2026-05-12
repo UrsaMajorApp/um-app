@@ -1,3 +1,4 @@
+// OsTask: задание architects, где пользователь выбирает логику/структуру операционной системы.
 /**
  * OsTask.tsx — Virtual OS simulation for 15-17 PRO phase.
  * Simulates Mail, Slack, and Trello interfaces.

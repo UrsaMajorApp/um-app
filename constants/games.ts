@@ -1,3 +1,4 @@
+// Games constants: настройки мини-игр, уровней и отображения game-IQ.
 import type { DailyChallenge, GameCard } from '$types/games';
 
 export const GAME_2048_GRID_SIZE = 4;

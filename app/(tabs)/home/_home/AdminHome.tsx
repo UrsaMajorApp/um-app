@@ -1,3 +1,4 @@
+// AdminHome: собирает виджеты и быстрые действия домашнего экрана для роли администратора.
 import { Feather } from '@expo/vector-icons';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { AdminCard } from '$components/admin/AdminCard';

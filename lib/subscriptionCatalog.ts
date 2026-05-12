@@ -1,3 +1,4 @@
+// Subscription catalog: описывает планы, цены, роли и возможности подписок в одном месте.
 export type SubscriptionPlanRole = 'parent' | 'youth' | 'org';
 
 export interface SubscriptionPlan {

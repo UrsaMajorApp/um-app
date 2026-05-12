@@ -1,3 +1,4 @@
+// OAuth callback: принимает redirect от Supabase/Google и восстанавливает session пользователя.
 /**
  * /auth/callback
  *

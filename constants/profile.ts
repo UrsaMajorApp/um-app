@@ -1,3 +1,4 @@
+// Profile constants: варианты полей анкеты и подписей для profile screens.
 import type { ChildAgeGroup } from '$types/profile';
 
 export const ORGANIZATION_PROFILE_COLOR = '#10B981';

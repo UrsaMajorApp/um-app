@@ -1,3 +1,4 @@
+// PressableScale: добавляет press-анимацию масштаба к кнопкам и карточкам.
 import type React from 'react';
 import { useRef } from 'react';
 import {

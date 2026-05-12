@@ -1,3 +1,4 @@
+// ParentDataContext: централизует профиль родителя, детей и операции обновления для parent-экранов.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { useAuth } from '$contexts/AuthContext';

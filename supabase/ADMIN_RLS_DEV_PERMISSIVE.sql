@@ -1,3 +1,4 @@
+-- ADMIN_RLS_DEV_PERMISSIVE: SQL-скрипт Supabase для настройки admin rls dev permissive.
 -- ADMIN_RLS_DEV_PERMISSIVE.sql
 -- FOR DEVELOPMENT / MVP ONLY
 -- Allows any authenticated user to SELECT from admin-panel tables.

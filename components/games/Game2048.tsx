@@ -1,3 +1,4 @@
+// Game2048: реализует поле 2048, свайпы/ходы, объединение плиток и подсчет score.
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Platform,

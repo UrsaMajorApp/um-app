@@ -1,3 +1,4 @@
+// router types: описывает TypeScript-структуры данных для роутинга.
 import type { Href, useRouter } from 'expo-router';
 
 export type AppHref = Extract<Href, string>;

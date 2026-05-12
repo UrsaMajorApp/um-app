@@ -1,3 +1,4 @@
+// AdminCard: единая карточка для блоков админки с одинаковыми отступами, тенью и радиусом.
 import type React from 'react';
 import { type StyleProp, View, type ViewStyle } from 'react-native';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';

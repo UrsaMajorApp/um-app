@@ -1,3 +1,4 @@
+// Константы UI диагностики: цвета, подписи и параметры отображения диагностических карточек.
 export const DIAGNOSTIC_SWIPE_THRESHOLD = 90;
 export const DIAGNOSTIC_SWIPE_VELOCITY = 850;
 export const DIAGNOSTIC_SWIPE_EXIT_DISTANCE = 1200;

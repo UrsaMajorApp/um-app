@@ -1,3 +1,4 @@
+// useOrgVerification: хранит форму и статус верификации организации.
 import { useState } from 'react';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 

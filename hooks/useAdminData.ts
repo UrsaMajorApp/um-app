@@ -1,3 +1,4 @@
+// useAdminData: загружает families, mentor applications, organizations, payments, tickets и AI rules для админки.
 import { useCallback, useEffect, useState } from 'react';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { rowsOrEmpty } from '$lib/supabaseHelpers';
@@ -138,6 +139,8 @@ export function useFamilies() {
       return;
     }
     setLoading(true);
+    // Данные семьи собираются из нескольких таблиц: профиль родителя,
+    // тариф и количество детей. Promise.all ускоряет загрузку админки.
     const [parents, tariffs, children] = await Promise.all([
       supabase.from('um_user_profiles').select('id, first_name, last_name').eq('role', 'parent'),
       supabase.from('parent_profiles').select('user_id, tariff'),
@@ -192,6 +195,7 @@ export function useMentorApps() {
 
   const approve = async (id: string) => {
     if (!supabase) return;
+    // Одобрение ментора меняет статус заявки; UI обновляется через refresh().
     await supabase
       .from('mentor_applications')
       .update({ status: 'approved', reviewed_at: new Date().toISOString() })
@@ -238,6 +242,7 @@ export function useOrganizations() {
 
   const verify = async (id: string) => {
     if (!supabase) return;
+    // Верификация организации открывает ей доступ к рабочим сценариям кабинета.
     await supabase.from('organizations').update({ status: 'verified' }).eq('id', id);
     refresh();
   };

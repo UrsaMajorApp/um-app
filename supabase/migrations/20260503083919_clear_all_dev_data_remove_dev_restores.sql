@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для clear all dev data remove dev restores.
 -- Older snapshots may already contain populated [DEV] rows if a developer
 -- enabled the toggle before snapshot support was fixed. Clear-all should remove
 -- those restored dev rows too.

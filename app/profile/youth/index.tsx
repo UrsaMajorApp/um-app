@@ -1,3 +1,4 @@
+// Экран профиля youth: показывает основную страницу раздела для роли ребенка/подростка.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Alert, Platform, Pressable, ScrollView, Text, View } from 'react-native';

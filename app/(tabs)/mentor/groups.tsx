@@ -1,3 +1,4 @@
+// Экран mentor/groups: загружает и показывает группы обучения в кабинете ментора.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

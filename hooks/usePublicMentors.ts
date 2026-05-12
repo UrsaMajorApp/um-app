@@ -1,3 +1,4 @@
+// usePublicMentors: загружает список публичных менторов для выбора родителем.
 import { useCallback, useEffect, useState } from 'react';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { rowsOrEmpty } from '$lib/supabaseHelpers';

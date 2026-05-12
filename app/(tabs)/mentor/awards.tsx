@@ -1,3 +1,4 @@
+// Экран mentor/awards: загружает и показывает награды и достижения в кабинете ментора.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';

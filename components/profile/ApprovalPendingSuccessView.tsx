@@ -1,3 +1,4 @@
+// ApprovalPendingSuccessView: показывает успешную отправку анкеты и ожидание проверки.
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';

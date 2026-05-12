@@ -1,3 +1,4 @@
+// ScreenHeader: компактный заголовок раздела с subtitle и правой зоной действий.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import type React from 'react';

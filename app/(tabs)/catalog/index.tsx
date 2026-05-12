@@ -1,3 +1,4 @@
+// Экран catalog/index: загружает и показывает каталог курсов и клубов в кабинете пользователя.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';

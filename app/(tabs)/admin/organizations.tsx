@@ -1,3 +1,4 @@
+// Экран admin/organizations: загружает и показывает организации и их статусы проверки в кабинете администратора.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';

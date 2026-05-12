@@ -1,3 +1,4 @@
+// Входная точка: после запуска решает, отправить пользователя в auth flow, профиль или основной кабинет.
 import { Redirect, useLocalSearchParams } from 'expo-router';
 import { PROFILE_SETUP_ROUTES } from '$constants/profileRoutes';
 import { useAuth } from '$contexts/AuthContext';

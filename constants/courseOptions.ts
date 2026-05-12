@@ -1,3 +1,4 @@
+// Course options: справочники направлений, возрастов, форматов и параметров курсов.
 import type { FeatherIconName } from '$types/icons';
 
 export type CourseLevel = 'beginner' | 'intermediate' | 'advanced';

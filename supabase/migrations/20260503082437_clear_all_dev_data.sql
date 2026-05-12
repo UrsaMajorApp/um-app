@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для clear all dev data.
 -- Clear populated dev data across every active dev-data session.
 -- The regular clear_dev_data() only restores the current user's snapshot and
 -- keeps shared rows around while colleagues still have the toggle enabled.

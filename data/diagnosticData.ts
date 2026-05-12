@@ -1,3 +1,4 @@
+// diagnosticData: вопросы, варианты ответов, skill-векторы и scoring data для диагностики 6-8.
 /**
  * diagnosticData.ts
  *

@@ -1,3 +1,4 @@
+// Экран профиля mentor: создает профиль для роли ментора.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';

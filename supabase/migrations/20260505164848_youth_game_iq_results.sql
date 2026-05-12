@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для youth game iq results.
 -- Persist IQ awarded from youth games as append-only completion events.
 
 create table if not exists public.youth_game_results (

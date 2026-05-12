@@ -1,3 +1,4 @@
+-- ORG_APPLICATIONS_MIGRATION: SQL-скрипт Supabase для настройки org applications migration.
 -- ORG_APPLICATIONS_MIGRATION.sql
 -- Creates the org_applications table used by the parent booking flow
 -- and the admin enrollment pipeline.

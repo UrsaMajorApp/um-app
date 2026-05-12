@@ -1,3 +1,4 @@
+// UI constants: общие размеры и настройки повторяемых элементов интерфейса.
 export const PRESSABLE_SCALE_OUTER_PROPS = new Set([
   'position',
   'top',

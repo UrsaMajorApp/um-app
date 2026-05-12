@@ -1,3 +1,4 @@
+// Модальное окно чата: открывает быстрый диалог поверх текущего экрана без ухода из основного flow.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';

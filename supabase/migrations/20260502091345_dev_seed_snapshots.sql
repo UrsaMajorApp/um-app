@@ -1,3 +1,4 @@
+-- Миграция Supabase: применяет изменение схемы или seed-данных для dev seed snapshots.
 -- Snapshot and restore the rows that the dev population toggle may overwrite.
 -- This intentionally scopes snapshots to deterministic seed IDs rather than
 -- replacing entire tables.

@@ -1,3 +1,4 @@
+// Экран teacher/journal: загружает и показывает journal в кабинете преподавателя.
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';

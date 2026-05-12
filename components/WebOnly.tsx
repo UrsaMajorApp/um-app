@@ -1,3 +1,4 @@
+// WebOnly: рендерит дочерний UI только в web-среде, где доступны browser-only API.
 import type { CSSProperties, ReactNode } from 'react';
 import { Platform } from 'react-native';
 

@@ -1,3 +1,4 @@
+// Карточка ученика ментора: загружает ученика по id и показывает прогресс, занятия и действия ментора.
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';

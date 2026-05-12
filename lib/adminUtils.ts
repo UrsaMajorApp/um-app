@@ -1,3 +1,4 @@
+// Admin utils: содержит helpers для отображения статусов и admin-данных.
 import { type Href, useRouter } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
 import { ADMIN_ROUTES, type AdminRouteKey } from '$constants/admin';

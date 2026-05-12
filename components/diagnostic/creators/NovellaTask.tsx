@@ -1,3 +1,4 @@
+// NovellaTask: творческое задание creators, где ответ влияет на профиль навыков.
 /**
  * NovellaTask.tsx — Visual novel / messenger UI for PRO phase (9–11).
  *
