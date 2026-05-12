@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthMethodSwitcher } from '$components/auth/AuthMethodSwitcher';
+import { WebForm } from '$components/auth/WebForm';
 import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -243,114 +244,122 @@ export default function LoginScreen() {
                   ...SHADOWS.md,
                 }}
               >
-                <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
+                <WebForm onSubmit={canSubmit && !isSubmitting ? handleLogin : undefined}>
+                  <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
 
-                {/* Login Field */}
-                <View style={{ marginBottom: 20 }}>
-                  <Text style={styles.label}>{isEmail ? 'EMAIL' : 'НОМЕР ТЕЛЕФОНА'}</Text>
-                  <View style={styles.inputWrapper}>
-                    <Feather
-                      name={isEmail ? 'mail' : 'phone'}
-                      size={18}
-                      color={COLORS.mutedForeground}
-                      style={styles.inputIcon}
-                    />
-                    <TextInput
-                      placeholder={isEmail ? 'you@example.com' : '+7 777 777 7777'}
-                      placeholderTextColor={COLORS.mutedForeground}
-                      value={identifier}
-                      onChangeText={handleIdentifierChange}
-                      keyboardType={isEmail ? 'email-address' : 'phone-pad'}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border border-gray-100"
-                      style={styles.inputText}
-                    />
-                  </View>
-                </View>
-
-                {/* Password Field */}
-                <View style={{ marginBottom: 12 }}>
-                  <Text style={styles.label}>ПАРОЛЬ</Text>
-                  <View style={styles.inputWrapper}>
-                    <Feather
-                      name="lock"
-                      size={18}
-                      color={COLORS.mutedForeground}
-                      style={styles.inputIcon}
-                    />
-                    <TextInput
-                      placeholder="Ваш пароль"
-                      placeholderTextColor={COLORS.mutedForeground}
-                      value={password}
-                      onChangeText={setPassword}
-                      secureTextEntry={!showPassword}
-                      className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
-                      style={styles.inputText}
-                    />
-                    <PressableScale
-                      onPress={() => setShowPassword(!showPassword)}
-                      style={styles.eyeIcon}
-                      scaleTo={0.85}
-                    >
+                  {/* Login Field */}
+                  <View style={{ marginBottom: 20 }}>
+                    <Text style={styles.label}>{isEmail ? 'EMAIL' : 'НОМЕР ТЕЛЕФОНА'}</Text>
+                    <View style={styles.inputWrapper}>
                       <Feather
-                        name={showPassword ? 'eye-off' : 'eye'}
+                        name={isEmail ? 'mail' : 'phone'}
                         size={18}
                         color={COLORS.mutedForeground}
+                        style={styles.inputIcon}
                       />
-                    </PressableScale>
+                      <TextInput
+                        placeholder={isEmail ? 'you@example.com' : '+7 777 777 7777'}
+                        placeholderTextColor={COLORS.mutedForeground}
+                        value={identifier}
+                        onChangeText={handleIdentifierChange}
+                        keyboardType={isEmail ? 'email-address' : 'phone-pad'}
+                        autoComplete={isEmail ? 'email' : 'tel'}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border border-gray-100"
+                        style={styles.inputText}
+                      />
+                    </View>
                   </View>
-                </View>
 
-                <PressableScale
-                  onPress={navigateToForgotPassword}
-                  style={{ alignSelf: 'flex-end', marginBottom: 24 }}
-                  scaleTo={0.93}
-                >
-                  <Text
-                    style={{
-                      color: COLORS.primary,
-                      fontSize: 13,
-                      fontWeight: '700',
-                    }}
-                  >
-                    Забыли пароль?
-                  </Text>
-                </PressableScale>
-
-                {!!error && (
-                  <MotiView
-                    from={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    style={styles.errorBox}
-                  >
-                    <Text style={styles.errorText}>{error}</Text>
-                  </MotiView>
-                )}
-
-                {/* Submit button inside card for cohesion */}
-                <PressableScale onPress={handleLogin} disabled={isSubmitting || !canSubmit}>
-                  <LinearGradient
-                    colors={
-                      canSubmit ? [COLORS.primary, COLORS.secondary] : [COLORS.muted, COLORS.muted]
-                    }
-                    style={styles.submitBtn}
-                  >
-                    {isSubmitting ? (
-                      <ActivityIndicator size="small" color="white" />
-                    ) : (
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: '800',
-                          color: canSubmit ? 'white' : COLORS.mutedForeground,
-                        }}
+                  {/* Password Field */}
+                  <View style={{ marginBottom: 12 }}>
+                    <Text style={styles.label}>ПАРОЛЬ</Text>
+                    <View style={styles.inputWrapper}>
+                      <Feather
+                        name="lock"
+                        size={18}
+                        color={COLORS.mutedForeground}
+                        style={styles.inputIcon}
+                      />
+                      <TextInput
+                        placeholder="Ваш пароль"
+                        placeholderTextColor={COLORS.mutedForeground}
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={!showPassword}
+                        autoComplete="current-password"
+                        textContentType="password"
+                        onSubmitEditing={canSubmit && !isSubmitting ? handleLogin : undefined}
+                        className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
+                        style={styles.inputText}
+                      />
+                      <PressableScale
+                        onPress={() => setShowPassword(!showPassword)}
+                        style={styles.eyeIcon}
+                        scaleTo={0.85}
                       >
-                        Войти
-                      </Text>
-                    )}
-                  </LinearGradient>
-                </PressableScale>
+                        <Feather
+                          name={showPassword ? 'eye-off' : 'eye'}
+                          size={18}
+                          color={COLORS.mutedForeground}
+                        />
+                      </PressableScale>
+                    </View>
+                  </View>
+
+                  <PressableScale
+                    onPress={navigateToForgotPassword}
+                    style={{ alignSelf: 'flex-end', marginBottom: 24 }}
+                    scaleTo={0.93}
+                  >
+                    <Text
+                      style={{
+                        color: COLORS.primary,
+                        fontSize: 13,
+                        fontWeight: '700',
+                      }}
+                    >
+                      Забыли пароль?
+                    </Text>
+                  </PressableScale>
+
+                  {!!error && (
+                    <MotiView
+                      from={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      style={styles.errorBox}
+                    >
+                      <Text style={styles.errorText}>{error}</Text>
+                    </MotiView>
+                  )}
+
+                  {/* Submit button inside card for cohesion */}
+                  <PressableScale onPress={handleLogin} disabled={isSubmitting || !canSubmit}>
+                    <LinearGradient
+                      colors={
+                        canSubmit
+                          ? [COLORS.primary, COLORS.secondary]
+                          : [COLORS.muted, COLORS.muted]
+                      }
+                      style={styles.submitBtn}
+                    >
+                      {isSubmitting ? (
+                        <ActivityIndicator size="small" color="white" />
+                      ) : (
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: '800',
+                            color: canSubmit ? 'white' : COLORS.mutedForeground,
+                          }}
+                        >
+                          Войти
+                        </Text>
+                      )}
+                    </LinearGradient>
+                  </PressableScale>
+                </WebForm>
               </MotiView>
 
               <View style={styles.accountSwitchRow}>
@@ -384,10 +393,7 @@ export default function LoginScreen() {
                   </PressableScale>
 
                   {/* QR */}
-                  <PressableScale
-                    onPress={navigateToQrScan}
-                    style={styles.socialChip}
-                  >
+                  <PressableScale onPress={navigateToQrScan} style={styles.socialChip}>
                     <Feather name="grid" size={20} color={COLORS.primary} />
                     <Text style={styles.socialChipText}>QR-код</Text>
                   </PressableScale>

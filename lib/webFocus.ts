@@ -14,4 +14,15 @@ export function blurActiveWebElement() {
   if (activeElement instanceof HTMLElement) {
     activeElement.blur();
   }
+
+  const previousTabIndex = document.body.getAttribute('tabindex');
+  document.body.setAttribute('tabindex', '-1');
+  document.body.focus({ preventScroll: true });
+
+  if (previousTabIndex === null) {
+    document.body.removeAttribute('tabindex');
+    return;
+  }
+
+  document.body.setAttribute('tabindex', previousTabIndex);
 }

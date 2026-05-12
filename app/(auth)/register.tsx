@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthMethodSwitcher } from '$components/auth/AuthMethodSwitcher';
+import { WebForm } from '$components/auth/WebForm';
 import { PressableScale } from '$components/ui/PressableScale';
 import { AUTH_ROLE_OPTIONS } from '$constants/authRoleOptions';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
@@ -465,153 +466,172 @@ export default function RegisterScreen() {
                     ...SHADOWS.md,
                   }}
                 >
-                  {/* Inner content fades between steps without remounting the card */}
+                  <WebForm onSubmit={isButtonEnabled() && !isSubmitting ? handleAction : undefined}>
+                    {/* Inner content fades between steps without remounting the card */}
 
-                  {/* Step 1: Phone + Password */}
-                  {step === 1 && (
-                    <MotiView
-                      key="s1"
-                      from={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ type: 'timing', duration: 150 }}
-                    >
-                      <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
-                      <Field
-                        label={isEmail ? 'Email' : 'Номер телефона'}
-                        icon={isEmail ? 'mail' : 'phone'}
-                        value={identifier}
-                        onChange={handleIdentifierChange}
-                        placeholder={isEmail ? 'you@example.com' : '+7 777 777 7777'}
-                        keyboardType={isEmail ? 'email-address' : 'phone-pad'}
-                        autoFocus
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                      />
-                      <Field
-                        label="Пароль"
-                        icon="lock"
-                        value={password}
-                        onChange={setPassword}
-                        placeholder="Минимум 6 символов"
-                        secure
-                        showToggle={() => setShowPassword(!showPassword)}
-                        shown={showPassword}
-                      />
-                      <Field
-                        label="Подтвердите пароль"
-                        icon="lock"
-                        value={confirmPassword}
-                        onChange={setConfirmPassword}
-                        placeholder="Повторите пароль"
-                        secure
-                        showToggle={() => setShowConfirmPassword(!showConfirmPassword)}
-                        shown={showConfirmPassword}
-                        last
-                      />
-                    </MotiView>
-                  )}
-
-                  {/* Step 2: OTP */}
-                  {step === 2 && (
-                    <MotiView
-                      key="s2"
-                      from={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ type: 'timing', duration: 150 }}
-                    >
-                      <View style={{ alignItems: 'center' }}>
-                        {!!devOtpCode && devMode && !useRealOtp && (
-                          <View
-                            style={{
-                              backgroundColor: '#FEF9C3',
-                              padding: 8,
-                              borderRadius: 8,
-                              marginBottom: 20,
-                              width: '100%',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <Text
-                              style={{
-                                color: '#854D0E',
-                                fontSize: 12,
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              DEV MODE: {devOtpCode}
-                            </Text>
-                          </View>
-                        )}
-                        <TextInput
-                          placeholder="000000"
-                          placeholderTextColor={COLORS.border}
-                          value={otp}
-                          onChangeText={(t) => setOtp(t.replace(/\D/g, '').slice(0, 6))}
-                          keyboardType="number-pad"
+                    {/* Step 1: Phone + Password */}
+                    {step === 1 && (
+                      <MotiView
+                        key="s1"
+                        from={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: 'timing', duration: 150 }}
+                      >
+                        <AuthMethodSwitcher value={authMethod} onChange={handleAuthMethodChange} />
+                        <Field
+                          label={isEmail ? 'Email' : 'Номер телефона'}
+                          icon={isEmail ? 'mail' : 'phone'}
+                          value={identifier}
+                          onChange={handleIdentifierChange}
+                          placeholder={isEmail ? 'you@example.com' : '+7 777 777 7777'}
+                          keyboardType={isEmail ? 'email-address' : 'phone-pad'}
+                          autoComplete={isEmail ? 'email' : 'tel'}
                           autoFocus
-                          style={
-                            {
-                              fontSize: 48,
-                              fontWeight: '900',
-                              textAlign: 'center',
-                              letterSpacing: 10,
-                              color: currentRoleInfo?.color || COLORS.primary,
-                              marginBottom: 20,
-                              outlineWidth: 0,
-                            } satisfies WebTextStyle
-                          }
+                          autoCapitalize="none"
+                          autoCorrect={false}
                         />
-                        <PressableScale
-                          onPress={() => sendRegistrationCode(identifier)}
-                          scaleTo={0.93}
-                        >
-                          <Text
-                            style={{
-                              color: COLORS.mutedForeground,
-                              fontSize: 14,
-                            }}
-                          >
-                            Не получили код?{' '}
-                            <Text
+                        <Field
+                          label="Пароль"
+                          icon="lock"
+                          value={password}
+                          onChange={setPassword}
+                          placeholder="Минимум 6 символов"
+                          secure
+                          autoComplete="new-password"
+                          textContentType="newPassword"
+                          showToggle={() => setShowPassword(!showPassword)}
+                          shown={showPassword}
+                        />
+                        <Field
+                          label="Подтвердите пароль"
+                          icon="lock"
+                          value={confirmPassword}
+                          onChange={setConfirmPassword}
+                          placeholder="Повторите пароль"
+                          secure
+                          autoComplete="new-password"
+                          textContentType="newPassword"
+                          onSubmitEditing={
+                            isButtonEnabled() && !isSubmitting ? handleAction : undefined
+                          }
+                          showToggle={() => setShowConfirmPassword(!showConfirmPassword)}
+                          shown={showConfirmPassword}
+                          last
+                        />
+                      </MotiView>
+                    )}
+
+                    {/* Step 2: OTP */}
+                    {step === 2 && (
+                      <MotiView
+                        key="s2"
+                        from={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: 'timing', duration: 150 }}
+                      >
+                        <View style={{ alignItems: 'center' }}>
+                          {!!devOtpCode && devMode && !useRealOtp && (
+                            <View
                               style={{
-                                color: currentRoleInfo?.color || COLORS.primary,
-                                fontWeight: 'bold',
+                                backgroundColor: '#FEF9C3',
+                                padding: 8,
+                                borderRadius: 8,
+                                marginBottom: 20,
+                                width: '100%',
+                                alignItems: 'center',
                               }}
                             >
-                              Отправить еще раз
+                              <Text
+                                style={{
+                                  color: '#854D0E',
+                                  fontSize: 12,
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                DEV MODE: {devOtpCode}
+                              </Text>
+                            </View>
+                          )}
+                          <TextInput
+                            placeholder="000000"
+                            placeholderTextColor={COLORS.border}
+                            value={otp}
+                            onChangeText={(t) => setOtp(t.replace(/\D/g, '').slice(0, 6))}
+                            keyboardType="number-pad"
+                            autoComplete="one-time-code"
+                            autoFocus
+                            onSubmitEditing={
+                              isButtonEnabled() && !isSubmitting ? handleAction : undefined
+                            }
+                            style={
+                              {
+                                fontSize: 48,
+                                fontWeight: '900',
+                                textAlign: 'center',
+                                letterSpacing: 10,
+                                color: currentRoleInfo?.color || COLORS.primary,
+                                marginBottom: 20,
+                                outlineWidth: 0,
+                              } satisfies WebTextStyle
+                            }
+                          />
+                          <PressableScale
+                            onPress={() => sendRegistrationCode(identifier)}
+                            scaleTo={0.93}
+                          >
+                            <Text
+                              style={{
+                                color: COLORS.mutedForeground,
+                                fontSize: 14,
+                              }}
+                            >
+                              Не получили код?{' '}
+                              <Text
+                                style={{
+                                  color: currentRoleInfo?.color || COLORS.primary,
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                Отправить еще раз
+                              </Text>
                             </Text>
-                          </Text>
-                        </PressableScale>
-                      </View>
-                    </MotiView>
-                  )}
+                          </PressableScale>
+                        </View>
+                      </MotiView>
+                    )}
 
-                  {/* Step 3: Name */}
-                  {step === 3 && (
-                    <MotiView
-                      key="s3"
-                      from={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ type: 'timing', duration: 150 }}
-                    >
-                      <Field
-                        label="Имя"
-                        icon="user"
-                        value={firstName}
-                        onChange={setFirstName}
-                        placeholder="Как к вам обращаться?"
-                        autoFocus
-                      />
-                      <Field
-                        label="Фамилия (опционально)"
-                        icon="user"
-                        value={lastName}
-                        onChange={setLastName}
-                        placeholder="Ваша фамилия"
-                        last
-                      />
-                    </MotiView>
-                  )}
+                    {/* Step 3: Name */}
+                    {step === 3 && (
+                      <MotiView
+                        key="s3"
+                        from={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: 'timing', duration: 150 }}
+                      >
+                        <Field
+                          label="Имя"
+                          icon="user"
+                          value={firstName}
+                          onChange={setFirstName}
+                          placeholder="Как к вам обращаться?"
+                          autoComplete="given-name"
+                          autoFocus
+                        />
+                        <Field
+                          label="Фамилия (опционально)"
+                          icon="user"
+                          value={lastName}
+                          onChange={setLastName}
+                          placeholder="Ваша фамилия"
+                          autoComplete="family-name"
+                          onSubmitEditing={
+                            isButtonEnabled() && !isSubmitting ? handleAction : undefined
+                          }
+                          last
+                        />
+                      </MotiView>
+                    )}
+                  </WebForm>
                 </MotiView>
               )}
 
@@ -766,6 +786,9 @@ interface FieldProps {
   shown?: boolean;
   autoCapitalize?: TextInputProps['autoCapitalize'];
   autoCorrect?: TextInputProps['autoCorrect'];
+  autoComplete?: TextInputProps['autoComplete'];
+  textContentType?: TextInputProps['textContentType'];
+  onSubmitEditing?: TextInputProps['onSubmitEditing'];
   last?: boolean;
 }
 
@@ -782,6 +805,9 @@ function Field({
   shown,
   autoCapitalize,
   autoCorrect,
+  autoComplete,
+  textContentType,
+  onSubmitEditing,
   last = false,
 }: FieldProps) {
   return (
@@ -816,6 +842,9 @@ function Field({
           autoFocus={autoFocus}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
+          autoComplete={autoComplete}
+          textContentType={textContentType}
+          onSubmitEditing={onSubmitEditing}
           className="w-full pl-12 pr-12 py-4 bg-gray-50 rounded-2xl border border-gray-100"
           style={{ fontSize: 15, fontWeight: '500' }}
         />
