@@ -194,7 +194,7 @@ export default function ParentChildren() {
                       ? 'Ребенок (6-11 лет)'
                       : child.ageCategory === 'teen'
                         ? 'Подросток (12-17 лет)'
-                        : 'Студент (18-20 лет)'}
+                        : 'Подросток (12-17 лет)'}
                     {child.age ? ` • ${child.age} лет` : ''}
                   </Text>
                   <View

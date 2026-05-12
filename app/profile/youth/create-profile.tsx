@@ -525,7 +525,12 @@ export default function CreateProfileTeen() {
                     parseInt(formData.age, 10) <= 17
                   )
                 }
-                onPress={() => router.push('/profile/youth/testing')}
+                onPress={() =>
+                  router.push({
+                    pathname: '/profile/youth/testing',
+                    params: { age: formData.age },
+                  })
+                }
                 style={{ marginTop: 8, marginBottom: 40 }}
                 activeOpacity={0.8}
               >

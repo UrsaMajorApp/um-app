@@ -67,6 +67,7 @@ type PlanCardProps = {
   requestedPlanId: string | null;
   requestedPlanTitle: string | null;
   stripeSandboxEnabled: boolean;
+  requiresParentApproval: boolean;
   paymentError: { planId: string; message: string } | null;
   onChoose: (plan: SubscriptionPlan) => void;
 };
@@ -82,6 +83,7 @@ function SubscribePlanCard(props: PlanCardProps) {
     requestedPlanId,
     requestedPlanTitle,
     stripeSandboxEnabled,
+    requiresParentApproval,
     paymentError,
     onChoose,
   } = props;
@@ -93,7 +95,7 @@ function SubscribePlanCard(props: PlanCardProps) {
   const isRequestedPlan =
     requestedPlanId === plan.id ||
     (requestedPlanTitle !== null && requestedPlanTitle === plan.title);
-  const isYouthRequestFlow = role === 'youth' && isPaid;
+  const isYouthRequestFlow = role === 'youth' && isPaid && requiresParentApproval;
   const actionLabel = planActionLabel({
     isCheckoutLoading,
     isSelected,
@@ -247,8 +249,11 @@ export default function SubscribeScreen() {
   const requestedBy = firstParam(params.requestedBy);
   const { plans, loading } = useSubscriptionPlans(role);
   const activeChild = childrenProfile.find((child) => child.id === activeChildId);
+  const requiresParentApproval = Boolean(
+    activeChild?.parentId && activeChild.parentId !== 'pending',
+  );
   const youthSubscriptionRequests = useYouthSubscriptionRequests({
-    user: role === 'youth' ? user : null,
+    user: role === 'youth' && requiresParentApproval ? user : null,
     activeChild,
   });
   const stripeSandboxEnabled = isTemporaryPreDefenseStripeSandboxEnabled();
@@ -285,7 +290,7 @@ export default function SubscribeScreen() {
       return;
     }
 
-    if (role === 'youth') {
+    if (role === 'youth' && requiresParentApproval) {
       const result = await youthSubscriptionRequests.requestPlan(plan);
       if (result.ok) {
         Alert.alert(
@@ -373,7 +378,7 @@ export default function SubscribeScreen() {
             выберите подходящий план
           </Text>
 
-          {role === 'youth' ? (
+          {role === 'youth' && requiresParentApproval ? (
             <View
               style={{
                 backgroundColor: 'rgba(255,255,255,0.92)',
@@ -388,7 +393,7 @@ export default function SubscribeScreen() {
                 Платные планы отправляются родителю на подтверждение.
               </Text>
               <Text style={{ color: '#6B7280', marginTop: 4, fontSize: 12 }}>
-                Для young adult аккаунта оплата остается прямой через Stripe Sandbox.
+                Самостоятельные подростковые аккаунты оплачивают подписку напрямую.
               </Text>
             </View>
           ) : null}
@@ -448,6 +453,7 @@ export default function SubscribeScreen() {
               requestedPlanId={requestedPlanId}
               requestedPlanTitle={requestedPlanTitle}
               stripeSandboxEnabled={stripeSandboxEnabled}
+              requiresParentApproval={requiresParentApproval}
               paymentError={paymentError}
               onChoose={choosePaidPlan}
             />

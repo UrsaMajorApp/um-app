@@ -30,11 +30,11 @@ export default function EditChildModal({
 
   const handleSave = () => {
     const parsed = parseInt(age, 10);
-    const ageCategory: Child['ageCategory'] =
-      parsed <= 11 ? 'child' : parsed <= 17 ? 'teen' : 'young-adult';
+    const safeAge = Number.isFinite(parsed) ? Math.min(Math.max(parsed, 6), 17) : child.age;
+    const ageCategory: Child['ageCategory'] = safeAge <= 11 ? 'child' : 'teen';
     onSave({
       name: name.trim() || child.name,
-      age: Number.isFinite(parsed) ? parsed : child.age,
+      age: safeAge,
       ageCategory,
     });
     onClose();

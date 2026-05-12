@@ -11,6 +11,7 @@ interface EnrollmentRequestModalProps {
   visible: boolean;
   selectedCourse: PublicCourse | null;
   enrollmentRequested: string[];
+  requiresParentApproval?: boolean;
   onClose: () => void;
   onRequestEnrollment: () => void;
 }
@@ -19,6 +20,7 @@ export function EnrollmentRequestModal({
   visible,
   selectedCourse,
   enrollmentRequested,
+  requiresParentApproval = true,
   onClose,
   onRequestEnrollment,
 }: EnrollmentRequestModalProps) {
@@ -119,7 +121,7 @@ export function EnrollmentRequestModal({
 
               <View
                 style={{
-                  backgroundColor: '#FEF3C7',
+                  backgroundColor: requiresParentApproval ? '#FEF3C7' : '#ECFDF5',
                   borderRadius: 16,
                   padding: 16,
                   marginBottom: 20,
@@ -133,26 +135,38 @@ export function EnrollmentRequestModal({
                     width: 36,
                     height: 36,
                     borderRadius: 18,
-                    backgroundColor: '#FDE68A',
+                    backgroundColor: requiresParentApproval ? '#FDE68A' : '#BBF7D0',
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
                 >
-                  <Feather name="bell" size={18} color="#B45309" />
+                  <Feather
+                    name={requiresParentApproval ? 'bell' : 'check-circle'}
+                    size={18}
+                    color={requiresParentApproval ? '#B45309' : '#047857'}
+                  />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text
                     style={{
                       fontSize: 14,
                       fontWeight: '700',
-                      color: '#92400E',
+                      color: requiresParentApproval ? '#92400E' : '#047857',
                       marginBottom: 4,
                     }}
                   >
-                    Нужно одобрение родителя
+                    {requiresParentApproval ? 'Нужно одобрение родителя' : 'Самостоятельная запись'}
                   </Text>
-                  <Text style={{ fontSize: 13, color: '#B45309', lineHeight: 18 }}>
-                    Родитель получит push-уведомление и сможет подтвердить или отклонить вашу заявку
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: requiresParentApproval ? '#B45309' : '#047857',
+                      lineHeight: 18,
+                    }}
+                  >
+                    {requiresParentApproval
+                      ? 'Родитель получит push-уведомление и сможет подтвердить или отклонить вашу заявку'
+                      : 'Заявка уйдет напрямую организации без родительского подтверждения.'}
                   </Text>
                 </View>
               </View>
@@ -230,7 +244,11 @@ export function EnrollmentRequestModal({
                     fontWeight: '800',
                   }}
                 >
-                  {isRequested ? 'Запрос отправлен' : 'Отправить запрос родителю'}
+                  {isRequested
+                    ? 'Заявка отправлена'
+                    : requiresParentApproval
+                      ? 'Отправить запрос родителю'
+                      : 'Отправить заявку'}
                 </Text>
               </TouchableOpacity>
             </>

@@ -15,7 +15,6 @@ export default function ProfileLayout() {
       <Stack.Screen name="parent/results" />
       <Stack.Screen name="youth/create-profile" />
       <Stack.Screen name="youth/create-profile-child" />
-      <Stack.Screen name="youth/create-profile-young-adult" />
       <Stack.Screen name="youth/testing" />
       <Stack.Screen name="youth/results" />
       <Stack.Screen name="organization/create-profile" />

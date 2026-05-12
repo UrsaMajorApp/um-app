@@ -44,7 +44,10 @@ import type { AppRouter } from '$types/router';
 
 export default function YouthTesting() {
   const router = useRouter();
-  const { childId } = useLocalSearchParams<{ childId?: string | string[] }>();
+  const { childId, age } = useLocalSearchParams<{
+    childId?: string | string[];
+    age?: string | string[];
+  }>();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.profileHorizontalPaddingDesktop
@@ -58,12 +61,14 @@ export default function YouthTesting() {
     useOnboardingQuestions('youth');
 
   const requestedChildId = Array.isArray(childId) ? childId[0] : childId;
+  const requestedAge = Number.parseInt(Array.isArray(age) ? (age[0] ?? '') : (age ?? ''), 10);
   const targetChild =
     childrenProfile.find((c) => c.id === requestedChildId) ||
     childrenProfile.find((c) => c.id === activeChildId) ||
     childrenProfile[0];
   const targetChildId = targetChild?.id || activeChildId;
-  const childAge = targetChild?.age ?? (devMode ? devYouthAge : 10);
+  const fallbackAge = Number.isFinite(requestedAge) ? requestedAge : devMode ? devYouthAge : 10;
+  const childAge = targetChild?.age ?? fallbackAge;
 
   useEffect(() => {
     if (targetChild?.id && targetChild.id !== activeChildId) {
@@ -76,7 +81,7 @@ export default function YouthTesting() {
   if (childAge >= 12 && childAge <= 14) return <DiagnosticRebels childId={targetChildId} />;
   if (childAge >= 15 && childAge <= 17) return <DiagnosticArchitects childId={targetChildId} />;
 
-  // FALLBACK: 18+ or unknown
+  // Fallback for missing or out-of-range age.
   if (fallbackLoading) {
     return (
       <View

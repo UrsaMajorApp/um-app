@@ -65,7 +65,7 @@ export default function CreateProfileChild() {
   const validation = {
     firstName: formData.firstName.trim().length > 0,
     phone: phoneDigits.length === 0 || phoneDigits.length === 11,
-    age: formData.age >= 6 && formData.age <= 20,
+    age: formData.age >= 6 && formData.age <= 17,
     gender: formData.gender === 'boy' || formData.gender === 'girl',
     interests: interests.length > 0,
     goals: formData.goals.trim().length > 0,

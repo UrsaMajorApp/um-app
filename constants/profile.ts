@@ -19,7 +19,7 @@ export const PARENT_CHILD_AGE_OPTIONS: { label: string; value: ChildAgeGroup }[]
   { label: '15-17', value: '15-17' },
 ];
 
-export const CHILD_PROFILE_AGE_OPTIONS = Array.from({ length: 15 }, (_, index) => index + 6);
+export const CHILD_PROFILE_AGE_OPTIONS = Array.from({ length: 12 }, (_, index) => index + 6);
 
 export const YOUTH_PROFILE_INTERESTS = [
   'Рисование',

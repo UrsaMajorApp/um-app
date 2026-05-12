@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import type { AuthUser } from '$contexts/AuthContext';
-import type { PublicCourse } from '$hooks/usePublicData';
+import { applyToCourse, type PublicCourse } from '$hooks/usePublicData';
 import { isSupabaseConfigured, supabase } from '$lib/supabase';
 import { rowsOrEmpty } from '$lib/supabaseHelpers';
 import type { Child } from '$types/child';
@@ -23,6 +23,7 @@ export function useYouthEnrollmentRequests({
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<PublicCourse | null>(null);
   const [enrollmentRequested, setEnrollmentRequested] = useState<string[]>([]);
+  const requiresParentApproval = Boolean(activeChild?.parentId && activeChild.parentId !== 'pending');
 
   const loadEnrollmentRequests = useCallback(async () => {
     if (!supabase || !isSupabaseConfigured || !user?.id) {
@@ -67,6 +68,28 @@ export function useYouthEnrollmentRequests({
       const parentId =
         activeChild?.parentId && activeChild.parentId !== 'pending' ? activeChild.parentId : null;
 
+      if (!parentId) {
+        const studentName = `${user.firstName}${user.lastName ? ` ${user.lastName}` : ''}`.trim();
+        const result = await applyToCourse({
+          orgId: selectedCourse.org_id,
+          courseTitle: selectedCourse.title,
+          childName: studentName || 'Подросток',
+          childAge: activeChild?.age ?? null,
+        });
+
+        if (result.error) {
+          Alert.alert('Ошибка', result.error);
+          return;
+        }
+
+        setEnrollmentRequested((prev) => [...prev, selectedCourse.id]);
+        setShowEnrollModal(false);
+        Alert.alert('Заявка отправлена', 'Организация увидит вашу заявку и свяжется с вами.', [
+          { text: 'OK' },
+        ]);
+        return;
+      }
+
       const { error } = await supabase.from('student_enrollment_requests').insert({
         student_id: user.id,
         student_name: user.firstName + (user.lastName ? ` ${user.lastName}` : ''),
@@ -98,6 +121,7 @@ export function useYouthEnrollmentRequests({
     showEnrollModal,
     selectedCourse,
     enrollmentRequested,
+    requiresParentApproval,
     openEnrollmentModal,
     closeEnrollmentModal,
     requestSelectedCourse,

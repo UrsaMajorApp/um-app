@@ -94,7 +94,7 @@ const rootAccess: Record<string, (role: UserRole) => boolean> = {
 
 function canAccessYouthProfileRoute(role: UserRole, screen?: string) {
   if (screen === 'create-profile-child') return role === 'parent';
-  if (screen === 'create-profile' || screen === 'create-profile-young-adult') {
+  if (screen === 'create-profile') {
     return isYouthRole(role);
   }
   return canUseYouthDiagnostic(role);
@@ -107,7 +107,10 @@ export function canAccessRouteSegments(role: UserRole, segments: string[]) {
 
   // Expo Router передает маршрут как сегменты: например (tabs)/parent/reports.
   // Мы проверяем первый и второй сегмент, чтобы не держать логику доступа в каждом экране.
-  if (root === '(tabs)') return tabSectionAccess[section]?.(role) ?? true;
+  if (root === '(tabs)') {
+    if (section === 'youth' && (screen === 'tasks' || screen === 'achievements')) return false;
+    return tabSectionAccess[section]?.(role) ?? true;
+  }
 
   if (root === 'profile') {
     if (section === 'youth') return canAccessYouthProfileRoute(role, screen);
