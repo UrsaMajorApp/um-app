@@ -3,9 +3,8 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Platform, Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FloatingBranding } from '$components/home/parent/FloatingBranding';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -20,7 +19,6 @@ import type { WebViewStyle } from '$types/styles';
 export default function ParentHome() {
   const router = useRouter();
   const { user } = useAuth();
-  const { width, height } = useWindowDimensions();
   const isDesktop = useIsDesktop();
   const [notificationsVisible, setNotificationsVisible] = useState(false);
   const {
@@ -53,23 +51,6 @@ export default function ParentHome() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Intensive Fixed Background Layer (Branded "Rain") */}
-      <View
-        style={{
-          ...Platform.select({
-            web: { position: 'fixed' } as WebViewStyle,
-            default: { position: 'absolute' },
-          }),
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          pointerEvents: 'none',
-        }}
-      >
-        <FloatingBranding count={40} dark={true} width={width} height={height} />
-      </View>
-
       <ScrollView
         contentContainerStyle={{
           paddingBottom: isDesktop ? 32 : 100,
