@@ -107,13 +107,6 @@ begin
     '70000000-0000-4000-a000-000000000102'
   );
 
-  delete from public.subscription_plans
-  where id in (
-    '70000000-0000-4000-a000-000000000201',
-    '70000000-0000-4000-a000-000000000202',
-    '70000000-0000-4000-a000-000000000203'
-  );
-
   delete from public.organizations
   where id = '70000000-0000-4000-a000-000000000001'
     and owner_user_id = current_user_id;
@@ -198,54 +191,6 @@ begin
     status = excluded.status,
     age_min = excluded.age_min,
     age_max = excluded.age_max,
-    updated_at = now();
-
-  insert into public.subscription_plans (
-    id, role, title, price_kzt, billing_period, features, popular, active, display_order
-  )
-  values
-    (
-      '70000000-0000-4000-a000-000000000201',
-      'parent',
-      '[DEV] Family Pro',
-      4900,
-      'month',
-      array['Priority mentor matching', 'Progress reports', 'Trial lesson reminders'],
-      true,
-      true,
-      10
-    ),
-    (
-      '70000000-0000-4000-a000-000000000202',
-      'youth',
-      '[DEV] Young Explorer',
-      2900,
-      'month',
-      array['Goal tracking', 'Course recommendations', 'Learning streaks'],
-      false,
-      true,
-      20
-    ),
-    (
-      '70000000-0000-4000-a000-000000000203',
-      'org',
-      '[DEV] Studio Growth',
-      14900,
-      'month',
-      array['Published course catalog', 'Wallet insights', 'Student applications'],
-      true,
-      true,
-      30
-    )
-  on conflict (id) do update set
-    role = excluded.role,
-    title = excluded.title,
-    price_kzt = excluded.price_kzt,
-    billing_period = excluded.billing_period,
-    features = excluded.features,
-    popular = excluded.popular,
-    active = excluded.active,
-    display_order = excluded.display_order,
     updated_at = now();
 
   insert into public.trial_lesson_slots (
@@ -613,8 +558,8 @@ set search_path = public
 as $$
   select exists (
     select 1
-    from public.subscription_plans
-    where id = '70000000-0000-4000-a000-000000000201'
+    from public.organizations
+    where id = '70000000-0000-4000-a000-000000000001'
   );
 $$;
 

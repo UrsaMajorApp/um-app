@@ -134,6 +134,18 @@ create index if not exists trial_requests_org_idx
 
 alter table public.trial_lesson_requests enable row level security;
 
+do $$
+begin
+  if to_regclass('public.subscription_plans') is not null then
+    delete from public.subscription_plans
+    where id in (
+      '70000000-0000-4000-a000-000000000201',
+      '70000000-0000-4000-a000-000000000202',
+      '70000000-0000-4000-a000-000000000203'
+    );
+  end if;
+end $$;
+
 drop policy if exists trial_requests_parent_select on public.trial_lesson_requests;
 create policy trial_requests_parent_select
   on public.trial_lesson_requests
@@ -719,8 +731,8 @@ begin
     status, notification_sent, notification_read
   )
   values
-    ('70000000-0000-4000-a000-000000002941', current_user_id, '[DEV] Amina', current_user_id, '70000000-0000-4000-a000-000000000202', '[DEV] Young Explorer', 'youth', 2900, 'month', 'pending', true, false),
-    ('70000000-0000-4000-a000-000000002942', current_user_id, '[DEV] Arman', current_user_id, '70000000-0000-4000-a000-000000000202', '[DEV] Young Explorer', 'youth', 2900, 'month', 'approved', true, true)
+    ('70000000-0000-4000-a000-000000002941', current_user_id, '[DEV] Amina', current_user_id, null, '[DEV] Young Explorer', 'youth', 2900, 'month', 'pending', true, false),
+    ('70000000-0000-4000-a000-000000002942', current_user_id, '[DEV] Arman', current_user_id, null, '[DEV] Young Explorer', 'youth', 2900, 'month', 'approved', true, true)
   on conflict (id) do update set
     student_id = excluded.student_id,
     student_name = excluded.student_name,

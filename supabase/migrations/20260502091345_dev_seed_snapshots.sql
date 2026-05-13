@@ -38,12 +38,6 @@ begin
         '70000000-0000-4000-a000-000000000101',
         '70000000-0000-4000-a000-000000000102'
       )), '[]'::jsonb),
-    'subscription_plans',
-      coalesce((select jsonb_agg(to_jsonb(t)) from public.subscription_plans t where t.id in (
-        '70000000-0000-4000-a000-000000000201',
-        '70000000-0000-4000-a000-000000000202',
-        '70000000-0000-4000-a000-000000000203'
-      )), '[]'::jsonb),
     'teacher_groups',
       coalesce((select jsonb_agg(to_jsonb(t)) from public.teacher_groups t where t.id in (
         '70000000-0000-4000-a000-000000000301'
@@ -207,13 +201,6 @@ begin
     '70000000-0000-4000-a000-000000000102'
   );
 
-  delete from public.subscription_plans
-  where id in (
-    '70000000-0000-4000-a000-000000000201',
-    '70000000-0000-4000-a000-000000000202',
-    '70000000-0000-4000-a000-000000000203'
-  );
-
   delete from public.organizations
   where id = '70000000-0000-4000-a000-000000000001'
     and owner_user_id = current_user_id;
@@ -258,20 +245,6 @@ begin
     created_at = excluded.created_at,
     updated_at = excluded.updated_at,
     rejection_reason = excluded.rejection_reason;
-
-  insert into public.subscription_plans
-  select * from jsonb_populate_recordset(null::public.subscription_plans, snapshot_payload->'subscription_plans')
-  on conflict (id) do update set
-    role = excluded.role,
-    title = excluded.title,
-    price_kzt = excluded.price_kzt,
-    billing_period = excluded.billing_period,
-    features = excluded.features,
-    popular = excluded.popular,
-    active = excluded.active,
-    display_order = excluded.display_order,
-    created_at = excluded.created_at,
-    updated_at = excluded.updated_at;
 
   insert into public.teacher_groups
   select * from jsonb_populate_recordset(null::public.teacher_groups, snapshot_payload->'teacher_groups')
@@ -462,54 +435,6 @@ begin
     status = excluded.status,
     age_min = excluded.age_min,
     age_max = excluded.age_max,
-    updated_at = now();
-
-  insert into public.subscription_plans (
-    id, role, title, price_kzt, billing_period, features, popular, active, display_order
-  )
-  values
-    (
-      '70000000-0000-4000-a000-000000000201',
-      'parent',
-      '[DEV] Family Pro',
-      4900,
-      'month',
-      array['Priority mentor matching', 'Progress reports', 'Trial lesson reminders'],
-      true,
-      true,
-      10
-    ),
-    (
-      '70000000-0000-4000-a000-000000000202',
-      'youth',
-      '[DEV] Young Explorer',
-      2900,
-      'month',
-      array['Goal tracking', 'Course recommendations', 'Learning streaks'],
-      false,
-      true,
-      20
-    ),
-    (
-      '70000000-0000-4000-a000-000000000203',
-      'org',
-      '[DEV] Studio Growth',
-      14900,
-      'month',
-      array['Published course catalog', 'Wallet insights', 'Student applications'],
-      true,
-      true,
-      30
-    )
-  on conflict (id) do update set
-    role = excluded.role,
-    title = excluded.title,
-    price_kzt = excluded.price_kzt,
-    billing_period = excluded.billing_period,
-    features = excluded.features,
-    popular = excluded.popular,
-    active = excluded.active,
-    display_order = excluded.display_order,
     updated_at = now();
 
   insert into public.trial_lesson_slots (
