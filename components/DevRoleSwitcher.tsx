@@ -76,7 +76,7 @@ export function DevRoleSwitcher() {
       await AsyncStorage.setItem(DEV_DATA_KEY, 'false');
       if (isDevSessionUser) {
         await logout();
-        router.replace('/(auth)/intro');
+        router.replace('/intro');
       }
       setVisible(false);
     }

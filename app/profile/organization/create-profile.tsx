@@ -83,8 +83,17 @@ export default function CreateProfileOrganization() {
     setSubmitting(true);
     try {
       if (supabase && isSupabaseConfigured) {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const ownerUserId = sessionData.session?.user.id;
+
+        if (!ownerUserId) {
+          setError('Сессия истекла. Войдите снова и повторите отправку.');
+          setSubmitting(false);
+          return;
+        }
+
         const { error: insertErr } = await supabase.from('organizations').insert({
-          owner_user_id: user?.id ?? null,
+          owner_user_id: ownerUserId,
           name: orgName.trim(),
           city: city.trim(),
           contact_person: contactPerson.trim(),

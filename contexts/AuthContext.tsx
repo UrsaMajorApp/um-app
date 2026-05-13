@@ -181,6 +181,44 @@ function buildDevUserFromId(id: string, role: UserRole): AuthUser {
   });
 }
 
+async function createAnonymousDevRegistrationSession(input: {
+  phone: string;
+  role: UserRole;
+  firstName: string;
+  lastName?: string;
+}): Promise<SupabaseUser | null> {
+  if (!supabase || !isSupabaseConfigured) return null;
+
+  const metadata = {
+    dev_otp_registration: true,
+    role: input.role,
+    phone: input.phone,
+    first_name: input.firstName.trim(),
+    last_name: input.lastName?.trim() || '',
+  };
+  const { data: currentSession } = await supabase.auth.getSession();
+  const currentUser = currentSession.session?.user ?? null;
+  const canReuseAnonymousDevUser =
+    currentUser &&
+    isAnonymousSupabaseUser(currentUser) &&
+    (currentUser.user_metadata?.dev_role_switcher === true ||
+      currentUser.user_metadata?.dev_otp_registration === true);
+
+  if (canReuseAnonymousDevUser) {
+    const { data, error } = await supabase.auth.updateUser({ data: metadata });
+    if (error) throw error;
+    return data.user ?? currentUser;
+  }
+
+  if (currentUser) await supabase.auth.signOut();
+
+  const { data, error } = await supabase.auth.signInAnonymously({
+    options: { data: metadata },
+  });
+  if (error) throw error;
+  return data.user;
+}
+
 async function fetchRemoteProfile(userId: string) {
   if (!supabase || !isSupabaseConfigured) return null;
   const response = await supabase
@@ -562,8 +600,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { success: true };
       }
 
-      // Dev bypass создает синтетического пользователя без Supabase session.
-      // UUID остается валидным, чтобы случайные запросы не падали на формате id.
+      if (isDevBypass && supabase && isSupabaseConfigured) {
+        try {
+          const sessionUser = await createAnonymousDevRegistrationSession({
+            phone: normalized,
+            role,
+            firstName,
+            lastName,
+          });
+
+          if (!sessionUser) {
+            return { success: false, error: 'Не удалось создать dev-сессию' };
+          }
+
+          const nextUser = toAuthUser({
+            id: sessionUser.id,
+            phone: normalized,
+            role,
+            firstName,
+            lastName,
+            profileComplete: false,
+          });
+
+          await upsertRemoteProfile(nextUser);
+          setUser(nextUser);
+          await AsyncStorage.removeItem(DEV_USER_KEY);
+          return { success: true };
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Не удалось создать dev-сессию',
+          };
+        }
+      }
+
+      // Offline dev fallback: no Supabase client means there is no remote RLS
+      // boundary to satisfy, so a local synthetic user is enough.
       const nextUser = toAuthUser({
         id: DEV_IDS[role] ?? 'd0000000-0000-4000-a000-000000000009',
         phone: normalized,

@@ -25,7 +25,7 @@ import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function MentorCreateProfile() {
   const router = useRouter();
-  const { user, finalizeRegistration } = useAuth();
+  const { finalizeRegistration } = useAuth();
   const isDesktop = useIsDesktop();
   const horizontalPadding = isDesktop
     ? LAYOUT.authHorizontalPaddingDesktop
@@ -98,9 +98,16 @@ export default function MentorCreateProfile() {
           formData.specialization === 'Другая специализация'
             ? formData.customSpecialization
             : formData.specialization;
+        const { data: sessionData } = await supabase.auth.getSession();
+        const userId = sessionData.session?.user.id;
+
+        if (!userId) {
+          setError('Сессия истекла. Войдите снова и повторите отправку.');
+          return;
+        }
 
         const { error: insertErr } = await supabase.from('mentor_applications').insert({
-          user_id: user?.id ?? null,
+          user_id: userId,
           name: formData.fullName,
           specialization: finalSpec,
           city: formData.city,
@@ -314,51 +321,6 @@ export default function MentorCreateProfile() {
                       exit={{ opacity: 0, translateX: -20 }}
                       transition={{ type: 'timing', duration: 400 }}
                     >
-                      {/* Photo upload */}
-                      <View style={{ alignItems: 'center', marginBottom: 28 }}>
-                        <View
-                          style={{
-                            width: 100,
-                            height: 100,
-                            borderRadius: 50,
-                            backgroundColor: COLORS.muted,
-                            borderWidth: 3,
-                            borderColor: ROLE_COLOR,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            ...SHADOWS.sm,
-                          }}
-                        >
-                          <Feather name="camera" size={28} color={COLORS.mutedForeground} />
-                          <PressableScale
-                            style={{
-                              position: 'absolute',
-                              bottom: 0,
-                              right: 0,
-                              width: 30,
-                              height: 30,
-                              borderRadius: 15,
-                              backgroundColor: ROLE_COLOR,
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              borderWidth: 2,
-                              borderColor: 'white',
-                            }}
-                          >
-                            <Feather name="plus" size={16} color="white" />
-                          </PressableScale>
-                        </View>
-                        <Text
-                          style={{
-                            color: COLORS.mutedForeground,
-                            marginTop: 10,
-                            fontSize: 13,
-                          }}
-                        >
-                          Загрузите профессиональное фото
-                        </Text>
-                      </View>
-
                       <InputField
                         label="ФИО *"
                         value={formData.fullName}
