@@ -35,7 +35,7 @@ export default function TeacherProfile() {
   const displayName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || 'Учитель';
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}

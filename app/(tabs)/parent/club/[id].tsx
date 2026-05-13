@@ -2,12 +2,11 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import {
-  ActivityIndicator, Platform, ScrollView, Text, View } from 'react-native';
-import { PressableScale } from '$components/ui/PressableScale';
+import { ActivityIndicator, Platform, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentChoiceModal } from '$components/parent/club/EnrollmentChoiceModal';
 import { FullCourseBookingModal } from '$components/parent/club/FullCourseBookingModal';
+import { PressableScale } from '$components/ui/PressableScale';
 import { LEVEL_LABELS } from '$constants/courseOptions';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -39,7 +38,7 @@ export default function ParentClubDetails() {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#F9FAFB',
+          backgroundColor: COLORS.background,
           alignItems: 'center',
           justifyContent: 'center',
         }}
@@ -57,6 +56,7 @@ export default function ParentClubDetails() {
           alignItems: 'center',
           justifyContent: 'center',
           padding: 32,
+          backgroundColor: COLORS.background,
         }}
       >
         <Feather name="alert-circle" size={40} color="#D1D5DB" />
@@ -89,7 +89,7 @@ export default function ParentClubDetails() {
   const displayLevel = LEVEL_LABELS[course.level] ?? course.level;
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 180 }}>
         {/* Hero gradient */}
         <View style={{ position: 'relative' }}>
@@ -155,7 +155,7 @@ export default function ParentClubDetails() {
           style={{
             padding: 20,
             marginTop: -32,
-            backgroundColor: '#F9FAFB',
+            backgroundColor: COLORS.background,
             borderTopLeftRadius: 36,
             borderTopRightRadius: 36,
           }}

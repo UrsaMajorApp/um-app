@@ -112,7 +112,7 @@ export default function ParentProfile() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#F8F7FF',
+          backgroundColor: COLORS.background,
         }}
       >
         <ActivityIndicator size="large" color="#6C5CE7" />

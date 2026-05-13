@@ -362,7 +362,7 @@ export default function MentorStudentDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F7FF',
+    backgroundColor: COLORS.background,
   },
   loadingContainer: {
     flex: 1,
@@ -441,7 +441,7 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    backgroundColor: '#F8F7FF',
+    backgroundColor: COLORS.background,
     borderRadius: 24,
     paddingVertical: 16,
     alignItems: 'center',
@@ -717,7 +717,7 @@ const styles = StyleSheet.create({
     color: COLORS.foreground,
   },
   reportPreview: {
-    backgroundColor: '#F8F7FF',
+    backgroundColor: COLORS.background,
     borderRadius: 24,
     padding: 20,
     marginBottom: 20,

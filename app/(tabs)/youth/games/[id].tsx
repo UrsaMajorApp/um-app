@@ -101,7 +101,7 @@ export default function YouthGamePage() {
     <GestureHandlerRootView
       style={{
         flex: 1,
-        backgroundColor: isDesktop ? '#F8FAFC' : COLORS.background,
+        backgroundColor: COLORS.background,
       }}
     >
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>

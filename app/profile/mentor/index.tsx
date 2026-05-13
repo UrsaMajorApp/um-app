@@ -73,7 +73,7 @@ export default function MentorProfile() {
   const displayName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || 'Ментор';
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ zIndex: 10 }}>
         <LinearGradient
           colors={COLORS.gradients.header}

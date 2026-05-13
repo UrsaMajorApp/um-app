@@ -58,7 +58,7 @@ export default function MentorWalletScreen() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: paddingX, paddingTop: 20 }}>
           <Text style={styles.mainTitle}>Кошелек</Text>

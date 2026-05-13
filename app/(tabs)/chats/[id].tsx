@@ -38,7 +38,7 @@ export default function ChatScreen() {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flex: 1, backgroundColor: COLORS.background }}>
         {/* Header */}
         <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
           <LinearGradient

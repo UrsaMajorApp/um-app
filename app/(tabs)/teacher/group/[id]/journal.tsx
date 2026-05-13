@@ -33,7 +33,7 @@ export default function TeacherGroupJournal() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         {/* Header */}
         <View style={[styles.header, { paddingHorizontal: paddingX }]}>
