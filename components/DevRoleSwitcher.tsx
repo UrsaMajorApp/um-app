@@ -53,7 +53,7 @@ export function DevRoleSwitcher() {
       (user.email.endsWith('@dev.local') ||
         (user.email.endsWith('@example.com') && user.phone === '79991234567')),
   );
-  const canManageDevData = devToolsEnabled && isDevSessionUser && !syncingDevData;
+  const canManageDevData = devToolsEnabled && Boolean(user) && !syncingDevData;
 
   if (!__DEV__) return null;
 
@@ -156,13 +156,15 @@ export function DevRoleSwitcher() {
       return;
     }
 
-    try {
-      const remoteSeeded = await getDevDataSeeded();
-      setDevDataEnabled(remoteSeeded);
-      await AsyncStorage.setItem(DEV_DATA_KEY, remoteSeeded ? 'true' : 'false');
-    } catch {
-      // Keep the local switch state when Supabase is unavailable or the
-      // migration has not been pushed yet.
+    if (user) {
+      try {
+        const remoteSeeded = await getDevDataSeeded();
+        setDevDataEnabled(remoteSeeded);
+        await AsyncStorage.setItem(DEV_DATA_KEY, remoteSeeded ? 'true' : 'false');
+      } catch {
+        // Keep the local switch state when Supabase is unavailable or the
+        // migration has not been pushed yet.
+      }
     }
 
     setVisible(true);
@@ -254,9 +256,9 @@ export function DevRoleSwitcher() {
                     <View style={{ flex: 1, marginRight: 12 }}>
                       <Text style={styles.devModeTitle}>Populated Dev Data</Text>
                       <Text style={styles.devModeSubtitle}>
-                        {isDevSessionUser
+                        {user
                           ? 'Seed or restore deterministic Supabase demo records'
-                          : 'Switch into any dev role first'}
+                          : 'Sign in with any account to seed Supabase demo records'}
                       </Text>
                     </View>
                     {syncingDevData ? (
