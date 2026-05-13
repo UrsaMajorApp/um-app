@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, useColorScheme, View } from 'react-native';
 import { COLORS } from '$constants/theme';
 import { AuthProvider, useAuth } from '$contexts/AuthContext';
-import { DevSettingsProvider } from '$contexts/DevSettingsContext';
+import { DevSettingsProvider, useDevSettings } from '$contexts/DevSettingsContext';
 import { ParentDataProvider } from '$contexts/ParentDataContext';
 import '../global.css';
 
@@ -25,11 +25,13 @@ function getRouteRedirectPath({
   isLoading,
   segments,
   user,
+  disableHomeRedirect,
 }: {
   devMode: boolean;
   isLoading: boolean;
   segments: string[];
   user: AuthUser | null;
+  disableHomeRedirect: boolean;
 }): AppHref | null {
   if (isLoading) return null;
 
@@ -59,6 +61,11 @@ function getRouteRedirectPath({
     if (!onProfileSetupRoute) {
       return setupRoute;
     }
+  }
+
+  // If home redirect is disabled in dev mode, we skip the automatic move to /(tabs)/home
+  if (user && disableHomeRedirect && devMode) {
+    return null;
   }
 
   if (user && inAuthGroup && authScreen === 'intro') {
@@ -94,6 +101,7 @@ function getRouteRedirectPath({
 function RootNavigator() {
   const colorScheme = useColorScheme();
   const { user, isLoading, devMode } = useAuth();
+  const { disableHomeRedirect } = useDevSettings();
   const router = useRouter();
   const segments = useSegments();
   const redirectPath = getRouteRedirectPath({
@@ -101,6 +109,7 @@ function RootNavigator() {
     isLoading,
     segments,
     user,
+    disableHomeRedirect,
   });
 
   useEffect(() => {

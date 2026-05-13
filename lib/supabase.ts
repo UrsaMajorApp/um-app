@@ -32,5 +32,14 @@ export const supabase: SupabaseClient | null = isSupabaseConfigured
         // В native callback обрабатывается отдельно через expo-web-browser.
         detectSessionInUrl: Platform.OS === 'web',
       },
+      // Node.js 20 doesn't have native WebSocket support.
+      // This fix is required for server-side rendering (SSR) in Expo.
+      ...(Platform.OS === 'web' && typeof window === 'undefined'
+        ? {
+            realtime: {
+              transport: require('ws'),
+            },
+          }
+        : {}),
     })
   : null;

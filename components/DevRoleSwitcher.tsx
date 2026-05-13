@@ -44,6 +44,10 @@ export function DevRoleSwitcher() {
     setOrgVerified,
     useRealOtp,
     setUseRealOtp,
+    devYouthAge,
+    setDevYouthAge,
+    disableHomeRedirect,
+    setDisableHomeRedirect,
   } = useDevSettings();
   const { width } = useWindowDimensions();
   const router = useRouter();
@@ -174,7 +178,6 @@ export function DevRoleSwitcher() {
     'parent',
     'child',
     'youth',
-    'young-adult',
     'mentor',
     'org',
     'teacher',
@@ -312,8 +315,25 @@ export function DevRoleSwitcher() {
                     />
                   </View>
 
+                  {/* Redirection toggle */}
+                  <View style={styles.devModeRow}>
+                    <View style={{ flex: 1, marginRight: 12 }}>
+                      <Text style={styles.devModeTitle}>Disable Home Redirect</Text>
+                      <Text style={styles.devModeSubtitle}>
+                        Stay on current screen after login/refresh
+                      </Text>
+                    </View>
+                    <Switch
+                      value={disableHomeRedirect}
+                      onValueChange={(val) => {
+                        if (devToolsEnabled) setDisableHomeRedirect(val);
+                      }}
+                      trackColor={{ false: COLORS.muted, true: '#EC4899' }}
+                    />
+                  </View>
+
                   {/* Tariff toggle (parent/student roles) */}
-                  {['parent', 'child', 'youth', 'young-adult'].includes(user?.role || '') && (
+                  {['parent', 'child', 'youth'].includes(user?.role || '') && (
                     <View style={styles.devModeRow}>
                       <View style={{ flex: 1, marginRight: 12 }}>
                         <Text style={styles.devModeTitle}>
@@ -328,6 +348,30 @@ export function DevRoleSwitcher() {
                         }}
                         trackColor={{ false: COLORS.muted, true: '#A78BFA' }}
                       />
+                    </View>
+                  )}
+
+                  {/* Youth Age toggle */}
+                  {['youth', 'child'].includes(user?.role || '') && (
+                    <View style={styles.devModeRow}>
+                      <View style={{ flex: 1, marginRight: 12 }}>
+                        <Text style={styles.devModeTitle}>Child Age: {devYouthAge}</Text>
+                        <Text style={styles.devModeSubtitle}>Affects diagnostic modules</Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', gap: 8 }}>
+                        <TouchableOpacity
+                          style={styles.ageButton}
+                          onPress={() => setDevYouthAge(Math.max(6, devYouthAge - 1))}
+                        >
+                          <Feather name="minus" size={16} color={COLORS.foreground} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.ageButton}
+                          onPress={() => setDevYouthAge(Math.min(17, devYouthAge + 1))}
+                        >
+                          <Feather name="plus" size={16} color={COLORS.foreground} />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   )}
 

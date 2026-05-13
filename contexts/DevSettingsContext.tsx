@@ -24,6 +24,8 @@ interface DevSettings {
   setUseRealOtp: (v: boolean) => Promise<void>;
   devYouthAge: number;
   setDevYouthAge: (v: number) => void;
+  disableHomeRedirect: boolean;
+  setDisableHomeRedirect: (v: boolean) => void;
 }
 
 const DevSettingsContext = createContext<DevSettings>({
@@ -35,6 +37,8 @@ const DevSettingsContext = createContext<DevSettings>({
   setUseRealOtp: async () => {},
   devYouthAge: 12, // Default age
   setDevYouthAge: () => {},
+  disableHomeRedirect: false,
+  setDisableHomeRedirect: () => {},
 });
 
 export function DevSettingsProvider({ children }: { children: React.ReactNode }) {
@@ -42,6 +46,7 @@ export function DevSettingsProvider({ children }: { children: React.ReactNode })
   const [orgVerified, setOrgVerified] = useState(false);
   const [useRealOtp, setUseRealOtpState] = useState(false);
   const [devYouthAge, setDevYouthAge] = useState(12);
+  const [disableHomeRedirect, setDisableHomeRedirect] = useState(false);
 
   // Hydrate persisted value on mount
   useEffect(() => {
@@ -66,6 +71,8 @@ export function DevSettingsProvider({ children }: { children: React.ReactNode })
         setUseRealOtp,
         devYouthAge,
         setDevYouthAge,
+        disableHomeRedirect,
+        setDisableHomeRedirect,
       }}
     >
       {children}

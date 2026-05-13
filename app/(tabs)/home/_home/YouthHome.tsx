@@ -22,7 +22,7 @@ import type { DashboardQuickAction } from '$types/dashboard';
 
 export default function YouthHome() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, devMode } = useAuth();
   const { childrenProfile, activeChildId, parentProfile } = useParentData();
   const { courses } = usePublicCourses();
   const isDesktop = useIsDesktop();
@@ -61,7 +61,8 @@ export default function YouthHome() {
 
   const { devYouthAge } = useDevSettings();
 
-  const isIndependent = user?.role === 'youth' && !activeChild ? true : devYouthAge >= 14;
+  const effectiveAge = devMode ? devYouthAge : (activeChild?.age ?? 12);
+  const isIndependent = effectiveAge >= 14; // "Подросток сам принимает решения"
   const isPro = parentProfile?.tariff === 'pro'; // PRO тариф
   const [passVisible, setPassVisible] = useState(false);
   const enrollmentRequests = useYouthEnrollmentRequests({ user, activeChild });
