@@ -9,51 +9,27 @@ function requireSupabase() {
   return supabase;
 }
 
-type SupabaseRpcError = {
-  code?: string;
-  message?: string;
-  details?: string;
-  hint?: string;
-};
-
-function formatSupabaseError(error: SupabaseRpcError | null) {
+function formatSupabaseError(error: { message?: string } | null) {
   return error?.message || 'Supabase request failed.';
 }
 
-function isMissingRpcError(error: SupabaseRpcError | null) {
-  if (!error) return false;
-  return (
-    error.code === 'PGRST202' ||
-    error.message?.includes('Could not find the function') ||
-    error.message?.includes('function') && error.message.includes('schema cache')
-  );
-}
-
-async function runDevDataRpc(
-  client: ReturnType<typeof requireSupabase>,
-  name: string,
-  opts: { optional?: boolean } = {},
-) {
+async function runDevDataRpc(client: ReturnType<typeof requireSupabase>, name: string) {
   const { error } = await client.rpc(name);
-  if (opts.optional && isMissingRpcError(error)) return;
   if (error) throw new Error(formatSupabaseError(error));
 }
 
 export async function seedDevData() {
   const client = requireSupabase();
   await runDevDataRpc(client, 'seed_dev_data');
-  await runDevDataRpc(client, 'seed_dev_extra_data', { optional: true });
 }
 
 export async function clearDevData() {
   const client = requireSupabase();
-  await runDevDataRpc(client, 'clear_dev_extra_data', { optional: true });
   await runDevDataRpc(client, 'clear_dev_data');
 }
 
 export async function clearAllDevData() {
   const client = requireSupabase();
-  await runDevDataRpc(client, 'clear_dev_extra_data', { optional: true });
   await runDevDataRpc(client, 'clear_all_dev_data');
 }
 
