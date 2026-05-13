@@ -3,10 +3,12 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
-import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
+import { YOUTH_RESULT_COLOR_PALETTE } from '$constants/profile';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
+import { getDiagnosticChartScores } from '$lib/diagnosticChart';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentChildDetails() {
@@ -20,21 +22,7 @@ export default function ParentChildDetails() {
 
   if (!child) return null;
 
-  const getDynamicSkills = () => {
-    if (child.talentProfile?.scores) {
-      const s = child.talentProfile.scores;
-      return [
-        { label: 'Креативность', value: s.creative, color: '#A78BFA' },
-        { label: 'Логика', value: s.logical, color: '#10B981' },
-        { label: 'Социум', value: s.social, color: '#3B82F6' },
-        { label: 'Физическая', value: s.physical, color: '#F59E0B' },
-        { label: 'Лингвистика', value: s.linguistic, color: '#EC4899' },
-      ].sort((a, b) => b.value - a.value);
-    }
-    return [];
-  };
-
-  const currentSkills = getDynamicSkills();
+  const currentSkills = getDiagnosticChartScores(child.talentProfile, YOUTH_RESULT_COLOR_PALETTE);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -131,15 +119,37 @@ export default function ParentChildDetails() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Insight Box */}
-        <View className="bg-blue-50 p-6 rounded-[32px] mb-8 flex-row items-center gap-4 border border-blue-100">
-          <View className="w-12 h-12 bg-white rounded-2xl items-center justify-center shadow-sm">
-            <Feather name="info" size={20} color="#3B82F6" />
+        {child.talentProfile && parentProfile?.tariff !== 'pro' ? (
+          <View className="bg-purple-50 p-6 rounded-[32px] mb-8 flex-row items-center gap-4 border border-purple-100">
+            <View className="w-12 h-12 bg-white rounded-2xl items-center justify-center shadow-sm">
+              <Feather name="unlock" size={20} color={COLORS.primary} />
+            </View>
+            <View className="flex-1">
+              <Text className="text-purple-900 text-sm font-black mb-1">PRO Аналитика</Text>
+              <Text className="text-purple-800 text-xs font-medium leading-5 mb-3">
+                Базовая диагностика для {child.name} готова. Откройте расширенный отчет,
+                профориентацию и персональные рекомендации.
+              </Text>
+              <PressableScale
+                onPress={() => router.push('/profile/common/subscribe')}
+                className="bg-purple-600 self-start px-4 py-2 rounded-2xl"
+              >
+                <Text className="text-white font-black text-[10px] uppercase tracking-widest">
+                  Открыть PRO
+                </Text>
+              </PressableScale>
+            </View>
           </View>
-          <Text className="flex-1 text-blue-900 text-xs font-medium leading-5">
-            Заполните анкету интересов, чтобы AI подобрал идеальный путь развития для {child.name}.
-          </Text>
-        </View>
+        ) : !child.talentProfile ? (
+          <View className="bg-blue-50 p-6 rounded-[32px] mb-8 flex-row items-center gap-4 border border-blue-100">
+            <View className="w-12 h-12 bg-white rounded-2xl items-center justify-center shadow-sm">
+              <Feather name="info" size={20} color="#3B82F6" />
+            </View>
+            <Text className="flex-1 text-blue-900 text-xs font-medium leading-5">
+              AI подберет путь развития для {child.name} после анкеты интересов.
+            </Text>
+          </View>
+        ) : null}
 
         {/* PRO TOOLS: SESSION & BIG TEST */}
         {parentProfile?.tariff === 'pro' && (
@@ -147,21 +157,6 @@ export default function ParentChildDetails() {
             <View className="flex-row items-center gap-2 mb-2 px-1">
               <Feather name="zap" size={20} color="#F59E0B" />
               <Text className="text-lg font-black text-gray-900">PRO Инструменты</Text>
-            </View>
-
-            <View
-              style={SHADOWS.sm}
-              className="bg-white rounded-[32px] p-6 border border-gray-100 flex-row items-center justify-between"
-            >
-              <View className="flex-1 pr-4">
-                <Text className="font-bold text-gray-900 text-lg mb-1">Сессия с ментором</Text>
-                <Text className="text-sm font-medium text-gray-500 mb-4 leading-5">
-                  Выберите 3 варианта времени для созвона-синхронизации с ментором.
-                </Text>
-              </View>
-              <View className="w-16 h-16 bg-purple-50 rounded-[20px] items-center justify-center border border-purple-100">
-                <Feather name="video" size={24} color={COLORS.primary} />
-              </View>
             </View>
 
             <View

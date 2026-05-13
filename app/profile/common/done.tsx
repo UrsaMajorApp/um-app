@@ -1,22 +1,67 @@
 // Экран профиля common: показывает успешное завершение сценария для роли common.
 import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { updateSubscriptionRequestStatus } from '$hooks/useSubscriptionRequests';
+import { consumeTemporaryPreDefensePendingSubscription } from '$lib/temporaryPreDefenseStripeSandbox';
+
+function planKey(role: string) {
+  return `subscription_plan_${role}`;
+}
 
 export default function DoneScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ temporaryStripeSandbox?: string }>();
   const { user } = useAuth();
+  const { isLoading: parentDataLoading, parentProfile, setParentTariff } = useParentData();
+  const [activationComplete, setActivationComplete] = useState(false);
+  const activationStartedRef = useRef(false);
   const role = user?.role ?? null;
   const isTemporaryStripeSandboxSuccess = params.temporaryStripeSandbox === 'success';
 
-  const handleStart = () => {
+  const activateTemporaryStripeSandboxPayment = useCallback(async () => {
+    if (!isTemporaryStripeSandboxSuccess || activationStartedRef.current) return;
+    if (!role) return;
+    if (role === 'parent' && (parentDataLoading || !parentProfile)) return;
+
+    activationStartedRef.current = true;
+
+    const pending = await consumeTemporaryPreDefensePendingSubscription();
+
+    if (pending) {
+      await AsyncStorage.setItem(planKey(pending.appRole), pending.planTitle);
+      await updateSubscriptionRequestStatus(pending.subscriptionRequestId ?? null, 'approved');
+
+      if (pending.appRole === 'parent' && pending.planTitle !== 'Free') {
+        await setParentTariff('pro');
+      }
+    }
+
+    setActivationComplete(true);
+  }, [isTemporaryStripeSandboxSuccess, parentDataLoading, parentProfile, role, setParentTariff]);
+
+  useEffect(() => {
+    if (!isTemporaryStripeSandboxSuccess) {
+      setActivationComplete(true);
+      return;
+    }
+
+    void activateTemporaryStripeSandboxPayment();
+  }, [activateTemporaryStripeSandboxPayment, isTemporaryStripeSandboxSuccess]);
+
+  const handleStart = async () => {
+    if (!activationComplete) return;
+    await activateTemporaryStripeSandboxPayment();
+
     if (role === 'youth' || role === 'child' || role === 'young-adult') {
       router.replace('/profile/youth/testing');
       return;
@@ -130,7 +175,12 @@ export default function DoneScreen() {
               </Text>
 
               {/* Action Button */}
-              <PressableScale onPress={handleStart} activeOpacity={0.8} style={{ width: '100%' }}>
+              <PressableScale
+                disabled={!activationComplete}
+                onPress={handleStart}
+                activeOpacity={0.8}
+                style={{ width: '100%', opacity: activationComplete ? 1 : 0.72 }}
+              >
                 <LinearGradient
                   colors={[COLORS.primary, COLORS.secondary]}
                   start={{ x: 0, y: 0 }}
@@ -152,7 +202,7 @@ export default function DoneScreen() {
                       letterSpacing: 1,
                     }}
                   >
-                    Начать работу
+                    {activationComplete ? 'Начать работу' : 'Активируем PRO...'}
                   </Text>
                 </LinearGradient>
               </PressableScale>

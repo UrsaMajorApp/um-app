@@ -10,11 +10,9 @@ import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
-import { useYouthGoals } from '$hooks/useStudentData';
 import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
-import { appHref } from '$lib/router';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function YoungAdultHome() {
@@ -24,12 +22,20 @@ export default function YoungAdultHome() {
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
   const { courses } = usePublicCourses();
-  const { goals } = useYouthGoals();
 
   const activeProfile = childrenProfile.find((child) => child.id === activeChildId);
   const firstName = activeProfile?.name || user?.firstName || 'Студент';
   const diagnostic = activeProfile?.talentProfile;
   const isPro = parentProfile?.tariff === 'pro';
+  const hasDiagnostic = Boolean(diagnostic);
+  const hasProDiagnostic = diagnostic?.tier === 'pro';
+
+  const openDiagnostic = () => {
+    router.push({
+      pathname: '/profile/youth/testing',
+      params: activeProfile?.id ? { childId: activeProfile.id } : undefined,
+    });
+  };
 
   const topSkills = useMemo(() => {
     if (!diagnostic?.scores) return [];
@@ -67,56 +73,6 @@ export default function YoungAdultHome() {
         />
 
         <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 24, gap: 28 }}>
-          <View
-            style={{
-              backgroundColor: 'white',
-              borderRadius: 24,
-              padding: 18,
-              borderWidth: 1,
-              borderColor: '#EEF2F7',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 14,
-              ...SHADOWS.sm,
-            }}
-          >
-            <View
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 14,
-                backgroundColor: `${COLORS.primary}12`,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Feather name={isPro ? 'zap' : 'lock'} size={20} color={COLORS.primary} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ color: COLORS.foreground, fontSize: 15, fontWeight: '900' }}>
-                {isPro ? 'PRO аналитика активна' : 'Открой PRO аналитику'}
-              </Text>
-              <Text style={{ color: COLORS.mutedForeground, fontSize: 12, marginTop: 3 }}>
-                {isPro
-                  ? 'Глубокие результаты и рекомендации доступны в твоём профиле.'
-                  : 'Можно подключить тестовую Stripe Sandbox оплату для демо.'}
-              </Text>
-            </View>
-            {!isPro && (
-              <PressableScale
-                onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
-                style={{
-                  backgroundColor: COLORS.foreground,
-                  borderRadius: 14,
-                  paddingHorizontal: 14,
-                  paddingVertical: 10,
-                }}
-              >
-                <Text style={{ color: 'white', fontWeight: '900', fontSize: 12 }}>PRO</Text>
-              </PressableScale>
-            )}
-          </View>
-
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
             {[
               {
@@ -126,10 +82,10 @@ export default function YoungAdultHome() {
                 action: () => navigateApp(router, user?.role, { name: 'calendar' }),
               },
               {
-                label: 'Цели',
-                icon: 'target' as const,
+                label: 'Кружки',
+                icon: 'book-open' as const,
                 color: '#10B981',
-                action: () => router.push(appHref('/(tabs)/youth/goals')),
+                action: () => navigateApp(router, user?.role, { name: 'clubs' }),
               },
               {
                 label: 'Ментор',
@@ -188,60 +144,153 @@ export default function YoungAdultHome() {
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <Feather name="activity" size={20} color={COLORS.primary} />
               <Text style={{ color: COLORS.foreground, fontSize: 18, fontWeight: '900' }}>
-                Профиль навыков
+                Диагностика
               </Text>
             </View>
-            {topSkills.length > 0 ? (
-              <View style={{ gap: 12 }}>
-                {topSkills.map(([skill, value]) => (
-                  <View key={skill}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Text style={{ color: '#4B5563', fontWeight: '800', fontSize: 12 }}>
-                        {skill}
-                      </Text>
-                      <Text style={{ color: COLORS.primary, fontWeight: '900', fontSize: 12 }}>
-                        {value}%
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        height: 8,
-                        borderRadius: 999,
-                        backgroundColor: '#F3F4F6',
-                        overflow: 'hidden',
-                        marginTop: 6,
-                      }}
-                    >
+
+            <View style={{ gap: 14 }}>
+              <View style={{ flexDirection: isDesktop ? 'row' : 'column', gap: 14 }}>
+                {[
+                  {
+                    title: 'Базовый тест',
+                    text: hasDiagnostic
+                      ? 'Карта навыков уже собрана. Можно обновить результат в любое время.'
+                      : 'Короткая диагностика покажет сильные стороны и карьерные направления.',
+                    icon: 'check-circle' as const,
+                    color: '#10B981',
+                    done: hasDiagnostic,
+                    actionLabel: hasDiagnostic ? 'Пройти заново' : 'Начать',
+                    onPress: openDiagnostic,
+                  },
+                  {
+                    title: 'Большой тест',
+                    text: hasProDiagnostic
+                      ? 'Расширенный профиль уже готов: поведение, тип интеллекта и векторы роста.'
+                      : isPro
+                        ? 'Глубокая диагностика добавит поведенческую аналитику и точные рекомендации.'
+                        : 'Откроется после PRO: больше заданий, больше данных, точнее рекомендации.',
+                    icon: 'zap' as const,
+                    color: COLORS.primary,
+                    done: hasProDiagnostic,
+                    actionLabel: hasProDiagnostic
+                      ? 'Обновить'
+                      : isPro
+                        ? 'Начать'
+                        : 'Открыть PRO',
+                    onPress: isPro
+                      ? openDiagnostic
+                      : () => navigateApp(router, user?.role, { name: 'subscriptionUpsell' }),
+                  },
+                ].map((step, index) => (
+                  <View
+                    key={step.title}
+                    style={{
+                      flex: 1,
+                      paddingTop: index === 0 || isDesktop ? 0 : 14,
+                      borderTopWidth: index === 0 || isDesktop ? 0 : 1,
+                      borderTopColor: '#EEF2F7',
+                      gap: 10,
+                    }}
+                  >
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
                       <View
                         style={{
-                          height: '100%',
-                          width: `${value}%`,
-                          backgroundColor: COLORS.primary,
+                          width: 40,
+                          height: 40,
+                          borderRadius: 14,
+                          backgroundColor: `${step.color}14`,
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
-                      />
+                      >
+                        <Feather name={step.done ? 'check-circle' : step.icon} size={19} color={step.color} />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text
+                          style={{ color: COLORS.foreground, fontSize: 15, fontWeight: '900' }}
+                        >
+                          {step.title}
+                        </Text>
+                        <Text
+                          style={{
+                            color: COLORS.mutedForeground,
+                            fontSize: 12,
+                            lineHeight: 17,
+                            marginTop: 3,
+                          }}
+                        >
+                          {step.text}
+                        </Text>
+                      </View>
                     </View>
+
+                    <PressableScale
+                      onPress={step.onPress}
+                      style={{
+                        alignSelf: 'flex-start',
+                        backgroundColor: step.done ? '#F8FAFC' : step.color,
+                        borderRadius: 14,
+                        paddingHorizontal: 14,
+                        paddingVertical: 10,
+                        borderWidth: step.done ? 1 : 0,
+                        borderColor: '#E5E7EB',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: step.done ? COLORS.foreground : 'white',
+                          fontWeight: '900',
+                          fontSize: 12,
+                        }}
+                      >
+                        {step.actionLabel}
+                      </Text>
+                    </PressableScale>
                   </View>
                 ))}
               </View>
-            ) : (
-              <View style={{ gap: 12 }}>
-                <Text style={{ color: '#6B7280', lineHeight: 19 }}>
-                  Пройди диагностику, чтобы собрать карту навыков и карьерных направлений.
-                </Text>
-                <PressableScale
-                  onPress={() => router.push('/profile/youth/testing')}
+
+              {topSkills.length > 0 ? (
+                <View
                   style={{
-                    alignSelf: 'flex-start',
-                    backgroundColor: COLORS.primary,
-                    borderRadius: 16,
-                    paddingHorizontal: 18,
-                    paddingVertical: 12,
+                    paddingTop: 14,
+                    borderTopWidth: 1,
+                    borderTopColor: '#EEF2F7',
+                    gap: 12,
                   }}
                 >
-                  <Text style={{ color: 'white', fontWeight: '900' }}>Начать диагностику</Text>
-                </PressableScale>
-              </View>
-            )}
+                  {topSkills.map(([skill, value]) => (
+                    <View key={skill}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={{ color: '#4B5563', fontWeight: '800', fontSize: 12 }}>
+                          {skill}
+                        </Text>
+                        <Text style={{ color: COLORS.primary, fontWeight: '900', fontSize: 12 }}>
+                          {value}%
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          height: 8,
+                          borderRadius: 999,
+                          backgroundColor: '#F3F4F6',
+                          overflow: 'hidden',
+                          marginTop: 6,
+                        }}
+                      >
+                        <View
+                          style={{
+                            height: '100%',
+                            width: `${value}%`,
+                            backgroundColor: COLORS.primary,
+                          }}
+                        />
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              ) : null}
+            </View>
           </View>
 
           <View>
@@ -254,81 +303,12 @@ export default function YoungAdultHome() {
               }}
             >
               <Text style={{ color: COLORS.foreground, fontSize: 18, fontWeight: '900' }}>
-                Цели
+                Кружки
               </Text>
-              <PressableScale onPress={() => router.push(appHref('/(tabs)/youth/goals'))}>
+              <PressableScale onPress={() => navigateApp(router, user?.role, { name: 'clubs' })}>
                 <Text style={{ color: COLORS.primary, fontWeight: '900', fontSize: 13 }}>Все</Text>
               </PressableScale>
             </View>
-            {goals.length === 0 ? (
-              <View
-                style={{
-                  backgroundColor: '#F9FAFB',
-                  borderRadius: 24,
-                  padding: 24,
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: '#EEF2F7',
-                }}
-              >
-                <Feather name="target" size={26} color="#CBD5E1" />
-                <Text style={{ marginTop: 10, color: '#94A3B8', fontWeight: '800' }}>
-                  Целей пока нет
-                </Text>
-              </View>
-            ) : (
-              <View style={{ gap: 10 }}>
-                {goals.slice(0, 2).map((goal) => (
-                  <View
-                    key={goal.id}
-                    style={{
-                      backgroundColor: 'white',
-                      borderRadius: 22,
-                      padding: 16,
-                      borderWidth: 1,
-                      borderColor: '#E5E7EB',
-                    }}
-                  >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Text style={{ color: COLORS.foreground, fontWeight: '900' }}>
-                        {goal.title}
-                      </Text>
-                      <Text style={{ color: goal.color, fontWeight: '900' }}>{goal.progress}%</Text>
-                    </View>
-                    <View
-                      style={{
-                        height: 8,
-                        borderRadius: 999,
-                        backgroundColor: '#F3F4F6',
-                        overflow: 'hidden',
-                        marginTop: 10,
-                      }}
-                    >
-                      <View
-                        style={{
-                          height: '100%',
-                          width: `${goal.progress}%`,
-                          backgroundColor: goal.color,
-                        }}
-                      />
-                    </View>
-                  </View>
-                ))}
-              </View>
-            )}
-          </View>
-
-          <View>
-            <Text
-              style={{
-                color: COLORS.foreground,
-                fontSize: 18,
-                fontWeight: '900',
-                marginBottom: 12,
-              }}
-            >
-              Курсы
-            </Text>
             {courses.length === 0 ? (
               <View
                 style={{
@@ -342,7 +322,7 @@ export default function YoungAdultHome() {
               >
                 <Feather name="book-open" size={26} color="#CBD5E1" />
                 <Text style={{ marginTop: 10, color: '#94A3B8', fontWeight: '800' }}>
-                  Курсы скоро появятся
+                  Кружки скоро появятся
                 </Text>
               </View>
             ) : (

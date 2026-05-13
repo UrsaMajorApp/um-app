@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
-import { Alert, Dimensions, Image, ScrollView, Text, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { PressableScale } from '$components/ui/PressableScale';
 import { type UserRole, useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -18,12 +18,10 @@ import { formatSubscriptionPrice } from '$lib/formatCurrency';
 import type { SubscriptionPlan, SubscriptionPlanRole } from '$lib/subscriptionCatalog';
 import {
   isTemporaryPreDefenseStripeSandboxEnabled,
+  saveTemporaryPreDefensePendingSubscription,
   startTemporaryPreDefenseStripeSandboxCheckout,
 } from '$lib/temporaryPreDefenseStripeSandbox';
 import { isWebMinWidth } from '$lib/useIsDesktop';
-
-const { width } = Dimensions.get('window');
-const IS_DESKTOP = isWebMinWidth(width, 900);
 
 function planKey(role: UserRole) {
   return `subscription_plan_${role}`;
@@ -58,6 +56,57 @@ function planActionLabel(params: {
   return 'выбрать';
 }
 
+function planCardBorderColor(params: {
+  isSelected: boolean;
+  isRequestedPlan: boolean;
+  isPopular: boolean;
+}) {
+  if (params.isSelected) return '#6C5CE7';
+  if (params.isRequestedPlan) return '#F59E0B';
+  if (params.isPopular) return '#6C5CE7';
+  return 'rgba(15, 23, 42, 0.08)';
+}
+
+function planCardMetrics(isCompact: boolean) {
+  return isCompact
+    ? {
+        borderRadius: 22,
+        padding: 18,
+        marginBottom: 14,
+        titleFontSize: 21,
+        priceFontSize: 20,
+        priceLineHeight: 25,
+        priceMarginBottom: 12,
+        sandboxMarginTop: -4,
+        sandboxMarginBottom: 12,
+        featureIconSize: 17,
+        featureFontSize: 14,
+        featureLineHeight: 18,
+        featureMarginBottom: 7,
+        buttonMarginTop: 14,
+        buttonPaddingVertical: 12,
+        buttonFontSize: 15,
+      }
+    : {
+        borderRadius: 26,
+        padding: 22,
+        marginBottom: 24,
+        titleFontSize: 22,
+        priceFontSize: 18,
+        priceLineHeight: undefined,
+        priceMarginBottom: 16,
+        sandboxMarginTop: -8,
+        sandboxMarginBottom: 14,
+        featureIconSize: 18,
+        featureFontSize: 15,
+        featureLineHeight: 20,
+        featureMarginBottom: 8,
+        buttonMarginTop: 20,
+        buttonPaddingVertical: 14,
+        buttonFontSize: 16,
+      };
+}
+
 type PlanCardProps = {
   plan: SubscriptionPlan;
   index: number;
@@ -70,6 +119,7 @@ type PlanCardProps = {
   stripeSandboxEnabled: boolean;
   requiresParentApproval: boolean;
   paymentError: { planId: string; message: string } | null;
+  isCompact: boolean;
   onChoose: (plan: SubscriptionPlan) => void;
 };
 
@@ -86,6 +136,7 @@ function SubscribePlanCard(props: PlanCardProps) {
     stripeSandboxEnabled,
     requiresParentApproval,
     paymentError,
+    isCompact,
     onChoose,
   } = props;
   const isSelected = selected === plan.title;
@@ -97,6 +148,7 @@ function SubscribePlanCard(props: PlanCardProps) {
     requestedPlanId === plan.id ||
     (requestedPlanTitle !== null && requestedPlanTitle === plan.title);
   const isYouthRequestFlow = role === 'youth' && isPaid && requiresParentApproval;
+  const metrics = planCardMetrics(isCompact);
   const actionLabel = planActionLabel({
     isCheckoutLoading,
     isSelected,
@@ -114,17 +166,11 @@ function SubscribePlanCard(props: PlanCardProps) {
       transition={{ duration: 350, delay: index * 120 }}
       style={{
         backgroundColor: 'white',
-        borderRadius: 26,
-        padding: 22,
-        marginBottom: 24,
+        borderRadius: metrics.borderRadius,
+        padding: metrics.padding,
+        marginBottom: metrics.marginBottom,
         borderWidth: isPopular || isSelected || isRequestedPlan ? 2 : 1,
-        borderColor: isSelected
-          ? '#6C5CE7'
-          : isRequestedPlan
-            ? '#F59E0B'
-            : isPopular
-              ? '#6C5CE7'
-              : 'rgba(15, 23, 42, 0.08)',
+        borderColor: planCardBorderColor({ isSelected, isRequestedPlan, isPopular }),
       }}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -181,22 +227,56 @@ function SubscribePlanCard(props: PlanCardProps) {
         ) : null}
       </View>
 
-      <Text style={{ fontSize: 22, fontWeight: '700', marginBottom: 6 }}>{plan.title}</Text>
+      <Text style={{ fontSize: metrics.titleFontSize, fontWeight: '800', marginBottom: 4 }}>
+        {plan.title}
+      </Text>
 
-      <Text style={{ fontSize: 18, fontWeight: '800', color: '#6C5CE7', marginBottom: 16 }}>
+      <Text
+        style={{
+          fontSize: metrics.priceFontSize,
+          lineHeight: metrics.priceLineHeight,
+          fontWeight: '900',
+          color: '#6C5CE7',
+          marginBottom: metrics.priceMarginBottom,
+        }}
+      >
         {formatSubscriptionPrice(plan.price_kzt, plan.billing_period)}
       </Text>
 
       {isPaid && stripeSandboxEnabled ? (
-        <Text style={{ color: '#71717A', fontSize: 12, marginTop: -8, marginBottom: 14 }}>
+        <Text
+          style={{
+            color: '#71717A',
+            fontSize: 12,
+            lineHeight: 16,
+            marginTop: metrics.sandboxMarginTop,
+            marginBottom: metrics.sandboxMarginBottom,
+          }}
+        >
           Stripe Sandbox: тестовая оплата, реальные списания не выполняются.
         </Text>
       ) : null}
 
       {plan.features.map((feature) => (
-        <View key={feature} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-          <Feather name="check" size={18} color="#6C5CE7" />
-          <Text style={{ marginLeft: 10, fontSize: 15 }}>{feature}</Text>
+        <View
+          key={feature}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            marginBottom: metrics.featureMarginBottom,
+          }}
+        >
+          <Feather name="check" size={metrics.featureIconSize} color="#6C5CE7" />
+          <Text
+            style={{
+              marginLeft: 10,
+              flex: 1,
+              fontSize: metrics.featureFontSize,
+              lineHeight: metrics.featureLineHeight,
+            }}
+          >
+            {feature}
+          </Text>
         </View>
       ))}
 
@@ -205,13 +285,20 @@ function SubscribePlanCard(props: PlanCardProps) {
         onPress={() => onChoose(plan)}
         style={{
           backgroundColor: isRequestPending ? '#A1A1AA' : '#6C5CE7',
-          marginTop: 20,
-          paddingVertical: 14,
+          marginTop: metrics.buttonMarginTop,
+          paddingVertical: metrics.buttonPaddingVertical,
           borderRadius: 999,
           opacity: isCheckoutLoading ? 0.72 : 1,
         }}
       >
-        <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: '700' }}>
+        <Text
+          style={{
+            textAlign: 'center',
+            color: 'white',
+            fontSize: metrics.buttonFontSize,
+            fontWeight: '800',
+          }}
+        >
           {actionLabel}
         </Text>
       </PressableScale>
@@ -230,6 +317,9 @@ function SubscribePlanCard(props: PlanCardProps) {
 
 export default function SubscribeScreen() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isDesktop = isWebMinWidth(width, 900);
+  const isCompact = !isDesktop;
   const params = useLocalSearchParams<{
     requestedPlanId?: string | string[];
     requestedPlanTitle?: string | string[];
@@ -312,6 +402,13 @@ export default function SubscribeScreen() {
     setCheckoutPlanId(plan.id);
 
     try {
+      await saveTemporaryPreDefensePendingSubscription({
+        appRole: role,
+        paymentRole: roleForPayment,
+        planId: plan.id,
+        planTitle: plan.title,
+        subscriptionRequestId,
+      });
       await startTemporaryPreDefenseStripeSandboxCheckout({
         plan,
         role: roleForPayment,
@@ -336,32 +433,36 @@ export default function SubscribeScreen() {
     <LinearGradient colors={['#6C5CE7', '#ECEBFF']} style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
-          paddingTop: 60,
-          paddingBottom: 120,
-          paddingHorizontal: 20,
-          alignItems: IS_DESKTOP ? 'center' : 'stretch',
+          paddingTop: isCompact ? 24 : 60,
+          paddingBottom: isCompact ? 56 : 120,
+          paddingHorizontal: isCompact ? 18 : 20,
+          alignItems: isDesktop ? 'center' : 'stretch',
         }}
       >
-        <View style={{ width: IS_DESKTOP ? '50%' : '100%' }}>
+        <View style={{ width: isDesktop ? '50%' : '100%', maxWidth: 720, alignSelf: 'center' }}>
           <MotiView
             from={{ opacity: 0, translateY: -10 }}
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 400 }}
-            style={{ alignItems: 'center', marginBottom: 10 }}
+            style={{ alignItems: 'center', marginBottom: isCompact ? 2 : 10 }}
           >
             <Image
               source={require('../../../assets/logo/logo_white.png')}
-              style={{ width: 160, height: 120, resizeMode: 'contain' }}
+              style={{
+                width: isCompact ? 104 : 160,
+                height: isCompact ? 70 : 120,
+                resizeMode: 'contain',
+              }}
             />
           </MotiView>
 
           <Text
             style={{
-              fontSize: 28,
+              fontSize: isCompact ? 28 : 28,
               fontWeight: '800',
               textAlign: 'center',
               color: 'white',
-              marginBottom: 10,
+              marginBottom: isCompact ? 6 : 10,
             }}
           >
             Подписки
@@ -370,10 +471,10 @@ export default function SubscribeScreen() {
           <Text
             style={{
               textAlign: 'center',
-              fontSize: 14,
+              fontSize: isCompact ? 14 : 14,
               opacity: 0.8,
               color: 'white',
-              marginBottom: 28,
+              marginBottom: isCompact ? 18 : 28,
             }}
           >
             выберите подходящий план
@@ -456,6 +557,7 @@ export default function SubscribeScreen() {
               stripeSandboxEnabled={stripeSandboxEnabled}
               requiresParentApproval={requiresParentApproval}
               paymentError={paymentError}
+              isCompact={isCompact}
               onChoose={choosePaidPlan}
             />
           ))}

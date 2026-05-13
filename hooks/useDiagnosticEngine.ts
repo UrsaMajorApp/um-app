@@ -220,6 +220,7 @@ export function useDiagnosticEngine(opts: {
         }
       }
     }
+
     const dominantPattern =
       Object.entries(patternCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'balanced';
     const stealthLabel =

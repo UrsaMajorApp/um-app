@@ -1,7 +1,9 @@
 // Temporary Stripe sandbox: запускает demo-checkout и возвращает пользователя в app flow.
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import { Platform } from 'react-native';
+import type { UserRole } from '$contexts/AuthContext';
 import type { SubscriptionPlan, SubscriptionPlanRole } from '$lib/subscriptionCatalog';
 
 type CheckoutResponse = {
@@ -10,6 +12,16 @@ type CheckoutResponse = {
 };
 
 const TEMPORARY_PREDEFENSE_CHECKOUT_PATH = '/api/payments/predefense-stripe-sandbox-checkout';
+const TEMPORARY_PREDEFENSE_PENDING_SUBSCRIPTION_KEY =
+  'um_temporary_predefense_pending_subscription';
+
+export type TemporaryPreDefensePendingSubscription = {
+  appRole: UserRole;
+  paymentRole: SubscriptionPlanRole;
+  planId: string;
+  planTitle: string;
+  subscriptionRequestId?: string | null;
+};
 
 export function isTemporaryPreDefenseStripeSandboxEnabled() {
   return process.env.EXPO_PUBLIC_TEMP_PREDEFENSE_STRIPE_SANDBOX_ENABLED === 'true';
@@ -74,4 +86,26 @@ export async function startTemporaryPreDefenseStripeSandboxCheckout(params: {
   }
 
   await openCheckoutUrl(data.url);
+}
+
+export async function saveTemporaryPreDefensePendingSubscription(
+  pending: TemporaryPreDefensePendingSubscription,
+) {
+  await AsyncStorage.setItem(
+    TEMPORARY_PREDEFENSE_PENDING_SUBSCRIPTION_KEY,
+    JSON.stringify(pending),
+  );
+}
+
+export async function consumeTemporaryPreDefensePendingSubscription() {
+  const raw = await AsyncStorage.getItem(TEMPORARY_PREDEFENSE_PENDING_SUBSCRIPTION_KEY);
+  if (!raw) return null;
+
+  await AsyncStorage.removeItem(TEMPORARY_PREDEFENSE_PENDING_SUBSCRIPTION_KEY);
+
+  try {
+    return JSON.parse(raw) as TemporaryPreDefensePendingSubscription;
+  } catch {
+    return null;
+  }
 }

@@ -164,10 +164,10 @@ export const TABS_BY_ROLE: Record<string, TabItem[]> = {
   'young-adult': [
     COMMON_HOME,
     {
-      key: 'youth/goals',
-      label: 'Цели',
-      route: 'youth/goals',
-      icon: ({ color, size }) => <Feather name="target" size={size} color={color} />,
+      key: 'catalog',
+      label: 'Кружки',
+      route: 'catalog',
+      icon: ({ color, size }) => <Feather name="book-open" size={size} color={color} />,
     },
     {
       key: 'chats',

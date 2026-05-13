@@ -3,9 +3,9 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Platform, ScrollView, Text, View } from 'react-native';
+import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -31,6 +31,7 @@ export default function ParentHome() {
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const activeChild = children.find((child) => child.id === activeChildId) || children[0] || null;
+  const activeChildHasDiagnostic = Boolean(activeChild?.talentProfile);
   const activeChildHasProDiagnostic = activeChild?.talentProfile?.tier === 'pro';
 
   const { courses: publicCourses } = usePublicCourses();
@@ -124,7 +125,7 @@ export default function ParentHome() {
                   });
                 }}
                 style={SHADOWS.md}
-                className={`mr-4 w-36 p-5 bg-white rounded-[32px] items-center border ${activeChildId === child.id ? 'border-purple-200' : 'border-gray-50'}`}
+                className={`mr-4 w-36 h-44 p-5 bg-white rounded-[32px] items-center justify-center border ${activeChildId === child.id ? 'border-purple-200' : 'border-gray-50'}`}
               >
                 <View className="w-16 h-16 rounded-full bg-purple-100 items-center justify-center mb-3">
                   <Text className="text-purple-600 font-black text-xl">
@@ -144,7 +145,7 @@ export default function ParentHome() {
               onPress={() => router.push('/profile/youth/create-profile-child')}
               scaleTo={0.94}
               pressDelayMs={90}
-              className="w-36 p-5 bg-gray-50 rounded-[32px] items-center justify-center border-2 border-dashed border-gray-100"
+              className="w-36 h-44 p-5 bg-gray-50 rounded-[32px] items-center justify-center border-2 border-dashed border-gray-100"
             >
               <View className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center mb-2">
                 <Feather name="plus" size={20} color="#9CA3AF" />
@@ -195,6 +196,48 @@ export default function ParentHome() {
                     className="bg-white px-3 py-1.5 rounded-full border border-purple-200 flex-row items-center gap-1"
                   >
                     <Feather name="bar-chart-2" size={10} color="#6C5CE7" />
+                    <Text className="text-purple-600 font-black text-[10px] uppercase tracking-widest">
+                      Отчет
+                    </Text>
+                  </PressableScale>
+                </View>
+              </View>
+            </View>
+          ) : activeChildHasDiagnostic && activeChild ? (
+            <View
+              style={SHADOWS.sm}
+              className="bg-purple-50 rounded-[32px] p-6 border border-purple-100 flex-row items-center"
+            >
+              <View
+                className="w-12 h-12 bg-white rounded-full items-center justify-center mr-4 border border-purple-100"
+                style={SHADOWS.sm}
+              >
+                <Feather name="zap" size={20} color="#6C5CE7" />
+              </View>
+              <View className="flex-1 pr-2">
+                <Text className="text-purple-900 font-bold text-sm mb-1">PRO Аналитика</Text>
+                <Text className="text-purple-700 text-xs leading-4">
+                  Базовая диагностика для {activeChild.name} готова. Откройте расширенный отчет: тип
+                  интеллекта, профориентацию и персональные рекомендации.
+                </Text>
+                <View className="flex-row gap-2 mt-3">
+                  <PressableScale
+                    onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
+                    className="bg-purple-600 self-start px-3 py-1.5 rounded-full"
+                  >
+                    <Text className="text-white font-black text-[10px] uppercase tracking-widest">
+                      Открыть PRO
+                    </Text>
+                  </PressableScale>
+                  <PressableScale
+                    onPress={() =>
+                      navigateApp(router, user?.role, {
+                        name: 'parentChildDetails',
+                        childId: activeChild.id,
+                      })
+                    }
+                    className="bg-white self-start px-3 py-1.5 rounded-full border border-purple-200"
+                  >
                     <Text className="text-purple-600 font-black text-[10px] uppercase tracking-widest">
                       Отчет
                     </Text>

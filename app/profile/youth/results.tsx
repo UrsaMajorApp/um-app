@@ -14,12 +14,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
 import { YOUTH_RESULT_COLOR_PALETTE } from '$constants/profile';
 import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
+import { getDiagnosticChartScores } from '$lib/diagnosticChart';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 function compactSummary(summary?: string) {
@@ -94,55 +95,7 @@ export default function YouthResults() {
 
   const isPro = diagnostic.tier === 'pro';
 
-  const sortedScores = Object.entries(diagnostic.scores || {})
-    .filter(([, v]) => typeof v === 'number' && v > 0)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6);
-
-  const chartScores = sortedScores.map(([key, value], idx) => {
-    const labelMap: Record<string, string> = {
-      logic: 'Логика',
-      creative: 'Креатив',
-      social: 'Социум',
-      physical: 'Физика',
-      linguistic: 'Лингвистика',
-      creativity: 'Креативность',
-      empathy: 'Эмпатия',
-      leadership: 'Лидерство',
-      communication: 'Общение',
-      adaptability: 'Адаптивность',
-      analytics: 'Аналитика',
-      teamwork: 'Командная работа',
-      Autonomy: 'Независимость',
-      Stability: 'Стабильность',
-      Mastery: 'Мастерство',
-      Management: 'Менеджмент',
-      Entrepreneurship: 'Предпринимательство',
-      Service: 'Служение',
-      Challenge: 'Вызов',
-      Lifestyle: 'Стиль жизни',
-      R: 'Реалистичный',
-      I: 'Интеллектуальный',
-      A: 'Артистичный',
-      S: 'Социальный',
-      E: 'Предприимчивый',
-      C: 'Конвенциональный',
-      tech: 'Технологии',
-      art: 'Искусство',
-      nature: 'Природа',
-      sport: 'Спорт',
-    };
-    const label = labelMap[key] || key;
-    // Normalize roughly (some test formats output points instead of percentages)
-    // If maximum expected is around 40-50, we can multiply by 2, but for simplicity we just cap at 100 or use raw if > 100
-    const normalizedValue = Math.min(100, Math.max(0, Math.round(value)));
-
-    return {
-      label,
-      value: normalizedValue,
-      color: YOUTH_RESULT_COLOR_PALETTE[idx % YOUTH_RESULT_COLOR_PALETTE.length],
-    };
-  });
+  const chartScores = getDiagnosticChartScores(diagnostic, YOUTH_RESULT_COLOR_PALETTE);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
