@@ -699,5 +699,7 @@ begin
 end;
 $$;
 
-grant execute on function public.clear_dev_extra_data() to authenticated;
-grant execute on function public.seed_dev_extra_data() to authenticated;
+grant execute on function public.clear_dev_extra_data() to anon, authenticated;
+grant execute on function public.seed_dev_extra_data() to anon, authenticated;
+
+notify pgrst, 'reload schema';
