@@ -3,10 +3,11 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import type { ReactNode } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { PressableScale } from '$components/ui/PressableScale';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
+import { COLORS, LAYOUT, RADIUS, SHADOWS } from '$constants/theme';
+import { isWebMinWidth } from '$lib/useIsDesktop';
 import type { ApprovalStep } from '$types/profile';
 
 interface ApprovalPendingSuccessViewProps {
@@ -34,6 +35,13 @@ export function ApprovalPendingSuccessView({
   noteText,
   notes = [],
 }: ApprovalPendingSuccessViewProps) {
+  const { width } = useWindowDimensions();
+  const isDesktopLayout = isWebMinWidth(width, 768);
+  const cardMaxWidth = variant === 'notes' ? 560 : LAYOUT.authMaxWidth;
+  const cardPadding = isDesktopLayout ? 40 : 28;
+  const titleFontSize = isDesktopLayout ? 30 : 26;
+  const iconSize = isDesktopLayout ? 88 : 80;
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <View style={{ ...StyleSheet.absoluteFillObject, overflow: 'hidden' }}>
@@ -61,21 +69,31 @@ export function ApprovalPendingSuccessView({
         />
       </View>
 
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: isDesktopLayout ? 40 : 24,
+          paddingVertical: isDesktopLayout ? 40 : 24,
+        }}
+      >
         <MotiView
           from={{ opacity: 0, scale: 0.9, translateY: 20 }}
           animate={{ opacity: 1, scale: 1, translateY: 0 }}
           style={{
+            width: '100%',
+            maxWidth: cardMaxWidth,
             backgroundColor: 'white',
-            borderRadius: RADIUS.xxl,
-            padding: 32,
+            borderRadius: isDesktopLayout ? RADIUS.xl : RADIUS.xxl,
+            padding: cardPadding,
             alignItems: 'center',
             ...(variant === 'notes' ? SHADOWS.lg : SHADOWS.md),
           }}
         >
           {variant === 'notes' ? (
-            <View style={{ position: 'relative', marginBottom: 28 }}>
-              <MaterialCommunityIcons name="check-circle" size={96} color={COLORS.success} />
+            <View style={{ position: 'relative', marginBottom: isDesktopLayout ? 24 : 28 }}>
+              <MaterialCommunityIcons name="check-circle" size={iconSize} color={COLORS.success} />
               <MotiView
                 from={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -118,7 +136,7 @@ export function ApprovalPendingSuccessView({
 
           <Text
             style={{
-              fontSize: 26,
+              fontSize: titleFontSize,
               fontWeight: '900',
               color: COLORS.foreground,
               textAlign: 'center',
@@ -143,6 +161,7 @@ export function ApprovalPendingSuccessView({
           {variant === 'notes' && noteText ? (
             <View
               style={{
+                width: '100%',
                 backgroundColor: `${accentColor}10`,
                 paddingHorizontal: 20,
                 paddingVertical: 14,
@@ -150,7 +169,14 @@ export function ApprovalPendingSuccessView({
                 marginBottom: 28,
               }}
             >
-              <Text style={{ color: accentColor, fontWeight: '800', fontSize: 14 }}>
+              <Text
+                style={{
+                  color: accentColor,
+                  fontWeight: '800',
+                  fontSize: 14,
+                  lineHeight: 20,
+                }}
+              >
                 {noteText}
               </Text>
             </View>
@@ -230,17 +256,37 @@ export function ApprovalPendingSuccessView({
             </View>
           )}
 
-          <PressableScale onPress={onHome} style={{ width: '100%' }} activeOpacity={0.8}>
+          <PressableScale
+            onPress={onHome}
+            style={{ width: '100%', maxWidth: isDesktopLayout ? 360 : undefined }}
+            activeOpacity={0.8}
+          >
             <LinearGradient
               colors={gradient}
               style={{
-                paddingVertical: 18,
+                width: '100%',
+                minHeight: 56,
+                paddingHorizontal: 28,
+                paddingVertical: 16,
                 borderRadius: RADIUS.xl,
                 alignItems: 'center',
+                justifyContent: 'center',
                 ...SHADOWS.md,
               }}
             >
-              <Text style={{ color: 'white', fontWeight: '900', fontSize: 17 }}>{buttonLabel}</Text>
+              <Text
+                numberOfLines={2}
+                adjustsFontSizeToFit={Platform.OS === 'web'}
+                style={{
+                  color: 'white',
+                  fontWeight: '900',
+                  fontSize: 17,
+                  lineHeight: 22,
+                  textAlign: 'center',
+                }}
+              >
+                {buttonLabel}
+              </Text>
             </LinearGradient>
           </PressableScale>
         </MotiView>

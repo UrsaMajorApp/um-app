@@ -5,27 +5,32 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import {
-  FlatList, type ListRenderItem, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+  FlatList, type ListRenderItem, StyleSheet, Text, TextInput, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import {
   type GroupMember,
+  useMentorOwnProfile,
   useMentorStudentAttendanceSummary,
   useMentorStudents,
 } from '$hooks/useMentorData';
 import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 import type { FeatherIconName } from '$types/icons';
+import type { WebTextStyle } from '$types/styles';
 
 export default function MentorStudentsScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
 
-  const { students } = useMentorStudents();
-  const { summary } = useMentorStudentAttendanceSummary();
+  const { profile: mentorProfile } = useMentorOwnProfile();
+  const canLoadStudents = mentorProfile?.status === 'approved';
+  const { students } = useMentorStudents({ enabled: canLoadStudents });
+  const { summary } = useMentorStudentAttendanceSummary({ enabled: canLoadStudents });
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
 
   const filteredStudents = students.filter((s) =>
     s.student_name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -143,67 +148,30 @@ export default function MentorStudentsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 20,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 16,
-                }}
-              >
-                <View>
-                  <Text style={[styles.mainTitle, { color: 'white' }]}>Мои ученики</Text>
-                  <Text style={[styles.subtitle, { color: 'rgba(255,255,255,0.7)' }]}>
-                    Сопровождение и прогресс
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.15)',
-                  borderRadius: 14,
-                  paddingHorizontal: 14,
-                  height: 44,
-                  borderWidth: 1,
-                  borderColor: 'rgba(255,255,255,0.2)',
-                }}
-              >
-                <Feather name="search" size={18} color="rgba(255,255,255,0.6)" />
-                <TextInput
-                  placeholder="Поиск ученика..."
-                  placeholderTextColor="rgba(255,255,255,0.6)"
-                  style={{
-                    flex: 1,
-                    marginLeft: 10,
-                    fontSize: 15,
-                    color: 'white',
-                  }}
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <GradientScreenHeader
+        title="Мои ученики"
+        subtitle="Сопровождение и прогресс"
+        paddingX={paddingX}
+        variant="dashboard"
+      >
+        <View style={[styles.headerSearch, searchFocused && styles.headerSearchFocused]}>
+          <Feather name="search" size={18} color="rgba(255,255,255,0.6)" />
+          <TextInput
+            placeholder="Поиск ученика..."
+            placeholderTextColor="rgba(255,255,255,0.6)"
+            className="outline-none"
+            style={[
+              styles.headerSearchInput,
+              { outlineWidth: 0 } satisfies WebTextStyle,
+            ]}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+          />
+        </View>
+      </GradientScreenHeader>
 
       <FlatList
         data={filteredStudents}
@@ -217,7 +185,11 @@ export default function MentorStudentsScreen() {
         ListEmptyComponent={
           <View style={{ padding: 40, alignItems: 'center' }}>
             <MaterialCommunityIcons name="account-search-outline" size={64} color="#E5E7EB" />
-            <Text style={{ color: COLORS.mutedForeground, marginTop: 16 }}>Ученики не найдены</Text>
+            <Text style={{ color: COLORS.mutedForeground, marginTop: 16 }}>
+              {canLoadStudents
+                ? 'Ученики не найдены'
+                : 'Ученики появятся после подтверждения анкеты'}
+            </Text>
           </View>
         }
       />
@@ -226,16 +198,26 @@ export default function MentorStudentsScreen() {
 }
 
 const styles = StyleSheet.create({
-  mainTitle: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: COLORS.foreground,
-    letterSpacing: -0.5,
+  headerSearch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    height: 44,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
   },
-  subtitle: {
+  headerSearchFocused: {
+    backgroundColor: 'rgba(255,255,255,0.24)',
+    borderColor: 'rgba(255,255,255,0.72)',
+    boxShadow: '0 0 0 3px rgba(255,255,255,0.16)',
+  },
+  headerSearchInput: {
+    flex: 1,
+    marginLeft: 10,
     fontSize: 15,
-    color: COLORS.mutedForeground,
-    marginTop: 2,
+    color: 'white',
   },
   filterBtn: {
     width: 44,
@@ -321,7 +303,7 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    backgroundColor: '#F8F7FF',
+    backgroundColor: COLORS.background,
     borderRadius: 16,
     paddingVertical: 12,
     alignItems: 'center',

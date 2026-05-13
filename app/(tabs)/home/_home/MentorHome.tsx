@@ -1,12 +1,11 @@
 // MentorHome: собирает виджеты и быстрые действия домашнего экрана для роли ментора.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
-import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useMentorOwnProfile, useMentorRequests, useMentorStudents } from '$hooks/useMentorData';
@@ -21,9 +20,14 @@ export default function MentorHome() {
   const paddingX = getDashboardHorizontalPadding(isDesktop);
 
   const { user } = useAuth();
-  const { students } = useMentorStudents();
-  const { requests, respond } = useMentorRequests();
-  const { profile: mentorProfile } = useMentorOwnProfile();
+  const {
+    profile: mentorProfile,
+    loading: mentorProfileLoading,
+    refresh: refreshMentorProfile,
+  } = useMentorOwnProfile();
+  const canLoadMentorWorkspace = mentorProfile?.status === 'approved';
+  const { students } = useMentorStudents({ enabled: canLoadMentorWorkspace });
+  const { requests, respond } = useMentorRequests({ enabled: canLoadMentorWorkspace });
   const { summary: walletSummary } = useWalletData('mentor');
   const [isAcceptingOrders, setIsAcceptingOrders] = useState(true);
 
@@ -36,73 +40,81 @@ export default function MentorHome() {
     (r) => r.request_type === 'mentorship' && r.status === 'pending',
   );
 
+  if (mentorProfileLoading) {
+    return (
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  if (mentorProfile?.status !== 'approved') {
+    return (
+      <MentorReviewState
+        displayName={displayName}
+        specialization={mentorProfile?.specialization}
+        status={mentorProfile?.status ?? 'missing'}
+        rejectionReason={mentorProfile?.rejection_reason}
+        paddingX={paddingX}
+        onRefresh={refreshMentorProfile}
+      />
+    );
+  }
+
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 110 }}
       >
-        {/* Violet Header Section */}
-        <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-          <LinearGradient
-            colors={COLORS.gradients.header}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.headerGradient}
-          >
-            <SafeAreaView edges={['top']}>
-              <View style={[styles.headerContent, { paddingHorizontal: paddingX }]}>
-                <View>
-                  <Text style={styles.greeting}>Добрый день, {displayName}!</Text>
-                  {mentorProfile?.specialization ? (
-                    <Text style={styles.roleLabel}>Ментор • {mentorProfile.specialization}</Text>
-                  ) : null}
-                </View>
-                {!isDesktop && (
-                  <PressableScale style={styles.bellBtn}>
-                    <Feather name="bell" size={20} color="white" />
-                    <View style={styles.bellDot} />
-                  </PressableScale>
-                )}
+        <GradientScreenHeader
+          title={`Добрый день, ${displayName}!`}
+          subtitle={mentorProfile?.specialization ? `Ментор • ${mentorProfile.specialization}` : null}
+          paddingX={paddingX}
+          variant="dashboard"
+          rightAccessory={
+            !isDesktop ? (
+              <PressableScale style={styles.bellBtn}>
+                <Feather name="bell" size={20} color="white" />
+                <View style={styles.bellDot} />
+              </PressableScale>
+            ) : null
+          }
+        >
+          <View style={styles.statusToggle}>
+            <View style={{ flex: 1 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+              >
+                <View
+                  style={[
+                    styles.statusDot,
+                    {
+                      backgroundColor: isAcceptingOrders ? '#4ADE80' : '#9CA3AF',
+                    },
+                  ]}
+                />
+                <Text style={styles.statusTitle}>Принимаю заказы</Text>
               </View>
-
-              {/* Status Toggle Card */}
-              <View style={[styles.statusToggle, { marginHorizontal: paddingX, marginTop: 0 }]}>
-                <View style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 6,
-                    }}
-                  >
-                    <View
-                      style={[
-                        styles.statusDot,
-                        {
-                          backgroundColor: isAcceptingOrders ? '#4ADE80' : '#9CA3AF',
-                        },
-                      ]}
-                    />
-                    <Text style={styles.statusTitle}>Принимаю заказы</Text>
-                  </View>
-                  <Text style={styles.statusSub}>
-                    {isAcceptingOrders ? 'Вы видны в поиске' : 'Режим отпуска'}
-                  </Text>
-                </View>
-                <PressableScale
-                  onPress={() => setIsAcceptingOrders(!isAcceptingOrders)}
-                  style={[styles.switch, isAcceptingOrders && styles.switchActive]}
-                >
-                  <MotiView
-                    animate={{ translateX: isAcceptingOrders ? 20 : 0 }}
-                    style={styles.switchThumb}
-                  />
-                </PressableScale>
-              </View>
-            </SafeAreaView>
-          </LinearGradient>
-        </View>
+              <Text style={styles.statusSub}>
+                {isAcceptingOrders ? 'Вы видны в поиске' : 'Режим отпуска'}
+              </Text>
+            </View>
+            <PressableScale
+              onPress={() => setIsAcceptingOrders(!isAcceptingOrders)}
+              style={[styles.switch, isAcceptingOrders && styles.switchActive]}
+            >
+              <MotiView
+                animate={{ translateX: isAcceptingOrders ? 20 : 0 }}
+                style={styles.switchThumb}
+              />
+            </PressableScale>
+          </View>
+        </GradientScreenHeader>
 
         <View style={{ paddingHorizontal: paddingX, marginTop: 24 }}>
           {/* Today's Tasks */}
@@ -235,41 +247,113 @@ export default function MentorHome() {
   );
 }
 
+function MentorReviewState({
+  displayName,
+  specialization,
+  status,
+  rejectionReason,
+  paddingX,
+  onRefresh,
+}: {
+  displayName: string;
+  specialization?: string | null;
+  status: 'pending' | 'approved' | 'rejected' | 'missing';
+  rejectionReason?: string | null;
+  paddingX: number;
+  onRefresh: () => void;
+}) {
+  const isRejected = status === 'rejected';
+  const isMissing = status === 'missing';
+  const accentColor = isRejected ? COLORS.destructive : COLORS.warning;
+  const iconName = isRejected ? 'x-circle' : isMissing ? 'file-text' : 'clock';
+  const title = isRejected
+    ? 'Заявка отклонена'
+    : isMissing
+      ? 'Анкета ментора не найдена'
+      : 'Заявка на рассмотрении';
+  const body = isRejected
+    ? 'Администратор проверил анкету и вернул ее с замечанием.'
+    : isMissing
+      ? 'Мы не нашли вашу анкету в базе. Если вы только что отправили форму, обновите статус через пару секунд.'
+      : 'Ваш профиль уже отправлен администратору. После подтверждения здесь появятся заявки, ученики и настройки заказов.';
+
+  return (
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 110 }}
+      >
+        <GradientScreenHeader
+          title={`Добрый день, ${displayName}!`}
+          subtitle={`Ментор${specialization ? ` • ${specialization}` : ''}`}
+          paddingX={paddingX}
+          variant="dashboard"
+        >
+          <View style={styles.reviewStatusPill}>
+            <View style={[styles.reviewStatusDot, { backgroundColor: accentColor }]} />
+            <Text style={styles.reviewStatusText}>
+              {isRejected
+                ? 'Нужны правки'
+                : isMissing
+                  ? 'Нет активной анкеты'
+                  : 'Ожидает проверки'}
+            </Text>
+          </View>
+        </GradientScreenHeader>
+
+        <View style={[styles.reviewBody, { paddingHorizontal: paddingX }]}>
+          <MotiView
+            from={{ opacity: 0, translateY: 16 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ type: 'timing', duration: 350 }}
+            style={styles.reviewCard}
+          >
+            <View style={[styles.reviewIcon, { backgroundColor: `${accentColor}14` }]}>
+              <Feather name={iconName} size={30} color={accentColor} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.reviewTitle}>{title}</Text>
+              <Text style={styles.reviewText}>{body}</Text>
+              {isRejected && rejectionReason ? (
+                <View style={styles.rejectionBox}>
+                  <Text style={styles.rejectionLabel}>Комментарий администратора</Text>
+                  <Text style={styles.rejectionText}>{rejectionReason}</Text>
+                </View>
+              ) : null}
+              {!isRejected && !isMissing ? (
+                <View style={styles.reviewTimeline}>
+                  <View style={styles.timelineItem}>
+                    <View style={[styles.timelineDot, { backgroundColor: COLORS.success }]} />
+                    <Text style={styles.timelineText}>Анкета отправлена</Text>
+                  </View>
+                  <View style={styles.timelineItem}>
+                    <View style={[styles.timelineDot, { backgroundColor: accentColor }]} />
+                    <Text style={styles.timelineText}>Проверка администратором</Text>
+                  </View>
+                  <View style={styles.timelineItem}>
+                    <View style={styles.timelineDot} />
+                    <Text style={styles.timelineText}>Доступ к кабинету</Text>
+                  </View>
+                </View>
+              ) : null}
+              <PressableScale onPress={onRefresh} style={styles.refreshButton} activeOpacity={0.8}>
+                <Feather name="refresh-cw" size={16} color="white" />
+                <Text style={styles.refreshButtonText}>Обновить статус</Text>
+              </PressableScale>
+            </View>
+          </MotiView>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 0 : 20,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 16,
-  },
-  avatarContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+  loadingScreen: {
+    flex: 1,
+    backgroundColor: COLORS.background,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'white',
-  },
-  avatarText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '800',
-  },
-  greeting: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  roleLabel: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 12,
-    fontWeight: '500',
   },
   bellBtn: {
     width: 44,
@@ -296,7 +380,113 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 32,
+  },
+  reviewStatusPill: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderRadius: 20,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  reviewStatusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  reviewStatusText: {
+    color: 'white',
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  reviewBody: {
+    flex: 1,
+    marginTop: 24,
+  },
+  reviewCard: {
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: 24,
+    padding: 24,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 18,
+    ...SHADOWS.sm,
+  },
+  reviewIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  reviewTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: COLORS.foreground,
+    marginBottom: 8,
+  },
+  reviewText: {
+    color: COLORS.mutedForeground,
+    fontSize: 14,
+    lineHeight: 21,
+  },
+  rejectionBox: {
+    backgroundColor: '#FEF2F2',
+    borderRadius: 16,
+    padding: 14,
+    marginTop: 18,
+    borderWidth: 1,
+    borderColor: '#FEE2E2',
+  },
+  rejectionLabel: {
+    color: COLORS.destructive,
+    fontSize: 11,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  },
+  rejectionText: {
+    color: COLORS.foreground,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  reviewTimeline: {
+    gap: 10,
+    marginTop: 20,
+  },
+  timelineItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  timelineDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.border,
+  },
+  timelineText: {
+    color: COLORS.mutedForeground,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  refreshButton: {
+    alignSelf: 'flex-start',
+    marginTop: 22,
+    backgroundColor: COLORS.primary,
+    borderRadius: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    ...SHADOWS.sm,
+  },
+  refreshButtonText: {
+    color: 'white',
+    fontSize: 13,
+    fontWeight: '800',
   },
   statusDot: {
     width: 8,

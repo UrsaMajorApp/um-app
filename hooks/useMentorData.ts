@@ -90,14 +90,19 @@ type AttendanceSummaryRecordRow = Omit<AttendanceRecordRow, 'id'>;
 
 type MemberNameRow = Pick<GroupMember, 'id' | 'student_name'>;
 
+type MentorDataOptions = {
+  enabled?: boolean;
+};
+
 // ─── useMentorGroups ──────────────────────────────────────────
-export function useMentorGroups() {
+export function useMentorGroups(options: MentorDataOptions = {}) {
+  const { enabled = true } = options;
   const { user } = useAuth();
   const [groups, setGroups] = useState<MentorGroup[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
+    if (!enabled || !supabase || !isSupabaseConfigured || !user?.id) {
       setGroups([]);
       setLoading(false);
       return;
@@ -127,7 +132,7 @@ export function useMentorGroups() {
       })),
     );
     setLoading(false);
-  }, [user?.id]);
+  }, [enabled, user?.id]);
 
   useEffect(() => {
     refresh();
@@ -165,13 +170,14 @@ export function useGroupMembers(groupId: string | null) {
 }
 
 // ─── useMentorStudents ────────────────────────────────────────
-export function useMentorStudents() {
+export function useMentorStudents(options: MentorDataOptions = {}) {
+  const { enabled = true } = options;
   const { user } = useAuth();
   const [students, setStudents] = useState<GroupMember[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
+    if (!enabled || !supabase || !isSupabaseConfigured || !user?.id) {
       setStudents([]);
       setLoading(false);
       return;
@@ -195,7 +201,7 @@ export function useMentorStudents() {
       .order('enrolled_at', { ascending: true });
     setStudents(rowsOrEmpty<GroupMember>(memberRes));
     setLoading(false);
-  }, [user?.id]);
+  }, [enabled, user?.id]);
 
   useEffect(() => {
     refresh();
@@ -382,13 +388,14 @@ export interface MentorStudentAttendanceSummary {
   latestPresent: boolean | null;
 }
 
-export function useMentorStudentAttendanceSummary() {
+export function useMentorStudentAttendanceSummary(options: MentorDataOptions = {}) {
+  const { enabled = true } = options;
   const { user } = useAuth();
   const [summary, setSummary] = useState<Record<string, MentorStudentAttendanceSummary>>({});
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
+    if (!enabled || !supabase || !isSupabaseConfigured || !user?.id) {
       setSummary({});
       setLoading(false);
       return;
@@ -450,7 +457,7 @@ export function useMentorStudentAttendanceSummary() {
 
     setSummary(next);
     setLoading(false);
-  }, [user?.id]);
+  }, [enabled, user?.id]);
 
   useEffect(() => {
     refresh();
@@ -569,6 +576,8 @@ export function useMentorProfileStats() {
 
 // ─── useMentorOwnProfile ─────────────────────────────────────
 export interface MentorOwnProfile {
+  status: 'pending' | 'approved' | 'rejected';
+  rejection_reason: string | null;
   specialization: string | null;
   bio: string | null;
   experience: string | null;
@@ -592,8 +601,12 @@ export function useMentorOwnProfile() {
     setLoading(true);
     const res = await supabase
       .from('mentor_applications')
-      .select('specialization, bio, experience, education, photo_emoji, rating, sessions')
+      .select(
+        'status, rejection_reason, specialization, bio, experience, education, photo_emoji, rating, sessions',
+      )
       .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
       .maybeSingle();
     setProfile(res.data ?? null);
     setLoading(false);
@@ -629,13 +642,14 @@ export interface MentorRequest {
   created_at: string;
 }
 
-export function useMentorRequests() {
+export function useMentorRequests(options: MentorDataOptions = {}) {
+  const { enabled = true } = options;
   const { user } = useAuth();
   const [requests, setRequests] = useState<MentorRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!supabase || !isSupabaseConfigured || !user?.id) {
+    if (!enabled || !supabase || !isSupabaseConfigured || !user?.id) {
       setRequests([]);
       setLoading(false);
       return;
@@ -648,14 +662,14 @@ export function useMentorRequests() {
       .order('created_at', { ascending: false });
     setRequests(rowsOrEmpty<MentorRequest>(res));
     setLoading(false);
-  }, [user?.id]);
+  }, [enabled, user?.id]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
   const respond = async (id: string, status: 'accepted' | 'rejected') => {
-    if (!supabase) return;
+    if (!enabled || !supabase) return;
     await supabase.from('mentorship_requests').update({ status }).eq('id', id);
     refresh();
   };

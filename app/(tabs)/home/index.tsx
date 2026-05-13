@@ -1,5 +1,4 @@
 // Экран home/index: загружает и показывает домашний экран в кабинете home.
-import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import AdminHome from '$app/(tabs)/home/_home/AdminHome';
 import ChildHome from '$app/(tabs)/home/_home/ChildHome';
@@ -15,15 +14,7 @@ import type { HomeScreenRole } from '$types/user';
 
 export default function HomeScreenRouter() {
   const { user, isLoading } = useAuth();
-  const [role, setRole] = useState<HomeScreenRole | null>(null);
-
-  useEffect(() => {
-    if (user?.role) {
-      setRole(user.role as HomeScreenRole);
-    } else {
-      setRole(null);
-    }
-  }, [user]);
+  const role = user?.role as HomeScreenRole | undefined;
 
   // Показываем индикатор загрузки, пока мы достаем роль
   if (isLoading || !role) {
