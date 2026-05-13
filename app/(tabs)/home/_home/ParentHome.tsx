@@ -31,6 +31,7 @@ export default function ParentHome() {
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
   const activeChild = children.find((child) => child.id === activeChildId) || children[0] || null;
+  const activeChildHasProDiagnostic = activeChild?.talentProfile?.tier === 'pro';
 
   const { courses: publicCourses } = usePublicCourses();
 
@@ -155,36 +156,47 @@ export default function ParentHome() {
 
         {/* Dashboard Insight Widget (Tariff Based) */}
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 32 }}>
-          {parentProfile?.tariff === 'pro' ? (
+          {activeChildHasProDiagnostic ? null : parentProfile?.tariff === 'pro' && activeChild ? (
             <View
               style={SHADOWS.md}
               className="bg-purple-50 rounded-[32px] p-6 border border-purple-100 flex-row items-center"
             >
               <View className="w-12 h-12 bg-white rounded-full items-center justify-center mr-4 border-2 border-purple-200">
-                <Feather name="message-circle" size={20} color="#6C5CE7" />
+                <Feather name="zap" size={20} color="#6C5CE7" />
               </View>
               <View className="flex-1 pr-2">
-                <Text className="text-purple-900 font-bold text-sm mb-1">Сообщение от Ментора</Text>
+                <Text className="text-purple-900 font-bold text-sm mb-1">PRO тест доступен</Text>
                 <Text className="text-purple-700 text-xs leading-4">
-                  «{activeChild?.name} показывает отличные результаты в логике. Я подобрал новые
-                  секции!»
+                  Для {activeChild.name} открыт расширенный тест: интеллект, профориентация и
+                  персональные рекомендации.
                 </Text>
                 <View className="flex-row gap-2 mt-3">
                   <PressableScale
-                    onPress={() => navigateApp(router, user?.role, { name: 'chats' })}
+                    onPress={() => {
+                      setActiveChildId(activeChild.id);
+                      router.push({
+                        pathname: '/profile/youth/testing',
+                        params: { childId: activeChild.id },
+                      });
+                    }}
                     className="bg-purple-600 px-3 py-1.5 rounded-full flex-row items-center gap-1"
                   >
                     <Text className="text-white font-black text-[10px] uppercase tracking-widest">
-                      Чат 🔥
+                      Пройти PRO
                     </Text>
                   </PressableScale>
                   <PressableScale
-                    onPress={() => navigateApp(router, user?.role, { name: 'parentMentors' })}
+                    onPress={() =>
+                      navigateApp(router, user?.role, {
+                        name: 'parentChildDetails',
+                        childId: activeChild.id,
+                      })
+                    }
                     className="bg-white px-3 py-1.5 rounded-full border border-purple-200 flex-row items-center gap-1"
                   >
-                    <Feather name="users" size={10} color="#6C5CE7" />
+                    <Feather name="bar-chart-2" size={10} color="#6C5CE7" />
                     <Text className="text-purple-600 font-black text-[10px] uppercase tracking-widest">
-                      Менторы
+                      Отчет
                     </Text>
                   </PressableScale>
                 </View>
