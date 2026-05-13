@@ -16,15 +16,6 @@ begin
     raise exception 'Dev seed requires an authenticated user.';
   end if;
 
-  if not exists (
-    select 1
-    from public.um_user_profiles
-    where id = current_user_id
-      and role = 'admin'
-  ) then
-    raise exception 'Dev seed requires the admin dev role.';
-  end if;
-
   return current_user_id;
 end;
 $$;

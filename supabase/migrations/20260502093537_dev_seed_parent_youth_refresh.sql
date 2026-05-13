@@ -1,7 +1,6 @@
 -- Миграция Supabase: применяет изменение схемы или seed-данных для dev seed parent youth refresh.
 -- Expand populated dev data beyond org/teacher flows, and allow any
--- anonymous dev-switcher session to run the toggle instead of requiring the
--- in-app role to be admin.
+-- authenticated session to run the toggle without checking app role.
 
 create table if not exists public.student_tasks (
   id uuid primary key default gen_random_uuid(),
@@ -88,28 +87,9 @@ set search_path = public, auth
 as $$
 declare
   current_user_id uuid := auth.uid();
-  is_dev_switcher_user boolean := false;
 begin
   if current_user_id is null then
     raise exception 'Dev seed requires an authenticated user.';
-  end if;
-
-  select coalesce((raw_user_meta_data->>'dev_role_switcher')::boolean, false)
-  into is_dev_switcher_user
-  from auth.users
-  where id = current_user_id;
-
-  if is_dev_switcher_user then
-    return current_user_id;
-  end if;
-
-  if not exists (
-    select 1
-    from public.um_user_profiles
-    where id = current_user_id
-      and role = 'admin'
-  ) then
-    raise exception 'Dev seed requires a dev-switcher session or the admin role.';
   end if;
 
   return current_user_id;

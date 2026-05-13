@@ -1,6 +1,23 @@
 -- Expand the "Populated Dev Data" toggle with records for more app surfaces:
 -- public course catalog, parent reports, org cabinet, mentor cabinet, and requests.
 
+create or replace function public.require_dev_seed_admin()
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  current_user_id uuid := auth.uid();
+begin
+  if current_user_id is null then
+    raise exception 'Dev seed requires an authenticated user.';
+  end if;
+
+  return current_user_id;
+end;
+$$;
+
 create table if not exists public.org_groups (
   id uuid primary key default gen_random_uuid(),
   org_id uuid references public.organizations(id) on delete cascade,

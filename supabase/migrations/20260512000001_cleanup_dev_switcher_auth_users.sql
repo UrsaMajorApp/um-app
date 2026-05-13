@@ -11,35 +11,9 @@ set search_path = public, auth
 as $$
 declare
   current_user_id uuid := auth.uid();
-  is_dev_switcher_user boolean := false;
-  remote_dev_switcher_enabled boolean := false;
 begin
   if current_user_id is null then
     raise exception 'Dev seed requires an authenticated user.';
-  end if;
-
-  select
-    coalesce((raw_user_meta_data->>'dev_role_switcher')::boolean, false),
-    coalesce((raw_user_meta_data->>'remote_dev_switcher_enabled')::boolean, false)
-  into is_dev_switcher_user, remote_dev_switcher_enabled
-  from auth.users
-  where id = current_user_id;
-
-  if is_dev_switcher_user then
-    if not remote_dev_switcher_enabled then
-      raise exception 'Remote dev switcher is disabled for this session.';
-    end if;
-
-    return current_user_id;
-  end if;
-
-  if not exists (
-    select 1
-    from public.um_user_profiles
-    where id = current_user_id
-      and role = 'admin'
-  ) then
-    raise exception 'Dev seed requires a dev-switcher session or the admin role.';
   end if;
 
   return current_user_id;
