@@ -18,6 +18,10 @@ function subscriptionRole(role: UserRole | null | undefined): SubscriptionPlanRo
   return null;
 }
 
+function isSeededDevPlan(plan: SubscriptionPlan) {
+  return plan.title.trim().toLowerCase().startsWith('[dev]');
+}
+
 export function useSubscriptionPlans(role: UserRole | null | undefined) {
   const planRole = subscriptionRole(role);
   const devDataVersion = useDevDataVersion();
@@ -38,7 +42,7 @@ export function useSubscriptionPlans(role: UserRole | null | undefined) {
       .eq('role', planRole)
       .eq('active', true)
       .order('display_order', { ascending: true });
-    const rows = rowsOrEmpty<SubscriptionPlan>(res);
+    const rows = rowsOrEmpty<SubscriptionPlan>(res).filter((plan) => !isSeededDevPlan(plan));
     setPlans(rows.length > 0 ? rows : fallbackPlansForRole(planRole));
     setLoading(false);
   }, [planRole]);
