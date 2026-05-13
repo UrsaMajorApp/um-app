@@ -240,7 +240,7 @@ export async function applyToTrialLesson(params: {
   if (!supabase || !isSupabaseConfigured) return { error: 'Not configured' };
   const childId = isUuid(params.childId) ? params.childId : null;
 
-  const res = await supabase.from('trial_lesson_requests').insert({
+  const requestPayload = {
     child_id: childId,
     child_name: params.childName,
     child_age: params.childAge ?? null,
@@ -252,7 +252,20 @@ export async function applyToTrialLesson(params: {
     requested_slots: params.requestedSlots,
     confirmed_slot: params.selectedSlot,
     status: 'pending',
-  });
+  };
+
+  const res = await supabase.from('trial_lesson_requests').insert(requestPayload);
+
+  if (
+    res.error?.code === '23503' &&
+    res.error.message.includes('trial_lesson_requests_child_id_fkey') &&
+    childId
+  ) {
+    const retryRes = await supabase
+      .from('trial_lesson_requests')
+      .insert({ ...requestPayload, child_id: null });
+    return { error: retryRes.error?.message ?? null };
+  }
 
   return { error: res.error?.message ?? null };
 }
