@@ -1,13 +1,12 @@
 // ParentHome: собирает виджеты и быстрые действия домашнего экрана для роли родителя.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Platform, ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
-import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
@@ -58,91 +57,52 @@ export default function ParentHome() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-          <LinearGradient
-            colors={COLORS.gradients.header}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-          >
-            <SafeAreaView edges={['top']}>
-              <View
+        <GradientScreenHeader
+          title={`Привет, ${user?.firstName || parentProfile?.firstName || 'Родитель'}!`}
+          subtitle="Узнайте, как развиваются ваши дети сегодня"
+          paddingX={horizontalPadding}
+          variant="dashboard"
+          rightAccessory={
+            !isDesktop ? (
+              <PressableScale
+                onPress={() => setNotificationsVisible(true)}
                 style={{
-                  paddingHorizontal: horizontalPadding,
-                  paddingTop: 12,
-                  paddingBottom: 32,
+                  width: 52,
+                  height: 52,
+                  borderRadius: RADIUS.lg,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: 'rgba(255,255,255,0.3)',
+                  ...(Platform.OS === 'web' && ({ cursor: 'pointer' } as WebViewStyle)),
                 }}
               >
+                <Feather name="bell" size={20} color="white" />
                 <View
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
+                    position: 'absolute',
+                    top: 14,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    backgroundColor: COLORS.destructive,
+                    borderRadius: 5,
+                    borderWidth: 1.5,
+                    borderColor: 'rgba(255,255,255,0.4)',
                   }}
-                >
-                  <Text
-                    style={{
-                      fontSize: TYPOGRAPHY.size.xxxl,
-                      fontWeight: TYPOGRAPHY.weight.semibold,
-                      color: COLORS.white,
-                      letterSpacing: TYPOGRAPHY.letterSpacing.tight,
-                    }}
-                  >
-                    Привет, {user?.firstName || parentProfile?.firstName || 'Родитель'}!
-                  </Text>
-                  {!isDesktop && (
-                    <PressableScale
-                      onPress={() => setNotificationsVisible(true)}
-                      style={{
-                        width: 52,
-                        height: 52,
-                        borderRadius: RADIUS.lg,
-                        backgroundColor: 'rgba(255,255,255,0.2)',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderWidth: 1,
-                        borderColor: 'rgba(255,255,255,0.3)',
-                        ...(Platform.OS === 'web' && ({ cursor: 'pointer' } as WebViewStyle)),
-                      }}
-                    >
-                      <Feather name="bell" size={20} color="white" />
-                      <View
-                        style={{
-                          position: 'absolute',
-                          top: 14,
-                          right: 14,
-                          width: 10,
-                          height: 10,
-                          backgroundColor: COLORS.destructive,
-                          borderRadius: 5,
-                          borderWidth: 1.5,
-                          borderColor: 'rgba(255,255,255,0.4)',
-                        }}
-                      />
-                    </PressableScale>
-                  )}
-                </View>
-                <Text
-                  style={{
-                    color: 'rgba(255,255,255,0.7)',
-                    fontSize: 13,
-                    fontWeight: '500',
-                    marginTop: 4,
-                  }}
-                >
-                  Узнайте, как развиваются ваши дети сегодня
-                </Text>
-              </View>
-            </SafeAreaView>
-          </LinearGradient>
-        </View>
+                />
+              </PressableScale>
+            ) : null
+          }
+        />
         {/* Children Section */}
         <View style={{ paddingHorizontal: horizontalPadding, marginTop: 24 }}>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-black text-gray-900">Мои дети</Text>
-            <PressableScale onPress={() => navigateApp(router, user?.role, { name: 'parentChildren' })}>
+            <PressableScale
+              onPress={() => navigateApp(router, user?.role, { name: 'parentChildren' })}
+            >
               <Text className="text-purple-600 font-bold text-sm">Все</Text>
             </PressableScale>
           </View>

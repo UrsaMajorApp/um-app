@@ -1,16 +1,14 @@
 // Экран teacher/groups: загружает и показывает группы обучения в кабинете преподавателя.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useTeacherGroups } from '$hooks/usePlatformData';
 import { navigateApp } from '$lib/appNavigation';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
-import type { WebViewStyle } from '$types/styles';
 
 export default function TeacherGroupsScreen() {
   const router = useRouter();
@@ -20,30 +18,13 @@ export default function TeacherGroupsScreen() {
   const { groups, studentCounts } = useTeacherGroups();
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <Text style={styles.headerTitle}>Мои группы</Text>
-              <Text style={styles.headerSubtitle}>
-                {groups.length} {groups.length === 1 ? 'группа' : 'групп'}
-              </Text>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <GradientScreenHeader
+        title="Мои группы"
+        subtitle={`${groups.length} ${groups.length === 1 ? 'группа' : 'групп'}`}
+        paddingX={paddingX}
+        variant="dashboard"
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -138,27 +119,6 @@ export default function TeacherGroupsScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
-    ...Platform.select({
-      web: { backdropFilter: 'blur(10px)' } as WebViewStyle,
-      ios: {},
-    }),
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '900',
-    color: 'white',
-    letterSpacing: -0.5,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
-    marginTop: 2,
-    fontWeight: '500',
-  },
   groupCard: {
     backgroundColor: 'white',
     borderRadius: 24,

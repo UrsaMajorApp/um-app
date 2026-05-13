@@ -1,17 +1,14 @@
 // Экран organization/attendance: загружает и показывает посещаемость занятий в кабинете организации.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function OrgAttendance() {
-  const router = useRouter();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
@@ -38,72 +35,40 @@ export default function OrgAttendance() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <LinearGradient
-        colors={COLORS.gradients.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{
-          paddingBottom: 24,
-          borderBottomLeftRadius: 32,
-          borderBottomRightRadius: 32,
-        }}
+      <GradientScreenHeader
+        title="Посещаемость"
+        subtitle="Журнал посещений"
+        paddingX={horizontalPadding}
+        variant="dashboard"
       >
-        <SafeAreaView edges={['top']}>
-          <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}>
-            <View
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {clubs.map((club) => (
+            <PressableScale
+              key={club.id}
+              onPress={() => setSelectedClub(club.id)}
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 16,
+                paddingHorizontal: 16,
+                paddingVertical: 10,
+                borderRadius: 16,
+                marginRight: 8,
+                backgroundColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.15)',
+                borderWidth: 1,
+                borderColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.2)',
               }}
             >
-              <PressableScale
-                onPress={() => router.back()}
+              <Text
                 style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: 12,
+                  color: selectedClub === club.id ? COLORS.primary : 'white',
+                  fontWeight: '700',
+                  fontSize: 13,
                 }}
               >
-                <Feather name="arrow-left" size={20} color="white" />
-              </PressableScale>
-              <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Посещаемость</Text>
-            </View>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {clubs.map((club) => (
-                <PressableScale
-                  key={club.id}
-                  onPress={() => setSelectedClub(club.id)}
-                  style={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 10,
-                    borderRadius: 16,
-                    marginRight: 8,
-                    backgroundColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.15)',
-                    borderWidth: 1,
-                    borderColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.2)',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: selectedClub === club.id ? COLORS.primary : 'white',
-                      fontWeight: '700',
-                      fontSize: 13,
-                    }}
-                  >
-                    {club.name}
-                  </Text>
-                </PressableScale>
-              ))}
-            </ScrollView>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+                {club.name}
+              </Text>
+            </PressableScale>
+          ))}
+        </ScrollView>
+      </GradientScreenHeader>
 
       <ScrollView
         contentContainerStyle={{

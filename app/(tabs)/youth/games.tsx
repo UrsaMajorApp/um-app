@@ -3,10 +3,9 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import {
-  Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { GAMES, getDailyChallenge } from '$constants/games';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
 import { useYouthGameIq } from '$hooks/useYouthGameIq';
@@ -53,62 +52,26 @@ export default function GamesLobby() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
+      <GradientScreenHeader
+        title="Развивайся играя"
+        subtitle="Игровой центр"
+        paddingX={paddingX}
+        variant="dashboard"
+        rightAccessory={
+          !iqLoading ? (
             <View
               style={{
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 32,
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 20,
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: 16,
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-                      color: 'rgba(255,255,255,0.7)',
-                      fontSize: 13,
-                      fontWeight: '700',
-                      textTransform: 'uppercase',
-                      letterSpacing: 1,
-                    }}
-                  >
-                    Игровой Центр
-                  </Text>
-                  <Text style={{ color: 'white', fontSize: 24, fontWeight: '900' }}>
-                    Развивайся играя
-                  </Text>
-                </View>
-                {!iqLoading && (
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.2)',
-                      paddingHorizontal: 16,
-                      paddingVertical: 8,
-                      borderRadius: 20,
-                    }}
-                  >
-                    <Text style={{ color: 'white', fontWeight: '900' }}>{totalIq} IQ</Text>
-                  </View>
-                )}
-              </View>
+              <Text style={{ color: 'white', fontWeight: '900' }}>{totalIq} IQ</Text>
             </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+          ) : null
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{

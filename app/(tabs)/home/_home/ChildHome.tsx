@@ -3,12 +3,12 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
 import { YouthPassModal } from '$components/home/youth/YouthPassModal';
-import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
@@ -41,70 +41,17 @@ export default function ChildHome() {
   const qrValue = `um:pass:${user?.id ?? activeChild?.id ?? 'guest'}:${profileName}`;
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 110 }}
       >
-        <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-          <LinearGradient
-            colors={['#6C5CE7', '#3B82F6']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-          >
-            <SafeAreaView edges={['top']}>
-              <View
-                style={{
-                  paddingHorizontal: horizontalPadding,
-                  paddingTop: 12,
-                  paddingBottom: 30,
-                  gap: 18,
-                }}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-                  <View
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 18,
-                      backgroundColor: 'rgba(255,255,255,0.18)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: 'rgba(255,255,255,0.25)',
-                    }}
-                  >
-                    <Text style={{ color: 'white', fontSize: 22, fontWeight: '900' }}>
-                      {profileName.charAt(0).toUpperCase()}
-                    </Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.75)',
-                        fontSize: 12,
-                        fontWeight: '800',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Детский кабинет
-                    </Text>
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontSize: TYPOGRAPHY.size.xxxl,
-                        fontWeight: TYPOGRAPHY.weight.semibold,
-                      }}
-                    >
-                      Привет, {profileName}!
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </SafeAreaView>
-          </LinearGradient>
-        </View>
+        <GradientScreenHeader
+          title={`Привет, ${profileName}!`}
+          subtitle="Детский кабинет"
+          paddingX={horizontalPadding}
+          variant="dashboard"
+        />
 
         <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 24, gap: 24 }}>
           <View style={{ flexDirection: 'row', gap: 12 }}>

@@ -1,16 +1,16 @@
 // Экран chats/index: загружает и показывает чаты пользователя в кабинете пользователя.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
-import { Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, LAYOUT, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useChats } from '$hooks/useChats';
 import { featherIconName } from '$lib/icons';
-import { useIsDesktop } from '$lib/useIsDesktop';
+import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { WebTextStyle } from '$types/styles';
 
 const DEFAULT_TABS = ['все', 'непрочитанные', 'архив'];
 
@@ -33,11 +33,12 @@ function formatChatTime(isoString: string): string {
 export default function ChatsScreen() {
   const router = useRouter();
   const IS_DESKTOP = useIsDesktop();
-  const horizontalPadding = IS_DESKTOP ? LAYOUT.dashboardHorizontalPaddingDesktop : 20;
+  const horizontalPadding = getDashboardHorizontalPadding(IS_DESKTOP);
   const TABS = DEFAULT_TABS;
 
   const [activeTab, setActiveTab] = useState('все');
   const [search, setSearch] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const { chats, loading } = useChats();
 
   const filteredChats = useMemo(() => {
@@ -55,45 +56,12 @@ export default function ChatsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: horizontalPadding,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: TYPOGRAPHY.size.xxxl,
-                  fontWeight: TYPOGRAPHY.weight.semibold,
-                  color: COLORS.white,
-                  letterSpacing: TYPOGRAPHY.letterSpacing.tight,
-                }}
-              >
-                Чаты
-              </Text>
-              <Text
-                style={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: 13,
-                  fontWeight: '500',
-                  marginTop: 4,
-                }}
-              >
-                Сообщения и обновления по вашим занятиям
-              </Text>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Чаты"
+        subtitle="Сообщения и обновления по вашим занятиям"
+        paddingX={horizontalPadding}
+        variant="dashboard"
+      />
 
       <View
         style={{
@@ -115,8 +83,8 @@ export default function ChatsScreen() {
             marginHorizontal: 20,
             marginBottom: 16,
             borderWidth: 1,
-            borderColor: '#F3F4F6',
-            ...SHADOWS.sm,
+            borderColor: searchFocused ? COLORS.primary : '#F3F4F6',
+            ...(searchFocused ? { boxShadow: `0 0 0 3px ${COLORS.primary}22` } : SHADOWS.sm),
           }}
         >
           <Feather name="search" size={20} color={COLORS.mutedForeground} />
@@ -124,13 +92,19 @@ export default function ChatsScreen() {
             placeholder="Поиск чатов"
             value={search}
             onChangeText={setSearch}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
             placeholderTextColor={COLORS.mutedForeground}
-            style={{
-              flex: 1,
-              marginLeft: 10,
-              fontSize: 16,
-              color: COLORS.foreground,
-            }}
+            className="outline-none"
+            style={
+              {
+                flex: 1,
+                marginLeft: 10,
+                fontSize: 16,
+                color: COLORS.foreground,
+                outlineWidth: 0,
+              } satisfies WebTextStyle
+            }
           />
         </View>
 

@@ -3,10 +3,10 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
 import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
@@ -44,129 +44,79 @@ export default function YoungAdultHome() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 110 }}
       >
-        <View style={{ backgroundColor: '#111827', overflow: 'hidden' }}>
-          <LinearGradient
-            colors={['#111827', '#2563EB']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-          >
-            <SafeAreaView edges={['top']}>
-              <View
-                style={{
-                  paddingHorizontal: horizontalPadding,
-                  paddingTop: 14,
-                  paddingBottom: 34,
-                  gap: 18,
-                }}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-                  <View
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 18,
-                      backgroundColor: 'rgba(255,255,255,0.14)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: 'rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <Feather name="compass" size={24} color="white" />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.7)',
-                        fontSize: 12,
-                        fontWeight: '900',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Самостоятельный трек
-                    </Text>
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontSize: TYPOGRAPHY.size.xxxl,
-                        fontWeight: TYPOGRAPHY.weight.semibold,
-                      }}
-                    >
-                      {firstName}, твой план
-                    </Text>
-                  </View>
-                  <PressableScale
-                    onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 16,
-                      backgroundColor: 'rgba(255,255,255,0.14)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Feather name="user" size={20} color="white" />
-                  </PressableScale>
-                </View>
-
-                <View
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    borderRadius: 24,
-                    padding: 18,
-                    borderWidth: 1,
-                    borderColor: 'rgba(255,255,255,0.16)',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 14,
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 14,
-                      backgroundColor: 'rgba(255,255,255,0.14)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Feather name={isPro ? 'zap' : 'lock'} size={20} color="white" />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'white', fontSize: 15, fontWeight: '900' }}>
-                      {isPro ? 'PRO аналитика активна' : 'Открой PRO аналитику'}
-                    </Text>
-                    <Text style={{ color: 'rgba(255,255,255,0.72)', fontSize: 12, marginTop: 3 }}>
-                      {isPro
-                        ? 'Глубокие результаты и рекомендации доступны в твоём профиле.'
-                        : 'Можно подключить тестовую Stripe Sandbox оплату для демо.'}
-                    </Text>
-                  </View>
-                  {!isPro && (
-                    <PressableScale
-                      onPress={() =>
-                        navigateApp(router, user?.role, { name: 'subscriptionUpsell' })
-                      }
-                      style={{
-                        backgroundColor: 'white',
-                        borderRadius: 14,
-                        paddingHorizontal: 14,
-                        paddingVertical: 10,
-                      }}
-                    >
-                      <Text style={{ color: '#111827', fontWeight: '900', fontSize: 12 }}>PRO</Text>
-                    </PressableScale>
-                  )}
-                </View>
-              </View>
-            </SafeAreaView>
-          </LinearGradient>
-        </View>
+        <GradientScreenHeader
+          title={`${firstName}, твой план`}
+          subtitle="Самостоятельный трек"
+          paddingX={horizontalPadding}
+          variant="dashboard"
+          rightAccessory={
+            <PressableScale
+              onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 16,
+                backgroundColor: 'rgba(255,255,255,0.18)',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Feather name="user" size={20} color="white" />
+            </PressableScale>
+          }
+        />
 
         <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 24, gap: 28 }}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              borderRadius: 24,
+              padding: 18,
+              borderWidth: 1,
+              borderColor: '#EEF2F7',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 14,
+              ...SHADOWS.sm,
+            }}
+          >
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 14,
+                backgroundColor: `${COLORS.primary}12`,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Feather name={isPro ? 'zap' : 'lock'} size={20} color={COLORS.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: COLORS.foreground, fontSize: 15, fontWeight: '900' }}>
+                {isPro ? 'PRO аналитика активна' : 'Открой PRO аналитику'}
+              </Text>
+              <Text style={{ color: COLORS.mutedForeground, fontSize: 12, marginTop: 3 }}>
+                {isPro
+                  ? 'Глубокие результаты и рекомендации доступны в твоём профиле.'
+                  : 'Можно подключить тестовую Stripe Sandbox оплату для демо.'}
+              </Text>
+            </View>
+            {!isPro && (
+              <PressableScale
+                onPress={() => navigateApp(router, user?.role, { name: 'subscriptionUpsell' })}
+                style={{
+                  backgroundColor: COLORS.foreground,
+                  borderRadius: 14,
+                  paddingHorizontal: 14,
+                  paddingVertical: 10,
+                }}
+              >
+                <Text style={{ color: 'white', fontWeight: '900', fontSize: 12 }}>PRO</Text>
+              </PressableScale>
+            )}
+          </View>
+
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
             {[
               {

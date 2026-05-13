@@ -3,9 +3,9 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ORG_HOME_QUICK_ACTIONS } from '$constants/dashboard';
 import { COLORS, RADIUS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -64,131 +64,87 @@ export default function OrgHome() {
           paddingBottom: 110,
         }}
       >
-        {/* Header - Premium Purple Aesthetic */}
-        <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-          <LinearGradient
-            colors={COLORS.gradients.header}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
+        <GradientScreenHeader
+          title={orgName || 'Моя организация'}
+          subtitle="Управление"
+          paddingX={horizontalPadding}
+          variant="dashboard"
+          rightAccessory={
+            <PressableScale
+              onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: RADIUS.lg,
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                borderColor: 'rgba(255,255,255,0.1)',
+              }}
+            >
+              <Feather name="settings" size={22} color="white" />
+            </PressableScale>
+          }
+        >
+          <MotiView
+            from={{ opacity: 0, translateY: -10 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}
           >
-            <SafeAreaView edges={['top']}>
-              <MotiView
-                from={{ opacity: 0, translateY: -10 }}
-                animate={{ opacity: 1, translateY: 0 }}
+            <View
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 999,
+                borderWidth: 1,
+                borderColor: 'rgba(255,255,255,0.2)',
+              }}
+            >
+              <Text
                 style={{
-                  paddingHorizontal: horizontalPadding,
-                  paddingTop: 12,
-                  paddingBottom: 32,
+                  color: 'white',
+                  fontSize: 10,
+                  fontWeight: '800',
+                  letterSpacing: 1,
+                  textTransform: 'uppercase',
                 }}
               >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 20,
-                  }}
-                >
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: TYPOGRAPHY.size.xxl,
-                        fontWeight: TYPOGRAPHY.weight.light,
-                        color: 'white',
-                        opacity: 0.8,
-                      }}
-                    >
-                      Управление
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: TYPOGRAPHY.size.xxxl,
-                        fontWeight: TYPOGRAPHY.weight.bold,
-                        color: 'white',
-                        letterSpacing: -0.5,
-                      }}
-                    >
-                      {orgName || 'Моя организация'}
-                    </Text>
-                  </View>
-                  <PressableScale
-                    onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
-                    style={{
-                      width: 52,
-                      height: 52,
-                      borderRadius: RADIUS.lg,
-                      backgroundColor: 'rgba(255,255,255,0.15)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: 'rgba(255,255,255,0.1)',
-                    }}
-                  >
-                    <Feather name="settings" size={22} color="white" />
-                  </PressableScale>
-                </View>
-
-                {/* Sub-header Context Chips */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginTop: 4,
-                  }}
-                >
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                      paddingHorizontal: 16,
-                      paddingVertical: 8,
-                      borderRadius: 999,
-                      borderWidth: 1,
-                      borderColor: 'rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontSize: 10,
-                        fontWeight: '800',
-                        letterSpacing: 1,
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Сеть: 1 филиал
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                      paddingHorizontal: 12,
-                      paddingVertical: 6,
-                      borderRadius: 999,
-                      borderWidth: 1,
-                      borderColor: 'rgba(255,255,255,0.2)',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 8,
-                    }}
-                  >
-                    <Feather name="trending-up" size={14} color="white" />
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontWeight: '700',
-                        fontSize: 12,
-                      }}
-                    >
-                      92% посещаемость
-                    </Text>
-                  </View>
-                </View>
-              </MotiView>
-            </SafeAreaView>
-          </LinearGradient>
-        </View>
+                Сеть: 1 филиал
+              </Text>
+            </View>
+            <View
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+                borderRadius: 999,
+                borderWidth: 1,
+                borderColor: 'rgba(255,255,255,0.2)',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              <Feather name="trending-up" size={14} color="white" />
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: '700',
+                  fontSize: 12,
+                }}
+              >
+                92% посещаемость
+              </Text>
+            </View>
+          </MotiView>
+        </GradientScreenHeader>
 
         {/* Verification status banner */}
         {(orgStatus === 'new' || orgStatus === null) && (

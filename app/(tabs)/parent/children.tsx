@@ -1,11 +1,10 @@
 // Экран parent/children: загружает и показывает детей родителя в кабинете родителя.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Platform, ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -44,42 +43,12 @@ export default function ParentChildren() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingHorizontal: horizontalPadding,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <PressableScale
-                onPress={() => router.back()}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: 12,
-                }}
-              >
-                <Feather name="arrow-left" size={20} color="white" />
-              </PressableScale>
-              <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Мои дети</Text>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Мои дети"
+        subtitle={`${children.length} профилей`}
+        paddingX={horizontalPadding}
+        onBack={() => router.back()}
+      />
 
       <ScrollView
         contentContainerStyle={{

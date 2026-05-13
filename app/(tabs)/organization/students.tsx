@@ -1,12 +1,10 @@
 // Экран organization/students: загружает и показывает учеников в кабинете организации.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import {
-  Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
 import { navigateApp } from '$lib/appNavigation';
@@ -46,30 +44,17 @@ export default function OrgStudents() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <Text style={{ fontSize: 20, fontWeight: '700', color: 'white' }}>Ученики</Text>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Ученики"
+        subtitle={`${students.length} учеников`}
+        paddingX={paddingX}
+        variant="dashboard"
+      />
 
       <ScrollView
         contentContainerStyle={{
-          padding: 16,
+          paddingHorizontal: paddingX,
+          paddingTop: 16,
           paddingBottom: isDesktop ? 32 : 100,
         }}
         stickyHeaderIndices={[0]}

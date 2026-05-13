@@ -1,11 +1,10 @@
 // Экран organization/staff: загружает и показывает staff в кабинете организации.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import type { OrgStaffMember } from '$hooks/useOrgData';
@@ -93,63 +92,27 @@ export default function OrgStaffScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header - Unified Brand Style */}
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xxl,
-                    fontWeight: TYPOGRAPHY.weight.bold,
-                    color: 'white',
-                  }}
-                >
-                  Учителя
-                </Text>
-                <Text
-                  style={{
-                    color: 'rgba(255,255,255,0.7)',
-                    fontSize: TYPOGRAPHY.size.sm,
-                    fontWeight: TYPOGRAPHY.weight.medium,
-                    marginTop: 2,
-                  }}
-                >
-                  Преподавательский состав
-                </Text>
-              </View>
-              <PressableScale
-                onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
-                style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: RADIUS.md,
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Feather name="plus" size={24} color="white" />
-              </PressableScale>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Учителя"
+        subtitle="Преподавательский состав"
+        paddingX={paddingX}
+        variant="dashboard"
+        rightAccessory={
+          <PressableScale
+            onPress={() => navigateApp(router, user?.role, { name: 'orgStaffAdd' })}
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: RADIUS.md,
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Feather name="plus" size={24} color="white" />
+          </PressableScale>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{

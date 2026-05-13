@@ -3,12 +3,12 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentRequestModal } from '$components/home/youth/EnrollmentRequestModal';
 import { YouthPassModal } from '$components/home/youth/YouthPassModal';
-import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useDevSettings } from '$contexts/DevSettingsContext';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -80,59 +80,24 @@ export default function YouthHome() {
   ];
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header - Restored Violet Aesthetic */}
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: horizontalPadding,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <View className="flex-row items-center justify-between mb-4">
-                <View>
-                  <Text
-                    style={{
-                      fontSize: TYPOGRAPHY.size.xxxl,
-                      fontWeight: TYPOGRAPHY.weight.semibold,
-                      color: COLORS.white,
-                      letterSpacing: TYPOGRAPHY.letterSpacing.tight,
-                    }}
-                  >
-                    Привет, {firstName}!
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'rgba(255,255,255,0.7)',
-                      fontSize: 13,
-                      fontWeight: '600',
-                      marginTop: 2,
-                    }}
-                  >
-                    {diagnostic?.recommendedConstellation || 'Профиль'} •{' '}
-                    {diagnostic ? 'Профиль готов' : 'Диагностика не пройдена'}
-                  </Text>
-                </View>
-                <PressableScale
-                  onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
-                  className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
-                >
-                  <View className="w-full h-full bg-white/20 items-center justify-center">
-                    <Feather name="user" size={20} color="white" />
-                  </View>
-                </PressableScale>
-              </View>
+      <GradientScreenHeader
+        title={`Привет, ${firstName}!`}
+        subtitle={`${diagnostic?.recommendedConstellation || 'Профиль'} • ${
+          diagnostic ? 'Профиль готов' : 'Диагностика не пройдена'
+        }`}
+        paddingX={horizontalPadding}
+        variant="dashboard"
+        rightAccessory={
+          <PressableScale
+            onPress={() => navigateApp(router, user?.role, { name: 'profile' })}
+            className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30"
+          >
+            <View className="w-full h-full bg-white/20 items-center justify-center">
+              <Feather name="user" size={20} color="white" />
             </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+          </PressableScale>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{
@@ -584,14 +549,14 @@ export default function YouthHome() {
         onClose={() => setPassVisible(false)}
       />
 
-        <EnrollmentRequestModal
-          visible={enrollmentRequests.showEnrollModal}
-          selectedCourse={enrollmentRequests.selectedCourse}
-          enrollmentRequested={enrollmentRequests.enrollmentRequested}
-          requiresParentApproval={enrollmentRequests.requiresParentApproval}
-          onClose={enrollmentRequests.closeEnrollmentModal}
-          onRequestEnrollment={enrollmentRequests.requestSelectedCourse}
-        />
+      <EnrollmentRequestModal
+        visible={enrollmentRequests.showEnrollModal}
+        selectedCourse={enrollmentRequests.selectedCourse}
+        enrollmentRequested={enrollmentRequests.enrollmentRequested}
+        requiresParentApproval={enrollmentRequests.requiresParentApproval}
+        onClose={enrollmentRequests.closeEnrollmentModal}
+        onRequestEnrollment={enrollmentRequests.requestSelectedCourse}
+      />
     </View>
   );
 }

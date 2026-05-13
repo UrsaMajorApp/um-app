@@ -1,10 +1,9 @@
 // Экран organization/applications: загружает и показывает заявки на обучение в кабинете организации.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useOrgApplications } from '$hooks/useOrgData';
 import { useIsDesktop } from '$lib/useIsDesktop';
@@ -95,68 +94,26 @@ export default function OrgApplicationsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header - Unified Brand Style */}
-      <View
-        style={{
-          backgroundColor: COLORS.primary,
-          borderBottomLeftRadius: RADIUS.xxl,
-          borderBottomRightRadius: RADIUS.xxl,
-          overflow: 'hidden',
-        }}
-      >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingHorizontal: paddingX,
-                paddingTop: SPACING.md,
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xxl,
-                    fontWeight: TYPOGRAPHY.weight.bold,
-                    color: 'white',
-                  }}
-                >
-                  Заявки
-                </Text>
-                <Text
-                  style={{
-                    color: 'rgba(255,255,255,0.7)',
-                    fontSize: TYPOGRAPHY.size.sm,
-                    fontWeight: TYPOGRAPHY.weight.medium,
-                    marginTop: 2,
-                  }}
-                >
-                  Новые поступления
-                </Text>
-              </View>
-              <PressableScale
-                style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: RADIUS.md,
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Feather name="filter" size={24} color="white" />
-              </PressableScale>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+      <GradientScreenHeader
+        title="Заявки"
+        subtitle="Новые поступления"
+        paddingX={paddingX}
+        variant="dashboard"
+        rightAccessory={
+          <PressableScale
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: RADIUS.md,
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Feather name="filter" size={24} color="white" />
+          </PressableScale>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{

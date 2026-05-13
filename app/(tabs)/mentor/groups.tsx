@@ -11,6 +11,7 @@ import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants
 import { useMentorGroups } from '$hooks/useMentorData';
 import { navigateApp } from '$lib/appNavigation';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import type { WebTextStyle } from '$types/styles';
 
 export default function MentorGroups() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function MentorGroups() {
   const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
 
   const [search, setSearch] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const { groups, loading } = useMentorGroups();
 
   const filtered = groups.filter(
@@ -81,12 +83,17 @@ export default function MentorGroups() {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.15)',
+                  backgroundColor: searchFocused
+                    ? 'rgba(255,255,255,0.24)'
+                    : 'rgba(255,255,255,0.15)',
                   borderRadius: RADIUS.md,
                   paddingHorizontal: SPACING.lg,
                   height: 52,
                   borderWidth: 1,
-                  borderColor: 'rgba(255,255,255,0.1)',
+                  borderColor: searchFocused
+                    ? 'rgba(255,255,255,0.72)'
+                    : 'rgba(255,255,255,0.1)',
+                  boxShadow: searchFocused ? '0 0 0 3px rgba(255,255,255,0.16)' : 'none',
                 }}
               >
                 <Feather
@@ -98,14 +105,20 @@ export default function MentorGroups() {
                 <TextInput
                   value={search}
                   onChangeText={setSearch}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => setSearchFocused(false)}
                   placeholder="Поиск по названию или курсу..."
                   placeholderTextColor="rgba(255,255,255,0.5)"
-                  style={{
-                    color: 'white',
-                    flex: 1,
-                    fontSize: 15,
-                    fontWeight: '500',
-                  }}
+                  className="outline-none"
+                  style={
+                    {
+                      color: 'white',
+                      flex: 1,
+                      fontSize: 15,
+                      fontWeight: '500',
+                      outlineWidth: 0,
+                    } satisfies WebTextStyle
+                  }
                 />
               </View>
             </MotiView>

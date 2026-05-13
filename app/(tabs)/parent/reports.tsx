@@ -3,9 +3,9 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
 import { useChildReports } from '$hooks/useParentReports';
@@ -42,52 +42,30 @@ export default function ParentReports() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: horizontalPadding,
-                paddingTop: 12,
-                paddingBottom: 16,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: 20,
-                }}
+      <GradientScreenHeader
+        title="Отчеты"
+        subtitle="Прогресс и посещаемость"
+        paddingX={horizontalPadding}
+        variant="dashboard"
+      >
+        {children.length > 0 && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="-mx-1 px-1 overflow-visible"
+          >
+            {children.map((child) => (
+              <PressableScale
+                key={child}
+                onPress={() => setSelectedChild(child)}
+                className={`mr-3 px-6 py-2.5 rounded-full border ${selectedChild === child ? 'bg-white/20 border-white/40' : 'bg-transparent border-white/20'}`}
               >
-                <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Отчеты</Text>
-              </View>
-
-              {children.length > 0 && (
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className="-mx-1 px-1 overflow-visible"
-                >
-                  {children.map((child) => (
-                    <PressableScale
-                      key={child}
-                      onPress={() => setSelectedChild(child)}
-                      className={`mr-3 px-6 py-2.5 rounded-full border ${selectedChild === child ? 'bg-white/20 border-white/40' : 'bg-transparent border-white/20'}`}
-                    >
-                      <Text className="font-bold text-sm text-white">{child}</Text>
-                    </PressableScale>
-                  ))}
-                </ScrollView>
-              )}
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+                <Text className="font-bold text-sm text-white">{child}</Text>
+              </PressableScale>
+            ))}
+          </ScrollView>
+        )}
+      </GradientScreenHeader>
 
       <ScrollView
         contentContainerStyle={{

@@ -1,13 +1,11 @@
 // Экран organization/courses: загружает и показывает курсы организации в кабинете организации.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useMemo, useState } from 'react';
-import {
-  ActivityIndicator, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TextInput, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useOrgCourses, useOrgGroups } from '$hooks/useOrgData';
@@ -15,6 +13,7 @@ import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
 import { useIsDesktop } from '$lib/useIsDesktop';
+import type { WebTextStyle } from '$types/styles';
 
 export default function OrgCourses() {
   const router = useRouter();
@@ -26,6 +25,7 @@ export default function OrgCourses() {
   const { groups } = useOrgGroups();
 
   const [search, setSearch] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
 
   // Compute student count per course from groups linked by course_id
   const studentCountByCourse = useMemo(() => {
@@ -50,97 +50,74 @@ export default function OrgCourses() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header */}
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
+      <GradientScreenHeader
+        title="Курсы"
+        subtitle={`${courses.length} курсов`}
+        paddingX={paddingX}
+        variant="dashboard"
+        rightAccessory={
+          <PressableScale
+            onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              paddingHorizontal: SPACING.lg,
+              height: 44,
+              borderRadius: RADIUS.md,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text
               style={{
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 32,
+                color: 'white',
+                fontWeight: TYPOGRAPHY.weight.bold,
+                fontSize: 13,
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: SPACING.xl,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xl,
-                    fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: 'white',
-                    flex: 1,
-                  }}
-                >
-                  Курсы
-                </Text>
-                <PressableScale
-                  onPress={() => navigateApp(router, user?.role, { name: 'orgCourseCreate' })}
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    paddingHorizontal: SPACING.lg,
-                    height: 44,
-                    borderRadius: RADIUS.md,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: TYPOGRAPHY.weight.bold,
-                      fontSize: 13,
-                    }}
-                  >
-                    + Добавить
-                  </Text>
-                </PressableScale>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.15)',
-                  borderRadius: RADIUS.lg,
-                  paddingHorizontal: SPACING.lg,
-                  height: 52,
-                  borderWidth: 1,
-                  borderColor: 'rgba(255,255,255,0.2)',
-                }}
-              >
-                <Feather
-                  name="search"
-                  size={18}
-                  color="rgba(255,255,255,0.6)"
-                  style={{ marginRight: SPACING.sm }}
-                />
-                <TextInput
-                  value={search}
-                  onChangeText={setSearch}
-                  placeholder="Поиск курса..."
-                  placeholderTextColor="rgba(255,255,255,0.5)"
-                  style={{
-                    color: 'white',
-                    flex: 1,
-                    fontSize: 16,
-                    fontWeight: TYPOGRAPHY.weight.medium,
-                  }}
-                />
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+              + Добавить
+            </Text>
+          </PressableScale>
+        }
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: searchFocused ? 'rgba(255,255,255,0.24)' : 'rgba(255,255,255,0.15)',
+            borderRadius: RADIUS.lg,
+            paddingHorizontal: SPACING.lg,
+            height: 52,
+            borderWidth: 1,
+            borderColor: searchFocused ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.2)',
+            boxShadow: searchFocused ? '0 0 0 3px rgba(255,255,255,0.16)' : 'none',
+          }}
+        >
+          <Feather
+            name="search"
+            size={18}
+            color="rgba(255,255,255,0.6)"
+            style={{ marginRight: SPACING.sm }}
+          />
+          <TextInput
+            value={search}
+            onChangeText={setSearch}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder="Поиск курса..."
+            placeholderTextColor="rgba(255,255,255,0.5)"
+            className="outline-none"
+            style={
+              {
+                color: 'white',
+                flex: 1,
+                fontSize: 16,
+                fontWeight: TYPOGRAPHY.weight.medium,
+                outlineWidth: 0,
+              } satisfies WebTextStyle
+            }
+          />
+        </View>
+      </GradientScreenHeader>
 
       <ScrollView
         contentContainerStyle={{

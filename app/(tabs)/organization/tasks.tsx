@@ -1,12 +1,11 @@
 // Экран organization/tasks: загружает и показывает задания в кабинете организации.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useOrgTasks } from '$hooks/useOrgData';
@@ -35,109 +34,63 @@ export default function OrgTasks() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      {/* Header - Unified Brand Style */}
-      <View
-        style={{
-          backgroundColor: COLORS.primary,
-          borderBottomLeftRadius: RADIUS.xxl,
-          borderBottomRightRadius: RADIUS.xxl,
-          overflow: 'hidden',
-        }}
+      <GradientScreenHeader
+        title="Задания"
+        subtitle="Задания по кружкам"
+        paddingX={paddingX}
+        variant="dashboard"
+        rightAccessory={
+          <PressableScale
+            onPress={() => navigateApp(router, user?.role, { name: 'orgTaskCreate' })}
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              paddingHorizontal: SPACING.lg,
+              height: 44,
+              borderRadius: RADIUS.md,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: TYPOGRAPHY.weight.bold,
+                fontSize: 13,
+              }}
+            >
+              + СОЗДАТЬ
+            </Text>
+          </PressableScale>
+        }
       >
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingBottom: SPACING.xl }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View style={{ paddingHorizontal: paddingX, paddingTop: SPACING.md }}>
-              <View
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-1 px-1">
+          {clubs.map((club) => (
+            <PressableScale
+              key={club.id}
+              onPress={() => setSelectedClub(club.id)}
+              style={{
+                paddingHorizontal: SPACING.lg,
+                paddingVertical: 10,
+                borderRadius: RADIUS.md,
+                marginRight: SPACING.sm,
+                backgroundColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.15)',
+                borderWidth: 1,
+                borderColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.2)',
+              }}
+            >
+              <Text
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: SPACING.xl,
+                  color: selectedClub === club.id ? COLORS.primary : 'white',
+                  fontWeight: TYPOGRAPHY.weight.bold,
+                  fontSize: 13,
                 }}
               >
-                <PressableScale
-                  onPress={() => router.back()}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: RADIUS.md,
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginRight: SPACING.md,
-                  }}
-                >
-                  <Feather name="arrow-left" size={20} color="white" />
-                </PressableScale>
-                <Text
-                  style={{
-                    fontSize: TYPOGRAPHY.size.xl,
-                    fontWeight: TYPOGRAPHY.weight.semibold,
-                    color: 'white',
-                    flex: 1,
-                  }}
-                >
-                  Задания
-                </Text>
-                <PressableScale
-                  onPress={() => navigateApp(router, user?.role, { name: 'orgTaskCreate' })}
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    paddingHorizontal: SPACING.lg,
-                    height: 44,
-                    borderRadius: RADIUS.md,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: TYPOGRAPHY.weight.bold,
-                      fontSize: 13,
-                    }}
-                  >
-                    + СОЗДАТЬ
-                  </Text>
-                </PressableScale>
-              </View>
-
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-1 px-1">
-                {clubs.map((club) => (
-                  <PressableScale
-                    key={club.id}
-                    onPress={() => setSelectedClub(club.id)}
-                    style={{
-                      paddingHorizontal: SPACING.lg,
-                      paddingVertical: 10,
-                      borderRadius: RADIUS.md,
-                      marginRight: SPACING.sm,
-                      backgroundColor:
-                        selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.15)',
-                      borderWidth: 1,
-                      borderColor: selectedClub === club.id ? 'white' : 'rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: selectedClub === club.id ? COLORS.primary : 'white',
-                        fontWeight: TYPOGRAPHY.weight.bold,
-                        fontSize: 13,
-                      }}
-                    >
-                      {club.name}
-                    </Text>
-                  </PressableScale>
-                ))}
-              </ScrollView>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+                {club.name}
+              </Text>
+            </PressableScale>
+          ))}
+        </ScrollView>
+      </GradientScreenHeader>
 
       <ScrollView
         contentContainerStyle={{

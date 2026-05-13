@@ -1,13 +1,11 @@
 // TeacherHome: собирает виджеты и быстрые действия домашнего экрана для роли преподавателя.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import {
-  ActivityIndicator, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SHADOWS, TYPOGRAPHY } from '$constants/theme';
+import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useTeacherGroups } from '$hooks/usePlatformData';
 import { navigateApp } from '$lib/appNavigation';
@@ -36,85 +34,77 @@ export default function TeacherHome() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topHeader}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.headerGradient}
-        >
-          <SafeAreaView edges={['top']}>
-            <View style={[styles.headerContent, { paddingHorizontal: paddingX }]}>
-              <View>
-                <Text style={styles.greeting}>Добрый день, {teacherName}!</Text>
-                <Text style={styles.dateText}>{today}</Text>
-              </View>
-              <View style={styles.notificationBtn}>
-                <Feather name="bell" size={20} color="white" />
-              </View>
-            </View>
-
-            <MotiView
-              from={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              style={[styles.nextLessonCard, { marginHorizontal: paddingX }]}
-            >
-              {loading ? (
-                <View style={styles.loadingBlock}>
-                  <ActivityIndicator size="small" color="white" />
-                </View>
-              ) : nextGroup ? (
-                <PressableScale
-                  activeOpacity={0.9}
-                  onPress={() =>
-                    navigateApp(router, user?.role, {
-                      name: 'teacherJournal',
-                      groupId: nextGroup.id,
-                    })
-                  }
-                >
-                  <View style={styles.nextLessonHeader}>
-                    <View style={styles.nextTag}>
-                      <Text style={styles.nextTagText}>БЛИЖАЙШАЯ ГРУППА</Text>
-                    </View>
-                    <Text style={styles.timerText}>{scheduleTimeLabel(nextGroup.schedule)}</Text>
-                  </View>
-
-                  <Text style={styles.lessonTitle}>{nextGroup.course_title || nextGroup.name}</Text>
-                  <Text style={styles.groupSubtitle}>
-                    {nextGroup.name}
-                    {nextGroup.schedule ? ` • ${nextGroup.schedule}` : ''}
-                  </Text>
-
-                  <View style={styles.lessonFooter}>
-                    <View style={styles.timeInfo}>
-                      <Feather name="users" size={16} color="white" />
-                      <Text style={styles.timeText}>
-                        {studentCounts[nextGroup.id] ?? 0} / {nextGroup.capacity}
-                      </Text>
-                    </View>
-                    <View style={styles.startButton}>
-                      <Text style={styles.startButtonText}>Журнал</Text>
-                    </View>
-                  </View>
-                </PressableScale>
-              ) : (
-                <View>
-                  <Text style={styles.lessonTitle}>Групп пока нет</Text>
-                  <Text style={styles.groupSubtitle}>
-                    Когда группы появятся в базе, они отобразятся здесь.
-                  </Text>
-                </View>
-              )}
-            </MotiView>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: paddingX }]}
+        contentContainerStyle={styles.pageScrollContent}
       >
+        <GradientScreenHeader
+          title={`Добрый день, ${teacherName}!`}
+          subtitle={today}
+          paddingX={paddingX}
+          variant="dashboard"
+          rightAccessory={
+            <View style={styles.notificationBtn}>
+              <Feather name="bell" size={20} color="white" />
+            </View>
+          }
+        >
+          <MotiView
+            from={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={styles.nextLessonCard}
+          >
+            {loading ? (
+              <View style={styles.loadingBlock}>
+                <ActivityIndicator size="small" color="white" />
+              </View>
+            ) : nextGroup ? (
+              <PressableScale
+                activeOpacity={0.9}
+                onPress={() =>
+                  navigateApp(router, user?.role, {
+                    name: 'teacherJournal',
+                    groupId: nextGroup.id,
+                  })
+                }
+              >
+                <View style={styles.nextLessonHeader}>
+                  <View style={styles.nextTag}>
+                    <Text style={styles.nextTagText}>БЛИЖАЙШАЯ ГРУППА</Text>
+                  </View>
+                  <Text style={styles.timerText}>{scheduleTimeLabel(nextGroup.schedule)}</Text>
+                </View>
+
+                <Text style={styles.lessonTitle}>{nextGroup.course_title || nextGroup.name}</Text>
+                <Text style={styles.groupSubtitle}>
+                  {nextGroup.name}
+                  {nextGroup.schedule ? ` • ${nextGroup.schedule}` : ''}
+                </Text>
+
+                <View style={styles.lessonFooter}>
+                  <View style={styles.timeInfo}>
+                    <Feather name="users" size={16} color="white" />
+                    <Text style={styles.timeText}>
+                      {studentCounts[nextGroup.id] ?? 0} / {nextGroup.capacity}
+                    </Text>
+                  </View>
+                  <View style={styles.startButton}>
+                    <Text style={styles.startButtonText}>Журнал</Text>
+                  </View>
+                </View>
+              </PressableScale>
+            ) : (
+              <View>
+                <Text style={styles.lessonTitle}>Групп пока нет</Text>
+                <Text style={styles.emptyHeaderSubtitle}>
+                  Когда группы появятся в базе, они отобразятся здесь.
+                </Text>
+              </View>
+            )}
+          </MotiView>
+        </GradientScreenHeader>
+
+        <View style={[styles.content, { paddingHorizontal: paddingX }]}>
         {/* Quick Actions */}
         <View style={styles.quickActions}>
           <PressableScale
@@ -185,6 +175,7 @@ export default function TeacherHome() {
               </MotiView>
             ))}
         </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -195,32 +186,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  topHeader: {
-    overflow: 'hidden',
-  },
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 0 : 20,
-    paddingBottom: 24,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 12,
-    marginBottom: 20,
-  },
-  greeting: {
-    fontSize: TYPOGRAPHY.size.xxxl,
-    fontWeight: TYPOGRAPHY.weight.semibold,
-    color: COLORS.white,
-    letterSpacing: TYPOGRAPHY.letterSpacing.tight,
-  },
-  dateText: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: 2,
-    fontWeight: '500',
-    textTransform: 'capitalize',
+  pageScrollContent: {
+    paddingBottom: 100,
   },
   notificationBtn: {
     width: 44,
@@ -233,7 +200,7 @@ const styles = StyleSheet.create({
   nextLessonCard: {
     backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: 24,
-    padding: 20,
+    padding: 16,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
   },
@@ -275,6 +242,10 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.8)',
     marginBottom: 16,
   },
+  emptyHeaderSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.8)',
+  },
   lessonFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -302,9 +273,8 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 14,
   },
-  scrollContent: {
-    paddingTop: 32,
-    paddingBottom: 100,
+  content: {
+    paddingTop: 24,
   },
   quickActions: {
     flexDirection: 'row',

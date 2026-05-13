@@ -3,10 +3,9 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import {
-  ActivityIndicator, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TextInput, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { CLUB_SKILL_FILTERS } from '$constants/catalog';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
@@ -15,12 +14,14 @@ import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
+import type { WebTextStyle } from '$types/styles';
 
 export default function ParentClubs() {
   const router = useRouter();
   const { childrenProfile, activeChildId } = useParentData();
   const [activeSkill, setActiveSkill] = useState('Все');
   const [search, setSearch] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
 
@@ -55,84 +56,55 @@ export default function ParentClubs() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
+      <GradientScreenHeader
+        title="Каталог кружков"
+        subtitle={courses.length > 0 ? `${courses.length} курсов` : 'Подберите занятие для ребенка'}
+        paddingX={horizontalPadding}
+        variant="dashboard"
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: searchFocused ? 'rgba(255,255,255,0.24)' : 'rgba(255,255,255,0.15)',
+            borderRadius: 16,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            borderWidth: 1,
+            borderColor: searchFocused ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.2)',
+            boxShadow: searchFocused ? '0 0 0 3px rgba(255,255,255,0.16)' : 'none',
+          }}
         >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: horizontalPadding,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: 20,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: '800',
-                    color: 'white',
-                    flex: 1,
-                  }}
-                >
-                  Каталог кружков
-                </Text>
-                <Text
-                  style={{
-                    color: 'rgba(255,255,255,0.6)',
-                    fontSize: 13,
-                    fontWeight: '600',
-                  }}
-                >
-                  {courses.length > 0 ? `${courses.length} курсов` : ''}
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.15)',
-                  borderRadius: 16,
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  borderWidth: 1,
-                  borderColor: 'rgba(255,255,255,0.2)',
-                }}
-              >
-                <Feather
-                  name="search"
-                  size={18}
-                  color="rgba(255,255,255,0.6)"
-                  style={{ marginRight: 10 }}
-                />
-                <TextInput
-                  value={search}
-                  onChangeText={setSearch}
-                  placeholder="Найти кружок..."
-                  placeholderTextColor="rgba(255,255,255,0.6)"
-                  style={{ flex: 1, color: 'white', fontWeight: '500' }}
-                />
-                {search.length > 0 && (
-                  <PressableScale onPress={() => setSearch('')}>
-                    <Feather name="x" size={16} color="rgba(255,255,255,0.6)" />
-                  </PressableScale>
-                )}
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+          <Feather
+            name="search"
+            size={18}
+            color="rgba(255,255,255,0.6)"
+            style={{ marginRight: 10 }}
+          />
+          <TextInput
+            value={search}
+            onChangeText={setSearch}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder="Найти кружок..."
+            placeholderTextColor="rgba(255,255,255,0.6)"
+            className="outline-none"
+            style={
+              {
+                flex: 1,
+                color: 'white',
+                fontWeight: '500',
+                outlineWidth: 0,
+              } satisfies WebTextStyle
+            }
+          />
+          {search.length > 0 && (
+            <PressableScale onPress={() => setSearch('')}>
+              <Feather name="x" size={16} color="rgba(255,255,255,0.6)" />
+            </PressableScale>
+          )}
+        </View>
+      </GradientScreenHeader>
 
       <ScrollView
         contentContainerStyle={{

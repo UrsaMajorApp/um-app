@@ -1,10 +1,9 @@
 // Экран parent/calendar: загружает и показывает календарь занятий в кабинете родителя.
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Platform, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { DAY_ALIASES, RUSSIAN_MONTHS, WEEKDAYS_SHORT } from '$constants/calendar';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
@@ -74,54 +73,32 @@ export default function ParentCalendar() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: horizontalPadding,
-                paddingTop: 12,
-                paddingBottom: 32,
-              }}
+      <GradientScreenHeader
+        title="Календарь"
+        subtitle="Расписание занятий"
+        paddingX={horizontalPadding}
+        variant="dashboard"
+      >
+        <View className="flex-row justify-between items-center">
+          <Text className="text-white text-2xl font-black">
+            {RUSSIAN_MONTHS[currentDate.month]} {currentDate.year}
+          </Text>
+          <View className="flex-row gap-2">
+            <PressableScale
+              onPress={() => shiftMonth(-1)}
+              className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: 20,
-                }}
-              >
-                <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Календарь</Text>
-              </View>
-
-              <View className="flex-row justify-between items-center">
-                <Text className="text-white text-2xl font-black">
-                  {RUSSIAN_MONTHS[currentDate.month]} {currentDate.year}
-                </Text>
-                <View className="flex-row gap-2">
-                  <PressableScale
-                    onPress={() => shiftMonth(-1)}
-                    className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
-                  >
-                    <Feather name="chevron-left" size={20} color="white" />
-                  </PressableScale>
-                  <PressableScale
-                    onPress={() => shiftMonth(1)}
-                    className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
-                  >
-                    <Feather name="chevron-right" size={20} color="white" />
-                  </PressableScale>
-                </View>
-              </View>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+              <Feather name="chevron-left" size={20} color="white" />
+            </PressableScale>
+            <PressableScale
+              onPress={() => shiftMonth(1)}
+              className="w-10 h-10 rounded-xl bg-white/20 items-center justify-center"
+            >
+              <Feather name="chevron-right" size={20} color="white" />
+            </PressableScale>
+          </View>
+        </View>
+      </GradientScreenHeader>
 
       <ScrollView
         contentContainerStyle={{
@@ -185,14 +162,14 @@ export default function ParentCalendar() {
                   {dayValue && (
                     <PressableScale
                       onPress={() => setSelectedDay(dayValue)}
-                      style={{
+                      style={() => ({
                         width: '100%',
                         height: '100%',
                         borderRadius: 12,
                         backgroundColor: dayValue === selectedDay ? '#7C3AED' : 'transparent',
                         alignItems: 'center',
                         justifyContent: 'center',
-                      }}
+                      })}
                     >
                       <Text
                         style={{

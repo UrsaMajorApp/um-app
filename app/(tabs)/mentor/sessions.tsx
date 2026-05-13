@@ -3,9 +3,9 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import {
-  ActivityIndicator, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+  ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { type MentorTrialRequest, useMentorTrialRequests } from '$hooks/useMentorTrialRequests';
@@ -14,7 +14,7 @@ import type { MentorSessionOutcomeConfig } from '$types/dashboard';
 
 export default function MentorSessionsScreen() {
   const isDesktop = useIsDesktop();
-  const paddingX = getDashboardHorizontalPadding(isDesktop, 20);
+  const paddingX = getDashboardHorizontalPadding(isDesktop);
   const { user } = useAuth();
   const trialRequests = useMentorTrialRequests(user?.id);
 
@@ -157,30 +157,13 @@ export default function MentorSessionsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F8F7FF' }}>
-      <View style={{ backgroundColor: COLORS.primary, overflow: 'hidden' }}>
-        <LinearGradient
-          colors={COLORS.gradients.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ paddingTop: Platform.OS === 'ios' ? 0 : 20 }}
-        >
-          <SafeAreaView edges={['top']}>
-            <View
-              style={{
-                paddingHorizontal: paddingX,
-                paddingTop: 12,
-                paddingBottom: 20,
-              }}
-            >
-              <Text style={[styles.mainTitle, { color: 'white' }]}>Пробные уроки</Text>
-              <Text style={[styles.subtitle, { color: 'rgba(255,255,255,0.7)' }]}>
-                Заявки от родителей
-              </Text>
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-      </View>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <GradientScreenHeader
+        title="Пробные уроки"
+        subtitle="Заявки от родителей"
+        paddingX={paddingX}
+        variant="dashboard"
+      />
       <View
         style={{
           paddingHorizontal: paddingX,
@@ -272,17 +255,6 @@ export default function MentorSessionsScreen() {
 }
 
 const styles = StyleSheet.create({
-  mainTitle: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: COLORS.foreground,
-    letterSpacing: -0.5,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: COLORS.mutedForeground,
-    marginTop: 2,
-  },
   tabsContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
