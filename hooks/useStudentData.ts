@@ -137,7 +137,21 @@ export function useYouthGoals() {
     refresh();
   }, [refresh, devDataVersion]);
 
-  return { goals, loading, refresh };
+  const createGoal = useCallback(
+    async (title: string) => {
+      if (!supabase || !isSupabaseConfigured || !user?.id) return;
+      const trimmed = title.trim();
+      if (!trimmed) return;
+      await supabase.from('youth_goals').insert({
+        student_user_id: user.id,
+        title: trimmed,
+      });
+      await refresh();
+    },
+    [user?.id, refresh],
+  );
+
+  return { goals, loading, refresh, createGoal };
 }
 
 // ─── useYouthAchievements ─────────────────────────────────────

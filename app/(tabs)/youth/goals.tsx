@@ -1,71 +1,30 @@
 // Экран youth/goals: загружает и показывает цели подростка в кабинете ребенка/подростка.
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import AddGoalModal from '$components/home/youth/AddGoalModal';
+import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SHADOWS } from '$constants/theme';
 import { useYouthGoals } from '$hooks/useStudentData';
 import { getDashboardHorizontalPadding, useIsDesktop } from '$lib/useIsDesktop';
 
 export default function YouthGoals() {
-  const router = useRouter();
   const isDesktop = useIsDesktop();
   const horizontalPadding = getDashboardHorizontalPadding(isDesktop, 20);
+  const [addOpen, setAddOpen] = useState(false);
 
-  const { goals, loading } = useYouthGoals();
+  const { goals, loading, createGoal } = useYouthGoals();
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <LinearGradient
-        colors={COLORS.gradients.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{
-          paddingBottom: 24,
-          borderBottomLeftRadius: 32,
-          borderBottomRightRadius: 32,
-        }}
-      >
-        <SafeAreaView edges={['top']}>
-          <View style={{ paddingHorizontal: horizontalPadding, paddingTop: 12 }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 20,
-              }}
-            >
-              <PressableScale
-                onPress={() => router.back()}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: 12,
-                }}
-              >
-                <Feather name="arrow-left" size={20} color="white" />
-              </PressableScale>
-              <Text style={{ fontSize: 20, fontWeight: '800', color: 'white' }}>Мои цели</Text>
-            </View>
-            <Text
-              style={{
-                color: 'rgba(255,255,255,0.7)',
-                fontSize: 13,
-                fontWeight: '500',
-                paddingLeft: 4,
-              }}
-            >
-              Ставь амбициозные цели и достигай их
-            </Text>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+      <GradientScreenHeader
+        title="Мои цели"
+        subtitle="Ставь амбициозные цели и достигай их"
+        paddingX={horizontalPadding}
+        variant="dashboard"
+      />
 
       <ScrollView
         contentContainerStyle={{
@@ -76,7 +35,10 @@ export default function YouthGoals() {
         showsVerticalScrollIndicator={false}
       >
         {/* Add Goal Button */}
-        <PressableScale className="h-16 rounded-3xl border-2 border-dashed border-gray-200 items-center justify-center flex-row gap-3 mb-8">
+        <PressableScale
+          onPress={() => setAddOpen(true)}
+          className="h-16 rounded-3xl border-2 border-dashed border-gray-200 items-center justify-center flex-row gap-3 mb-8"
+        >
           <Feather name="plus-circle" size={20} color={COLORS.mutedForeground} />
           <Text className="font-bold text-gray-500">Добавить новую цель</Text>
         </PressableScale>
@@ -181,6 +143,8 @@ export default function YouthGoals() {
           </View>
         </LinearGradient>
       </ScrollView>
+
+      {addOpen && <AddGoalModal onSave={createGoal} onClose={() => setAddOpen(false)} />}
     </View>
   );
 }
