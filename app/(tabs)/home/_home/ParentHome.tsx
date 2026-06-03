@@ -1,7 +1,7 @@
 // ParentHome: собирает виджеты и быстрые действия домашнего экрана для роли родителя.
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Platform, ScrollView, Text, View } from 'react-native';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
@@ -9,7 +9,8 @@ import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
 import { useAuth } from '$contexts/AuthContext';
 import { useParentData } from '$contexts/ParentDataContext';
-import { courseGradient, SCORE_TO_SKILLS, usePublicCourses } from '$hooks/usePublicData';
+import { useAiCourseRecommendations } from '$hooks/useAiCourseRecommendations';
+import { courseGradient, usePublicCourses } from '$hooks/usePublicData';
 import { navigateApp } from '$lib/appNavigation';
 import { formatKZT } from '$lib/formatCurrency';
 import { featherIconName } from '$lib/icons';
@@ -35,21 +36,10 @@ export default function ParentHome() {
   const activeChildHasProDiagnostic = activeChild?.talentProfile?.tier === 'pro';
 
   const { courses: publicCourses } = usePublicCourses();
-
-  const recommendations = useMemo(() => {
-    if (publicCourses.length === 0) return [];
-    if (!activeChild?.talentProfile) return publicCourses.slice(0, 3);
-
-    const scores = activeChild.talentProfile.scores as Record<string, number>;
-    const topTraits = Object.entries(scores)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 2)
-      .map(([t]) => t);
-    const wantedSkills = new Set(topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []));
-
-    const matched = publicCourses.filter((c) => c.skills.some((s) => wantedSkills.has(s)));
-    return (matched.length > 0 ? matched : publicCourses).slice(0, 3);
-  }, [activeChild, publicCourses]);
+  const { recommendations, isLoading: loadingRecs } = useAiCourseRecommendations(
+    activeChild,
+    publicCourses,
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -287,7 +277,9 @@ export default function ParentHome() {
           <View style={{ paddingHorizontal: horizontalPadding }}>
             <Text className="text-xl font-black text-gray-900 mb-1">Рекомендации AI</Text>
             <Text className="text-xs text-gray-400 font-medium mb-4">
-              На основе интересов {activeChild?.name}
+              {activeChildHasDiagnostic
+                ? `На основе теста способностей ${activeChild?.name}`
+                : `На основе интересов ${activeChild?.name}`}
             </Text>
           </View>
 
@@ -296,7 +288,61 @@ export default function ParentHome() {
             showsHorizontalScrollIndicator={false}
             style={{ paddingLeft: horizontalPadding }}
           >
-            {recommendations.length === 0 ? (
+            {loadingRecs ? (
+              // 3 skeleton cards
+              ['skeleton-1', 'skeleton-2', 'skeleton-3'].map((skeletonKey) => (
+                <View
+                  key={skeletonKey}
+                  style={[
+                    SHADOWS.sm,
+                    {
+                      marginRight: 16,
+                      width: 240,
+                      backgroundColor: 'white',
+                      borderRadius: 28,
+                      overflow: 'hidden',
+                      borderWidth: 1,
+                      borderColor: '#F3F4F6',
+                    },
+                  ]}
+                >
+                  <View
+                    style={{
+                      height: 120,
+                      backgroundColor: '#F3F4F6',
+                    }}
+                  />
+                  <View style={{ padding: 14 }}>
+                    <View
+                      style={{
+                        height: 16,
+                        backgroundColor: '#E5E7EB',
+                        borderRadius: 4,
+                        width: '80%',
+                        marginBottom: 8,
+                      }}
+                    />
+                    <View
+                      style={{
+                        height: 12,
+                        backgroundColor: '#F3F4F6',
+                        borderRadius: 4,
+                        width: '60%',
+                        marginBottom: 12,
+                      }}
+                    />
+                    <View
+                      style={{
+                        height: 20,
+                        backgroundColor: '#EDE9FE',
+                        borderRadius: 6,
+                        width: '40%',
+                      }}
+                    />
+                  </View>
+                </View>
+              ))
+            ) : recommendations.length === 0 ? (
               <View
                 style={{
                   width: 260,
@@ -399,6 +445,45 @@ export default function ParentHome() {
                           {formatKZT(rec.price)}/мес
                         </Text>
                       </View>
+
+                      {rec.aiReason ? (
+                        <View
+                          style={{
+                            marginTop: 10,
+                            paddingTop: 8,
+                            borderTopWidth: 1,
+                            borderTopColor: '#F3F4F6',
+                          }}
+                        >
+                          <View
+                            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}
+                          >
+                            <View
+                              style={{
+                                backgroundColor: '#F3E8FF',
+                                borderRadius: 6,
+                                paddingHorizontal: 5,
+                                paddingVertical: 1.5,
+                                marginRight: 6,
+                              }}
+                            >
+                              <Text style={{ fontSize: 8, fontWeight: '900', color: '#7C3AED' }}>
+                                AI АНАЛИЗ
+                              </Text>
+                            </View>
+                          </View>
+                          <Text
+                            style={{
+                              fontSize: 11,
+                              color: '#6B7280',
+                              lineHeight: 15,
+                            }}
+                            numberOfLines={2}
+                          >
+                            {rec.aiReason}
+                          </Text>
+                        </View>
+                      ) : null}
                     </View>
                   </PressableScale>
                 );
