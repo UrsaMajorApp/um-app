@@ -3,7 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, Text, TextInput, View } from 'react-native';
 import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
 import { CLUB_SKILL_FILTERS } from '$constants/catalog';
@@ -38,16 +38,22 @@ export default function ParentClubs() {
       .slice(0, 2)
       .map(([trait]) => trait);
 
-    const wantedSkills = new Set(topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []));
+    const wantedSkills = new Set(
+      topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []).map((skill) => skill.toLowerCase()),
+    );
 
-    return courses.filter((c) => c.skills.some((s) => wantedSkills.has(s))).slice(0, 5);
+    return courses
+      .filter((c) => c.skills.some((s) => wantedSkills.has(s.toLowerCase())))
+      .slice(0, 5);
   }, [activeChild, courses]);
 
   // ── Filtered list ────────────────────────────────────────────────────────────
   const filtered = useMemo(
     () =>
       courses.filter((c) => {
-        const matchSkill = activeSkill === 'Все' || c.skills.includes(activeSkill);
+        const matchSkill =
+          activeSkill === 'Все' ||
+          c.skills.some((skill) => skill.toLowerCase() === activeSkill.toLowerCase());
         const matchSearch = c.title.toLowerCase().includes(search.toLowerCase());
         return matchSkill && matchSearch;
       }),
@@ -258,15 +264,54 @@ export default function ParentClubs() {
                         },
                       ]}
                     >
-                      <LinearGradient
-                        colors={grad}
+                      <View
                         style={{
                           height: 110,
                           borderRadius: 24,
+                          backgroundColor: grad[0],
                           padding: 12,
                           justifyContent: 'space-between',
+                          overflow: 'hidden',
+                          position: 'relative',
                         }}
                       >
+                        <LinearGradient
+                          colors={grad}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0,
+                          }}
+                        />
+                        {club.image_url ? (
+                          <>
+                            <Image
+                              source={{ uri: club.image_url }}
+                              resizeMode="cover"
+                              style={{
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                            <View
+                              style={{
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                left: 0,
+                                backgroundColor: 'rgba(17,24,39,0.28)',
+                              }}
+                            />
+                          </>
+                        ) : null}
                         <View
                           style={{
                             backgroundColor: 'rgba(255,255,255,0.25)',
@@ -293,7 +338,7 @@ export default function ParentClubs() {
                           color="rgba(255,255,255,0.8)"
                           style={{ alignSelf: 'flex-end' }}
                         />
-                      </LinearGradient>
+                      </View>
                       <View style={{ padding: 12 }}>
                         <Text
                           style={{
@@ -403,13 +448,22 @@ export default function ParentClubs() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginRight: 14,
+                        overflow: 'hidden',
                       }}
                     >
-                      <Feather
-                        name={featherIconName(club.icon, 'book-open')}
-                        size={24}
-                        color={color}
-                      />
+                      {club.image_url ? (
+                        <Image
+                          source={{ uri: club.image_url }}
+                          resizeMode="cover"
+                          style={{ width: '100%', height: '100%' }}
+                        />
+                      ) : (
+                        <Feather
+                          name={featherIconName(club.icon, 'book-open')}
+                          size={24}
+                          color={color}
+                        />
+                      )}
                     </View>
 
                     <View style={{ flex: 1 }}>

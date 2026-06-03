@@ -6,6 +6,12 @@
 alter table public.parent_profiles enable row level security;
 alter table public.child_profiles enable row level security;
 
+drop policy if exists "self_read_parent_profile" on public.parent_profiles;
+create policy "self_read_parent_profile" on public.parent_profiles
+  for select
+  to authenticated
+  using (user_id = auth.uid());
+
 drop policy if exists "self_insert_parent_profile" on public.parent_profiles;
 create policy "self_insert_parent_profile" on public.parent_profiles
   for insert
@@ -20,6 +26,12 @@ create policy "self_update_parent_profile" on public.parent_profiles
   with check (user_id = auth.uid());
 
 drop policy if exists "parent_write_own_children" on public.child_profiles;
+drop policy if exists "parent_read_own_children" on public.child_profiles;
+create policy "parent_read_own_children" on public.child_profiles
+  for select
+  to authenticated
+  using (parent_user_id = auth.uid());
+
 drop policy if exists "parent_insert_own_children" on public.child_profiles;
 create policy "parent_insert_own_children" on public.child_profiles
   for insert

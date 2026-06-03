@@ -29,6 +29,7 @@ export interface OrgCourse {
   status: 'draft' | 'active' | 'archived';
   age_min: number | null;
   age_max: number | null;
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -427,6 +428,7 @@ type CourseInput = {
   icon: string;
   skills: string[];
   status: string;
+  image_url?: string | null;
 };
 
 export function useOrgCourses() {

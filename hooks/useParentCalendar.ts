@@ -28,6 +28,8 @@ async function fetchParentCalendarEnrollments(userId: string, activeChild: Paren
 
   if (isUuid(activeChild.id)) {
     query = query.eq('child_profile_id', activeChild.id);
+  } else if (activeChild.name) {
+    query = query.eq('child_name', activeChild.name);
   }
 
   const res = await query;

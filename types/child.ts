@@ -13,6 +13,7 @@ export interface Child {
   interests: string[];
   goals?: string;
   talentProfile?: Diagnostic;
+  mentorApplicationId?: string | null;
   qrPin?: string;
   qrPinExpiresAt?: string | Date;
   qrPinOneTimeUse?: boolean;

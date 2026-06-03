@@ -2,6 +2,92 @@
 -- UM admin-panel schema. Run in Supabase SQL Editor.
 -- Assumes um_user_profiles, parent_profiles, child_profiles already exist.
 
+-- ============ base app profiles ============
+-- These profile tables are referenced by the legacy 001..009 migrations. Keep
+-- them here so a clean local Supabase database can apply the full chain.
+create table if not exists public.um_user_profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  phone text,
+  role text not null default 'parent',
+  first_name text,
+  last_name text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.parent_profiles (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null unique references public.um_user_profiles(id) on delete cascade,
+  first_name text,
+  last_name text,
+  phone text,
+  tariff text not null default 'basic',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.child_profiles (
+  id uuid primary key default gen_random_uuid(),
+  parent_user_id uuid not null references public.um_user_profiles(id) on delete cascade,
+  name text not null,
+  age int,
+  age_category text,
+  interests text[] not null default '{}',
+  talent_profile jsonb,
+  phone text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists child_profiles_parent_user_idx
+  on public.child_profiles(parent_user_id);
+
+insert into auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  raw_app_meta_data,
+  raw_user_meta_data,
+  created_at,
+  updated_at,
+  is_sso_user,
+  is_anonymous
+)
+values
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000001', 'authenticated', 'authenticated', 'parent@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"parent","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000002', 'authenticated', 'authenticated', 'youth@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"youth","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000003', 'authenticated', 'authenticated', 'child@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"child","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000004', 'authenticated', 'authenticated', 'young-adult@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"young-adult","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000005', 'authenticated', 'authenticated', 'mentor@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"mentor","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000006', 'authenticated', 'authenticated', 'org@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"org","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000007', 'authenticated', 'authenticated', 'teacher@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"teacher","dev_role_switcher":true}', now(), now(), false, true),
+  ('00000000-0000-0000-0000-000000000000', 'd0000000-0000-4000-a000-000000000008', 'authenticated', 'authenticated', 'admin@dev.local', '', now(), '{"provider":"email","providers":["email"]}', '{"role":"admin","dev_role_switcher":true}', now(), now(), false, true)
+on conflict (id) do update set
+  email = excluded.email,
+  raw_user_meta_data = excluded.raw_user_meta_data,
+  updated_at = now();
+
+insert into public.um_user_profiles (id, phone, role, first_name, last_name, updated_at)
+values
+  ('d0000000-0000-4000-a000-000000000001', '+77010000000', 'parent', 'Dev', 'Parent', now()),
+  ('d0000000-0000-4000-a000-000000000002', '+77020000000', 'youth', 'Dev', 'Youth', now()),
+  ('d0000000-0000-4000-a000-000000000003', '+77030000000', 'child', 'Dev', 'Child', now()),
+  ('d0000000-0000-4000-a000-000000000004', '+77040000000', 'young-adult', 'Dev', 'Young Adult', now()),
+  ('d0000000-0000-4000-a000-000000000005', '+77050000000', 'mentor', 'Dev', 'Mentor', now()),
+  ('d0000000-0000-4000-a000-000000000006', '+77060000000', 'org', 'Dev', 'Org', now()),
+  ('d0000000-0000-4000-a000-000000000007', '+77070000000', 'teacher', 'Dev', 'Teacher', now()),
+  ('d0000000-0000-4000-a000-000000000008', '+77080000000', 'admin', 'Dev', 'Admin', now())
+on conflict (id) do update set
+  phone = excluded.phone,
+  role = excluded.role,
+  first_name = excluded.first_name,
+  last_name = excluded.last_name,
+  updated_at = now();
+
 -- ============ helpers ============
 create or replace function public.is_admin() returns boolean
 language sql stable security definer set search_path = public as $$
@@ -23,6 +109,23 @@ create table if not exists public.organizations (
   active_students int default 0,
   commission_pct numeric(4,2) default 15.00,
   created_at timestamptz default now()
+);
+
+create table if not exists public.org_courses (
+  id uuid primary key default gen_random_uuid(),
+  org_id uuid not null references public.organizations(id) on delete cascade,
+  title text not null,
+  description text,
+  level text not null default 'beginner' check (level in ('beginner','intermediate','advanced')),
+  price int not null default 0,
+  icon text not null default 'book-open',
+  skills text[] not null default '{}',
+  status text not null default 'draft' check (status in ('draft','active','archived')),
+  age_min int,
+  age_max int,
+  rejection_reason text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 -- ============ mentor_applications (includes approved mentors) ============
@@ -101,6 +204,7 @@ create table if not exists public.test_questions (
 
 -- ============ RLS ============
 alter table public.organizations enable row level security;
+alter table public.org_courses enable row level security;
 alter table public.mentor_applications enable row level security;
 alter table public.transactions enable row level security;
 alter table public.tickets enable row level security;
@@ -115,6 +219,8 @@ end $$;
 
 drop policy if exists "admin_all" on public.organizations;
 create policy "admin_all" on public.organizations for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "admin_all" on public.org_courses;
+create policy "admin_all" on public.org_courses for all using (public.is_admin()) with check (public.is_admin());
 drop policy if exists "admin_all" on public.mentor_applications;
 create policy "admin_all" on public.mentor_applications for all using (public.is_admin()) with check (public.is_admin());
 drop policy if exists "admin_all" on public.transactions;
@@ -131,6 +237,18 @@ create policy "admin_all" on public.test_questions for all using (public.is_admi
 -- public read for orgs (catalog) and tags (UI)
 drop policy if exists "public_read_verified" on public.organizations;
 create policy "public_read_verified" on public.organizations for select using (status = 'verified');
+drop policy if exists "public_read_active_courses" on public.org_courses;
+create policy "public_read_active_courses" on public.org_courses for select using (status = 'active');
+drop policy if exists "org_owner_manage_courses" on public.org_courses;
+create policy "org_owner_manage_courses" on public.org_courses
+  for all using (
+    org_id in (select id from public.organizations where owner_user_id = auth.uid())
+    or public.is_admin()
+  )
+  with check (
+    org_id in (select id from public.organizations where owner_user_id = auth.uid())
+    or public.is_admin()
+  );
 drop policy if exists "public_read_tags" on public.tags;
 create policy "public_read_tags" on public.tags for select using (true);
 drop policy if exists "public_read_questions" on public.test_questions;

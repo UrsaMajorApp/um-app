@@ -342,31 +342,31 @@ on conflict do nothing;
 
 -- Seed mentor groups for dev mentor (UUID 005 = mentor role)
 insert into public.mentor_groups (id, mentor_user_id, name, course, schedule, max_students, active) values
-  ('g0000001-0000-4000-a000-000000000001', 'd0000000-0000-4000-a000-000000000005', 'Старшая группа A', 'Робототехника',    'Пн, Ср 15:00', 20, true),
-  ('g0000001-0000-4000-a000-000000000002', 'd0000000-0000-4000-a000-000000000005', 'Middle Python',    'Программирование', 'Вт, Чт 16:45', 15, true),
-  ('g0000001-0000-4000-a000-000000000003', 'd0000000-0000-4000-a000-000000000005', 'Младшая группа B', 'Робототехника',    'Сб 10:00',     20, false)
+  ('90000001-0000-4000-a000-000000000001', 'd0000000-0000-4000-a000-000000000005', 'Старшая группа A', 'Робототехника',    'Пн, Ср 15:00', 20, true),
+  ('90000001-0000-4000-a000-000000000002', 'd0000000-0000-4000-a000-000000000005', 'Middle Python',    'Программирование', 'Вт, Чт 16:45', 15, true),
+  ('90000001-0000-4000-a000-000000000003', 'd0000000-0000-4000-a000-000000000005', 'Младшая группа B', 'Робототехника',    'Сб 10:00',     20, false)
 on conflict do nothing;
 
 -- Seed group_members for group 1
-with g1 as (select 'g0000001-0000-4000-a000-000000000001'::uuid as gid)
+with g1 as (select '90000001-0000-4000-a000-000000000001'::uuid as gid)
 insert into public.group_members (id, group_id, student_name, student_age, level, xp, progress, skills) values
-  ('m0000001-0000-4000-a000-000000000001', (select gid from g1), 'Анна Петрова',   8,  5, 1250, 85, '{"com":85,"lead":65,"cre":90,"log":75,"dis":70}'),
-  ('m0000001-0000-4000-a000-000000000002', (select gid from g1), 'Максим Иванов',  12, 8, 2450, 78, '{"com":78,"lead":65,"cre":85,"log":80,"dis":72}')
+  ('b0000001-0000-4000-a000-000000000001', (select gid from g1), 'Анна Петрова',   8,  5, 1250, 85, '{"com":85,"lead":65,"cre":90,"log":75,"dis":70}'),
+  ('b0000001-0000-4000-a000-000000000002', (select gid from g1), 'Максим Иванов',  12, 8, 2450, 78, '{"com":78,"lead":65,"cre":85,"log":80,"dis":72}')
 on conflict do nothing;
 
 -- Seed attendance sessions
-with g1 as (select 'g0000001-0000-4000-a000-000000000001'::uuid as gid)
+with g1 as (select '90000001-0000-4000-a000-000000000001'::uuid as gid)
 insert into public.attendance_sessions (id, group_id, session_date) values
-  ('s0000001-0000-4000-a000-000000000001', (select gid from g1), current_date),
-  ('s0000001-0000-4000-a000-000000000002', (select gid from g1), current_date - 1)
+  ('50000001-0000-4000-a000-000000000001', (select gid from g1), current_date),
+  ('50000001-0000-4000-a000-000000000002', (select gid from g1), current_date - 1)
 on conflict do nothing;
 
 -- Seed attendance records
 insert into public.attendance_records (session_id, member_id, present) values
-  ('s0000001-0000-4000-a000-000000000001', 'm0000001-0000-4000-a000-000000000001', true),
-  ('s0000001-0000-4000-a000-000000000001', 'm0000001-0000-4000-a000-000000000002', true),
-  ('s0000001-0000-4000-a000-000000000002', 'm0000001-0000-4000-a000-000000000001', true),
-  ('s0000001-0000-4000-a000-000000000002', 'm0000001-0000-4000-a000-000000000002', false)
+  ('50000001-0000-4000-a000-000000000001', 'b0000001-0000-4000-a000-000000000001', true),
+  ('50000001-0000-4000-a000-000000000001', 'b0000001-0000-4000-a000-000000000002', true),
+  ('50000001-0000-4000-a000-000000000002', 'b0000001-0000-4000-a000-000000000001', true),
+  ('50000001-0000-4000-a000-000000000002', 'b0000001-0000-4000-a000-000000000002', false)
 on conflict do nothing;
 
 -- Seed student goals

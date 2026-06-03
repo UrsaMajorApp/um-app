@@ -6,6 +6,8 @@ import React from 'react';
 import { Alert, Platform, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EditChildModal from '$components/parent/EditChildModal';
+import { EnrolledClubsSection } from '$components/parent/EnrolledClubsSection';
+import { ParentMentorSection } from '$components/parent/ParentMentorSection';
 import { PressableScale } from '$components/ui/PressableScale';
 import { YOUTH_RESULT_COLOR_PALETTE } from '$constants/profile';
 import { COLORS, SHADOWS } from '$constants/theme';
@@ -445,37 +447,14 @@ export default function ParentChildDetails() {
               </View>
             )}
 
-            {/* Enrolled Clubs */}
-            <View style={{ marginTop: 8 }}>
-              <View className="flex-row items-center gap-2 mb-4 px-1">
-                <Feather name="shopping-bag" size={20} color={COLORS.primary} />
-                <Text className="text-lg font-black text-gray-900">Записан в кружки</Text>
-              </View>
-              <View
-                style={SHADOWS.sm}
-                className="bg-white rounded-[32px] p-6 border border-gray-100"
-              >
-                <Text className="text-sm font-semibold text-gray-500">
-                  Активные кружки появятся после записи ребенка на курс.
-                </Text>
-              </View>
-            </View>
+            <EnrolledClubsSection child={child} />
 
-            {/* My Mentor Section */}
-            <View style={{ marginTop: 32 }}>
-              <View className="flex-row items-center gap-2 mb-4 px-1">
-                <Feather name="user-check" size={20} color="#10B981" />
-                <Text className="text-lg font-black text-gray-900">Персональный ментор</Text>
-              </View>
-              <View
-                style={SHADOWS.sm}
-                className="bg-white rounded-[32px] p-4 border border-gray-100"
-              >
-                <Text className="text-sm font-semibold text-gray-500">
-                  Персональный ментор появится после подтверждения заявки на сопровождение.
-                </Text>
-              </View>
-            </View>
+            <ParentMentorSection
+              child={child}
+              onSelectMentor={(mentorApplicationId) =>
+                updateChild(child.id, { mentorApplicationId })
+              }
+            />
 
             {/* QR Code Login Stub */}
             {!child.phone && (

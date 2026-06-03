@@ -2,7 +2,7 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import { Image, Platform, ScrollView, Text, View } from 'react-native';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
 import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
@@ -396,9 +396,42 @@ export default function ParentHome() {
                         backgroundColor: `${c1}20`,
                         alignItems: 'center',
                         justifyContent: 'center',
+                        overflow: 'hidden',
+                        position: 'relative',
                       }}
                     >
-                      <Feather name={featherIconName(rec.icon, 'book-open')} size={36} color={c1} />
+                      {rec.image_url ? (
+                        <>
+                          <Image
+                            source={{ uri: rec.image_url }}
+                            resizeMode="cover"
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 0,
+                              bottom: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                          <View
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 0,
+                              bottom: 0,
+                              left: 0,
+                              backgroundColor: 'rgba(17,24,39,0.24)',
+                            }}
+                          />
+                        </>
+                      ) : null}
+                      <Feather
+                        name={featherIconName(rec.icon, 'book-open')}
+                        size={36}
+                        color={rec.image_url ? 'rgba(255,255,255,0.88)' : c1}
+                      />
                     </View>
                     <View style={{ padding: 14 }}>
                       <Text

@@ -13,6 +13,7 @@ import {
   StyleSheet,
   Switch,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';

@@ -5,8 +5,10 @@ import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { ScrollView, Text, View } from 'react-native';
 import { PressableScale } from '$components/ui/PressableScale';
+import { YOUTH_RESULT_COLOR_PALETTE } from '$constants/profile';
 import { COLORS, LAYOUT, SHADOWS } from '$constants/theme';
 import { useParentData } from '$contexts/ParentDataContext';
+import { getDiagnosticChartScores } from '$lib/diagnosticChart';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
 export default function ParentResults() {
@@ -78,17 +80,8 @@ export default function ParentResults() {
     );
   }
 
-  const scores = [
-    { label: 'Логика', value: diagnostic.scores.logical, color: '#10B981' },
-    { label: 'Креатив', value: diagnostic.scores.creative, color: '#8B5CF6' },
-    { label: 'Социум', value: diagnostic.scores.social, color: '#3B82F6' },
-    { label: 'Физика', value: diagnostic.scores.physical, color: '#F59E0B' },
-    {
-      label: 'Лингвист.',
-      value: diagnostic.scores.linguistic,
-      color: '#EC4899',
-    },
-  ];
+  const isPro = diagnostic.tier === 'pro';
+  const scores = getDiagnosticChartScores(diagnostic, YOUTH_RESULT_COLOR_PALETTE);
 
   return (
     <LinearGradient colors={['#6C5CE7', '#EDE9FE']} style={{ flex: 1 }}>
@@ -137,6 +130,22 @@ export default function ParentResults() {
               {child.name}
             </Text>
           )}
+          <View
+            style={{
+              alignSelf: 'center',
+              backgroundColor: isPro ? 'rgba(255,255,255,0.24)' : 'rgba(255,255,255,0.18)',
+              borderWidth: 1,
+              borderColor: 'rgba(255,255,255,0.32)',
+              paddingHorizontal: 14,
+              paddingVertical: 6,
+              borderRadius: 999,
+              marginBottom: 24,
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 11, fontWeight: '900' }}>
+              {isPro ? 'PRO ОТЧЕТ' : 'BASIC ОТЧЕТ'}
+            </Text>
+          </View>
 
           {/* Icon */}
           <MotiView
@@ -293,6 +302,67 @@ export default function ParentResults() {
               ))}
             </View>
           </MotiView>
+
+          {isPro && (
+            <MotiView
+              from={{ opacity: 0, translateY: 20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 400, delay: 300 }}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 32,
+                padding: 24,
+                marginBottom: 26,
+                ...SHADOWS.sm,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: '800',
+                  marginBottom: 16,
+                  color: COLORS.foreground,
+                }}
+              >
+                PRO аналитика
+              </Text>
+              {diagnostic.intellectType ? (
+                <Text
+                  style={{
+                    color: COLORS.foreground,
+                    fontSize: 15,
+                    fontWeight: '700',
+                    lineHeight: 22,
+                    marginBottom: 12,
+                  }}
+                >
+                  {diagnostic.intellectType}
+                </Text>
+              ) : null}
+              {diagnostic.careerArchetypes?.length ? (
+                <View style={{ gap: 8 }}>
+                  {diagnostic.careerArchetypes.map((item) => (
+                    <View
+                      key={item}
+                      style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+                    >
+                      <View
+                        style={{
+                          width: 7,
+                          height: 7,
+                          borderRadius: 4,
+                          backgroundColor: COLORS.primary,
+                        }}
+                      />
+                      <Text style={{ color: COLORS.mutedForeground, fontWeight: '700' }}>
+                        {item}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              ) : null}
+            </MotiView>
+          )}
 
           {/* Actions */}
           <PressableScale

@@ -2,7 +2,7 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ActivityIndicator, Platform, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { EnrollmentChoiceModal } from '$components/parent/club/EnrollmentChoiceModal';
 import { FullCourseBookingModal } from '$components/parent/club/FullCourseBookingModal';
@@ -100,8 +100,36 @@ export default function ParentClubDetails() {
               height: 280,
               alignItems: 'center',
               justifyContent: 'center',
+              overflow: 'hidden',
             }}
           >
+            {course.image_url ? (
+              <>
+                <Image
+                  source={{ uri: course.image_url }}
+                  resizeMode="cover"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                    backgroundColor: 'rgba(17,24,39,0.32)',
+                  }}
+                />
+              </>
+            ) : null}
             <Feather
               name={featherIconName(course.icon, 'book-open')}
               size={72}

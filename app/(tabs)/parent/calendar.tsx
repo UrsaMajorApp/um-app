@@ -147,6 +147,14 @@ export default function ParentCalendar() {
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             {days.map((day) => {
               const dayValue = day.value;
+              const dayEventCount = dayValue
+                ? enrollments.filter((item) =>
+                    scheduleMatchesDate(
+                      item.group_schedule,
+                      new Date(currentDate.year, currentDate.month, dayValue),
+                    ),
+                  ).length
+                : 0;
 
               return (
                 <View
@@ -180,13 +188,35 @@ export default function ParentCalendar() {
                       >
                         {dayValue}
                       </Text>
-                      {enrollments.some((item) =>
-                        scheduleMatchesDate(
-                          item.group_schedule,
-                          new Date(currentDate.year, currentDate.month, dayValue),
-                        ),
-                      ) &&
-                        dayValue !== selectedDay && (
+                      {dayEventCount > 0 &&
+                        dayValue !== selectedDay &&
+                        (dayEventCount > 1 ? (
+                          <View
+                            style={{
+                              position: 'absolute',
+                              right: 4,
+                              bottom: 3,
+                              minWidth: 14,
+                              height: 14,
+                              borderRadius: 7,
+                              backgroundColor: '#7C3AED',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              paddingHorizontal: 3,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: 'white',
+                                fontSize: 8,
+                                fontWeight: '900',
+                                fontVariant: ['tabular-nums'],
+                              }}
+                            >
+                              {dayEventCount}
+                            </Text>
+                          </View>
+                        ) : (
                           <View
                             style={{
                               position: 'absolute',
@@ -197,7 +227,7 @@ export default function ParentCalendar() {
                               backgroundColor: '#7C3AED',
                             }}
                           />
-                        )}
+                        ))}
                     </PressableScale>
                   )}
                 </View>

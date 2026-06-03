@@ -32,6 +32,7 @@ type RemoteChildProfileRow = {
   interests: string | string[] | null;
   age_category: Child['ageCategory'] | null;
   talent_profile: Diagnostic | null;
+  mentor_application_id: string | null;
 };
 
 interface ChildDraft {
@@ -139,7 +140,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
             .maybeSingle(),
           supabase
             .from('child_profiles')
-            .select('id, name, age, interests, age_category, talent_profile')
+            .select('id, name, age, interests, age_category, talent_profile, mentor_application_id')
             .eq('parent_user_id', user.id)
             .order('created_at', { ascending: true }),
         ]);
@@ -177,6 +178,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
                 item.talent_profile && typeof item.talent_profile === 'object'
                   ? (item.talent_profile as Diagnostic)
                   : undefined,
+              mentorApplicationId: item.mentor_application_id,
             });
           });
         }
@@ -283,6 +285,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
             age_category: child.ageCategory,
             interests: child.interests,
             talent_profile: child.talentProfile || null,
+            mentor_application_id: child.mentorApplicationId || null,
             phone: child.phone || null,
             qr_pin: child.qrPin || null,
             qr_pin_expires_at: child.qrPinExpiresAt || null,
@@ -318,6 +321,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
           age_category: normalizedChild.ageCategory,
           interests: normalizedChild.interests,
           talent_profile: normalizedChild.talentProfile || null,
+          mentor_application_id: normalizedChild.mentorApplicationId || null,
           updated_at: new Date().toISOString(),
         },
         { onConflict: 'id' },
@@ -348,6 +352,7 @@ export function ParentDataProvider({ children }: { children: ReactNode }) {
           age: updated.age,
           age_category: updated.ageCategory,
           interests: updated.interests,
+          mentor_application_id: updated.mentorApplicationId || null,
           phone: updated.phone || null,
           qr_pin: updated.qrPin || null,
           qr_pin_expires_at: updated.qrPinExpiresAt || null,
