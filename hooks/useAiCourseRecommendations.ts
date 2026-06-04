@@ -181,12 +181,18 @@ function getRuleBasedRecommendations(
     .slice(0, 2)
     .map(([t]) => t);
 
-  const wantedSkills = new Set(topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []));
-  const matched = publicCourses.filter((c) => c.skills?.some((s) => wantedSkills.has(s)));
+  const wantedSkills = new Set(
+    topTraits.flatMap((t) => SCORE_TO_SKILLS[t] ?? []).map((skill) => skill.toLowerCase()),
+  );
+  const matched = publicCourses.filter((c) =>
+    (c.skills ?? []).some((skill) => wantedSkills.has(skill.toLowerCase())),
+  );
   const list = matched.length > 0 ? matched : publicCourses;
 
   return list.slice(0, 3).map((c) => {
-    const matchedSkills = c.skills.filter((s) => wantedSkills.has(s));
+    const matchedSkills = (c.skills ?? []).filter((skill) =>
+      wantedSkills.has(skill.toLowerCase()),
+    );
     let aiReason = `Рекомендуется на основе интересов и способностей ребенка.`;
     if (matchedSkills.length > 0) {
       aiReason = `Поможет ${childName} развить навыки: ${matchedSkills.slice(0, 2).join(', ')}.`;

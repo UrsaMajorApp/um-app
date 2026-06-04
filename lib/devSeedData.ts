@@ -23,11 +23,13 @@ export async function seedDevData() {
   await runDevDataRpc(client, 'seed_dev_data');
   await runDevDataRpc(client, 'seed_dev_extra_data');
   await runDevDataRpc(client, 'seed_parent_showcase_data');
+  await runDevDataRpc(client, 'seed_parent_mentor_request_showcase_data');
   await runDevDataRpc(client, 'seed_mvp_organization_showcase_data');
 }
 
 export async function clearDevData() {
   const client = requireSupabase();
+  await runDevDataRpc(client, 'clear_parent_mentor_request_showcase_data');
   await runDevDataRpc(client, 'clear_mvp_organization_showcase_data');
   await runDevDataRpc(client, 'clear_parent_showcase_data');
   await runDevDataRpc(client, 'clear_dev_extra_data');
@@ -36,6 +38,7 @@ export async function clearDevData() {
 
 export async function clearAllDevData() {
   const client = requireSupabase();
+  await runDevDataRpc(client, 'clear_parent_mentor_request_showcase_data');
   await runDevDataRpc(client, 'clear_mvp_organization_showcase_data');
   await runDevDataRpc(client, 'clear_all_dev_data');
   await runDevDataRpc(client, 'clear_dev_extra_data');

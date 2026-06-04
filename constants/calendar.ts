@@ -52,13 +52,13 @@ export const RUSSIAN_MONTHS = RUSSIAN_CALENDAR_LOCALE.monthNames;
 export const WEEKDAYS_SHORT = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as const;
 
 export const DAY_ALIASES: Record<number, string[]> = {
-  0: ['вс', 'воск'],
-  1: ['пн', 'пон'],
-  2: ['вт', 'втор'],
-  3: ['ср', 'сред'],
-  4: ['чт', 'чет', 'четв'],
-  5: ['пт', 'пят'],
-  6: ['сб', 'суб'],
+  0: ['вс', 'воск', 'sun', 'sunday'],
+  1: ['пн', 'пон', 'mon', 'monday'],
+  2: ['вт', 'втор', 'tue', 'tues', 'tuesday'],
+  3: ['ср', 'сред', 'wed', 'wednesday'],
+  4: ['чт', 'чет', 'четв', 'thu', 'thur', 'thurs', 'thursday'],
+  5: ['пт', 'пят', 'fri', 'friday'],
+  6: ['сб', 'суб', 'sat', 'saturday'],
 };
 
 export const SCHEDULE_TOKENS = [

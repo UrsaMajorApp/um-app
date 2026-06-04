@@ -1,9 +1,11 @@
 // ParentMentorSection: показывает выбранного ментора и дает родителю выбрать другого.
 import { Feather } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from 'react-native';
 import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, SHADOWS } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useParentMentorRequests, requestParentMentor } from '$hooks/useParentMentorRequests';
 import { type PublicMentor, usePublicMentors } from '$hooks/usePublicMentors';
 import type { Child } from '$types/child';
 
@@ -26,11 +28,18 @@ function mentorSubtitle(mentor: PublicMentor) {
 }
 
 export function ParentMentorSection({ child, onSelectMentor }: ParentMentorSectionProps) {
+  const { user } = useAuth();
   const { mentors, loading } = usePublicMentors();
+  const { requests, refresh: refreshRequests } = useParentMentorRequests(user?.id, child);
   const [savingMentorId, setSavingMentorId] = useState<string | null>(null);
+  const [requestingMentorId, setRequestingMentorId] = useState<string | null>(null);
   const selectedMentor = useMemo(
     () => mentors.find((mentor) => mentor.id === child.mentorApplicationId) ?? null,
     [child.mentorApplicationId, mentors],
+  );
+  const selectedMentorRequest = useMemo(
+    () => requests.find((request) => request.mentor_application_id === selectedMentor?.id) ?? null,
+    [requests, selectedMentor?.id],
   );
 
   const chooseMentor = async (mentorId: string) => {
@@ -42,6 +51,25 @@ export function ParentMentorSection({ child, onSelectMentor }: ParentMentorSecti
     } finally {
       setSavingMentorId(null);
     }
+  };
+
+  const submitMentorRequest = async (mentorId: string) => {
+    if (!user?.id || requestingMentorId) return;
+
+    setRequestingMentorId(mentorId);
+    const { error } = await requestParentMentor({
+      userId: user.id,
+      child,
+      mentorApplicationId: mentorId,
+    });
+    setRequestingMentorId(null);
+
+    if (error) {
+      Alert.alert('Не удалось отправить заявку', error);
+      return;
+    }
+
+    await refreshRequests();
   };
 
   return (
@@ -87,6 +115,29 @@ export function ParentMentorSection({ child, onSelectMentor }: ParentMentorSecti
                   {selectedMentor.bio}
                 </Text>
               ) : null}
+              <PressableScale
+                onPress={() => submitMentorRequest(selectedMentor.id)}
+                disabled={Boolean(selectedMentorRequest) || requestingMentorId === selectedMentor.id}
+                style={{
+                  marginTop: 12,
+                  height: 40,
+                  borderRadius: 16,
+                  backgroundColor: selectedMentorRequest ? '#D1FAE5' : COLORS.primary,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text
+                  style={{ color: selectedMentorRequest ? '#047857' : 'white' }}
+                  className="text-xs font-black"
+                >
+                  {requestingMentorId === selectedMentor.id
+                    ? 'Отправляем...'
+                    : selectedMentorRequest
+                      ? 'Заявка отправлена'
+                      : 'Записаться к ментору'}
+                </Text>
+              </PressableScale>
             </View>
           </View>
         </View>

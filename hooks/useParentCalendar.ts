@@ -23,7 +23,8 @@ async function fetchParentCalendarEnrollments(userId: string, activeChild: Paren
     .from('org_applications')
     .select('id, club, group_name, group_schedule')
     .eq('parent_user_id', userId)
-    .in('status', ['activated', 'completed'])
+    .in('status', ['awaiting_payment', 'paid', 'activated', 'completed'])
+    .not('group_schedule', 'is', null)
     .order('created_at', { ascending: false });
 
   if (isUuid(activeChild.id)) {

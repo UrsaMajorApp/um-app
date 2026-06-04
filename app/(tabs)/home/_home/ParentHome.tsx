@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Image, Platform, ScrollView, Text, View } from 'react-native';
 import { NotificationsModal } from '$components/navigation/NotificationsModal';
+import { ParentHomeMentorCard } from '$components/parent/ParentHomeMentorCard';
+import { ParentHomeMentorLockedCard } from '$components/parent/ParentHomeMentorLockedCard';
 import { GradientScreenHeader } from '$components/ui/GradientScreenHeader';
 import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, RADIUS, SHADOWS } from '$constants/theme';
@@ -271,6 +273,29 @@ export default function ParentHome() {
             </View>
           ) : null}
         </View>
+
+        {activeChild ? (
+          <View style={{ paddingHorizontal: horizontalPadding, marginTop: 32 }}>
+            {activeChildHasDiagnostic ? (
+              <ParentHomeMentorCard
+                child={activeChild}
+                userId={user?.id}
+                onOpenMentors={() => navigateApp(router, user?.role, { name: 'parentMentors' })}
+              />
+            ) : (
+              <ParentHomeMentorLockedCard
+                child={activeChild}
+                onStartTest={() => {
+                  setActiveChildId(activeChild.id);
+                  router.push({
+                    pathname: '/profile/youth/testing',
+                    params: { childId: activeChild.id },
+                  });
+                }}
+              />
+            )}
+          </View>
+        ) : null}
 
         {/* AI Recommendations Section */}
         <View style={{ marginTop: 32 }}>

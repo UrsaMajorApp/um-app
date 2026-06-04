@@ -306,6 +306,40 @@ async function upsertRemoteProfile(user: AuthUser) {
   );
 }
 
+async function ensureDevMentorApplication(user: AuthUser) {
+  if (!supabase || !isSupabaseConfigured || user.role !== 'mentor') return;
+
+  const existing = await supabase
+    .from('mentor_applications')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('status', 'approved')
+    .limit(1)
+    .maybeSingle();
+
+  if (existing.data) return;
+
+  await supabase.from('mentor_applications').insert({
+    user_id: user.id,
+    name: `${user.firstName} ${user.lastName || 'Mentor'}`.trim(),
+    specialization: 'Профориентация и развитие',
+    email: user.email || 'mentor@dev.local',
+    phone: user.phone,
+    experience: '7 лет',
+    education: 'Dev Academy, mentoring track',
+    bio: 'Демо-ментор для проверки кабинета, заявок и сопровождения учеников.',
+    photo_emoji: '🧭',
+    status: 'approved',
+    rating: 4.9,
+    sessions: 128,
+    city: 'Алматы',
+    languages: '["Русский","Казахский","Английский"]',
+    skills: '["Профориентация","Коммуникация","Мотивация"]',
+    pitch: 'Помогаю ребенку собрать интересы в понятный план развития.',
+    price: 14000,
+  });
+}
+
 async function hydrateFromSupabaseUser(sessionUser: SupabaseUser): Promise<AuthUser | null> {
   const metadata = sessionUser.user_metadata ?? {};
   const remoteProfile = await fetchRemoteProfile(sessionUser.id);
@@ -991,6 +1025,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const nextUser = buildDevUserFromId(sessionUser.id, role);
         setUser(nextUser);
         await upsertRemoteProfile(nextUser);
+        await ensureDevMentorApplication(nextUser);
         await AsyncStorage.removeItem(DEV_USER_KEY);
         return;
       }

@@ -3,10 +3,13 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
-import { ScrollView, Text, View } from 'react-native';
-import { PressableScale } from '$components/ui/PressableScale';
+import { Alert, Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PressableScale } from '$components/ui/PressableScale';
 import { COLORS, LAYOUT, RADIUS, SHADOWS, SPACING, TYPOGRAPHY } from '$constants/theme';
+import { useAuth } from '$contexts/AuthContext';
+import { useParentData } from '$contexts/ParentDataContext';
+import { requestParentMentor, useParentMentorRequests } from '$hooks/useParentMentorRequests';
 import { usePublicMentors } from '$hooks/usePublicMentors';
 import { useIsDesktop } from '$lib/useIsDesktop';
 
@@ -14,6 +17,14 @@ export default function ParentMentorsScreen() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const paddingX = isDesktop ? LAYOUT.dashboardHorizontalPaddingDesktop : SPACING.xl;
+  const { user } = useAuth();
+  const { childrenProfile, activeChildId, updateChild } = useParentData();
+  const activeChild =
+    childrenProfile.find((child) => child.id === activeChildId) || childrenProfile[0] || null;
+  const { requests, refresh: refreshRequests } = useParentMentorRequests(
+    user?.id,
+    activeChild ?? undefined,
+  );
 
   const { mentors: rawMentors, loading } = usePublicMentors();
   // Map to UI shape
@@ -24,7 +35,30 @@ export default function ParentMentorsScreen() {
     rating: m.rating ?? 0,
     students: m.sessions ?? 0,
     tags: [] as string[],
+    photo_url: m.photo_url,
+    bio: m.bio,
   }));
+
+  const chooseMentor = async (mentorId: string) => {
+    if (!activeChild || !user?.id) {
+      Alert.alert('Выберите ребенка', 'Сначала выберите профиль ребенка для записи к ментору.');
+      return;
+    }
+
+    await updateChild(activeChild.id, { mentorApplicationId: mentorId });
+    const { error } = await requestParentMentor({
+      userId: user.id,
+      child: activeChild,
+      mentorApplicationId: mentorId,
+    });
+
+    if (error) {
+      Alert.alert('Не удалось отправить заявку', error);
+      return;
+    }
+
+    await refreshRequests();
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -131,17 +165,26 @@ export default function ParentMentorsScreen() {
                       backgroundColor: `${COLORS.primary}10`,
                       alignItems: 'center',
                       justifyContent: 'center',
+                      overflow: 'hidden',
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 30,
-                        fontWeight: '700',
-                        color: COLORS.primary,
-                      }}
-                    >
-                      {mentor.name.charAt(0)}
-                    </Text>
+                    {mentor.photo_url ? (
+                      <Image
+                        source={{ uri: mentor.photo_url }}
+                        resizeMode="cover"
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    ) : (
+                      <Text
+                        style={{
+                          fontSize: 30,
+                          fontWeight: '700',
+                          color: COLORS.primary,
+                        }}
+                      >
+                        {mentor.name.charAt(0)}
+                      </Text>
+                    )}
                   </View>
                   <View style={{ flex: 1, justifyContent: 'center' }}>
                     <Text
@@ -266,27 +309,37 @@ export default function ParentMentorsScreen() {
                       ПРОФИЛЬ
                     </Text>
                   </PressableScale>
-                  <PressableScale
-                    style={{
-                      flex: 1.5,
-                      height: 48,
-                      backgroundColor: COLORS.primary,
-                      borderRadius: RADIUS.lg,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      ...SHADOWS.md,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontWeight: TYPOGRAPHY.weight.bold,
-                        fontSize: 13,
-                      }}
-                    >
-                      ВЫБРАТЬ
-                    </Text>
-                  </PressableScale>
+                  {(() => {
+                    const selected = activeChild?.mentorApplicationId === mentor.id;
+                    const request = requests.find(
+                      (item) => item.mentor_application_id === mentor.id,
+                    );
+                    return (
+                      <PressableScale
+                        onPress={() => chooseMentor(mentor.id)}
+                        disabled={Boolean(request)}
+                        style={{
+                          flex: 1.5,
+                          height: 48,
+                          backgroundColor: request ? '#D1FAE5' : COLORS.primary,
+                          borderRadius: RADIUS.lg,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          ...SHADOWS.md,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: request ? '#047857' : 'white',
+                            fontWeight: TYPOGRAPHY.weight.bold,
+                            fontSize: 13,
+                          }}
+                        >
+                          {request ? 'ЗАЯВКА ОТПРАВЛЕНА' : selected ? 'ЗАПИСАТЬСЯ' : 'ВЫБРАТЬ'}
+                        </Text>
+                      </PressableScale>
+                    );
+                  })()}
                 </View>
               </View>
             </MotiView>

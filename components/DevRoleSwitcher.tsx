@@ -26,6 +26,22 @@ import { useParentData } from '$contexts/ParentDataContext';
 import { emitDevDataChanged } from '$lib/devDataEvents';
 import { clearAllDevData, clearDevData, getDevDataSeeded, seedDevData } from '$lib/devSeedData';
 import { isWebMinWidth } from '$lib/useIsDesktop';
+import type { Child } from '$types/child';
+
+function clampDevChildAge(age: number) {
+  return Math.max(6, Math.min(17, age));
+}
+
+function getDevAgeCategory(age: number): Child['ageCategory'] {
+  return age < 12 ? 'child' : 'teen';
+}
+
+function getDevAgeGroupLabel(age: number) {
+  if (age <= 8) return '6-8 Explorer';
+  if (age <= 11) return '9-11 Creators';
+  if (age <= 14) return '12-14 Rebels';
+  return '15-17 Architects';
+}
 
 export function DevRoleSwitcher() {
   const [visible, setVisible] = useState(false);
@@ -37,7 +53,8 @@ export function DevRoleSwitcher() {
 
   // All hooks up-front so they're in scope for toggleDevTools
   const { user, devLogin, logout, devMode, setDevMode, devOtpCode } = useAuth();
-  const { parentProfile, setParentTariff } = useParentData();
+  const { parentProfile, childrenProfile, activeChildId, updateChild, setParentTariff } =
+    useParentData();
   const {
     mentorApproved,
     setMentorApproved,
@@ -59,6 +76,10 @@ export function DevRoleSwitcher() {
         (user.email.endsWith('@example.com') && user.phone === '79991234567')),
   );
   const canManageDevData = devToolsEnabled && Boolean(user) && !syncingDevData;
+  const activeDevChild =
+    childrenProfile.find((child) => child.id === activeChildId) || childrenProfile[0] || null;
+  const displayedChildAge = activeDevChild?.age ?? devYouthAge;
+  const canAdjustChildAge = ['parent', 'child', 'youth'].includes(user?.role || '');
 
   if (!__DEV__) return null;
 
@@ -210,6 +231,18 @@ export function DevRoleSwitcher() {
     }
   };
 
+  const setDevChildAge = async (nextAge: number) => {
+    const age = clampDevChildAge(nextAge);
+    setDevYouthAge(age);
+
+    if (activeDevChild) {
+      await updateChild(activeDevChild.id, {
+        age,
+        ageCategory: getDevAgeCategory(age),
+      });
+    }
+  };
+
   return (
     <>
       <PressableScale onPress={handleOpen} style={styles.floatingButton} activeOpacity={0.8}>
@@ -352,26 +385,61 @@ export function DevRoleSwitcher() {
                     </View>
                   )}
 
-                  {/* Youth Age toggle */}
-                  {['youth', 'child'].includes(user?.role || '') && (
-                    <View style={styles.devModeRow}>
-                      <View style={{ flex: 1, marginRight: 12 }}>
-                        <Text style={styles.devModeTitle}>Child Age: {devYouthAge}</Text>
-                        <Text style={styles.devModeSubtitle}>Affects diagnostic modules</Text>
+                  {/* Child age override */}
+                  {canAdjustChildAge && (
+                    <View style={styles.devAgeRow}>
+                      <View style={styles.devAgeHeader}>
+                        <View style={{ flex: 1, marginRight: 12 }}>
+                          <Text style={styles.devModeTitle}>
+                            Child age: {displayedChildAge}
+                          </Text>
+                          <Text style={styles.devModeSubtitle}>
+                            {activeDevChild
+                              ? `${activeDevChild.name} · ${getDevAgeGroupLabel(displayedChildAge)}`
+                              : `Fallback · ${getDevAgeGroupLabel(displayedChildAge)}`}
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', gap: 8 }}>
+                          <TouchableOpacity
+                            style={styles.ageButton}
+                            onPress={() => void setDevChildAge(displayedChildAge - 1)}
+                          >
+                            <Feather name="minus" size={16} color={COLORS.foreground} />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.ageButton}
+                            onPress={() => void setDevChildAge(displayedChildAge + 1)}
+                          >
+                            <Feather name="plus" size={16} color={COLORS.foreground} />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                      <View style={{ flexDirection: 'row', gap: 8 }}>
-                        <TouchableOpacity
-                          style={styles.ageButton}
-                          onPress={() => setDevYouthAge(Math.max(6, devYouthAge - 1))}
-                        >
-                          <Feather name="minus" size={16} color={COLORS.foreground} />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.ageButton}
-                          onPress={() => setDevYouthAge(Math.min(17, devYouthAge + 1))}
-                        >
-                          <Feather name="plus" size={16} color={COLORS.foreground} />
-                        </TouchableOpacity>
+                      <View style={styles.agePresetRow}>
+                        {[
+                          { age: 7, label: '6-8' },
+                          { age: 10, label: '9-11' },
+                          { age: 13, label: '12-14' },
+                          { age: 16, label: '15-17' },
+                        ].map((preset) => {
+                          const active =
+                            getDevAgeGroupLabel(displayedChildAge).startsWith(preset.label);
+                          return (
+                            <TouchableOpacity
+                              key={preset.label}
+                              style={[styles.agePresetButton, active && styles.agePresetActive]}
+                              onPress={() => void setDevChildAge(preset.age)}
+                            >
+                              <Text
+                                style={[
+                                  styles.agePresetText,
+                                  active && styles.agePresetTextActive,
+                                ]}
+                              >
+                                {preset.label}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
                       </View>
                     </View>
                   )}
@@ -584,6 +652,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
+  devAgeRow: {
+    paddingBottom: 16,
+    marginBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  devAgeHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   optionMuted: {
     opacity: 0.35,
   },
@@ -621,6 +700,34 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.muted,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  agePresetRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 12,
+  },
+  agePresetButton: {
+    minHeight: 30,
+    paddingHorizontal: 10,
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.muted,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  agePresetActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  agePresetText: {
+    color: COLORS.foreground,
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  agePresetTextActive: {
+    color: 'white',
   },
   grid: {
     flexDirection: 'row',
